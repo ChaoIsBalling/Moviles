@@ -1,5 +1,25 @@
 package com.example.engine;
 
-public class Engine {
+public interface Engine {
+    /**
+     * Inicia el motor
+     */
+    public void resume();
 
+    /**
+     * pausa el motor
+     */
+    public void pause();
+
+    /**
+     * Indicar estado de juego que debe renderizarse/ejecutarse
+     *
+     * @param state
+     */
+    public void setState(State state);
+
+    /**
+     *
+     */
+    public Graphics getGraphics();
 }
