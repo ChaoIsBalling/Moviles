@@ -8,14 +8,19 @@ import android.view.SurfaceHolder;
 
 import com.example.engine.Font;
 import com.example.engine.Graphics;
+import com.example.engine.Scene;
 
-public class AndroidGraphics implements Graphics {
+public class AndroidGraphics implements Graphics, Runnable {
     private SurfaceHolder holder;
     private SurfaceView sView;
     private Paint paint;
     private Canvas canvas;
 
+    private Thread renderThread;
 
+    private boolean running;
+
+    private Scene scene;
     private final Rect rect = new Rect();
 
 
@@ -38,6 +43,11 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void setFont(Font font) {
+
+    }
+
+    @Override
+    public void run() {
 
     }
 }
