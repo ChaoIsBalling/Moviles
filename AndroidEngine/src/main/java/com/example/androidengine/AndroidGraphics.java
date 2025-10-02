@@ -55,6 +55,34 @@ public class AndroidGraphics implements Graphics, Runnable {
             throw new RuntimeException("Error reading "+ path, ex);
         }
         return new AndroidImage(bm);
+
+    }
+
+    @Override
+    public void pintarCirculo(float x, float y, float r) {
+
+    }
+
+    @Override
+    public void pintarCuadrado(float x, float y, float w, float h) {
+
+    }
+
+    @Override
+    public void pintarFondo(int color) {
+
+    }
+
+    @Override
+    public void pintarTexto(String texto, float x, float y) {
+
+    }
+
+    @Override
+    public void pintarImagen(IImage img, float x, float y) {
+
+    }
+
     @Override
     public void setColor(int color) {
 
@@ -69,5 +97,4 @@ public class AndroidGraphics implements Graphics, Runnable {
     public void run() {
 
     }
-}
 }
