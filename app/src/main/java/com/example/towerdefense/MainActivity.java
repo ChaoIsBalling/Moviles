@@ -9,6 +9,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
 import com.example.gamelogic.GameLogic;
 
@@ -16,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SurfaceView renderView;
 
-    private AndroidGraphics render;
+    private AndroidEngine engine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,14 +27,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(this.renderView);
         GameLogic gameLogic = new GameLogic();
 
-        this.render = new AndroidGraphics(this.renderView);
-        gameLogic.init(render);
+        this.engine = new AndroidEngine(this.renderView);
 
-        render.setScene(gameLogic);
+        this.engine.setState(gameLogic);
     }
 
+    @Override
     protected void onResume(){
         super.onResume();
-        this.render.resume();
+        this.engine.resume();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        this.engine.pause();
     }
 }

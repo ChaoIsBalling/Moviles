@@ -2,8 +2,9 @@ package com.example.gamelogic;
 
 import com.example.engine.Scene;
 import com.example.engine.Graphics;
+import com.example.engine.State;
 
-public class GameLogic implements Scene {
+public class GameLogic implements State {
     private int x;
     private int y;
     private int radious;
@@ -16,10 +17,6 @@ public class GameLogic implements Scene {
         this.y=0;
         this.radious=100;
         this.speed=150;
-    }
-
-    public void init(Graphics gr){
-        this.graphics = gr;
     }
 
 

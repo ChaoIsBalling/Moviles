@@ -5,6 +5,7 @@ import android.view.SurfaceView;
 
 import com.example.engine.Engine;
 import com.example.engine.State;
+import com.example.engine.Graphics;
 
 import java.util.List;
 
@@ -64,10 +65,6 @@ public class AndroidEngine implements Engine,Runnable {
         }
     }
 
-    @Override
-    public void setState(State state) {
-
-    }
 
     @Override
     public void run() {
