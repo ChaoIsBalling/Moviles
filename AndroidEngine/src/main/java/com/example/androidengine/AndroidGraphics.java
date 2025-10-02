@@ -6,7 +6,9 @@ import android.graphics.Rect;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
-import com.example.
+import com.example.engine.Font;
+import com.example.engine.Graphics;
+
 public class AndroidGraphics implements Graphics {
     private SurfaceHolder holder;
     private SurfaceView sView;
@@ -27,5 +29,15 @@ public class AndroidGraphics implements Graphics {
     public void startFrame(){
         while(!this.holder.getSurface().isValid());
         this.canvas = this.holder.lockHardwareCanvas();
+    }
+
+    @Override
+    public void setColor(int color) {
+
+    }
+
+    @Override
+    public void setFont(Font font) {
+
     }
 }
