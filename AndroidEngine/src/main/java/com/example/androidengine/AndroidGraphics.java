@@ -1,17 +1,23 @@
 package com.example.androidengine;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
-import com.example.
+import java.io.IOException;
+
+
 public class AndroidGraphics implements Graphics {
     private SurfaceHolder holder;
     private SurfaceView sView;
     private Paint paint;
     private Canvas canvas;
+
+    private Asset asset;
 
 
     private final Rect rect = new Rect();
@@ -27,5 +33,20 @@ public class AndroidGraphics implements Graphics {
     public void startFrame(){
         while(!this.holder.getSurface().isValid());
         this.canvas = this.holder.lockHardwareCanvas();
+    }
+
+    public void createText(String text, float x, float y){
+        this.canvas.drawText(text,x,y,this.paint);
+    }
+
+    public Image createImage(String path){
+        Bitmap bm = null;
+
+        try{
+            bm = BitmapFactory.decodeStream(this.asset.open(path));
+        }catch (IOException ex){
+            throw new RuntimeException("Error reading "+ path, ex);
+        }
+        return new AndroidImage(bm);
     }
 }
