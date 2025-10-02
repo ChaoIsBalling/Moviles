@@ -13,6 +13,7 @@ import java.io.IOException;
 import com.example.engine.Font;
 import com.example.engine.Graphics;
 import com.example.engine.Scene;
+import com.example.androidengine.AndroidImage;
 
 public class AndroidGraphics implements Graphics {
     private SurfaceHolder holder;
