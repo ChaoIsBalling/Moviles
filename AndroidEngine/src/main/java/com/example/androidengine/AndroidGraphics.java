@@ -1,10 +1,14 @@
 package com.example.androidengine;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
+
+import java.io.IOException;
 
 import com.example.engine.Font;
 import com.example.engine.Graphics;
@@ -17,6 +21,8 @@ public class AndroidGraphics implements Graphics, Runnable {
     private Canvas canvas;
 
     private Thread renderThread;
+    private Asset asset;
+
 
     private boolean running;
 
@@ -36,6 +42,19 @@ public class AndroidGraphics implements Graphics, Runnable {
         this.canvas = this.holder.lockHardwareCanvas();
     }
 
+    public void createText(String text, float x, float y){
+        this.canvas.drawText(text,x,y,this.paint);
+    }
+
+    public Image createImage(String path){
+        Bitmap bm = null;
+
+        try{
+            bm = BitmapFactory.decodeStream(this.asset.open(path));
+        }catch (IOException ex){
+            throw new RuntimeException("Error reading "+ path, ex);
+        }
+        return new AndroidImage(bm);
     @Override
     public void setColor(int color) {
 
@@ -50,4 +69,5 @@ public class AndroidGraphics implements Graphics, Runnable {
     public void run() {
 
     }
+}
 }
