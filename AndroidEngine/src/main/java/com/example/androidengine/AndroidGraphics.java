@@ -10,6 +10,8 @@ import android.view.SurfaceHolder;
 
 import java.io.IOException;
 
+import com.example.engine.Font;
+import com.example.engine.Graphics;
 
 public class AndroidGraphics implements Graphics {
     private SurfaceHolder holder;
@@ -48,5 +50,14 @@ public class AndroidGraphics implements Graphics {
             throw new RuntimeException("Error reading "+ path, ex);
         }
         return new AndroidImage(bm);
+    @Override
+    public void setColor(int color) {
+
     }
+
+    @Override
+    public void setFont(Font font) {
+
+    }
+}
 }

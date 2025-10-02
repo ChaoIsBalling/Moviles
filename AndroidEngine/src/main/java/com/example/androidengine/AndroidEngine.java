@@ -3,6 +3,9 @@ package com.example.androidengine;
 
 import android.view.SurfaceView;
 
+import com.example.engine.Engine;
+import com.example.engine.State;
+
 import java.util.List;
 
 
@@ -59,6 +62,11 @@ public class AndroidEngine implements Engine,Runnable {
 
 
         }
+    }
+
+    @Override
+    public void setState(State state) {
+
     }
 
     @Override
