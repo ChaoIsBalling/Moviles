@@ -18,6 +18,10 @@ public class GameLogic implements Scene {
         this.speed=150;
     }
 
+    public void init(Graphics gr){
+        this.graphics = gr;
+    }
+
 
     @Override
     public void update(double deltaTime) {
@@ -32,6 +36,6 @@ public class GameLogic implements Scene {
 
     @Override
     public void render() {
-        //graphics.pintarCirculo(this.x,this.y,this.radious*5);
+        graphics.pintarCirculo(this.x,this.y,this.radious*5);
     }
 }

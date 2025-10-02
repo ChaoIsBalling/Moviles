@@ -14,7 +14,7 @@ import com.example.engine.Font;
 import com.example.engine.Graphics;
 import com.example.engine.Scene;
 
-public class AndroidGraphics implements Graphics, Runnable {
+public class AndroidGraphics implements Graphics {
     private SurfaceHolder holder;
     private SurfaceView sView;
     private Paint paint;
@@ -30,16 +30,19 @@ public class AndroidGraphics implements Graphics, Runnable {
     private final Rect rect = new Rect();
 
 
-    AndroidGraphics(SurfaceView view){
+    public AndroidGraphics(SurfaceView view){
         this.sView = view;
         this.holder = this.sView.getHolder();
         this.paint = new Paint();
-        this.paint.setColor(0xFFFFFFFF);
     }
 
-    public void startFrame(){
+    protected void startFrame(){
         while(!this.holder.getSurface().isValid());
         this.canvas = this.holder.lockHardwareCanvas();
+    }
+
+    protected void endFrame(){
+        this.holder.unlockCanvasAndPost(canvas);
     }
 
     public void createText(String text, float x, float y){
@@ -60,12 +63,13 @@ public class AndroidGraphics implements Graphics, Runnable {
 
     @Override
     public void pintarCirculo(float x, float y, float r) {
-
+        this.canvas.drawCircle(x,y,r,this.paint);
     }
 
     @Override
     public void pintarCuadrado(float x, float y, float w, float h) {
-
+        this.paint.setStyle(Paint.Style.FILL);
+        this.canvas.drawRect(x,y,x+w,y+h,this.paint);
     }
 
     @Override
@@ -85,7 +89,7 @@ public class AndroidGraphics implements Graphics, Runnable {
 
     @Override
     public void setColor(int color) {
-
+        this.paint.setColor(color);
     }
 
     @Override
@@ -93,8 +97,4 @@ public class AndroidGraphics implements Graphics, Runnable {
 
     }
 
-    @Override
-    public void run() {
-
-    }
 }
