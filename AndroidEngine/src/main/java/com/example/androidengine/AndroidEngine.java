@@ -30,7 +30,7 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     public void resume(){
-        if(this.running){
+        if(!this.running){
             this.running = true;
 
             this.renderThread = new Thread(this);
@@ -55,7 +55,7 @@ public class AndroidEngine implements Engine,Runnable {
                     break;
 
 
-                }catch (InterruptedException ie{
+                }catch (InterruptedException ie){
 
                 }
 
@@ -74,13 +74,11 @@ public class AndroidEngine implements Engine,Runnable {
         }
 
         // El thread se pone en marcha
-        while (this.running && this.renderView.getWidth() == 0);
+        while (this.running && this.sView.getWidth() == 0);
 
         long lastFrameTime = System.nanoTime();
         long prevTime = lastFrameTime;    // Informe de FPS
         int frames = 0;
-
-        canvas = gr.getCanvas(); // Obtiene el canvas del sistema gráfico
 
         while (running) {
             long currentTime = System.nanoTime();
@@ -89,7 +87,8 @@ public class AndroidEngine implements Engine,Runnable {
 
             // Informe de FPS
             double elapsedTime = (double) nanoElapsedTime / 1.0E9;
-            this.update(elapsedTime);
+
+            this.state.update(elapsedTime);
 
             if (currentTime - prevTime > 1000000000L) {
                 long fps = frames * 1000000000L / (currentTime - prevTime);

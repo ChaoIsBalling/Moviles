@@ -4,6 +4,6 @@ public interface State {
 
     void update (double deltatime);
 
-    void render();
+    void render(Graphics gr);
 
 }
