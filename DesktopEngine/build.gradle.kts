@@ -7,4 +7,5 @@ java {
 }
 dependencies {
     implementation(project(":DesktopGame"))
+    implementation(project(":Engine"))
 }
