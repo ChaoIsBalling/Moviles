@@ -6,13 +6,21 @@ import com.example.engine.Font;
 import com.example.engine.Image;
 
 import java.awt.Color;
+import java.awt.Polygon;
+import java.io.IOException;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
+import java.awt.BasicStroke;
 
+
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.xml.stream.events.StartDocument;
 
 public class DesktopGraphics implements Runnable, Graphics{
+
+    String root = "data/";
+    private BasicStroke stroke;
     private JFrame myView;
     private BufferStrategy bufferStrategy;
     private java.awt.Graphics graphics2D;
@@ -20,7 +28,7 @@ public class DesktopGraphics implements Runnable, Graphics{
     private Thread renderThread;
     private boolean running;
     private State state;
-    DesktopGraphics(JFrame view)
+    public DesktopGraphics(JFrame view)
     {
         this.myView=view;
         this.bufferStrategy= this.myView.getBufferStrategy();
@@ -40,10 +48,6 @@ public class DesktopGraphics implements Runnable, Graphics{
     {
 
     }
-    public void Run()
-    {
-        
-    }
     public boolean swapBuffer()
     {
         this.graphics2D.dispose();
@@ -59,16 +63,60 @@ public class DesktopGraphics implements Runnable, Graphics{
         this.setColor(0xFFFFFFF);
         this.pintarCuadrado(0,0,this.myView.getWidth(),this.myView.getHeight());
     }
+    public void pintarTexto(String texto, float x, float y)
+    {
+        this.graphics2D.drawString(texto,(int)x,(int)y);
+    }
+    @Override
+    public Image createImage(String path)
+    {
+        java.awt.Image im =null;
+        try
+        {
+            im = ImageIO.read(new File(root+path));
+        }
+        catch(IOException io)
+        {
+            throw new RuntimeException("Error reading"+path,io);
+        }
+        return new DesktopImage(im);
+    }
+    @Override
+    public void pintarImagen(Image image, int x, int y)
+    {
+        java.awt.Image d=((DesktopImage)image).getImage();
+        this.graphics2D.drawImage(d,x,y);
+    }
     @Override
     public void pintarCirculo(float x, float y, float r)
     {
-        this.graphics2D.fillOval((int)x,(int)y,(int)r,(int)r);
+        this.graphics2D.drawOval((int)(x-r),(int)(y-r),(int)r*2,(int)r*2);
+        this.graphics2D.setPaintMode();
+    }
+    @Override
+    public void rellenarCirculo(float x, float y, float r)
+    {
+        this.graphics2D.fillOval((int)(x-r),(int)(y-r),(int)r*2,(int)r*2);
+        this.graphics2D.setPaintMode();
     }
     @Override
     public void pintarCuadrado(float x, float y, float w, float h)
     {
-
+        this.graphics2D.drawRect((int)x,(int)y,(int)w,(int)h);
+        this.graphics2D.setPaintMode();
     }
+    @Override
+    public void rellenarCuadrado(float x, float y, float w, float h)
+    {
+        this.graphics2D.fillRect((int)x,(int)y,(int)w,(int)h);
+        this.graphics2D.setPaintMode();
+    }
+     @Override
+     public void rellanarTriangulo(float x1,float y1,float x2,float y2, float x3, float y3)
+     {
+         this.graphics2D.fillPolygon(new int[]{(int)x1,(int)x2,(int)x3},
+                 new int[]{(int)y1,(int)y2,(int)y3},3);
+     }
     public void pintarFondo(int color)
     {
         this.setColor(color);
