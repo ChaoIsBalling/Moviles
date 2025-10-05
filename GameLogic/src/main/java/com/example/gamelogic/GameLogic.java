@@ -32,6 +32,9 @@ public class GameLogic implements State {
 
     @Override
     public void render(Graphics gr) {
+
+        gr.setColor(0xFFFFF);
+
         gr.pintarCirculo(this.x,this.y,this.radious*5);
     }
 

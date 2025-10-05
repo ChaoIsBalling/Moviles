@@ -57,7 +57,6 @@ public class DesktopGraphics implements Runnable, Graphics{
         this.bufferStrategy.show();
         return !this.bufferStrategy.contentsLost();
     }
-    @Override
     public void clear()
     {
         this.setColor(0xFFFFFFF);
@@ -67,25 +66,31 @@ public class DesktopGraphics implements Runnable, Graphics{
     {
         this.graphics2D.drawString(texto,(int)x,(int)y);
     }
+
     @Override
-    public Image createImage(String path)
-    {
-        java.awt.Image im =null;
-        try
-        {
-            im = ImageIO.read(new File(root+path));
-        }
-        catch(IOException io)
-        {
-            throw new RuntimeException("Error reading"+path,io);
-        }
-        return new DesktopImage(im);
+    public void pintarImagen(Image img, float x, float y) {
+
     }
-    @Override
+
+
+//    public Image createImage(String path)
+//    {
+//        java.awt.Image im =null;
+//        try
+//        {
+//            im = ImageIO.read(new File(root+path));
+//        }
+//        catch(IOException io)
+//        {
+//            throw new RuntimeException("Error reading"+path,io);
+//        }
+//        return new DesktopImage(im);
+//    }
+
     public void pintarImagen(Image image, int x, int y)
     {
-        java.awt.Image d=((DesktopImage)image).getImage();
-        this.graphics2D.drawImage(d,x,y);
+        //java.awt.Image d=((DesktopImage)image).getImage();
+        //this.graphics2D.drawImage(d,x,y);
     }
     @Override
     public void pintarCirculo(float x, float y, float r)
@@ -93,7 +98,7 @@ public class DesktopGraphics implements Runnable, Graphics{
         this.graphics2D.drawOval((int)(x-r),(int)(y-r),(int)r*2,(int)r*2);
         this.graphics2D.setPaintMode();
     }
-    @Override
+
     public void rellenarCirculo(float x, float y, float r)
     {
         this.graphics2D.fillOval((int)(x-r),(int)(y-r),(int)r*2,(int)r*2);
@@ -105,13 +110,13 @@ public class DesktopGraphics implements Runnable, Graphics{
         this.graphics2D.drawRect((int)x,(int)y,(int)w,(int)h);
         this.graphics2D.setPaintMode();
     }
-    @Override
+
     public void rellenarCuadrado(float x, float y, float w, float h)
     {
         this.graphics2D.fillRect((int)x,(int)y,(int)w,(int)h);
         this.graphics2D.setPaintMode();
     }
-     @Override
+
      public void rellanarTriangulo(float x1,float y1,float x2,float y2, float x3, float y3)
      {
          this.graphics2D.fillPolygon(new int[]{(int)x1,(int)x2,(int)x3},
@@ -125,11 +130,16 @@ public class DesktopGraphics implements Runnable, Graphics{
     @Override
     public void setColor(int color)
     {
-
+        this.graphics2D.setColor(new Color(color));
     }
     @Override
     public void setFont(Font font)
     {
+
+    }
+
+    @Override
+    public void run() {
 
     }
 }

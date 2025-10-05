@@ -33,6 +33,8 @@ public class AndroidGraphics implements Graphics {
         this.sView = view;
         this.holder = this.sView.getHolder();
         this.paint = new Paint();
+
+        this.paint.setColor(0xFFFFFFFF);
     }
 
     protected void startFrame(){
