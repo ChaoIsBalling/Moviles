@@ -29,6 +29,7 @@ public class AndroidEngine implements Engine,Runnable {
 
     }
 
+    @Override
     public void resume(){
         if(!this.running){
             this.running = true;
@@ -38,6 +39,7 @@ public class AndroidEngine implements Engine,Runnable {
         }
     }
 
+    @Override
     public void setState(State state){
         this.state = state;
     }
@@ -45,6 +47,8 @@ public class AndroidEngine implements Engine,Runnable {
     public Graphics getGraphics(){
         return this.gr;
     }
+
+    @Override
     public void pause(){
         if(this.running){
             this.running = false;

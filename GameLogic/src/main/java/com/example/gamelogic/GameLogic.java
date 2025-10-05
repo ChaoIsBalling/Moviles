@@ -1,6 +1,5 @@
 package com.example.gamelogic;
 
-import com.example.engine.Scene;
 import com.example.engine.Graphics;
 import com.example.engine.State;
 
@@ -32,7 +31,8 @@ public class GameLogic implements State {
     }
 
     @Override
-    public void render() {
-        graphics.pintarCirculo(this.x,this.y,this.radious*5);
+    public void render(Graphics gr) {
+        gr.pintarCirculo(this.x,this.y,this.radious*5);
     }
+
 }

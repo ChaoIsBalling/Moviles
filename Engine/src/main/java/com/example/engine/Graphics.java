@@ -12,7 +12,7 @@ public interface Graphics {
 
     public void pintarTexto(String texto, float x, float y);
 
-    public void pintarImagen(IImage img, float x, float y);
+    public void pintarImagen(Image img, float x, float y);
 
     public void setColor(int color);
     public void setFont(Font font);

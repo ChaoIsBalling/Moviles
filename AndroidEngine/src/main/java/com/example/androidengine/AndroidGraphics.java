@@ -12,8 +12,8 @@ import java.io.IOException;
 
 import com.example.engine.Font;
 import com.example.engine.Graphics;
-import com.example.engine.Scene;
 import com.example.androidengine.AndroidImage;
+import com.example.engine.Image;
 
 public class AndroidGraphics implements Graphics {
     private SurfaceHolder holder;
@@ -22,12 +22,11 @@ public class AndroidGraphics implements Graphics {
     private Canvas canvas;
 
     private Thread renderThread;
-    private Asset asset;
+    //private Asset asset;
 
 
     private boolean running;
 
-    private Scene scene;
     private final Rect rect = new Rect();
 
 
@@ -50,7 +49,7 @@ public class AndroidGraphics implements Graphics {
         this.canvas.drawText(text,x,y,this.paint);
     }
 
-    public Image createImage(String path){
+    /*public Image createImage(String path){
         Bitmap bm = null;
 
         try{
@@ -60,7 +59,7 @@ public class AndroidGraphics implements Graphics {
         }
         return new AndroidImage(bm);
 
-    }
+    }*/
 
     @Override
     public void pintarCirculo(float x, float y, float r) {
@@ -83,8 +82,9 @@ public class AndroidGraphics implements Graphics {
 
     }
 
+
     @Override
-    public void pintarImagen(IImage img, float x, float y) {
+    public void pintarImagen(Image img, float x, float y) {
 
     }
 
