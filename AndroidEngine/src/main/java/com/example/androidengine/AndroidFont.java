@@ -1,4 +1,20 @@
 package com.example.androidengine;
 
-public class AndroidFont {
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
+
+
+public class AndroidFont implements Font {
+    private Typeface tFont;
+
+    private float size;
+
+    public AndroidFont(AssetManager assets,String file, float size){
+        this(assets,file,size,false,false);
+    }
+
+    public AndroidFont(AssetManager assets, String file, float size, boolean bold){
+        this.tFont = Typeface.createFromAsset(assets,file);
+        this.size = size;
+    }
 }

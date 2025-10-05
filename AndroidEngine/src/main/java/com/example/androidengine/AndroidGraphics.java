@@ -24,7 +24,6 @@ public class AndroidGraphics implements Graphics {
     private Thread renderThread;
     private Asset asset;
 
-
     private boolean running;
 
     private Scene scene;
