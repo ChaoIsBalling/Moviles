@@ -16,4 +16,10 @@ public interface Graphics {
 
     public void setColor(int color);
     public void setFont(Font font);
+
+    public void escalar(float x, float y);
+
+    public void trasladar(float x,float y);
+
+    public void setLogicSize(float w, float h);
 }

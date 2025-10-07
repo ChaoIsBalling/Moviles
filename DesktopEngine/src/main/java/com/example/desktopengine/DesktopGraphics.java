@@ -23,11 +23,18 @@ public class DesktopGraphics implements Runnable, Graphics{
     private BasicStroke stroke;
     private JFrame myView;
     private BufferStrategy bufferStrategy;
-    private java.awt.Graphics graphics2D;
+    private Graphics2D graphics2D;
 
     private Thread renderThread;
     private boolean running;
     private State state;
+
+    private float scale;
+    private float offsetX;
+    private float offsetY;
+
+    private float logicH;
+    private float logicW;
     public DesktopGraphics(JFrame view)
     {
         this.myView=view;
@@ -39,6 +46,21 @@ public class DesktopGraphics implements Runnable, Graphics{
     {
         this.graphics2D=(Graphics2D) this.bufferStrategy.getDrawGraphics();
         this.clear();
+
+        calculateTransforms();
+        this.escalar(scale,scale);
+        this.trasladar(offsetX,offsetY);
+    }
+
+    private void calculateTransforms(){
+        float tempY = this.myView.getHeight()/logicH;
+        float tempX = this.myView.getWidth()/logicW;
+
+        this.scale = tempX <tempY ? tempX :tempY;
+
+        this.offsetX = (this.myView.getWidth() -this.scale*logicW)/2;
+        this.offsetY =(this.myView.getHeight() -this.scale*logicH)/2;
+
     }
     protected void prepareFrame()
     {
@@ -135,6 +157,21 @@ public class DesktopGraphics implements Runnable, Graphics{
     @Override
     public void setFont(Font font)
     {
+
+    }
+
+    @Override
+    public void escalar(float x, float y) {
+        this.graphics2D.scale(x,y);
+    }
+
+    @Override
+    public void trasladar(float x, float y) {
+        this.graphics2D.translate(x,y);
+    }
+
+    @Override
+    public void setLogicSize(float w, float h) {
 
     }
 

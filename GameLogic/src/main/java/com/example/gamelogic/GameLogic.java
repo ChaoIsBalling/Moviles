@@ -1,5 +1,6 @@
 package com.example.gamelogic;
 
+import com.example.engine.Engine;
 import com.example.engine.Graphics;
 import com.example.engine.State;
 

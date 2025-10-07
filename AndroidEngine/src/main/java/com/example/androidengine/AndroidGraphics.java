@@ -22,6 +22,15 @@ public class AndroidGraphics implements Graphics {
     private Canvas canvas;
 
     private Thread renderThread;
+
+    private float scale;
+
+    private float offsetX;
+    private float offsetY;
+
+    private float logicH;
+    private float logicW;
+
     //private Asset asset;
 
     private boolean running;
@@ -35,11 +44,35 @@ public class AndroidGraphics implements Graphics {
         this.paint = new Paint();
 
         this.paint.setColor(0xFFFFFFFF);
+
+        scale =1;
+        offsetX=0;
+        offsetY=0;
     }
 
     protected void startFrame(){
         while(!this.holder.getSurface().isValid());
         this.canvas = this.holder.lockHardwareCanvas();
+        this.clear();
+
+        calculateTransforms();
+        this.trasladar(this.offsetX,this.offsetY);
+        this.escalar(this.scale,this.scale);
+    }
+
+    private void calculateTransforms(){
+        float tempY = this.sView.getHeight()/logicH;
+        float tempX = this.sView.getWidth()/logicW;
+
+        this.scale = tempX <tempY ? tempX :tempY;
+
+        this.offsetX = (this.sView.getWidth() -this.scale*logicW)/2;
+        this.offsetY =(this.sView.getHeight() -this.scale*logicH)/2;
+
+    }
+
+    protected void clear(){
+        this.paint.setColor(0xFFFFFFFF);
     }
 
     protected void endFrame(){
@@ -97,6 +130,22 @@ public class AndroidGraphics implements Graphics {
     @Override
     public void setFont(Font font) {
 
+    }
+
+    @Override
+    public void escalar(float x, float y) {
+        this.canvas.scale(x,y);
+    }
+
+    @Override
+    public void trasladar(float x, float y) {
+        this.canvas.translate(x,y);
+    }
+
+    @Override
+    public void setLogicSize(float w, float h) {
+        this.logicW =w;
+        this.logicH =h;
     }
 
 }
