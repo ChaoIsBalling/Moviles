@@ -15,11 +15,10 @@ import java.awt.BasicStroke;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import java.awt.image.BufferedImage;
 import javax.xml.stream.events.StartDocument;
 
 public class DesktopGraphics implements Runnable, Graphics{
-
-    String root = "data/";
     private BasicStroke stroke;
     private JFrame myView;
     private BufferStrategy bufferStrategy;
@@ -35,11 +34,15 @@ public class DesktopGraphics implements Runnable, Graphics{
 
     private float logicH;
     private float logicW;
+
+    String root = "data/";
     public DesktopGraphics(JFrame view)
     {
-        this.myView=view;
+        this.myView = view;
         this.bufferStrategy= this.myView.getBufferStrategy();
-        this.graphics2D=(Graphics2D) bufferStrategy.getDrawGraphics();
+        this.graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
+
+        //coger escalado de ventana aquí
     }
 
     public void startFrame()

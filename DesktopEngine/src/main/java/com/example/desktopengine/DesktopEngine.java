@@ -4,47 +4,65 @@ import com.example.engine.Engine;
 import com.example.engine.Graphics;
 import com.example.engine.State;
 
-public class DesktopEngine implements Engine{
-    State state;
-    long lastFrameTime;
+import javax.swing.JFrame;
 
+public class DesktopEngine implements Runnable, Engine {
+    private final JFrame myView;
+    long lastFrameTime;
     DesktopGraphics gr;
     boolean running;
-    public void run(){
-        long prevTime= lastFrameTime;
+    private State state;
+    private Thread renderThread;
+
+    public DesktopEngine(JFrame view){
+        this.myView = view;
+        this.gr = new DesktopGraphics(this.myView); //Sistema de gráficos
+    }
+
+    @Override
+    public void run() {
+        long prevTime = lastFrameTime;
         int frames = 0;
 
-        while(running){
+        while (running) {
             long currentTime = System.nanoTime();
-            long nanoElpasedTime = currentTime-lastFrameTime;
+            long nanoElpasedTime = currentTime - lastFrameTime;
             lastFrameTime = currentTime;
 
-            double elapsedTime = (double) nanoElpasedTime/1.0E9;
+            double elapsedTime = (double) nanoElpasedTime / 1.0E9;
             state.update(elapsedTime);
 
-            if(currentTime - prevTime > 1000000000L){
-                long fps = frames * 1000000000L /(currentTime-prevTime);
-                System.out.println(" " + fps +" fps" );
+            ++frames;
+            do {
+                gr.startFrame();
+                state.render(gr);
+
+                try {
+                    state.render(gr);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } while (!this.gr.swapBuffer());
+
+
+            //Calculamos FPS por segundo
+            if (currentTime - prevTime > 1000000000L) {
+                long fps = frames * 1000000000L / (currentTime - prevTime);
+                System.out.println(" " + fps + " fps"); //Informamos de los FPS
                 frames = 0;
                 prevTime = currentTime;
             }
         }
-
-        ++frames;
-        do{
-            gr.startFrame();
-            state.render(gr);
-
-            try{
-                state.render(gr);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } while(!this.gr.swapBuffer());
     }
+
+    //Este método inicia el hilo de renderizado
     @Override
     public void resume() {
-
+        if(!this.running){
+            this.running = true;
+            this.renderThread = new Thread(this);
+            this.renderThread.start();
+        }
     }
 
     @Override
@@ -59,6 +77,6 @@ public class DesktopEngine implements Engine{
 
     @Override
     public Graphics getGraphics() {
-        return null;
+        return gr;
     }
 }
