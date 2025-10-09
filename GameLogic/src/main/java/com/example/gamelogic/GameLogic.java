@@ -9,6 +9,8 @@ public class GameLogic implements State {
     private float y;
     private float radious;
     private float speed;
+
+    private Graphics graphics;
     boolean firstFrame = false;
 
     public GameLogic(){
