@@ -22,4 +22,6 @@ public interface Graphics {
     public void trasladar(float x,float y);
 
     public void setLogicSize(float w, float h);
+
+    public void rellenarCirculo(float x, float y, float r);
 }

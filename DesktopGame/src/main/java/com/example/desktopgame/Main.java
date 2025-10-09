@@ -1,6 +1,7 @@
 package com.example.desktopgame;
 
 import com.example.desktopengine.DesktopEngine;
+import com.example.gamelogic.GameLogic;
 
 import java.awt.Insets;
 
@@ -42,7 +43,11 @@ public class Main {
         //Inicializamos el motor gráfico de escritorio usando el JFrame renderView
         DesktopEngine engine = new DesktopEngine(renderView);
 
+        GameLogic gameLogic = new GameLogic();
+
+        engine.setState(gameLogic);
+
         //Inicializamos el motor de juego
-        //engine.resume();
+        engine.resume();
     }
 }

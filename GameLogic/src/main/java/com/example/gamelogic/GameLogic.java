@@ -5,38 +5,38 @@ import com.example.engine.Graphics;
 import com.example.engine.State;
 
 public class GameLogic implements State {
-    private int x;
-    private int y;
-    private int radious;
-    private int speed;
-
-    private Graphics graphics;
+    private float x;
+    private float y;
+    private float radious;
+    private float speed;
+    boolean firstFrame = false;
 
     public GameLogic(){
         this.x =100;
-        this.y=0;
-        this.radious=100;
-        this.speed=150;
+        this.y=100;
+        this.radious=50;
+        this.speed=10f;
     }
 
 
     @Override
     public void update(double deltaTime) {
-
-        this.x += this.speed *deltaTime;
-        while (this.x<this.radious){
-            if (this.x < this.radious){
-                this.speed *= -1;
-            }
+        if(!this.firstFrame){
+            this.firstFrame = !this.firstFrame;
         }
+        else{
+            this.x += (float) (this.speed *deltaTime);
+        }
+
+
     }
 
     @Override
     public void render(Graphics gr) {
 
-        gr.setColor(0xFFFFF);
+        gr.setColor(0x00000000);
 
-        gr.pintarCirculo(this.x,this.y,this.radious*5);
+        gr.rellenarCirculo(this.x,this.y,this.radious);
     }
 
 }

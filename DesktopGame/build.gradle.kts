@@ -8,4 +8,5 @@ java {
 dependencies {
     implementation(project(":GameLogic"))
     implementation(project(":DesktopEngine"))
+    implementation(project(":Engine"))
 }
