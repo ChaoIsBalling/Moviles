@@ -17,6 +17,7 @@ public class DesktopEngine implements Runnable, Engine {
     public DesktopEngine(JFrame view){
         this.myView = view;
         this.gr = new DesktopGraphics(this.myView); //Sistema de gráficos
+        gr.setLogicSize(600,400);
     }
 
     @Override

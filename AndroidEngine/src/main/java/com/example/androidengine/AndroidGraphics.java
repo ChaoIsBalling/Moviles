@@ -151,4 +151,9 @@ public class AndroidGraphics implements Graphics {
         this.logicH =h;
     }
 
+    @Override
+    public void rellenarCirculo(float x, float y, float r) {
+
+    }
+
 }

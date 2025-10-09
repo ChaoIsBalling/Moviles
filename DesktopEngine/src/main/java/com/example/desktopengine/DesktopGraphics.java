@@ -84,7 +84,7 @@ public class DesktopGraphics implements Runnable, Graphics{
     }
     public void clear()
     {
-        this.setColor(0xFFFFFFF);
+        this.setColor(0xFFFFFFFF);
         this.pintarCuadrado(0,0,this.myView.getWidth(),this.myView.getHeight());
     }
     public void pintarTexto(String texto, float x, float y)
@@ -175,7 +175,8 @@ public class DesktopGraphics implements Runnable, Graphics{
 
     @Override
     public void setLogicSize(float w, float h) {
-
+        this.logicW = w;
+        this.logicH = h;
     }
 
     @Override
