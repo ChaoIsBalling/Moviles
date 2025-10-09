@@ -87,8 +87,9 @@ public class DesktopGraphics implements Runnable, Graphics{
     //Método que limpia la pantalla
     public void clear()
     {
-        this.graphics2D.setColor(new java.awt.Color(0xFFFFFFFF, true));
-        this.graphics2D.fillRect(0,0,this.myView.getWidth(),this.myView.getHeight());
+        //this.graphics2D.setColor(new java.awt.Color(0xFFFFFFFF, true));
+        this.setColor(0xFFFFFFF);
+        this.rellenarCuadrado(0,0,this.myView.getWidth(),this.myView.getHeight());
     }
     public void pintarTexto(String texto, float x, float y)
     {
