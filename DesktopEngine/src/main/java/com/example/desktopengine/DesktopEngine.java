@@ -33,7 +33,7 @@ public class DesktopEngine implements Runnable, Engine {
             double elapsedTime = (double) nanoElpasedTime / 1.0E9;
             state.update(elapsedTime);
 
-            ++frames;
+
             do {
                 gr.startFrame();
                 state.render(gr);
@@ -45,6 +45,7 @@ public class DesktopEngine implements Runnable, Engine {
                 }
             } while (!this.gr.swapBuffer());
 
+            ++frames;
 
             //Calculamos FPS por segundo
             if (currentTime - prevTime > 1000000000L) {

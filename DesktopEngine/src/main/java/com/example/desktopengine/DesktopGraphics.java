@@ -48,7 +48,7 @@ public class DesktopGraphics implements Runnable, Graphics{
     public void startFrame()
     {
         this.graphics2D=(Graphics2D) this.bufferStrategy.getDrawGraphics();
-        this.clear();
+        this.clear(); //Llamamos a metodo que limpia la pantalla
 
         calculateTransforms();
         this.escalar(scale,scale);
@@ -77,15 +77,18 @@ public class DesktopGraphics implements Runnable, Graphics{
     {
         this.graphics2D.dispose();
         this.graphics2D=null;
-        if (this.bufferStrategy.contentsRestored())
+        if (this.bufferStrategy.contentsRestored()){
             return false;
+        }
         this.bufferStrategy.show();
         return !this.bufferStrategy.contentsLost();
     }
+
+    //Método que limpia la pantalla
     public void clear()
     {
-        this.setColor(0xFFFFFFFF);
-        this.pintarCuadrado(0,0,this.myView.getWidth(),this.myView.getHeight());
+        this.graphics2D.setColor(new java.awt.Color(0xFFFFFFFF, true));
+        this.graphics2D.fillRect(0,0,this.myView.getWidth(),this.myView.getHeight());
     }
     public void pintarTexto(String texto, float x, float y)
     {
@@ -117,6 +120,12 @@ public class DesktopGraphics implements Runnable, Graphics{
         //java.awt.Image d=((DesktopImage)image).getImage();
         //this.graphics2D.drawImage(d,x,y);
     }
+
+    @Override
+    public int getWidth() {
+        return 0;
+    }
+
     @Override
     public void pintarCirculo(float x, float y, float r)
     {
