@@ -42,8 +42,7 @@ public class AndroidGraphics implements Graphics {
         this.sView = view;
         this.holder = this.sView.getHolder();
         this.paint = new Paint();
-
-        this.paint.setColor(0xFFFFFFFF);
+        this.canvas = new Canvas();
 
         scale =1;
         offsetX=0;
@@ -72,7 +71,7 @@ public class AndroidGraphics implements Graphics {
     }
 
     protected void clear(){
-        this.paint.setColor(0xFFFFFFFF);
+        this.canvas.drawColor(0xFFFFFFF);;
     }
 
     protected void endFrame(){
@@ -94,7 +93,11 @@ public class AndroidGraphics implements Graphics {
         return new AndroidImage(bm);
 
     }*/
-
+    @Override
+    public int getWidth()
+    {
+        return this.sView.getWidth();
+    }
     @Override
     public void pintarCirculo(float x, float y, float r) {
         this.canvas.drawCircle(x,y,r,this.paint);

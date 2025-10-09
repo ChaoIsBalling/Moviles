@@ -3,6 +3,8 @@ package com.example.engine;
 import javax.imageio.IIOImage;
 
 public interface Graphics {
+    public int getWidth();
+
     public void pintarCirculo(float x, float y, float r);
 
     public void pintarCuadrado(float x, float y, float w, float h);

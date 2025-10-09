@@ -7,7 +7,7 @@ import com.example.engine.State;
 public class GameLogic implements State {
     private int x;
     private int y;
-    private int radious;
+    private int radius;
     private int speed;
 
     private Graphics graphics;
@@ -15,28 +15,35 @@ public class GameLogic implements State {
     public GameLogic(){
         this.x =100;
         this.y=0;
-        this.radious=100;
+        this.radius=20;
         this.speed=150;
     }
-
+    public void init(Graphics gr){
+        this.graphics = gr;
+    }
 
     @Override
     public void update(double deltaTime) {
-
-        this.x += this.speed *deltaTime;
-        while (this.x<this.radious){
-            if (this.x < this.radious){
-                this.speed *= -1;
-            }
-        }
+//        int maxX = this.graphics.getWidth() - this.radius;
+//
+//        this.x += this.speed * deltaTime;
+//        while (this.x < this.radius) {
+//            if (this.x < this.radius) {
+//                this.speed *= -1;
+//            } else if (this.x > maxX) {
+//                // Nos salimos por la derecha. Rebotamos
+//                this.x = 2 * maxX - this.x;
+//                this.speed *= -1;
+//            }
+//        }
     }
 
     @Override
     public void render(Graphics gr) {
 
-        gr.setColor(0xFFFFF);
+        gr.setColor(0xff00ff00);
 
-        gr.pintarCirculo(this.x,this.y,this.radious*5);
+        gr.pintarCirculo(this.x,this.y,this.radius);
     }
 
 }

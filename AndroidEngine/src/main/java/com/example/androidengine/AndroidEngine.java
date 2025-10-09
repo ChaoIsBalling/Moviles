@@ -58,14 +58,9 @@ public class AndroidEngine implements Engine,Runnable {
                     this.renderThread = null;
                     break;
 
-
                 }catch (InterruptedException ie){
-
                 }
-
             }
-
-
         }
     }
 
