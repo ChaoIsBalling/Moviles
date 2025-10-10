@@ -1,10 +1,9 @@
 package com.example.androidengine;
 
-import android.content.res.AssetManager;
 import android.graphics.Typeface;
-import com.example.engine.Font;
+import com.example.engine.IFont;
 
-public class AndroidFont implements Font {
+public class AndroidFont implements IFont {
     private Typeface tFont;
 
     private float size;

@@ -4,6 +4,9 @@ import com.example.engine.Engine;
 import com.example.engine.Graphics;
 import com.example.engine.State;
 
+import java.awt.FontFormatException;
+import java.io.IOException;
+
 public class GameLogic implements State {
     private float x;
     private float y;
@@ -28,8 +31,8 @@ public class GameLogic implements State {
         if(!this.firstFrame){
             this.firstFrame = !this.firstFrame;
         }
-        else{
-            this.x += (float) (this.speed *deltaTime);
+        else {
+            this.x += (float) (this.speed * deltaTime);
         }
 
 
@@ -41,6 +44,10 @@ public class GameLogic implements State {
         gr.setColor(0x00000000);
 
         gr.rellenarCirculo(this.x,this.y,this.radious);
+
+        gr.newFont("Inika-Regular.ttf");
+        gr.setFont();
+        gr.pintarTexto("Balatrito", 200,200);
     }
 
 }

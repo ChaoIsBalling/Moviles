@@ -1,18 +1,13 @@
 package com.example.androidengine;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
-import java.io.IOException;
-
-import com.example.engine.Font;
+import com.example.engine.IFont;
 import com.example.engine.Graphics;
-import com.example.androidengine.AndroidImage;
 import com.example.engine.Image;
 
 public class AndroidGraphics implements Graphics {
@@ -131,7 +126,12 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
-    public void setFont(Font font) {
+    public IFont newFont(String f) {
+        return null;
+    }
+
+    @Override
+    public void setFont() {
 
     }
 

@@ -1,4 +1,4 @@
 package com.example.engine;
 
-public interface Font {
+public interface IFont {
 }

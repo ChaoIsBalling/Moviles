@@ -2,21 +2,23 @@ package com.example.desktopengine;
 
 import com.example.engine.Graphics;
 import com.example.engine.State;
-import com.example.engine.Font;
+import com.example.engine.IFont;
 import com.example.engine.Image;
 
 import java.awt.Color;
-import java.awt.Polygon;
-import java.io.IOException;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.BasicStroke;
+import java.awt.Font;
+
+import java.awt.FontFormatException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import java.awt.image.BufferedImage;
-import javax.xml.stream.events.StartDocument;
 
 public class DesktopGraphics implements Runnable, Graphics{
     private BasicStroke stroke;
@@ -35,7 +37,9 @@ public class DesktopGraphics implements Runnable, Graphics{
     private float logicH;
     private float logicW;
 
-    String root = "data/";
+    private DesktopFont currentFont;
+
+    String root = "data/fonts/";
     public DesktopGraphics(JFrame view)
     {
         this.myView = view;
@@ -127,6 +131,12 @@ public class DesktopGraphics implements Runnable, Graphics{
         return 0;
     }
 
+
+
+    public IFont getCurrentFont(){
+        return this.currentFont;
+    }
+
     @Override
     public void pintarCirculo(float x, float y, float r)
     {
@@ -139,6 +149,7 @@ public class DesktopGraphics implements Runnable, Graphics{
         this.graphics2D.fillOval((int)(x-r),(int)(y-r),(int)r*2,(int)r*2);
         this.graphics2D.setPaintMode();
     }
+
     @Override
     public void pintarCuadrado(float x, float y, float w, float h)
     {
@@ -167,10 +178,26 @@ public class DesktopGraphics implements Runnable, Graphics{
     {
         this.graphics2D.setColor(new Color(color));
     }
-    @Override
-    public void setFont(Font font)
-    {
 
+    public IFont newFont(String f) {
+
+        DesktopFont font = null;
+        try {
+            font = new DesktopFont(root +f);
+        } catch (FontFormatException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        this.currentFont = font;
+        return font;
+    }
+
+    @Override
+    public void setFont()
+    {
+        //Seteamos un font para que Graphics lo use cuando vaya a escribir
+        this.graphics2D.setFont(this.currentFont.getCurrentFont());
     }
 
     @Override
