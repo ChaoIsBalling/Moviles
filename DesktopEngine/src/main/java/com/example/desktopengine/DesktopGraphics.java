@@ -3,21 +3,19 @@ package com.example.desktopengine;
 import com.example.engine.Graphics;
 import com.example.engine.State;
 import com.example.engine.IFont;
-import com.example.engine.Image;
+import com.example.engine.IImage;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.BasicStroke;
-import java.awt.Font;
 
 import java.awt.FontFormatException;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 public class DesktopGraphics implements Runnable, Graphics{
@@ -39,7 +37,7 @@ public class DesktopGraphics implements Runnable, Graphics{
 
     private DesktopFont currentFont;
 
-    String root = "data/fonts/";
+    String root = "data/";
     public DesktopGraphics(JFrame view)
     {
         this.myView = view;
@@ -101,37 +99,30 @@ public class DesktopGraphics implements Runnable, Graphics{
     }
 
     @Override
-    public void pintarImagen(Image img, float x, float y) {
-
+    public void pintarImagen(IImage img, int x, int y) {
+        DesktopImage imagen = (DesktopImage)img;
+        this.graphics2D.drawImage(imagen.getCurrentImage(), x, y, null);
     }
 
-
-//    public Image createImage(String path)
-//    {
-//        java.awt.Image im =null;
-//        try
-//        {
-//            im = ImageIO.read(new File(root+path));
-//        }
-//        catch(IOException io)
-//        {
-//            throw new RuntimeException("Error reading"+path,io);
-//        }
-//        return new DesktopImage(im);
-//    }
-
-    public void pintarImagen(Image image, int x, int y)
+    @Override
+    public IImage newImage(String path)
     {
-        //java.awt.Image d=((DesktopImage)image).getImage();
-        //this.graphics2D.drawImage(d,x,y);
+        java.awt.Image im =null;
+        try
+        {
+            im = ImageIO.read(new File(root +"/images/"+path));
+        }
+        catch(IOException io)
+        {
+            throw new RuntimeException("Error al leer imagen..."+path,io);
+        }
+        return new DesktopImage(im);
     }
 
     @Override
     public int getWidth() {
         return 0;
     }
-
-
 
     public IFont getCurrentFont(){
         return this.currentFont;
@@ -183,7 +174,7 @@ public class DesktopGraphics implements Runnable, Graphics{
 
         DesktopFont font = null;
         try {
-            font = new DesktopFont(root +f);
+            font = new DesktopFont(root +"/fonts/"+f);
         } catch (FontFormatException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

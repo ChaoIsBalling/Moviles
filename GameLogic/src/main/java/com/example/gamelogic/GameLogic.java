@@ -48,6 +48,9 @@ public class GameLogic implements State {
         gr.newFont("Inika-Regular.ttf");
         gr.setFont();
         gr.pintarTexto("Balatrito", 200,200);
+
+        gr.pintarImagen(gr.newImage("asgore.png"),0,210);
+        gr.pintarImagen(gr.newImage("Joker.png"),400,200);
     }
 
 }

@@ -8,6 +8,16 @@ public class AndroidFont implements IFont {
 
     private float size;
 
+    @Override
+    public int getSize() {
+        return 0;
+    }
+
+    @Override
+    public boolean isBold() {
+        return false;
+    }
+
     /*public AndroidFont(AssetManager assets,String file, float size){
         this(assets,file,size,false,false);
     }

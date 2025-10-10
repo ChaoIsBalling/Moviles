@@ -8,7 +8,7 @@ import android.view.SurfaceHolder;
 
 import com.example.engine.IFont;
 import com.example.engine.Graphics;
-import com.example.engine.Image;
+import com.example.engine.IImage;
 
 public class AndroidGraphics implements Graphics {
     private SurfaceHolder holder;
@@ -116,7 +116,7 @@ public class AndroidGraphics implements Graphics {
 
 
     @Override
-    public void pintarImagen(Image img, float x, float y) {
+    public void pintarImagen(IImage img, int x, int y) {
 
     }
 
@@ -127,6 +127,11 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public IFont newFont(String f) {
+        return null;
+    }
+
+    @Override
+    public IImage newImage(String f) {
         return null;
     }
 

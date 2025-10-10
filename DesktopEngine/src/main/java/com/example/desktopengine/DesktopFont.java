@@ -28,4 +28,14 @@ public class DesktopFont implements IFont {
     public Font getCurrentFont() {
         return this.awtFont;
     }
+
+    @Override
+    public int getSize() {
+        return this.awtFont.getSize();
+    }
+
+    @Override
+    public boolean isBold() {
+        return this.awtFont.isBold();
+    }
 }

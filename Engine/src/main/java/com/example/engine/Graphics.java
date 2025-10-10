@@ -1,11 +1,5 @@
 package com.example.engine;
 
-import com.example.engine.IFont;
-
-import java.awt.FontFormatException;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 public interface Graphics {
     public int getWidth();
 
@@ -18,11 +12,13 @@ public interface Graphics {
 
     public void pintarTexto(String texto, float x, float y);
 
-    public void pintarImagen(Image img, float x, float y);
+    public void pintarImagen(IImage img, int x, int y);
 
     public void setColor(int color);
 
     public IFont newFont(String f);
+
+    public IImage newImage(String path);
 
     public void setFont();
 
