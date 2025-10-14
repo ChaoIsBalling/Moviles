@@ -25,13 +25,14 @@ public class AndroidEngine implements Engine,Runnable {
     private State state;
 
     private AndroidInput input;
-
+    
     public AndroidEngine(SurfaceView view){
         this.sView = view;
         this.input = new AndroidInput();
         this.sView.setOnTouchListener(this.input);
         this.gr = new AndroidGraphics(view);
-
+        this.input=new AndroidInput();
+        this.sView.setOnTouchListener(this.input);
     }
 
     @Override
