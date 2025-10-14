@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface Input {
 
-    public List<TouchEvent> getInput();
+    public List<TouchEvent> getTouchEvents();
 }

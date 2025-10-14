@@ -3,9 +3,11 @@ package com.example.gamelogic;
 import com.example.engine.Engine;
 import com.example.engine.Graphics;
 import com.example.engine.State;
+import com.example.engine.TouchEvent;
 
 import java.awt.FontFormatException;
 import java.io.IOException;
+import java.util.List;
 
 public class GameLogic implements State {
     private float x;
@@ -52,5 +54,11 @@ public class GameLogic implements State {
         gr.pintarImagen(gr.newImage("asgore.png"),0,210);
         gr.pintarImagen(gr.newImage("Joker.png"),400,200);
     }
+
+    @Override
+    public void handleInput(List<TouchEvent> list, double elapseTime) {
+
+    }
+
 
 }

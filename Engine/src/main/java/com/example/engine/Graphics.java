@@ -29,4 +29,8 @@ public interface Graphics {
     public void setLogicSize(float w, float h);
 
     public void rellenarCirculo(float x, float y, float r);
+
+    public float real2LogicX(float x);
+
+    public float real2LogicY(float y);
 }

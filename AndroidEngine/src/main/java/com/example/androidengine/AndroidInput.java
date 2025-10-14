@@ -1,0 +1,57 @@
+package com.example.androidengine;
+
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_MOVE;
+import static android.view.MotionEvent.ACTION_UP;
+
+import android.view.MotionEvent;
+import android.view.View;
+
+import com.example.engine.Input;
+import com.example.engine.TouchEvent;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class AndroidInput implements Input,View.OnTouchListener{
+
+    ArrayList<TouchEvent> events;
+    ArrayList<TouchEvent> pendingEvents;
+    public AndroidInput(){
+        events = new ArrayList<TouchEvent>();
+        pendingEvents = new ArrayList<TouchEvent>();
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        TouchEvent myEvent = new TouchEvent();
+        myEvent.x = event.getX();
+        myEvent.y = event.getY();
+        myEvent.finger =0;
+        int action = event.getActionMasked();
+
+        switch (action){
+            case ACTION_DOWN:
+                myEvent.type= TouchEvent.TouchEventType.TOUCH_DOWN;
+            case ACTION_UP:
+                myEvent.type= TouchEvent.TouchEventType.TOUCH_UP;
+            case ACTION_MOVE:
+                myEvent.type= TouchEvent.TouchEventType.TOUCH_MOVE;
+        }
+
+        synchronized (this){
+            this.pendingEvents.add(myEvent);
+        }
+
+        return true;
+    }
+
+    @Override
+    public synchronized List<TouchEvent> getTouchEvents() {
+        this.events.clear();
+        this.events.addAll(this.pendingEvents);
+        this.pendingEvents.clear();
+        return this.events;
+    }
+}

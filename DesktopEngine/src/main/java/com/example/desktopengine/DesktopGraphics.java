@@ -143,6 +143,16 @@ public class DesktopGraphics implements Runnable, Graphics{
     }
 
     @Override
+    public float real2LogicX(float x) {
+        return (x + this.scale*this.logicW);
+    }
+
+    @Override
+    public float real2LogicY(float y) {
+        return (y + this.scale*this.logicH);
+    }
+
+    @Override
     public void pintarCuadrado(float x, float y, float w, float h)
     {
         this.graphics2D.drawRect((int)x,(int)y,(int)w,(int)h);

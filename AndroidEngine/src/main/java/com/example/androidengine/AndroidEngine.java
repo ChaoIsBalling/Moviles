@@ -6,6 +6,7 @@ import android.view.SurfaceView;
 import com.example.engine.Engine;
 import com.example.engine.State;
 import com.example.engine.Graphics;
+import com.example.engine.TouchEvent;
 
 import java.util.List;
 
@@ -23,8 +24,12 @@ public class AndroidEngine implements Engine,Runnable {
 
     private State state;
 
+    private AndroidInput input;
+
     public AndroidEngine(SurfaceView view){
         this.sView = view;
+        this.input = new AndroidInput();
+        this.sView.setOnTouchListener(this.input);
         this.gr = new AndroidGraphics(view);
 
     }
@@ -86,6 +91,13 @@ public class AndroidEngine implements Engine,Runnable {
 
             // Informe de FPS
             double elapsedTime = (double) nanoElapsedTime / 1.0E9;
+
+            for (TouchEvent e: input.getTouchEvents()){
+                e.x = this.gr.real2LogicX(e.x);
+                e.y = this.gr.real2LogicY(e.y);
+            }
+
+            state.handleInput(this.input.getTouchEvents(), elapsedTime);
 
             this.state.update(elapsedTime);
 

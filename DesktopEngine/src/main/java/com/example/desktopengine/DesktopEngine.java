@@ -3,6 +3,7 @@ package com.example.desktopengine;
 import com.example.engine.Engine;
 import com.example.engine.Graphics;
 import com.example.engine.State;
+import com.example.engine.TouchEvent;
 
 import javax.swing.JFrame;
 
@@ -14,10 +15,15 @@ public class DesktopEngine implements Runnable, Engine {
     private State state;
     private Thread renderThread;
 
+    private DesktopInput input;
+
     public DesktopEngine(JFrame view){
         this.myView = view;
         this.gr = new DesktopGraphics(this.myView); //Sistema de gráficos
+        this.input = new DesktopInput();
+        this.myView.addMouseListener(this.input);
         gr.setLogicSize(600,400);
+
     }
 
     @Override
@@ -31,6 +37,15 @@ public class DesktopEngine implements Runnable, Engine {
             lastFrameTime = currentTime;
 
             double elapsedTime = (double) nanoElpasedTime / 1.0E9;
+
+            for (TouchEvent e: input.getTouchEvents()){
+                e.x = this.gr.real2LogicX(e.x);
+                e.y = this.gr.real2LogicY(e.y);
+            }
+
+            state.handleInput(this.input.getTouchEvents(), elapsedTime);
+
+
             state.update(elapsedTime);
 
 
