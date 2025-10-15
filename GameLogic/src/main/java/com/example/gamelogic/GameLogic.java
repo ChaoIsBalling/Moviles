@@ -37,7 +37,6 @@ public class GameLogic implements State {
             this.x += (float) (this.speed * deltaTime);
         }
 
-
     }
 
     @Override
@@ -58,6 +57,17 @@ public class GameLogic implements State {
     @Override
     public void handleInput(List<TouchEvent> list, double elapseTime) {
 
+        for(TouchEvent e: list){
+
+            switch (e.type){
+                case TOUCH_DOWN:
+                    System.out.println("Has pulsado el raton");
+                    break;
+                case TOUCH_UP:
+                    System.out.println("Has soltado el raton");
+                    break;
+            }
+        }
     }
 
 

@@ -14,7 +14,6 @@ public class DesktopEngine implements Runnable, Engine {
     boolean running;
     private State state;
     private Thread renderThread;
-
     private DesktopInput input;
 
     public DesktopEngine(JFrame view){
@@ -23,20 +22,6 @@ public class DesktopEngine implements Runnable, Engine {
         this.input = new DesktopInput();
         this.myView.addMouseListener(this.input);
         gr.setLogicSize(600,400);
-        long currentTime = System.nanoTime();
-        long nanoElapsedTime= currentTime-lastFrameTime;
-        lastFrameTime= currentTime;
-
-        float elapsedTime= (float)(nanoElapsedTime/1.0E9);
-
-        for(touchEvent e: input.getTouchEvents())
-        {
-            e.x=this.gr.real2LogicX(e.x);
-            e.y=this.gr.real2LogicY(e.y);
-        }
-
-        this.input= new DesktopInput();
-        this.myView.addMouseListener(this.input);
     }
 
     @Override
@@ -57,8 +42,7 @@ public class DesktopEngine implements Runnable, Engine {
             }
 
             state.handleInput(this.input.getTouchEvents(), elapsedTime);
-
-
+            this.input.getTouchEvents().clear();
             state.update(elapsedTime);
 
 
