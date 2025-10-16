@@ -1,5 +1,6 @@
 package com.example.engine;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface State {
@@ -8,6 +9,6 @@ public interface State {
 
     void render(Graphics gr);
 
-    void handleInput(List<TouchEvent> list, double elapseTime);
+    void handleInput(ArrayList<TouchEvent> list, double elapseTime);
 
 }

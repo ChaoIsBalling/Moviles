@@ -5,6 +5,7 @@ import com.example.engine.Graphics;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Menu implements State {
@@ -37,7 +38,7 @@ public class Menu implements State {
     }
 
     @Override
-    public void handleInput(List<TouchEvent> list, double elapseTime) {
+    public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
 
             switch (e.type){

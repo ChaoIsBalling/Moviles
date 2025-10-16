@@ -7,6 +7,7 @@ import com.example.engine.TouchEvent;
 
 import java.awt.FontFormatException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameLogic implements State {
@@ -39,7 +40,7 @@ public class GameLogic implements State {
 
         gr.setColor(0x000000FF);
 
-        gr.pintarCirculo(this.x,this.y,this.radious);
+        gr.rellenarCirculo(this.x,this.y,this.radious);
 
         gr.newFont("Inika-Regular.ttf");
         gr.setFont();
@@ -50,7 +51,7 @@ public class GameLogic implements State {
     }
 
     @Override
-    public void handleInput(List<TouchEvent> list, double elapseTime) {
+    public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
 
         for(TouchEvent e: list){
 

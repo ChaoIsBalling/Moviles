@@ -44,6 +44,7 @@ public class DesktopEngine implements Runnable, Engine {
 
             state.handleInput(this.input.getTouchEvents(), elapsedTime);
             state.update(elapsedTime);
+            this.input.events.clear();
 
 
             do {
