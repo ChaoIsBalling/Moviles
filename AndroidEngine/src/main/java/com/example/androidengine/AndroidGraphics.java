@@ -1,6 +1,7 @@
 package com.example.androidengine;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.SurfaceView;
@@ -42,6 +43,8 @@ public class AndroidGraphics implements Graphics {
         scale =1;
         offsetX=0;
         offsetY=0;
+        logicH=600;
+        logicW=400;
     }
 
     protected void startFrame(){
@@ -95,6 +98,8 @@ public class AndroidGraphics implements Graphics {
     }
     @Override
     public void pintarCirculo(float x, float y, float r) {
+        this.paint.setColor(Color.MAGENTA);
+        this.paint.setStyle(Paint.Style.FILL);
         this.canvas.drawCircle(x,y,r,this.paint);
     }
 
