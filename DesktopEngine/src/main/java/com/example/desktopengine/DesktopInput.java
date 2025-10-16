@@ -57,7 +57,7 @@ public class DesktopInput implements Input, MouseListener {
             event.finger =0;
             event.type= TouchEvent.TouchEventType.TOUCH_UP;
             synchronized (this){
-                this.events.add(event);
+                this.pendingEvents.add(event);
             }
 
         }
