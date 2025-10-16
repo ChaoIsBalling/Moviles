@@ -10,8 +10,14 @@ import android.view.SurfaceHolder;
 import com.example.engine.IFont;
 import com.example.engine.Graphics;
 import com.example.engine.IImage;
+import android.graphics.Bitmap;
 
+import java.io.IOException;
+import java.io.InputStream;
+import android.graphics.BitmapFactory;
+import android.content.res.AssetManager;
 public class AndroidGraphics implements Graphics {
+    AssetManager assetManager;
     private SurfaceHolder holder;
     private SurfaceView sView;
     private Paint paint;
@@ -40,6 +46,7 @@ public class AndroidGraphics implements Graphics {
         this.paint = new Paint();
         this.canvas = new Canvas();
 
+
         scale =1;
         offsetX=0;
         offsetY=0;
@@ -50,8 +57,8 @@ public class AndroidGraphics implements Graphics {
     protected void startFrame(){
         while(!this.holder.getSurface().isValid());
         this.canvas = this.holder.lockHardwareCanvas();
-        this.clear();
 
+        this.clear();
         calculateTransforms();
         this.trasladar(this.offsetX,this.offsetY);
         this.escalar(this.scale,this.scale);
@@ -99,7 +106,6 @@ public class AndroidGraphics implements Graphics {
     @Override
     public void pintarCirculo(float x, float y, float r) {
         this.paint.setColor(Color.MAGENTA);
-        this.paint.setStyle(Paint.Style.FILL);
         this.canvas.drawCircle(x,y,r,this.paint);
     }
 
@@ -116,13 +122,14 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void pintarTexto(String texto, float x, float y) {
-
+        this.canvas.drawText(texto,x,y,this.paint);
     }
 
 
     @Override
     public void pintarImagen(IImage img, int x, int y) {
-
+       AndroidImage image= (AndroidImage)img;
+       canvas.drawBitmap(image.getBitmap(),x,y,null);
     }
 
     @Override
@@ -137,7 +144,14 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public IImage newImage(String f) {
-        return null;
+        InputStream is = null;
+        try {
+            is = assetManager.open(f);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Bitmap bitmap = BitmapFactory.decodeStream(is);
+        return new AndroidImage(bitmap);
     }
 
     @Override
