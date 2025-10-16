@@ -22,10 +22,7 @@ public class DesktopEngine implements Runnable, Engine {
         this.input = new DesktopInput();
         this.myView.addMouseListener(this.input);
         gr.setLogicSize(600,400);
-<<<<<<< HEAD
-=======
 
->>>>>>> parent of 5c1a549 (Merge branch 'main' of https://github.com/ChaoIsBalling/Moviles)
     }
 
     @Override
@@ -46,7 +43,6 @@ public class DesktopEngine implements Runnable, Engine {
             }
 
             state.handleInput(this.input.getTouchEvents(), elapsedTime);
-            this.input.getTouchEvents().clear();
             state.update(elapsedTime);
 
 

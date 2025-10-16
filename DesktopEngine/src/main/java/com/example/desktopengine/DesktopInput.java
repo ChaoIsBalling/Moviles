@@ -28,22 +28,15 @@ public class DesktopInput implements Input, MouseListener {
     }
 
     @Override
-<<<<<<< HEAD
-    public void mousePressed(MouseEvent mouseEvent)
-    {
-        if(mouseEvent.getButton()== mouseEvent.BUTTON1) {
-=======
+
     public void mousePressed(MouseEvent mouseEvent) {
         if(mouseEvent.getButton() == MouseEvent.BUTTON1 || mouseEvent.getButton() == MouseEvent.BUTTON2){
->>>>>>> parent of 5c1a549 (Merge branch 'main' of https://github.com/ChaoIsBalling/Moviles)
+
             TouchEvent event = new TouchEvent();
             event.x = mouseEvent.getX();
-<<<<<<< HEAD
+
             event.y = mouseEvent.getY(); //Las coordenadas son de la ventana!
             event.finger = 0;
-=======
-            event.y = mouseEvent.getY();
-            event.finger =0;
             event.type= TouchEvent.TouchEventType.TOUCH_DOWN;
 
             synchronized (this){
@@ -62,28 +55,15 @@ public class DesktopInput implements Input, MouseListener {
             event.y = mouseEvent.getY();
             event.finger =0;
             event.type= TouchEvent.TouchEventType.TOUCH_UP;
->>>>>>> parent of 5c1a549 (Merge branch 'main' of https://github.com/ChaoIsBalling/Moviles)
+            synchronized (this){
+                this.events.add(event);
+            }
 
-            this.events.add(event);
         }
     }
 
-    @Override
-<<<<<<< HEAD
-    public void mouseReleased(MouseEvent mouseEvent) {
-        if(mouseEvent.getButton()== mouseEvent.BUTTON1){
-            TouchEvent event = new TouchEvent();
-            event.type= TouchEvent.TouchEventType.TOUCH_UP;
-            event.x = mouseEvent.getX(); //La x va a ser la de la ventana NO la del juego
-            event.y = mouseEvent.getY();
-            event.finger = 0;
-            this.events.add(event); //Añado a la lista de eventos
-        }
-    }
 
     @Override
-=======
->>>>>>> parent of 5c1a549 (Merge branch 'main' of https://github.com/ChaoIsBalling/Moviles)
     public void mouseEntered(MouseEvent mouseEvent) {
 
     }
@@ -92,12 +72,4 @@ public class DesktopInput implements Input, MouseListener {
     public void mouseExited(MouseEvent mouseEvent) {
 
     }
-<<<<<<< HEAD
-
-    @Override
-    public List<TouchEvent> getTouchEvents() {
-        return this.events;
-    }
-=======
->>>>>>> parent of 5c1a549 (Merge branch 'main' of https://github.com/ChaoIsBalling/Moviles)
 }

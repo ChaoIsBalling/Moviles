@@ -98,7 +98,6 @@ public class AndroidEngine implements Engine,Runnable {
             }
 
             state.handleInput(this.input.getTouchEvents(), elapsedTime);
-
             this.state.update(elapsedTime);
 
             if (currentTime - prevTime > 1000000000L) {
