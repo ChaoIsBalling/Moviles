@@ -6,7 +6,6 @@ import com.example.engine.TouchEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.List;
 
 public class DesktopInput implements Input, MouseListener {
     ArrayList<TouchEvent> events;
@@ -16,8 +15,7 @@ public class DesktopInput implements Input, MouseListener {
         pendingEvents = new ArrayList<TouchEvent>();
     }
     @Override
-    public synchronized List<TouchEvent> getTouchEvents() {
-        this.events.clear();
+    public synchronized ArrayList<TouchEvent> getTouchEvents() {
         this.events.addAll(this.pendingEvents);
         this.pendingEvents.clear();
         return this.events;
@@ -57,7 +55,7 @@ public class DesktopInput implements Input, MouseListener {
             event.finger =0;
             event.type= TouchEvent.TouchEventType.TOUCH_UP;
             synchronized (this){
-                this.events.add(event);
+                this.pendingEvents.add(event);
             }
 
         }

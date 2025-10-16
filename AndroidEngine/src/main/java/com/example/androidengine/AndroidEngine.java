@@ -99,6 +99,7 @@ public class AndroidEngine implements Engine,Runnable {
 
             state.handleInput(this.input.getTouchEvents(), elapsedTime);
             this.state.update(elapsedTime);
+            this.input.events.clear();
 
             if (currentTime - prevTime > 1000000000L) {
                 long fps = frames * 1000000000L / (currentTime - prevTime);
