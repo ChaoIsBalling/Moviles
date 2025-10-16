@@ -42,9 +42,9 @@ public class GameLogic implements State {
     @Override
     public void render(Graphics gr) {
 
-        gr.setColor(0x00000000);
+        gr.setColor(0x000000FF);
 
-        gr.rellenarCirculo(this.x,this.y,this.radious);
+        gr.pintarCirculo(this.x,this.y,this.radious);
 
         gr.newFont("Inika-Regular.ttf");
         gr.setFont();
