@@ -13,6 +13,7 @@ public class DesktopInput implements Input, MouseListener {
     ArrayList<TouchEvent> pendingEvents;
     public DesktopInput(){
         events = new ArrayList<TouchEvent>();
+        pendingEvents = new ArrayList<TouchEvent>();
     }
     @Override
     public synchronized List<TouchEvent> getTouchEvents() {
