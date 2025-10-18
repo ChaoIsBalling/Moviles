@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import android.graphics.BitmapFactory;
 import android.content.res.AssetManager;
+import android.content.Context;
 public class AndroidGraphics implements Graphics {
     AssetManager assetManager;
     private SurfaceHolder holder;
@@ -32,7 +33,8 @@ public class AndroidGraphics implements Graphics {
 
     private float logicH;
     private float logicW;
-
+    private Context context;
+    String root = "data/";
     //private Asset asset;
 
     private boolean running;
@@ -45,6 +47,8 @@ public class AndroidGraphics implements Graphics {
         this.holder = this.sView.getHolder();
         this.paint = new Paint();
         this.canvas = new Canvas();
+        context= sView.getContext();
+        assetManager= context.getAssets();
 
 
         scale =1;
@@ -177,7 +181,9 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void rellenarCirculo(float x, float y, float r) {
-
+        this.paint.setColor(Color.MAGENTA);
+        this.paint.setStyle(Paint.Style.FILL);
+        this.canvas.drawCircle(x,y,r,this.paint);
     }
 
     @Override
