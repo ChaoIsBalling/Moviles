@@ -78,4 +78,8 @@ public class Button {
     Texto texto;
     ArrayList<Figura> figuras;
 
+    public void Render(Graphics gr) {
+
+    }
+
 }
