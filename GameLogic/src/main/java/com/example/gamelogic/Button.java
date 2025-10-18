@@ -73,7 +73,7 @@ public class Button {
     int y;
     int w;
     int h;
-    int color;
+    int color = 0x00000000;
     Imagen imagen;
     Texto texto;
     ArrayList<Figura> figuras;
