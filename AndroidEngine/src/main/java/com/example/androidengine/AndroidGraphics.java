@@ -126,7 +126,10 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void pintarTexto(String texto, float x, float y) {
-        this.canvas.drawText(texto,x,y,this.paint);
+        Paint.FontMetrics metrics= this.paint.getFontMetrics();
+        Rect r= new Rect();
+        this.paint.getTextBounds(texto,0,texto.length(),r);
+        this.canvas.drawText(texto,x-r.width()/2,y+r.height()/2,this.paint);
     }
 
 
@@ -180,9 +183,21 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void setFont(IFont font) {
+    
 
     }
-
+    public IFont createFont(String path,float size)
+    {
+        return this.createFont(path,size,false,false);
+    }
+    public IFont createFont(String path, float size,boolean bold )
+    {
+        return this.createFont(path,size,bold,false);
+    }
+    public IFont createFont(String path, float size,boolean bold, boolean italic )
+    {
+        return new AndroidFont(this.assetManager,path,size,bold,italic);
+    }
     @Override
     public void escalar(float x, float y) {
         this.canvas.scale(x,y);
