@@ -1,5 +1,7 @@
 package com.example.engine;
 
+import java.awt.Font;
+
 public interface Graphics {
     public int getWidth();
 
@@ -14,13 +16,21 @@ public interface Graphics {
 
     public void pintarImagen(IImage img, int x, int y);
 
+    public void pintarTextoCentrado(String texto, float x, float y);
+
     public void setColor(int color);
 
     public IFont newFont(String f);
 
+    public IFont newFont(String f, float size);
+
+    public IFont newFont(String f, float size, boolean bold);
+
+    public IFont newFont(String f, float size, boolean bold, boolean italic);
+
     public IImage newImage(String path);
 
-    public void setFont();
+    public void setFont(IFont font);
 
     public void escalar(float x, float y);
 

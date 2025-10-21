@@ -137,12 +137,32 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
+    public void pintarTextoCentrado(String texto, float x, float y) {
+
+    }
+
+    @Override
     public void setColor(int color) {
         this.paint.setColor(color);
     }
 
     @Override
     public IFont newFont(String f) {
+        return null;
+    }
+
+    @Override
+    public IFont newFont(String f, float size) {
+        return null;
+    }
+
+    @Override
+    public IFont newFont(String f, float size, boolean bold) {
+        return null;
+    }
+
+    @Override
+    public IFont newFont(String f, float size, boolean bold, boolean italic) {
         return null;
     }
 
@@ -159,7 +179,7 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
-    public void setFont() {
+    public void setFont(IFont font) {
 
     }
 

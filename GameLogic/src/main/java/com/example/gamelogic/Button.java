@@ -76,7 +76,7 @@ public class Button {
     int color = 0x00000000;
     Imagen imagen;
     Texto texto;
-    ArrayList<Figura> figuras;
+    Figura figuras;
 
     public void Render(Graphics gr) {
 

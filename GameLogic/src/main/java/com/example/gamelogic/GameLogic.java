@@ -2,6 +2,7 @@ package com.example.gamelogic;
 
 import com.example.engine.Engine;
 import com.example.engine.Graphics;
+import com.example.engine.IFont;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 
@@ -42,8 +43,8 @@ public class GameLogic implements State {
 
         gr.rellenarCirculo(this.x,this.y,this.radious);
 
-        gr.newFont("Inika-Regular.ttf");
-        gr.setFont();
+        IFont f = gr.newFont("Inika-Regular.ttf");
+        gr.setFont(f);
         gr.pintarTexto("Balatrito", 0,400);
 
         gr.pintarImagen(gr.newImage("asgore.png"),0,210);
