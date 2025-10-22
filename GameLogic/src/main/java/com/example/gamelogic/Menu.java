@@ -15,6 +15,7 @@ public class Menu implements State {
     private float h;
     boolean firstFrame = false;
 
+    private Button botonInicial;
     Engine engine;
 
     public Menu(Engine engine){
@@ -23,6 +24,10 @@ public class Menu implements State {
         this.w =200;
         this.h =100;
         this.engine = engine;
+
+        botonInicial = new Button(400/2, 500/2, 100,40);
+
+
     }
     @Override
     public void update(double deltatime) {
@@ -34,7 +39,9 @@ public class Menu implements State {
     @Override
     public void render(Graphics gr) {
         gr.setColor(0x00000000);
-        gr.pintarCuadrado(x,y,w,h);
+        //gr.pintarCuadrado(x,y,w,h);
+        botonInicial.setText(gr,"Inika-Regular.ttf","Hola", 20);
+        botonInicial.Render(gr);
     }
 
     @Override
@@ -43,7 +50,7 @@ public class Menu implements State {
 
             switch (e.type){
                 case TOUCH_DOWN:
-                    if(e.x >= this.x && e.x <= this.x + this.w && e.y >= this.y && e.y <= this.y + this.h){
+                    if(botonInicial.contains(e.x,e.y)){
                         GameLogic gameLogic = new GameLogic();
                         this.engine.setState(gameLogic);
                     }

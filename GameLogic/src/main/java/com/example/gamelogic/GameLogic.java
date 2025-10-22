@@ -45,10 +45,10 @@ public class GameLogic implements State {
 
         IFont f = gr.newFont("Inika-Regular.ttf");
         gr.setFont(f);
-        gr.pintarTexto("Balatrito", 0,400);
+        gr.pintarTexto("Balatrito", 300,200);
 
         gr.pintarImagen(gr.newImage("asgore.png"),0,210);
-        gr.pintarImagen(gr.newImage("Joker.png"),0,200);
+        gr.pintarImagen(gr.newImage("Joker.png"),400,200);
 
     }
 
