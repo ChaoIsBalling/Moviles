@@ -11,7 +11,6 @@ public interface Graphics {
 
     public void pintarFondo(int color);
 
-
     public void pintarTexto(String texto, float x, float y);
 
     public void pintarImagen(IImage img, int x, int y);

@@ -1,6 +1,7 @@
 package com.example.gamelogic;
 
 import com.example.engine.Engine;
+import com.example.engine.Square;
 import com.example.engine.Graphics;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
@@ -16,6 +17,8 @@ public class Menu implements State {
     boolean firstFrame = false;
 
     private Button botonInicial;
+
+    private Square figuraBoton;
     Engine engine;
 
     public Menu(Engine engine){
@@ -25,9 +28,10 @@ public class Menu implements State {
         this.h =100;
         this.engine = engine;
 
-        botonInicial = new Button(400/2, 500/2, 100,40);
-
-
+        botonInicial = new Button(400/2, 500/2, 200,100);
+        figuraBoton = new Square(0 , 0,50,50);
+        figuraBoton.setColor(0x000000FF);
+        botonInicial.setFigura(figuraBoton);
     }
     @Override
     public void update(double deltatime) {

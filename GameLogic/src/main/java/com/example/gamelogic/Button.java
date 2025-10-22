@@ -5,6 +5,7 @@ package com.example.gamelogic;
 import java.awt.Image;
 import java.util.ArrayList;
 
+import com.example.engine.Figure;
 import com.example.engine.Graphics;
 import com.example.engine.IFont;
 public class Button {
@@ -82,9 +83,7 @@ public class Button {
     int color = 0x00000000;
     Imagen imagen;
     Texto texto;
-    Figura figuras;
-
-
+    Figure figura;
 
     public Button(float x, float y, float w, float h){
         this.x = x;
@@ -103,6 +102,9 @@ public class Button {
                 y >= this.y && y <= this.y + this.h;
     }
 
+    public void setFigura(Figure fig){
+        this.figura = fig;
+    }
     public void Render(Graphics gr) {
         gr.setColor(color);
         gr.pintarCuadrado(this.x,this.y,this.w,this.h);
@@ -110,6 +112,10 @@ public class Button {
         gr.setFont(this.f);
         gr.pintarTextoCentrado(this.text,this.x + this.w/2,this.y + this.h/2);
 
+        //Renderizamos figura centrada
+        if(this.figura != null){
+            this.figura.RenderCentrado(gr,this.x + this.w/2, this.y + this.h/2);
+        }
     }
 
 }
