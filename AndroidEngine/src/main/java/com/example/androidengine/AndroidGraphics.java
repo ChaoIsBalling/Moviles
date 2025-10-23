@@ -222,6 +222,10 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
+    public void rellenarCuadrado(float x, float y, float w, float h) {
+    }
+
+    @Override
     public float real2LogicX(float x) {
         return (x + this.scale*this.logicW);
     }

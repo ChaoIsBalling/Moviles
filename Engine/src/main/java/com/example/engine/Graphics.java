@@ -39,6 +39,8 @@ public interface Graphics {
 
     public void rellenarCirculo(float x, float y, float r);
 
+    public void rellenarCuadrado(float x, float y, float w, float h);
+
     public float real2LogicX(float x);
 
     public float real2LogicY(float y);

@@ -19,59 +19,8 @@ public class Button {
 
         }
     }
-    class Texto{
-        int x;
-        int y;
-        int w;
-        int h;
-        String font;
-        String texto;
 
-        void Render(Graphics gr){
-
-        }
-
-    }
-    interface Figura{
-        int x = 0;
-        int y =0;
-        int color =0;
-        void Render(Graphics gr);
-
-    }
-    class Rectangulo implements Figura{
-        int w;
-        int h;
-        @Override
-        public void Render(Graphics gr) {
-
-        }
-    }
-    class Triangulo implements Figura{
-        int x2;
-        int y2;
-        int x3;
-        int y3;
-        @Override
-        public void Render(Graphics gr) {
-
-        }
-    }
-    class Pentagono implements Figura{
-        int x2;
-        int y2;
-        int x3;
-        int y3;
-        int x4;
-        int y4;
-        int x5;
-        int y5;
-        @Override
-        public void Render(Graphics gr) {
-
-        }
-    }
-
+    //Atributos del botón
     private float x;
     private float y;
     private float w;
@@ -82,7 +31,6 @@ public class Button {
 
     int color = 0x00000000;
     Imagen imagen;
-    Texto texto;
     Figure figura;
 
     public Button(float x, float y, float w, float h){
@@ -106,6 +54,7 @@ public class Button {
         this.figura = fig;
     }
     public void Render(Graphics gr) {
+        //Renderizamos el cuadrado que representa el botón
         gr.setColor(color);
         gr.pintarCuadrado(this.x,this.y,this.w,this.h);
         gr.setColor(color);
@@ -114,7 +63,8 @@ public class Button {
 
         //Renderizamos figura centrada
         if(this.figura != null){
-            this.figura.RenderCentrado(gr,this.x + this.w/2, this.y + this.h/2);
+            this.figura.RenderCentrado(gr,this.x + this.w/2 + this.figura.getX(),
+                    this.y + this.h/2 + this.figura.getY());
         }
     }
 

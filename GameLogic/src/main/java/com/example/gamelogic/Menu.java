@@ -1,5 +1,6 @@
 package com.example.gamelogic;
 
+import com.example.engine.Circle;
 import com.example.engine.Engine;
 import com.example.engine.Square;
 import com.example.engine.Graphics;
@@ -29,8 +30,9 @@ public class Menu implements State {
         this.engine = engine;
 
         botonInicial = new Button(400/2, 500/2, 200,100);
-        figuraBoton = new Square(0 , 0,50,50);
-        figuraBoton.setColor(0x000000FF);
+        //figuraBoton = new Circle(-60,0,20, true);
+        figuraBoton = new Square(-90,-20,40,40, true);
+        figuraBoton.setColor(0x0000FF00);
         botonInicial.setFigura(figuraBoton);
     }
     @Override
@@ -51,7 +53,6 @@ public class Menu implements State {
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
-
             switch (e.type){
                 case TOUCH_DOWN:
                     if(botonInicial.contains(e.x,e.y)){

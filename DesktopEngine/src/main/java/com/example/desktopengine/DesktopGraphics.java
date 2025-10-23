@@ -163,13 +163,14 @@ public class DesktopGraphics implements Runnable, Graphics{
         this.graphics2D.setPaintMode();
     }
 
+    @Override
     public void rellenarCuadrado(float x, float y, float w, float h)
     {
         this.graphics2D.fillRect((int)x,(int)y,(int)w,(int)h);
         this.graphics2D.setPaintMode();
     }
 
-     public void rellanarTriangulo(float x1,float y1,float x2,float y2, float x3, float y3)
+     public void rellenarTriangulo(float x1,float y1,float x2,float y2, float x3, float y3)
      {
          this.graphics2D.fillPolygon(new int[]{(int)x1,(int)x2,(int)x3},
                  new int[]{(int)y1,(int)y2,(int)y3},3);
