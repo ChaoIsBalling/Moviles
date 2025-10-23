@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private SurfaceView renderView;
     private AndroidGraphics androidGraphics;
     private AndroidEngine engine;
-
+    private Menu menu;
     private GameLogic gameLogic;
 
     @Override
@@ -29,10 +29,11 @@ public class MainActivity extends AppCompatActivity {
         this.renderView = new SurfaceView(this);
         setContentView(this.renderView);
         this.gameLogic = new GameLogic();
+        this.menu= new Menu(engine);
         this.androidGraphics=new AndroidGraphics(this.renderView);
         this.engine = new AndroidEngine(this.renderView);
-        Menu menu = new Menu(engine);
-        this.engine.setState(menu);
+        this.engine.setState(this.menu);
+        this.menu.render(androidGraphics);
     }
 
     @Override

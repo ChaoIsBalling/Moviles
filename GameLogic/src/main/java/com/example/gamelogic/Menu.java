@@ -41,7 +41,7 @@ public class Menu implements State {
 
     @Override
     public void render(Graphics gr) {
-        gr.setColor(0x00000000);
+        gr.setColor(0x000000FF);
         //gr.pintarCuadrado(x,y,w,h);
         botonInicial.setText(gr,"Inika-Regular.ttf","Hola", 20);
         botonInicial.Render(gr);

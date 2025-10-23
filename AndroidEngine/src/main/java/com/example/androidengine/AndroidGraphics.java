@@ -143,7 +143,10 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void pintarTextoCentrado(String texto, float x, float y) {
-
+        Paint.FontMetrics metrics= this.paint.getFontMetrics();
+        Rect r= new Rect();
+        this.paint.getTextBounds(texto,0,texto.length(),r);
+        this.canvas.drawText(texto,x-r.width()/2,y+r.height()/2,this.paint);
     }
 
     @Override
@@ -176,7 +179,7 @@ public class AndroidGraphics implements Graphics {
     @Override
     public IFont newFont(String path,float size)
     {
-        return this.newFont(fontDir+path,size,false,false);
+        return this.newFont(path,size,false,false);
     }
     @Override
     public IFont newFont(String path, float size,boolean bold )
@@ -186,7 +189,7 @@ public class AndroidGraphics implements Graphics {
     @Override
     public IFont newFont(String path, float size,boolean bold, boolean italic )
     {
-        return new AndroidFont(this.assetManager,path,size,bold,italic);
+        return new AndroidFont(this.assetManager,fontDir+path,size,bold,italic);
     }
     @Override
     public void escalar(float x, float y) {
