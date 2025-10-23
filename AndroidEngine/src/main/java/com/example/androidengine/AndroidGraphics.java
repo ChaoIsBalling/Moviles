@@ -24,6 +24,8 @@ public class AndroidGraphics implements Graphics {
     private Paint paint;
     private Canvas canvas;
 
+    private String imageDir="Images/";
+    private String fontDir="Fonts/";
     private Thread renderThread;
 
     private float scale;
@@ -34,7 +36,7 @@ public class AndroidGraphics implements Graphics {
     private float logicH;
     private float logicW;
     private Context context;
-    String root = "data/";
+
     //private Asset asset;
 
     private boolean running;
@@ -141,7 +143,10 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void pintarTextoCentrado(String texto, float x, float y) {
-
+        Paint.FontMetrics metrics= this.paint.getFontMetrics();
+        Rect r= new Rect();
+        this.paint.getTextBounds(texto,0,texto.length(),r);
+        this.canvas.drawText(texto,x-r.width()/2,y+r.height()/2,this.paint);
     }
 
     @Override
@@ -151,29 +156,14 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public IFont newFont(String f) {
-        return null;
-    }
-
-    @Override
-    public IFont newFont(String f, float size) {
-        return null;
-    }
-
-    @Override
-    public IFont newFont(String f, float size, boolean bold) {
-        return null;
-    }
-
-    @Override
-    public IFont newFont(String f, float size, boolean bold, boolean italic) {
-        return null;
+        return this.newFont(f,10);
     }
 
     @Override
     public IImage newImage(String f) {
         InputStream is = null;
         try {
-            is = assetManager.open(f);
+            is = assetManager.open(imageDir+f);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -183,20 +173,23 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void setFont(IFont font) {
-    
-
+    AndroidFont af =(AndroidFont) font;
+    this.paint.setTypeface(af.getTypeface());
     }
-    public IFont createFont(String path,float size)
+    @Override
+    public IFont newFont(String path,float size)
     {
-        return this.createFont(path,size,false,false);
+        return this.newFont(path,size,false,false);
     }
-    public IFont createFont(String path, float size,boolean bold )
+    @Override
+    public IFont newFont(String path, float size,boolean bold )
     {
-        return this.createFont(path,size,bold,false);
+        return this.newFont(path,size,bold,false);
     }
-    public IFont createFont(String path, float size,boolean bold, boolean italic )
+    @Override
+    public IFont newFont(String path, float size,boolean bold, boolean italic )
     {
-        return new AndroidFont(this.assetManager,path,size,bold,italic);
+        return new AndroidFont(this.assetManager,fontDir+path,size,bold,italic);
     }
     @Override
     public void escalar(float x, float y) {

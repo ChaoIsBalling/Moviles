@@ -24,6 +24,10 @@ public class AndroidFont implements IFont {
 
     }
 
+    public Typeface getTypeface()
+    {
+        return this.tFont;
+    }
 
     @Override
     public int getSize() {

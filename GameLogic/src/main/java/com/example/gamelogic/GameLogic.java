@@ -59,6 +59,9 @@ public class GameLogic implements State {
                 case TOUCH_UP:
 
                     break;
+                case TOUCH_MOVE:
+                    System.out.println("Dedooo");
+                    break;
             }
         }
     }
