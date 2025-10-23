@@ -92,7 +92,7 @@ public class AndroidEngine implements Engine,Runnable {
             // Informe de FPS
             double elapsedTime = (double) nanoElapsedTime / 1.0E9;
 
-            for (TouchEvent e: input.getTouchEvents()){
+            for (TouchEvent e: this.input.getTouchEvents()){
                 e.x = this.gr.real2LogicX(e.x);
                 e.y = this.gr.real2LogicY(e.y);
             }

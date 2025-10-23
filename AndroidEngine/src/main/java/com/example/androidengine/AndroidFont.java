@@ -8,9 +8,11 @@ public class AndroidFont implements IFont {
     private Typeface tFont;
     private float size;
 
+    private String fontDir="Fonts/";
+
     public AndroidFont(AssetManager as,String file, float size, boolean bold, boolean italic)
     {
-        Typeface tmp=Typeface.createFromAsset(as,file);
+        Typeface tmp=Typeface.createFromAsset(as,fontDir+file);
         this.size=size;
         int style =tmp.getStyle();
         // Ponemos un determinado estilo y tamaño
@@ -24,6 +26,10 @@ public class AndroidFont implements IFont {
 
     }
 
+    public Typeface getTypeface()
+    {
+        return this.tFont;
+    }
 
     @Override
     public int getSize() {
