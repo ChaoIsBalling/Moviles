@@ -1,31 +1,26 @@
-package com.example.engine;
+package com.example.gamelogic;
 
-public class Square implements Figure{
+import com.example.engine.Graphics;
 
+public class Circle implements Figure{
     private float x;
     private float y;
-    private float w;
-    private float h;
-
+    private float r;
     private int color;
-
     private boolean isFill;
 
-    public Square(float x, float y, float w, float h, boolean isFill){
+    public Circle(float x, float y, float r, boolean isFill){
         this.x = x;
         this.y = y;
-        this.w = w;
-        this.h = h;
+        this.r = r;
         this.isFill = isFill;
     }
-    public Square(float x, float y, float w, float h){
+
+    public Circle(float x, float y, float r){
         this.x = x;
         this.y = y;
-        this.w = w;
-        this.h = h;
+        this.r = r;
     }
-
-
     @Override
     public float getX() {
         return this.x;
@@ -49,17 +44,20 @@ public class Square implements Figure{
     @Override
     public void Render(Graphics gr) {
         gr.setColor(this.color);
-        if(this.isFill){
-            gr.rellenarCuadrado(this.x, this.y, this.w, this.h);
-        }
-        gr.pintarCuadrado(this.x,this.y,this.w,this.h);
+
+        if(isFill)
+            gr.rellenarCirculo(this.x, this.y, this.r);
+        else
+            gr.pintarCirculo(this.x, this.y,this.r);
     }
 
+    @Override
     public void RenderCentrado(Graphics gr, float x, float y) {
         gr.setColor(this.color);
-        if(this.isFill){
-            gr.rellenarCuadrado(x, y, this.w, this.h);
-        }
-        gr.pintarCuadrado(x,y,this.w,this.h);
+
+        if(isFill)
+            gr.rellenarCirculo(x, y, this.r);
+        else
+            gr.pintarCirculo(x, y,this.r);
     }
 }

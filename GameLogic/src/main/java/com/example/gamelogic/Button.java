@@ -2,10 +2,7 @@ package com.example.gamelogic;
 
 //import java.awt.Font;
 //import java.awt.Graphics;
-import java.awt.Image;
-import java.util.ArrayList;
 
-import com.example.engine.Figure;
 import com.example.engine.Graphics;
 import com.example.engine.IFont;
 public class Button {

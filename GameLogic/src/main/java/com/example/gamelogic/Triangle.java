@@ -1,4 +1,6 @@
-package com.example.engine;
+package com.example.gamelogic;
+
+import com.example.engine.Graphics;
 
 public class Triangle implements Figure {
     private float x;

@@ -1,14 +1,11 @@
 package com.example.gamelogic;
 
-import com.example.engine.Circle;
 import com.example.engine.Engine;
-import com.example.engine.Square;
 import com.example.engine.Graphics;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Menu implements State {
     private float x;
