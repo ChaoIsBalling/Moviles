@@ -60,8 +60,8 @@ public class Square implements Figure{
     public void RenderCentrado(Graphics gr, float x, float y) {
         gr.setColor(this.color);
         if(this.isFill){
-            gr.rellenarCuadrado(x, y, this.w, this.h);
+            gr.rellenarCuadrado(x+this.x, y+this.y, this.w, this.h);
         }
-        gr.pintarCuadrado(x,y,this.w,this.h);
+        gr.pintarCuadrado(x+this.x, y+this.y,this.w,this.h);
     }
 }

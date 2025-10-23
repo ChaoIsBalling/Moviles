@@ -17,6 +17,9 @@ public class Menu implements State {
     private Button botonInicial;
 
     private Square figuraBoton;
+
+    private Text textoBoton;
+    private Text textoInicial;
     Engine engine;
 
     public Menu(Engine engine){
@@ -26,11 +29,16 @@ public class Menu implements State {
         this.h =100;
         this.engine = engine;
 
-        botonInicial = new Button(400/2, 500/2, 200,100);
+        botonInicial = new Button(300, 300, 200,100);
+        botonInicial.setColor(0xFF999999);
         //figuraBoton = new Circle(-60,0,20, true);
-        figuraBoton = new Square(-90,-20,40,40, true);
+        figuraBoton = new Square(-60,0,40,40, true);
         figuraBoton.setColor(0x0000FF00);
         botonInicial.setFigura(figuraBoton);
+        textoBoton = new Text("Inika-Regular.ttf","Hola",0,0,20,true,true);
+        botonInicial.setText(textoBoton);
+        textoInicial = new Text("Inika-Regular.ttf","Tower Defense",300,150,40,true,true);
+
     }
     @Override
     public void update(double deltatime) {
@@ -42,9 +50,8 @@ public class Menu implements State {
     @Override
     public void render(Graphics gr) {
         gr.setColor(0x00000000);
-        //gr.pintarCuadrado(x,y,w,h);
-        botonInicial.setText(gr,"Inika-Regular.ttf","Hola", 20);
         botonInicial.Render(gr);
+        textoInicial.Render(gr);
     }
 
     @Override

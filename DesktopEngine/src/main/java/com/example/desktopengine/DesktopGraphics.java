@@ -50,12 +50,12 @@ public class DesktopGraphics implements Runnable, Graphics{
     public void startFrame()
     {
         this.graphics2D=(Graphics2D) this.bufferStrategy.getDrawGraphics();
-        this.clear(); //Llamamos a metodo que limpia la pantalla
 
         calculateTransforms();
 
         this.trasladar(offsetX,offsetY);
         this.escalar(scale,scale);
+        this.clear(); //Llamamos a metodo que limpia la pantalla
     }
 
     private void calculateTransforms(){
@@ -92,7 +92,7 @@ public class DesktopGraphics implements Runnable, Graphics{
     {
         //this.graphics2D.setColor(new java.awt.Color(0xFFFFFFFF, true));
         this.setColor(0xFFFFFFF);
-        this.rellenarCuadrado(0,0,this.myView.getWidth(),this.myView.getHeight());
+        this.rellenarCuadrado(logicW/2,logicH/2,this.myView.getWidth(),this.myView.getHeight());
     }
     public void pintarTexto(String texto, float x, float y)
     {
@@ -159,14 +159,14 @@ public class DesktopGraphics implements Runnable, Graphics{
     @Override
     public void pintarCuadrado(float x, float y, float w, float h)
     {
-        this.graphics2D.drawRect((int)x,(int)y,(int)w,(int)h);
+        this.graphics2D.drawRect((int)(x-w/2),(int)(y-h/2),(int)w,(int)h);
         this.graphics2D.setPaintMode();
     }
 
     @Override
     public void rellenarCuadrado(float x, float y, float w, float h)
     {
-        this.graphics2D.fillRect((int)x,(int)y,(int)w,(int)h);
+        this.graphics2D.fillRect((int)(x-w/2),(int)(y-h/2),(int)w,(int)h);
         this.graphics2D.setPaintMode();
     }
 

@@ -23,8 +23,7 @@ public class Button {
     private float w;
     private float h;
 
-    String text = "";
-    private IFont f;
+    Text text;
 
     int color = 0x00000000;
     Imagen imagen;
@@ -37,14 +36,17 @@ public class Button {
         this.h = h;
     }
 
-    public void setText(Graphics gr, String file, String text, float size) {
-        this.f = gr.newFont(file,size, true);
+    public void setText(Text text) {
         this.text = text;
     }
 
+    public void setColor(int color){
+        this.color = color;
+    }
+
     public boolean contains(float x, float y){
-        return x >= this.x && x <= this.x + this.w &&
-                y >= this.y && y <= this.y + this.h;
+        return x >= this.x-this.w/2 && x <= this.x + this.w/2 &&
+                y >= this.y-this.h/2 && y <= this.y + this.h/2;
     }
 
     public void setFigura(Figure fig){
@@ -53,15 +55,12 @@ public class Button {
     public void Render(Graphics gr) {
         //Renderizamos el cuadrado que representa el botón
         gr.setColor(color);
-        gr.pintarCuadrado(this.x,this.y,this.w,this.h);
-        gr.setColor(color);
-        gr.setFont(this.f);
-        gr.pintarTextoCentrado(this.text,this.x + this.w/2,this.y + this.h/2);
+        gr.rellenarCuadrado(this.x,this.y,this.w,this.h);
+        this.text.RenderCentrado(gr,this.x,this.y);
 
         //Renderizamos figura centrada
         if(this.figura != null){
-            this.figura.RenderCentrado(gr,this.x + this.w/2 + this.figura.getX(),
-                    this.y + this.h/2 + this.figura.getY());
+            this.figura.RenderCentrado(gr,this.x,this.y);
         }
     }
 

@@ -56,8 +56,8 @@ public class Circle implements Figure{
         gr.setColor(this.color);
 
         if(isFill)
-            gr.rellenarCirculo(x, y, this.r);
+            gr.rellenarCirculo(x+this.x, y+this.y, this.r);
         else
-            gr.pintarCirculo(x, y,this.r);
+            gr.pintarCirculo(x+this.x, y+this.y,this.r);
     }
 }
