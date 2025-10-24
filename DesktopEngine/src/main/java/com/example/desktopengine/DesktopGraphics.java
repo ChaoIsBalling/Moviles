@@ -194,6 +194,12 @@ public class DesktopGraphics implements Runnable, Graphics{
     }
 
     @Override
+    public void rellenarCuadradoRedondeado(float x, float y, float w, float h, float ar) {
+        this.graphics2D.fillRoundRect((int)(x-w/2),(int)(y-h/2),(int)w,(int)h, (int)ar, (int)ar);
+        this.graphics2D.setPaintMode();
+    }
+
+    @Override
     public void rellenarPoligono(float cx, float cy, float r, int nv) {
         //Si el numero de vertices es menor a 3 no hacemos nada
         if(nv<3)

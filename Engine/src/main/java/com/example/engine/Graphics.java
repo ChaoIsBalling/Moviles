@@ -42,6 +42,8 @@ public interface Graphics {
 
     public void rellenarCuadrado(float x, float y, float w, float h);
 
+    public void rellenarCuadradoRedondeado(float x, float y, float w, float h, float ar);
+
     public void rellenarPoligono(float cx, float cy, float r, int nv);
 
     public float real2LogicX(float x);

@@ -23,12 +23,24 @@ public class Button {
     private float w;
     private float h;
 
+    private boolean isRound = false;
+
+    private float arcRadius;
+
     Text text;
 
     int color = 0x00000000;
     Imagen imagen;
     Figure figura;
 
+    public Button(float x, float y, float w, float h, boolean isRound, float ar){
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.isRound = isRound;
+        this.arcRadius = ar;
+    }
     public Button(float x, float y, float w, float h){
         this.x = x;
         this.y = y;
@@ -55,7 +67,12 @@ public class Button {
     public void Render(Graphics gr) {
         //Renderizamos el cuadrado que representa el botón
         gr.setColor(color);
-        gr.rellenarCuadrado(this.x,this.y,this.w,this.h);
+
+        if(isRound)
+            gr.rellenarCuadradoRedondeado(this.x,this.y,this.w,this.h,this.arcRadius);
+        else
+            gr.rellenarCuadrado(this.x,this.y,this.w,this.h);
+
         this.text.RenderCentrado(gr,this.x,this.y);
 
         //Renderizamos figura centrada

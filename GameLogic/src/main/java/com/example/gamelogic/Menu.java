@@ -20,6 +20,8 @@ public class Menu implements State {
 
     private Triangle tri;
 
+    private Hexagon hex;
+
     private Text textoBoton;
     private Text textoInicial;
     Engine engine;
@@ -31,17 +33,19 @@ public class Menu implements State {
         this.h =100;
         this.engine = engine;
 
-        botonInicial = new Button(300, 300, 200,100);
+        botonInicial = new Button(300, 250, 200,50,true,20);
         botonInicial.setColor(0xFF999999);
         //figuraBoton = new Circle(-60,0,20, true);
-        figuraBoton = new Square(-60,0,40,40, true);
-        figuraBoton.setColor(0x0000FF00);
-        tri = new Triangle(-60,0,40,true);
-        tri.setColor(0x0000FF00);
-        botonInicial.setFigura(tri);
-        textoBoton = new Text("Inika-Regular.ttf","Hola",0,0,20,true,true);
+        //figuraBoton = new Square(-60,0,40,40, true);
+        //figuraBoton.setColor(0x0000FF00);
+        //tri = new Triangle(-60,0,40,true);
+        //tri.setColor(0x00000000);
+        //hex = new Hexagon(-60,0,40, true);
+        //hex.setColor(0x000000FF);
+        //botonInicial.setFigura(figuraBoton);
+        textoBoton = new Text("Inika-Regular.ttf","Jugar",0,0,30,true,true);
         botonInicial.setText(textoBoton);
-        textoInicial = new Text("Inika-Regular.ttf","Tower Defense",300,150,40,true,true);
+        textoInicial = new Text("Inika-Regular.ttf","TowerDefense",300,150,40,true,true);
 
     }
     @Override
