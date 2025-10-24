@@ -164,13 +164,59 @@ public class DesktopGraphics implements Runnable, Graphics{
     }
 
     @Override
+    public void pintarPoligono(float cx, float cy, float r, int nv) {
+        //Si el numero de vertices es menor a 3 no hacemos nada
+        if(nv<3)
+            return;
+
+        //Coordendadas de los vertices del poligono
+        int [] coorX = new int[nv];
+        int [] coorY = new int[nv];
+
+        double angleStep = 2 * Math.PI / nv;
+
+
+        for(int i = 0; i<nv;i++){
+            double angle = angleStep* i - Math.PI /2;
+            int x = (int) (cx + r * Math.cos(angle));
+            int y = (int) (cy + r * Math.sin(angle));
+            coorX[i] = x; coorY[i]= y;
+        }
+
+        graphics2D.drawPolygon(coorX,coorY,nv);
+    }
+
+    @Override
     public void rellenarCuadrado(float x, float y, float w, float h)
     {
         this.graphics2D.fillRect((int)(x-w/2),(int)(y-h/2),(int)w,(int)h);
         this.graphics2D.setPaintMode();
     }
 
-     public void rellenarTriangulo(float x1,float y1,float x2,float y2, float x3, float y3)
+    @Override
+    public void rellenarPoligono(float cx, float cy, float r, int nv) {
+        //Si el numero de vertices es menor a 3 no hacemos nada
+        if(nv<3)
+            return;
+
+        //Coordendadas de los vertices del poligono
+        int [] coorX = new int[nv];
+        int [] coorY = new int[nv];
+
+        double angleStep = 2 * Math.PI / nv;
+
+
+        for(int i = 0; i<nv;i++){
+            double angle = angleStep* i - Math.PI /2;
+            int x = (int) (cx + r * Math.cos(angle));
+            int y = (int) (cy + r * Math.sin(angle));
+            coorX[i] = x; coorY[i]= y;
+        }
+
+        graphics2D.fillPolygon(coorX,coorY,nv);
+    }
+
+    public void rellenarTriangulo(float x1,float y1,float x2,float y2, float x3, float y3)
      {
          this.graphics2D.fillPolygon(new int[]{(int)x1,(int)x2,(int)x3},
                  new int[]{(int)y1,(int)y2,(int)y3},3);

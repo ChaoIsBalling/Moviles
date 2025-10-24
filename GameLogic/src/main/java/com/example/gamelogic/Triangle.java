@@ -3,35 +3,36 @@ package com.example.gamelogic;
 import com.example.engine.Graphics;
 
 public class Triangle implements Figure {
-    private float x;
+    private float cx;
 
-    private float y;
+    private float cy;
 
-    private float v1;
-
-    private float v2;
-
-    private float v3;
+    private float r;
 
     private int color;
 
     private boolean isFill;
 
-    Triangle(float x, float y, float v1, float v2, float v3){
-        this.x =x;
-        this.y =y;
-        this.v1 = v1;
-        this.v2 = v2;
-        this.v3 = v3;
+
+    public Triangle(float x, float y, float r, boolean isFill){
+        this.cx = x;
+        this.cy = y;
+        this.r = r;
+        this.isFill = isFill;
+    }
+    Triangle(float x, float y, float r){
+        this.cx = x;
+        this.cy = y;
+        this.r = r;
     }
     @Override
     public float getX() {
-        return this.x;
+        return this.cx;
     }
 
     @Override
     public float getY() {
-        return this.y;
+        return this.cy;
     }
 
     @Override
@@ -46,13 +47,23 @@ public class Triangle implements Figure {
 
     @Override
     public void Render(Graphics gr) {
-
+        gr.setColor(this.color);
+        if(isFill){
+            gr.rellenarPoligono(this.cx,this.cy,this.r, 3);
+        }
+        else {
+            gr.pintarPoligono(this.cx,this.cy,this.r, 3);
+        }
     }
 
     @Override
     public void RenderCentrado(Graphics gr, float x, float y) {
+        gr.setColor(this.color);
         if(isFill){
-            //gr
+            gr.rellenarPoligono(x+ this.cx,y + this.cy,this.r, 3);
+        }
+        else {
+            gr.pintarPoligono(x + this.cx,y + this.cy,this.r, 3);
         }
     }
 }

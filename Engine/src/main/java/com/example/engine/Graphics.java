@@ -5,10 +5,6 @@ import java.awt.Font;
 public interface Graphics {
     public int getWidth();
 
-    public void pintarCirculo(float x, float y, float r);
-
-    public void pintarCuadrado(float x, float y, float w, float h);
-
     public void pintarFondo(int color);
 
     public void pintarTexto(String texto, float x, float y);
@@ -36,10 +32,17 @@ public interface Graphics {
     public void trasladar(float x,float y);
 
     public void setLogicSize(float w, float h);
+    public void pintarCirculo(float x, float y, float r);
+
+    public void pintarCuadrado(float x, float y, float w, float h);
+
+    public void pintarPoligono(float cx, float cy, float r, int nv);
 
     public void rellenarCirculo(float x, float y, float r);
 
     public void rellenarCuadrado(float x, float y, float w, float h);
+
+    public void rellenarPoligono(float cx, float cy, float r, int nv);
 
     public float real2LogicX(float x);
 

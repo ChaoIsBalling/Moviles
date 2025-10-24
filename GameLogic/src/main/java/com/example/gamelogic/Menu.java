@@ -18,6 +18,8 @@ public class Menu implements State {
 
     private Square figuraBoton;
 
+    private Triangle tri;
+
     private Text textoBoton;
     private Text textoInicial;
     Engine engine;
@@ -34,7 +36,9 @@ public class Menu implements State {
         //figuraBoton = new Circle(-60,0,20, true);
         figuraBoton = new Square(-60,0,40,40, true);
         figuraBoton.setColor(0x0000FF00);
-        botonInicial.setFigura(figuraBoton);
+        tri = new Triangle(-60,0,40,true);
+        tri.setColor(0x0000FF00);
+        botonInicial.setFigura(tri);
         textoBoton = new Text("Inika-Regular.ttf","Hola",0,0,20,true,true);
         botonInicial.setText(textoBoton);
         textoInicial = new Text("Inika-Regular.ttf","Tower Defense",300,150,40,true,true);

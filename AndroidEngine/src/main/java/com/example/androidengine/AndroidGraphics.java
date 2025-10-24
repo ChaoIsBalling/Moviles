@@ -122,6 +122,11 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
+    public void pintarPoligono(float cx, float cy, float r, int nv) {
+
+    }
+
+    @Override
     public void pintarFondo(int color) {
 
     }
@@ -216,6 +221,11 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void rellenarCuadrado(float x, float y, float w, float h) {
+    }
+
+    @Override
+    public void rellenarPoligono(float cx, float cy, float r, int nv) {
+
     }
 
     @Override
