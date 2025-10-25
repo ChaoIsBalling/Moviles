@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
@@ -17,6 +18,7 @@ import java.io.InputStream;
 import android.graphics.BitmapFactory;
 import android.content.res.AssetManager;
 import android.content.Context;
+import android.graphics.Path;
 public class AndroidGraphics implements Graphics {
     AssetManager assetManager;
     private SurfaceHolder holder;
@@ -111,23 +113,53 @@ public class AndroidGraphics implements Graphics {
     }
     @Override
     public void pintarCirculo(float x, float y, float r) {
-        this.paint.setColor(Color.MAGENTA);
         this.canvas.drawCircle(x,y,r,this.paint);
     }
-
+    @Override
+    public void rellenarCuadradoRedondeado(float x, float y, float w, float h, float ar)
+    {
+        this.paint.setStyle(Paint.Style.FILL);
+        RectF r = new RectF(x,y,x+w,y+h);
+        this.canvas.drawRoundRect(r,x,y,this.paint);
+    }
     @Override
     public void pintarCuadrado(float x, float y, float w, float h) {
-        this.paint.setStyle(Paint.Style.FILL);
         this.canvas.drawRect(x,y,x+w,y+h,this.paint);
     }
 
     @Override
     public void pintarPoligono(float cx, float cy, float r, int nv) {
+        if(nv<3)
+            return;
 
+        //Coordendadas de los vertices del poligono
+        int [] coorX = new int[nv];
+        int [] coorY = new int[nv];
+
+        double angleStep = 2 * Math.PI / nv;
+
+
+        for(int i = 0; i<nv;i++){
+            double angle = angleStep* i - Math.PI /2;
+            int x = (int) (cx + r * Math.cos(angle));
+            int y = (int) (cy + r * Math.sin(angle));
+            coorX[i] = x; coorY[i]= y;
+        }
+        Path wallpath = new Path();
+        wallpath.reset();
+        wallpath.moveTo(coorX[0], coorY[0]);//Primer punto
+        for(int i = 1; i<nv;i++) {
+            wallpath.lineTo(coorX[i], coorY[i]);
+        }
+        wallpath.lineTo(coorX[0], coorY[0]);//Volvemos al primer punto
+        this.canvas.drawPath(wallpath, this.paint);
     }
 
     @Override
     public void pintarFondo(int color) {
+        this.paint.setColor(color);
+        this.paint.setStyle(Paint.Style.FILL);
+        this.canvas.drawRect(0,0,this.canvas.getWidth(),this.canvas.getHeight(),this.paint);
 
     }
 
@@ -221,10 +253,37 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void rellenarCuadrado(float x, float y, float w, float h) {
+        this.paint.setStyle(Paint.Style.FILL);
+        this.canvas.drawRect(x,y,x+w,y+h,this.paint);
     }
 
     @Override
     public void rellenarPoligono(float cx, float cy, float r, int nv) {
+        this.paint.setStyle(Paint.Style.FILL);
+        if(nv<3)
+            return;
+
+        //Coordendadas de los vertices del poligono
+        int [] coorX = new int[nv];
+        int [] coorY = new int[nv];
+
+        double angleStep = 2 * Math.PI / nv;
+
+
+        for(int i = 0; i<nv;i++){
+            double angle = angleStep* i - Math.PI /2;
+            int x = (int) (cx + r * Math.cos(angle));
+            int y = (int) (cy + r * Math.sin(angle));
+            coorX[i] = x; coorY[i]= y;
+        }
+        Path wallpath = new Path();
+        wallpath.reset();
+        wallpath.moveTo(coorX[0], coorY[0]);//Primer punto
+        for(int i = 1; i<nv;i++) {
+            wallpath.lineTo(coorX[i], coorY[i]);
+        }
+        wallpath.lineTo(coorX[0], coorY[0]);//Volvemos al primer punto
+        this.canvas.drawPath(wallpath, this.paint);
 
     }
 
