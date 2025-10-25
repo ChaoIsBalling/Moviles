@@ -73,7 +73,9 @@ public class Button {
         else
             gr.rellenarCuadrado(this.x,this.y,this.w,this.h);
 
-        this.text.RenderCentrado(gr,this.x,this.y);
+        if(this.text != null){
+            this.text.RenderCentrado(gr,this.x,this.y);
+        }
 
         //Renderizamos figura centrada
         if(this.figura != null){
