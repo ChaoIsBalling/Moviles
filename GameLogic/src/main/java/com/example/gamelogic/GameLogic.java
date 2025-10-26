@@ -5,6 +5,7 @@ import com.example.engine.State;
 import com.example.engine.TouchEvent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GameLogic implements State {
     boolean firstFrame = false;
@@ -29,15 +30,26 @@ public class GameLogic implements State {
 
     //mapa
     ArrayList<ArrayList<Square>> casillas;
+    ArrayList<ArrayList<String>> leer;
+
     public GameLogic(){
         this.casillas = new ArrayList<ArrayList<Square>>();
-
+        this.leer = new ArrayList<ArrayList<String>>();
+        this.InitPrueba();
         for (int i =0; i<this.fil;i++){
             ArrayList<Square> fila = new ArrayList<Square>();
             for(int j =0; j<this.col;j++){
-                Square cuad = new Square((float)(j*35+30),(float)(i*35+50),35,35,false);
-                cuad.setColor(0xff000000);
-                fila.add(cuad);
+                if(this.leer.get(i).get(j) == "h"){
+                    Square cuad = new Square((float)(j*35+30),(float)(i*35+50),35,35,false);
+                    cuad.setColor(0xff000000);
+                    fila.add(cuad);
+                }
+                else{
+                    Square cuad = new Square((float)(j*35+30),(float)(i*35+50),35,35,true);
+                    cuad.setColor(0xff944d03);
+                    fila.add(cuad);
+                }
+
             }
             this.casillas.add(fila);
         }
@@ -115,6 +127,33 @@ public class GameLogic implements State {
 
         this.costeMejoraHexagonos = new Text("Inika-Regular.ttf","200",0,15,15,true,true);
         this.botonMejoraHexagonos.setText(this.costeMejoraHexagonos);
+    }
+
+    public void InitPrueba(){
+        ArrayList<String> filaL = new ArrayList<String>();
+        filaL.addAll(List.of("h","h","h","h","h","h","h","h","h","h","h","h","h","h","h"));
+        this.leer.add(filaL);
+        filaL = new ArrayList<String>();
+        filaL.addAll(List.of("c","c","c","c","c","c","c","c","h","h","h","h","h","h","h"));
+        this.leer.add(filaL);
+        filaL = new ArrayList<String>();
+        filaL.addAll(List.of("h","h","h","h","h","h","h","c","h","h","h","h","h","h","h"));
+        this.leer.add(filaL);
+        filaL = new ArrayList<String>();
+        filaL.addAll(List.of("h","h","h","h","h","h","h","c","h","h","h","h","h","h","h"));
+        this.leer.add(filaL);
+        filaL = new ArrayList<String>();
+        filaL.addAll(List.of("h","h","h","h","h","h","h","c","h","h","h","h","h","h","h"));
+        this.leer.add(filaL);
+        filaL = new ArrayList<String>();
+        filaL.addAll(List.of("h","h","h","h","h","h","h","c","h","h","h","h","h","h","h"));
+        this.leer.add(filaL);
+        filaL = new ArrayList<String>();
+        filaL.addAll(List.of("h","h","h","h","h","h","h","c","c","c","c","c","c","c","c"));
+        this.leer.add(filaL);
+        filaL = new ArrayList<String>();
+        filaL.addAll(List.of("h","h","h","h","h","h","h","h","h","h","h","h","h","h","h"));
+        this.leer.add(filaL);
     }
 
 
