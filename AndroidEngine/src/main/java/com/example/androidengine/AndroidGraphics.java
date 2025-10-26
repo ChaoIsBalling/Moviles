@@ -55,19 +55,20 @@ public class AndroidGraphics implements Graphics {
         assetManager= context.getAssets();
 
 
-        scale =1;
+        scale =0;
         offsetX=0;
         offsetY=0;
-        logicH=600;
-        logicW=400;
+        logicH=400;
+        logicW=600;
     }
 
     protected void startFrame(){
         while(!this.holder.getSurface().isValid());
         this.canvas = this.holder.lockHardwareCanvas();
 
-        this.clear();
+
         calculateTransforms();
+        this.clear();
         this.trasladar(this.offsetX,this.offsetY);
         this.escalar(this.scale,this.scale);
 
@@ -86,7 +87,7 @@ public class AndroidGraphics implements Graphics {
     }
 
     protected void clear(){
-        this.canvas.drawColor(0xFFFFFFF);;
+        this.canvas.drawColor(0xFFFFFFF);
     }
 
     protected void endFrame(){
@@ -121,12 +122,12 @@ public class AndroidGraphics implements Graphics {
     public void rellenarCuadradoRedondeado(float x, float y, float w, float h, float ar)
     {
         this.paint.setStyle(Paint.Style.FILL);
-        RectF r = new RectF(x,y,x+w,y+h);
+        RectF r = new RectF(x - w/2,y - h/2,x+w/2,y+h/2);
         this.canvas.drawRoundRect(r,x,y,this.paint);
     }
     @Override
     public void pintarCuadrado(float x, float y, float w, float h) {
-        this.canvas.drawRect(x,y,x+w,y+h,this.paint);
+        this.canvas.drawRect(x - w/2,y -h/2,x+w /2,y+h/2,this.paint);
     }
 
     @Override
@@ -147,6 +148,7 @@ public class AndroidGraphics implements Graphics {
             int y = (int) (cy + r * Math.sin(angle));
             coorX[i] = x; coorY[i]= y;
         }
+
         Path wallpath = new Path();
         wallpath.reset();
         wallpath.moveTo(coorX[0], coorY[0]);//Primer punto
@@ -259,7 +261,7 @@ public class AndroidGraphics implements Graphics {
     @Override
     public void rellenarCuadrado(float x, float y, float w, float h) {
         this.paint.setStyle(Paint.Style.FILL);
-        this.canvas.drawRect(x,y,x+w,y+h,this.paint);
+        this.canvas.drawRect(x - w/2,y -h/2,x+w /2,y+h/2,this.paint);
     }
 
     @Override

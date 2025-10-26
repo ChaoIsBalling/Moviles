@@ -21,7 +21,6 @@ public class AndroidFont implements IFont {
             style |= Typeface.ITALIC;
         }
         this.tFont =Typeface.create(tmp,style);
-
     }
 
     public Typeface getTypeface()

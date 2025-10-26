@@ -53,8 +53,10 @@ public class DesktopGraphics implements Runnable, Graphics{
 
         calculateTransforms();
 
+
         this.trasladar(offsetX,offsetY);
         this.escalar(scale,scale);
+
         this.clear(); //Llamamos a metodo que limpia la pantalla
     }
 

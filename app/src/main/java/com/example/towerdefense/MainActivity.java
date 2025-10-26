@@ -28,8 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.renderView = new SurfaceView(this);
         setContentView(this.renderView);
-        this.gameLogic = new GameLogic();
-        this.menu= new Menu(engine);
+
         this.androidGraphics=new AndroidGraphics(this.renderView);
         this.engine = new AndroidEngine(this.renderView);
         this.engine.setState(this.menu);
