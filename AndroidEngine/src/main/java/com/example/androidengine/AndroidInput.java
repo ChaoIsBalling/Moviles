@@ -35,10 +35,13 @@ public class AndroidInput implements Input,View.OnTouchListener{
         switch (action){
             case ACTION_DOWN:
                 myEvent.type= TouchEvent.TouchEventType.TOUCH_DOWN;
+                break;
             case ACTION_UP:
                 myEvent.type= TouchEvent.TouchEventType.TOUCH_UP;
+                break;
             case ACTION_MOVE:
                 myEvent.type= TouchEvent.TouchEventType.TOUCH_MOVE;
+                break;
         }
 
         synchronized (this){

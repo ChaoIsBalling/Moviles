@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.androidGraphics=new AndroidGraphics(this.renderView);
         this.engine = new AndroidEngine(this.renderView);
+        this.menu=new Menu(this.engine);
         this.engine.setState(this.menu);
         this.menu.render(androidGraphics);
     }

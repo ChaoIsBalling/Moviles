@@ -39,6 +39,8 @@ public class AndroidGraphics implements Graphics {
     private float logicW;
     private Context context;
 
+    private AndroidFont af;
+
     //private Asset asset;
 
     private boolean running;
@@ -172,6 +174,7 @@ public class AndroidGraphics implements Graphics {
         Paint.FontMetrics metrics= this.paint.getFontMetrics();
         Rect r= new Rect();
         this.paint.getTextBounds(texto,0,texto.length(),r);
+
         this.canvas.drawText(texto,x-r.width()/2,y+r.height()/2,this.paint);
     }
 
@@ -190,6 +193,7 @@ public class AndroidGraphics implements Graphics {
         this.paint.getTextBounds(texto,0,texto.length(),r);
         float xc= x-(r.width()/2);
         float yc= y+(r.height()/2);
+        this.paint.setTextSize(af.getSize());
         this.canvas.drawText(texto,xc,yc,this.paint);
     }
 
@@ -217,7 +221,7 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void setFont(IFont font) {
-    AndroidFont af =(AndroidFont) font;
+    af =(AndroidFont) font;
     this.paint.setTypeface(af.getTypeface());
     }
     @Override

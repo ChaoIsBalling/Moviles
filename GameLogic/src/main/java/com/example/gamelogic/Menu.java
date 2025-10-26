@@ -48,7 +48,7 @@ public class Menu implements State {
         textoBoton.setColor(0xff00ffff);
         botonInicial.setText(textoBoton);
         textoInicial = new Text("Inika-Regular.ttf","TowerDefense",300,150,40,true,true);
-
+        textoInicial.setColor(0Xff000000);
     }
     @Override
     public void update(double deltatime) {
@@ -76,6 +76,8 @@ public class Menu implements State {
                     break;
                 case TOUCH_UP:
                     System.out.println("Has soltado el raton");
+                    break;
+                case TOUCH_MOVE:
                     break;
             }
         }
