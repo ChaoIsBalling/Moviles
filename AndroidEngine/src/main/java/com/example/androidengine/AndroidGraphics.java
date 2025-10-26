@@ -118,6 +118,7 @@ public class AndroidGraphics implements Graphics {
     }
     @Override
     public void pintarCirculo(float x, float y, float r) {
+        this.paint.setStyle(Paint.Style.STROKE);
         this.canvas.drawCircle(x,y,r,this.paint);
     }
     @Override
@@ -129,11 +130,13 @@ public class AndroidGraphics implements Graphics {
     }
     @Override
     public void pintarCuadrado(float x, float y, float w, float h) {
+        this.paint.setStyle(Paint.Style.STROKE);
         this.canvas.drawRect(x - w/2,y -h/2,x+w /2,y+h/2,this.paint);
     }
 
     @Override
     public void pintarPoligono(float cx, float cy, float r, int nv) {
+        this.paint.setStyle(Paint.Style.STROKE);
         if(nv<3)
             return;
 
