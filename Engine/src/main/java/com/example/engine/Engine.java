@@ -21,5 +21,6 @@ public interface Engine {
     /**
      *
      */
+    public State getState();
     public Graphics getGraphics();
 }

@@ -48,7 +48,11 @@ public class AndroidEngine implements Engine,Runnable {
     public void setState(State state){
         this.state = state;
     }
-
+    @Override
+    public State getState()
+    {
+        return this.state;
+    }
     public Graphics getGraphics(){
         return this.gr;
     }

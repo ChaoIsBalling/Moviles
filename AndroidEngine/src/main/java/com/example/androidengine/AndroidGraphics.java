@@ -70,6 +70,8 @@ public class AndroidGraphics implements Graphics {
         calculateTransforms();
         this.trasladar(this.offsetX,this.offsetY);
         this.escalar(this.scale,this.scale);
+
+
     }
 
     private void calculateTransforms(){
@@ -181,9 +183,12 @@ public class AndroidGraphics implements Graphics {
     @Override
     public void pintarTextoCentrado(String texto, float x, float y) {
         Paint.FontMetrics metrics= this.paint.getFontMetrics();
+        this.paint.setTextAlign(Paint.Align.CENTER);
         Rect r= new Rect();
         this.paint.getTextBounds(texto,0,texto.length(),r);
-        this.canvas.drawText(texto,x-r.width()/2,y+r.height()/2,this.paint);
+        float xc= x-(r.width()/2);
+        float yc= y+(r.height()/2);
+        this.canvas.drawText(texto,xc,yc,this.paint);
     }
 
     @Override

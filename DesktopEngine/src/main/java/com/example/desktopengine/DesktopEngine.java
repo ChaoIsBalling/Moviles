@@ -89,6 +89,11 @@ public class DesktopEngine implements Runnable, Engine {
     public void setState(State state) {
         this.state = state;
     }
+    @Override
+    public State getState()
+    {
+        return this.state;
+    }
 
     @Override
     public Graphics getGraphics() {

@@ -5,6 +5,7 @@ import com.example.engine.Graphics;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 public class Menu implements State {
@@ -44,6 +45,7 @@ public class Menu implements State {
         //hex.setColor(0x000000FF);
         //botonInicial.setFigura(figuraBoton);
         textoBoton = new Text("Inika-Regular.ttf","Jugar",0,0,30,true,true);
+        textoBoton.setColor(0xff00ffff);
         botonInicial.setText(textoBoton);
         textoInicial = new Text("Inika-Regular.ttf","TowerDefense",300,150,40,true,true);
 
