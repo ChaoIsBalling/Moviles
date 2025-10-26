@@ -24,19 +24,22 @@ public class GameLogic implements State {
 
     private Text costeMejoraHexagonos;
 
+    int fil = 8;
+    int col = 15;
+
     //mapa
     ArrayList<ArrayList<Square>> casillas;
     public GameLogic(){
-        casillas = new ArrayList<ArrayList<Square>>();
-        int fil = 8;
-        int col = 15;
-        for (int i =0; i<fil;i++){
+        this.casillas = new ArrayList<ArrayList<Square>>();
+
+        for (int i =0; i<this.fil;i++){
             ArrayList<Square> fila = new ArrayList<Square>();
-            for(int j =0; j<col;j++){
-                Square cuad = new Square((float)(j*100+100),(float)(i*100+100),100,100);
+            for(int j =0; j<this.col;j++){
+                Square cuad = new Square((float)(j*35+30),(float)(i*35+50),35,35,false);
+                cuad.setColor(0xff000000);
                 fila.add(cuad);
             }
-            casillas.add(fila);
+            this.casillas.add(fila);
         }
 
         inicializarUI();
@@ -56,6 +59,11 @@ public class GameLogic implements State {
     @Override
     public void render(Graphics gr) {
         //gr.setColor(0x00000000);
+        for (int i =0; i<this.fil;i++){
+            for(int j =0; j<this.col;j++){
+                this.casillas.get(i).get(j).Render(gr);
+            }
+        }
         this.botonMejoraCuadrados.Render(gr);
         this.botonMejoraTriangulos.Render(gr);
         this.botonMejoraHexagonos.Render(gr);
