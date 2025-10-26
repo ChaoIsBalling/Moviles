@@ -188,12 +188,11 @@ public class AndroidGraphics implements Graphics {
     @Override
     public void pintarTextoCentrado(String texto, float x, float y) {
         Paint.FontMetrics metrics= this.paint.getFontMetrics();
-        this.paint.setTextAlign(Paint.Align.CENTER);
         Rect r= new Rect();
-        this.paint.getTextBounds(texto,0,texto.length(),r);
-        float xc= x-(r.width()/2);
-        float yc= y+(r.height()/2);
         this.paint.setTextSize(af.getSize());
+        this.paint.getTextBounds(texto,0,texto.length(),r);
+        float xc= x-r.width()/2;
+        float yc= y+r.height()/2- metrics.descent;
         this.canvas.drawText(texto,xc,yc,this.paint);
     }
 
