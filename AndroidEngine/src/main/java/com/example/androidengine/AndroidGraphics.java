@@ -300,12 +300,12 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public float real2LogicX(float x) {
-        return (x + this.scale*this.logicW);
+        return (x - offsetX) / scale;
     }
 
     @Override
     public float real2LogicY(float y) {
-        return (y + this.scale*this.logicH);
+        return (y - offsetY) / scale;
     }
 
 }
