@@ -26,11 +26,13 @@ public class AndroidEngine implements Engine,Runnable {
 
     private AndroidInput input;
 
+    private AndroidAudio audio;
     public AndroidEngine(SurfaceView view){
         this.sView = view;
         this.input = new AndroidInput();
         this.sView.setOnTouchListener(this.input);
         this.gr = new AndroidGraphics(view);
+        this.audio=new AndroidAudio(sView.getContext().getAssets());
 
     }
 

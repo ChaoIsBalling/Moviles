@@ -18,6 +18,8 @@ public interface Engine {
      */
     public void setState(State state);
 
+    public Audio getAudio();
+
     /**
      *
      */
