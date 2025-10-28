@@ -25,6 +25,7 @@ public class Menu implements State {
 
     private Text textoBoton;
     private Text textoInicial;
+    private Audio audio;
     Engine engine;
 
     public Menu(Engine engine){
@@ -49,6 +50,8 @@ public class Menu implements State {
         botonInicial.setText(textoBoton);
         textoInicial = new Text("Inika-Regular.ttf","TowerDefense",300,150,40,true,true);
         textoInicial.setColor(0Xff000000);
+
+
     }
     @Override
     public void update(double deltatime) {

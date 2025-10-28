@@ -16,14 +16,18 @@ public class DesktopEngine implements Runnable, Engine {
     private Thread renderThread;
     private DesktopInput input;
 
+    private DesktopAudio audio;
+
     public DesktopEngine(JFrame view){
         this.myView = view;
         this.gr = new DesktopGraphics(this.myView); //Sistema de gráficos
         this.input = new DesktopInput();
         this.myView.addMouseListener(this.input);
+        this.audio= new DesktopAudio();
         gr.setLogicSize(600,400);
 
     }
+
 
     @Override
     public void run() {
@@ -79,7 +83,11 @@ public class DesktopEngine implements Runnable, Engine {
             this.renderThread.start();
         }
     }
-
+    @Override
+    public Audio getAudio()
+    {
+    return this.audio;
+    }
     @Override
     public void pause() {
 
