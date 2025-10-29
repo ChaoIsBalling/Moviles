@@ -11,7 +11,7 @@ public class Text {
     float size;
     boolean bold;
     boolean italic;
-    int color = 0x00000000;
+    int color = 0xFF000000;
     public Text(String font, String text, float x, float y){
         this.font=font;
         this.text=text;

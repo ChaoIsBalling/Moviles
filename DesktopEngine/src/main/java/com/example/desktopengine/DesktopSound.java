@@ -11,13 +11,11 @@ public class DesktopSound implements Sound{
         this.file=file;
     }
 
-    @Override
     public String getName()
     {
         return this.file;
     }
 
-    @Override
     public Object setClip(Clip c) {
         return this.clip = c;
     }

@@ -9,7 +9,7 @@ public class Triangle implements Figure {
 
     private float r;
 
-    private int color;
+    private int color = 0xFF000000;
 
     private boolean isFill;
 

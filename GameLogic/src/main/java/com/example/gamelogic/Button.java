@@ -29,7 +29,7 @@ public class Button {
 
     Text text;
 
-    int color = 0x00000000;
+    int color = 0xFF000000;
     Imagen imagen;
     Figure figura;
 

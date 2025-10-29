@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private AndroidGraphics androidGraphics;
     private AndroidEngine engine;
     private Menu menu;
+
+    private GameLogic gl;
     private GameLogic gameLogic;
 
     @Override
@@ -31,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         this.androidGraphics=new AndroidGraphics(this.renderView);
         this.engine = new AndroidEngine(this.renderView);
         this.menu=new Menu(this.engine);
+        this.gl = new GameLogic();
         this.engine.setState(this.menu);
-        this.menu.render(androidGraphics);
 
 
     }

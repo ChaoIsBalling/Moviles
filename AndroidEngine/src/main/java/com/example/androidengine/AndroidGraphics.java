@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.fonts.Font;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
@@ -146,7 +147,6 @@ public class AndroidGraphics implements Graphics {
 
         double angleStep = 2 * Math.PI / nv;
 
-
         for(int i = 0; i<nv;i++){
             double angle = angleStep* i - Math.PI /2;
             int x = (int) (cx + r * Math.cos(angle));
@@ -205,11 +205,6 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
-    public IFont newFont(String f) {
-        return this.newFont(f,10);
-    }
-
-    @Override
     public IImage newImage(String f) {
         InputStream is = null;
         try {
@@ -223,13 +218,17 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void setFont(IFont font) {
-    af =(AndroidFont) font;
-    this.paint.setTypeface(af.getTypeface());
+        this.af =(AndroidFont) font;
+        this.paint.setTypeface(this.af.getTypeface());
+    }
+
+    @Override
+    public IFont newFont(String f, float size) {
+        return this.newFont(f, size, false, false);
     }
     @Override
-    public IFont newFont(String path,float size)
-    {
-        return this.newFont(path,size,false,false);
+    public IFont newFont(String f) {
+        return this.newFont(f,10, false, false);
     }
     @Override
     public IFont newFont(String path, float size,boolean bold )
