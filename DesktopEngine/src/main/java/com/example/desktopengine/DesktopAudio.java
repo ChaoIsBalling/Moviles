@@ -18,10 +18,10 @@ public class DesktopAudio implements Audio  {
 
     private HashMap<String, ArrayList<Clip>>pools;
     public static ArrayList<Clip> soundPool;
-    public int count=0;
+    public int count = 0;
     public DesktopAudio()
     {
-        pools = new HashMap<>();
+        pools = new HashMap<String, ArrayList<Clip>>();
     }
     @Override
     public Sound newSound(String name)
@@ -29,7 +29,6 @@ public class DesktopAudio implements Audio  {
         if(!pools.containsKey(name)||pools.get(name).isEmpty()) {
             ArrayList<Clip> pool = new ArrayList<Clip>();
             pools.put(name,pool);
-
             try {
                 Clip clip = AudioSystem.getClip();
                 Clip clip2 = AudioSystem.getClip();
@@ -58,20 +57,24 @@ public class DesktopAudio implements Audio  {
     @Override
     public void playSound(Sound sound)
     {
-        ArrayList<Clip>p =pools.get((DesktopSound)sound.getName());
+
+        DesktopSound s = (DesktopSound)sound;
+        ArrayList<Clip>p =this.pools.get(s.getName());
         Clip c= p.get(count);
         count= (count+1)%2;
         c.setFramePosition(0);
         c.start();
-        (DesktopSound)sound.setClip(c);
+        //(DesktopSound)sound.setClip(c);
+        s.setClip(c);
     }
 
 
     @Override
     public void stopSound(Sound sound)
     {
-        (DesktopSound)sound.getClip().stop();
-        (DesktopSound)sound.getClip().stop();
+        DesktopSound s = (DesktopSound)sound;
+        s.getClip().stop();
+        //(DesktopSound)sound.getClip().stop();
 
     }
 }

@@ -15,7 +15,6 @@ import com.example.androidengine.AndroidGraphics;
 import com.example.gamelogic.Menu;
 
 public class MainActivity extends AppCompatActivity {
-
     private SurfaceView renderView;
     private AndroidGraphics androidGraphics;
     private AndroidEngine engine;
@@ -34,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         this.menu=new Menu(this.engine);
         this.engine.setState(this.menu);
         this.menu.render(androidGraphics);
+
+
     }
 
     @Override

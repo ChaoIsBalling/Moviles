@@ -3,6 +3,7 @@ package com.example.androidengine;
 
 import android.view.SurfaceView;
 
+import com.example.engine.Audio;
 import com.example.engine.Engine;
 import com.example.engine.State;
 import com.example.engine.Graphics;
@@ -50,6 +51,12 @@ public class AndroidEngine implements Engine,Runnable {
     public void setState(State state){
         this.state = state;
     }
+
+    @Override
+    public Audio getAudio() {
+        return this.audio;
+    }
+
     @Override
     public State getState()
     {

@@ -8,6 +8,7 @@ import com.example.engine.IImage;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.awt.BasicStroke;
@@ -37,15 +38,16 @@ public class DesktopGraphics implements Runnable, Graphics{
     private float logicH;
     private float logicW;
 
-    private Insets ins;
+    private Insets insets;
     String root = "data/";
     public DesktopGraphics(JFrame view)
     {
         this.myView = view;
         this.bufferStrategy= this.myView.getBufferStrategy();
         this.graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
-         ins = myView.getInsets();
-        jframe.setSize(JFrame.getwidth()+ins.left+ins.right,jframe.getHeight()+ins.top+ins.bottom);
+        this.insets = myView.getInsets();
+        myView.setSize(myView.getWidth()+ insets.left+ insets.right,
+                myView.getHeight()+ insets.top+ insets.bottom);
 
         //coger escalado de ventana aquí
     }
@@ -64,13 +66,14 @@ public class DesktopGraphics implements Runnable, Graphics{
     }
 
     private void calculateTransforms(){
-        float tempY = this.myView.getHeight()-ins.left-ins.right/logicH;
-        float tempX = this.myView.getWidth()-ins.top-ins.bottom/logicW;
+
+        float tempX = (this.myView.getWidth()- insets.left- insets.right)/logicW;
+        float tempY = (this.myView.getHeight()- insets.top- insets.bottom)/logicH;
 
         this.scale = tempX <tempY ? tempX :tempY;
 
-        this.offsetX = ins.left+(this.myView.getWidth() -this.scale*logicW)/2;
-        this.offsetY =ins.top(this.myView.getHeight() -this.scale*logicH)/2;
+        this.offsetX = this.insets.left + (this.myView.getWidth() - insets.left- insets.right-this.scale*logicW)/2;
+        this.offsetY = this.insets.top + (this.myView.getHeight() - insets.top- insets.bottom-this.scale*logicH)/2;
 
     }
     protected void prepareFrame()
