@@ -65,6 +65,7 @@ public class GameLogic implements State {
 
         this.torres.add(new ThunderTower(this.casillas.get(2).get(6).getX(),this.casillas.get(2).get(6).getY()));
         this.torres.get(0).setListaEnemigos(this.enemigos);
+        this.enemigos.add(new Enemy(this.casillas.get(1).get(6).getX(),this.casillas.get(1).get(6).getY(),10,10,10,10,Tipo.rayo));
     }
 
     @Override

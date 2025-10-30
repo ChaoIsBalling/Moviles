@@ -11,6 +11,7 @@ public class Enemy {
     Tipo tipo;
     public Enemy(float x, float y, float vida, float velocidad, float defensa, float resistencia, Tipo tipoRes){
         this.circulo = new Circle(x,y,15,true);
+        this.circulo.setColor(0xff00ff00);
         this.vida=vida;
         this.velocidad = velocidad;
         this.defensa = defensa;

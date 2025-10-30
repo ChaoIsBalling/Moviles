@@ -6,10 +6,12 @@ import java.util.ArrayList;
 
 public class ThunderTower implements Tower{
     Triangle trianulo;
-    float ataque;
-    float rango;
-    float velocidad;
+    float ataque=10;
+    float rango= 105;
+    float velocidad = 4;
     float enfriamiento = 0;
+    float rayo =1;
+    boolean disparo = false;
     Tipo tipo = Tipo.rayo;
     ArrayList<Enemy> enemigos;
     public ThunderTower(float x, float y){
@@ -43,7 +45,11 @@ public class ThunderTower implements Tower{
         for (int i = 0; i < this.enemigos.size(); i++){
             float x = this.enemigos.get(i).getX();
             float y = this.enemigos.get(i).getY();
-            double distancia = Math.sqrt((Math.pow((x-this.trianulo.getX()),2)-Math.pow((y-this.trianulo.getY()),2)));
+            double a = x-this.trianulo.getX();
+            double b = y-this.trianulo.getY();
+            a = Math.pow(a,2);
+            b = Math.pow(b,2);
+            double distancia = Math.sqrt(a+b);
             if(distancia <= this.rango){
                 if(distanciaC == -1){
                     cercano = this.enemigos.get(i);
@@ -58,9 +64,12 @@ public class ThunderTower implements Tower{
         if (this.enfriamiento <= 0 && this.enemigos.contains(cercano)){
             cercano.damage(this.ataque,this.tipo);
             this.enfriamiento = this.velocidad;
+            this.disparo = true;
+            this.rayo = 1;
         }
         else{
             this.enfriamiento -= deltaTime;
+            this.rayo -= deltaTime;
         }
 
     }
@@ -68,5 +77,9 @@ public class ThunderTower implements Tower{
     @Override
     public void Render(Graphics gr) {
         this.trianulo.Render(gr);
+        if(this.disparo && this.rayo > 0){
+            gr.setColor(0x00ff0000);
+            gr.rellenarCuadrado(this.trianulo.getX(),this.trianulo.getY(),50,50);
+        }
     }
 }
