@@ -167,6 +167,11 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
+    public void pintarLinea(float x1, float y1, float x2, float y2) {
+        this.canvas.drawLine(x1,y1,x2,y2,this.paint);
+    }
+
+    @Override
     public void pintarFondo(int color) {
         this.paint.setColor(color);
         this.paint.setStyle(Paint.Style.FILL);

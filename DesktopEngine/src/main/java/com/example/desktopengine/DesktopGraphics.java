@@ -195,6 +195,12 @@ public class DesktopGraphics implements Runnable, Graphics{
     }
 
     @Override
+    public void pintarLinea(float x1, float y1, float x2, float y2) {
+        graphics2D.drawLine((int)x1,(int)y1,(int)x2,(int)y2);
+        this.graphics2D.setPaintMode();
+    }
+
+    @Override
     public void rellenarCuadrado(float x, float y, float w, float h)
     {
         this.graphics2D.fillRect((int)(x-w/2),(int)(y-h/2),(int)w,(int)h);
