@@ -74,7 +74,7 @@ public class Menu implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     if(botonInicial.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic();
+                        GameLogic gameLogic = new GameLogic(this.engine);
                         this.engine.setState(gameLogic);
                     }
                     break;

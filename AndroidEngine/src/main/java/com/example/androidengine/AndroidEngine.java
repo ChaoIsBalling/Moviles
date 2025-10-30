@@ -1,6 +1,7 @@
 package com.example.androidengine;
 
 
+import android.content.res.AssetManager;
 import android.view.SurfaceView;
 
 import com.example.engine.Audio;
@@ -9,13 +10,19 @@ import com.example.engine.State;
 import com.example.engine.Graphics;
 import com.example.engine.TouchEvent;
 
-import java.util.List;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 
 
 public class AndroidEngine implements Engine,Runnable {
 
     private AndroidGraphics gr;
+
+    private AssetManager assetManager;
 
     private Thread renderThread;
 
@@ -28,15 +35,36 @@ public class AndroidEngine implements Engine,Runnable {
     private AndroidInput input;
 
     private AndroidAudio audio;
+
+    private String filesDir="Files/";
+
+
     public AndroidEngine(SurfaceView view){
         this.sView = view;
         this.input = new AndroidInput();
         this.sView.setOnTouchListener(this.input);
+        assetManager=this.sView.getContext().getAssets();
         this.gr = new AndroidGraphics(view);
         this.audio=new AndroidAudio(sView.getContext().getAssets());
 
     }
+    @Override
+    public ArrayList<String> readFile(String path)
+    {
+        ArrayList<String> file = new ArrayList<>();
 
+        try {
+            InputStream inputStream = assetManager.open(filesDir+path);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+
+            while ((line = reader.readLine()) != null)
+                file.add(line);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return file;
+    }
     @Override
     public void resume(){
         if(!this.running){

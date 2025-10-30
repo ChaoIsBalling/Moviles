@@ -29,6 +29,8 @@ public class AndroidGraphics implements Graphics {
 
     private String imageDir="Images/";
     private String fontDir="Fonts/";
+
+
     private Thread renderThread;
 
     private float scale;
