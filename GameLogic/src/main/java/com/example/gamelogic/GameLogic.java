@@ -3,10 +3,11 @@ package com.example.gamelogic;
 import com.example.engine.Graphics;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
+import com.example.engine.Engine;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.lang.Integer;
 public class GameLogic implements State {
     boolean firstFrame = false;
 
@@ -25,8 +26,8 @@ public class GameLogic implements State {
 
     private Text costeMejoraHexagonos;
 
-    int fil = 8;
-    int col = 15;
+    int fil;
+    int col;
 
     float vida = 0;
     float dinero = 0;
@@ -41,18 +42,20 @@ public class GameLogic implements State {
     ArrayList<ArrayList<Casilla>> casillas;
     ArrayList<Tower> torres;
     ArrayList<Enemy> enemigos;
-    ArrayList<ArrayList<String>> leer;
-
-    public GameLogic(){
+    ArrayList<String> leer;
+    Engine engine;
+    public GameLogic(Engine engine){
+        this.engine=engine;
         this.torres = new ArrayList<Tower>();
         this.enemigos=new ArrayList<Enemy>();
         this.casillas = new ArrayList<ArrayList<Casilla>>();
-        this.leer = new ArrayList<ArrayList<String>>();
-        this.InitPrueba();
+        this.leer = engine.readFile("mapa1.txt");
+       this.fil=Integer.parseInt(leer.get(0));
+       this.col=Integer.parseInt(leer.get(1));
         for (int i =0; i<this.fil;i++){
             ArrayList<Casilla> fila = new ArrayList<Casilla>();
             for(int j =0; j<this.col;j++){
-                if(this.leer.get(i).get(j) == "h"){
+                if(leer.get(2+i).charAt(j) == 'h'){
                     Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),35,35,false,false);
                     casilla.setColor(0xff000000);
                     fila.add(casilla);
@@ -164,33 +167,5 @@ public class GameLogic implements State {
         this.costeMejoraHexagonos = new Text("Inika-Regular.ttf","200",0,15,15,true,true);
         this.botonMejoraHexagonos.setText(this.costeMejoraHexagonos);
     }
-
-    public void InitPrueba(){
-        ArrayList<String> filaL = new ArrayList<String>();
-        filaL.addAll(List.of("h","h","h","h","h","h","h","h","h","h","h","h","h","h","h"));
-        this.leer.add(filaL);
-        filaL = new ArrayList<String>();
-        filaL.addAll(List.of("c","c","c","c","c","c","c","c","h","h","h","h","h","h","h"));
-        this.leer.add(filaL);
-        filaL = new ArrayList<String>();
-        filaL.addAll(List.of("h","h","h","h","h","h","h","c","h","h","h","h","h","h","h"));
-        this.leer.add(filaL);
-        filaL = new ArrayList<String>();
-        filaL.addAll(List.of("h","h","h","h","h","h","h","c","h","h","h","h","h","h","h"));
-        this.leer.add(filaL);
-        filaL = new ArrayList<String>();
-        filaL.addAll(List.of("h","h","h","h","h","h","h","c","h","h","h","h","h","h","h"));
-        this.leer.add(filaL);
-        filaL = new ArrayList<String>();
-        filaL.addAll(List.of("h","h","h","h","h","h","h","c","h","h","h","h","h","h","h"));
-        this.leer.add(filaL);
-        filaL = new ArrayList<String>();
-        filaL.addAll(List.of("h","h","h","h","h","h","h","c","c","c","c","c","c","c","c"));
-        this.leer.add(filaL);
-        filaL = new ArrayList<String>();
-        filaL.addAll(List.of("h","h","h","h","h","h","h","h","h","h","h","h","h","h","h"));
-        this.leer.add(filaL);
-    }
-
 
 }

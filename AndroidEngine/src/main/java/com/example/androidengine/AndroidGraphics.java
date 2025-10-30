@@ -29,6 +29,8 @@ public class AndroidGraphics implements Graphics {
 
     private String imageDir="Images/";
     private String fontDir="Fonts/";
+
+
     private Thread renderThread;
 
     private float scale;
@@ -165,8 +167,11 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
-    public void pintarLinea(float x1, float y1, float x2, float y2) {
+    public void pintarLinea(float x1, float y1, float x2, float y2, float width) {
+        this.paint.setStrokeWidth(width);
         this.canvas.drawLine(x1,y1,x2,y2,this.paint);
+        this.paint.setStrokeWidth(1);
+
     }
 
     @Override

@@ -24,6 +24,8 @@ public class Menu implements State {
 
     private Hexagon hex;
 
+    private Line lin;
+
     private Text textoBoton;
     private Text textoInicial;
     private Audio audio;
@@ -51,6 +53,8 @@ public class Menu implements State {
         botonInicial.setText(textoBoton);
         textoInicial = new Text("Inika-Regular.ttf","TowerDefense",300,150,40,true,true);
         textoInicial.setColor(0Xff000000);
+        //this.lin = new Line(100,100,200,200,10);
+        //this.lin.setColor(0xFF0000FF);
     }
     @Override
     public void update(double deltatime) {
@@ -72,7 +76,7 @@ public class Menu implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     if(botonInicial.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic();
+                        GameLogic gameLogic = new GameLogic(this.engine);
                         this.engine.setState(gameLogic);
                     }
                     break;

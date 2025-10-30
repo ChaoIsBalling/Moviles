@@ -6,6 +6,13 @@ import com.example.engine.State;
 import com.example.engine.TouchEvent;
 import com.example.engine.Audio;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.io.FileReader;
+
 import javax.swing.JFrame;
 
 public class DesktopEngine implements Runnable, Engine {
@@ -18,7 +25,7 @@ public class DesktopEngine implements Runnable, Engine {
     private DesktopInput input;
 
     private DesktopAudio audio;
-
+    String root = "data/";
     public DesktopEngine(JFrame view){
         this.myView = view;
         this.gr = new DesktopGraphics(this.myView); //Sistema de gráficos
@@ -94,6 +101,22 @@ public class DesktopEngine implements Runnable, Engine {
 
     }
 
+    @Override
+    public ArrayList<String> readFile(String path)
+    {
+        ArrayList<String> file = new ArrayList<>();
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(root+path));
+            String line;
+
+            while ((line = reader.readLine()) != null)
+                file.add(line);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return file;
+    }
     @Override
     public void setState(State state) {
         this.state = state;
