@@ -200,6 +200,7 @@ public class DesktopGraphics implements Runnable, Graphics{
     public void pintarLinea(float x1, float y1, float x2, float y2, float width) {
         graphics2D.setStroke(new BasicStroke(width));
         graphics2D.drawLine((int)x1,(int)y1,(int)x2,(int)y2);
+        graphics2D.setStroke(new BasicStroke(1));
         this.graphics2D.setPaintMode();
     }
 

@@ -32,6 +32,7 @@ public interface Graphics {
     public void trasladar(float x,float y);
 
     public void setLogicSize(float w, float h);
+
     public void pintarCirculo(float x, float y, float r);
 
     public void pintarCuadrado(float x, float y, float w, float h);
