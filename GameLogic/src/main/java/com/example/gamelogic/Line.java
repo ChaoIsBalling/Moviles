@@ -10,7 +10,16 @@ public class Line implements Figure{
 
     private int color;
 
-    Line(float x1, float y1, float x2, float y2 ){
+    private float w;
+
+    Line(float x1, float y1, float x2, float y2, float w){
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.w = w;
+    }
+    Line(float x1, float y1, float x2, float y2){
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -41,12 +50,12 @@ public class Line implements Figure{
     @Override
     public void Render(Graphics gr) {
         gr.setColor(this.color);
-        gr.pintarLinea(this.x1,this.y1, this.x2, this.y2);
+        gr.pintarLinea(this.x1,this.y1, this.x2, this.y2,this.w);
     }
 
     @Override
     public void RenderCentrado(Graphics gr, float x, float y) {
         gr.setColor(this.color);
-        gr.pintarLinea(this.x1,this.y1, this.x2, this.y2);
+        gr.pintarLinea(this.x1,this.y1, this.x2, this.y2,this.w);
     }
 }
