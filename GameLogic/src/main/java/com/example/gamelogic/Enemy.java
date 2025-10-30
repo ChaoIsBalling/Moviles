@@ -28,7 +28,7 @@ public class Enemy {
 
     }
     public void Update(double deltaTime){
-
+        this.circulo.setX((float)(this.circulo.getX() + (velocidad*deltaTime)));
     }
     public void Render(Graphics gr){
         this.circulo.Render(gr);

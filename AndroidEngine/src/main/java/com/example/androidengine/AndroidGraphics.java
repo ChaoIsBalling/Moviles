@@ -167,8 +167,12 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
-    public void pintarLinea(float x1, float y1, float x2, float y2) {
+    public void pintarLinea(float x1, float y1, float x2, float y2, float width) {
+        float currWidth = this.paint.getStrokeWidth();
+        this.paint.setStrokeWidth(width);
         this.canvas.drawLine(x1,y1,x2,y2,this.paint);
+        this.paint.setStrokeWidth(0);
+
     }
 
     @Override
@@ -265,7 +269,6 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void rellenarCirculo(float x, float y, float r) {
-        this.paint.setColor(Color.MAGENTA);
         this.paint.setStyle(Paint.Style.FILL);
         this.canvas.drawCircle(x,y,r,this.paint);
     }

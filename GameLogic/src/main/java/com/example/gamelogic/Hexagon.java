@@ -37,6 +37,16 @@ public class Hexagon implements Figure{
     }
 
     @Override
+    public void setX(float x) {
+        this.cx = x;
+    }
+
+    @Override
+    public void setY(float y) {
+        this.cy = y;
+    }
+
+    @Override
     public int getColor() {
         return this.color;
     }

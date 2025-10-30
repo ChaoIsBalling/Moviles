@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Shape;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.awt.BasicStroke;
@@ -195,8 +197,10 @@ public class DesktopGraphics implements Runnable, Graphics{
     }
 
     @Override
-    public void pintarLinea(float x1, float y1, float x2, float y2) {
+    public void pintarLinea(float x1, float y1, float x2, float y2, float width) {
+        graphics2D.setStroke(new BasicStroke(width));
         graphics2D.drawLine((int)x1,(int)y1,(int)x2,(int)y2);
+        graphics2D.setStroke(new BasicStroke(1));
         this.graphics2D.setPaintMode();
     }
 
