@@ -38,6 +38,8 @@ public interface Graphics {
 
     public void pintarPoligono(float cx, float cy, float r, int nv);
 
+    public void pintarLinea(float x1, float y1, float x2, float y2);
+
     public void rellenarCirculo(float x, float y, float r);
 
     public void rellenarCuadrado(float x, float y, float w, float h);
