@@ -5,7 +5,7 @@ import com.example.engine.Graphics;
 import java.util.ArrayList;
 
 public class ThunderTower implements Tower{
-    Triangle trianulo;
+    Triangle triangulo;
     float ataque=10;
     float rango= 105;
     float velocidad = 4;
@@ -18,8 +18,8 @@ public class ThunderTower implements Tower{
     Tipo tipo = Tipo.rayo;
     ArrayList<Enemy> enemigos;
     public ThunderTower(float x, float y){
-        this.trianulo = new Triangle(x,y,15,true);
-        this.trianulo.setColor(0xFF000000);
+        this.triangulo = new Triangle(x,y,15,true);
+        this.triangulo.setColor(0xFF000000);
     }
     @Override
     public void UpdateAttack(float mejora) {
@@ -48,8 +48,8 @@ public class ThunderTower implements Tower{
         for (int i = 0; i < this.enemigos.size(); i++){
             float x = this.enemigos.get(i).getX();
             float y = this.enemigos.get(i).getY();
-            double a = x-this.trianulo.getX();
-            double b = y-this.trianulo.getY();
+            double a = x-this.triangulo.getX();
+            double b = y-this.triangulo.getY();
             a = Math.pow(a,2);
             b = Math.pow(b,2);
             double distancia = Math.sqrt(a+b);
@@ -57,10 +57,14 @@ public class ThunderTower implements Tower{
                 if(distanciaC == -1){
                     cercano = this.enemigos.get(i);
                     distanciaC = distancia;
+                    this.enemyX = cercano.getX();
+                    this.enemyY = cercano.getY();
                 }
                 else if(distancia < distanciaC){
                     cercano = this.enemigos.get(i);
                     distanciaC = distancia;
+                    this.enemyX = cercano.getX();
+                    this.enemyY = cercano.getY();
                 }
             }
         }
@@ -81,10 +85,10 @@ public class ThunderTower implements Tower{
 
     @Override
     public void Render(Graphics gr) {
-        this.trianulo.Render(gr);
+        this.triangulo.Render(gr);
         if(this.disparo && this.rayo > 0){
-            gr.setColor(0x0000ffff);
-            gr.pintarLinea(this.trianulo.getX(),this.trianulo.getY(),this.enemyX,this.enemyY);
+            gr.setColor(0xff00ffff);
+            gr.pintarLinea(this.triangulo.getX(),this.triangulo.getY(),this.enemyX,this.enemyY,5);
         }
     }
 }
