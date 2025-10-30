@@ -4,6 +4,7 @@ import com.example.engine.Graphics;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 import com.example.engine.Engine;
+import com.example.engine.Audio;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class GameLogic implements State {
     ArrayList<Enemy> enemigos;
     ArrayList<String> leer;
     Engine engine;
+
     public GameLogic(Engine engine){
         this.engine=engine;
         this.torres = new ArrayList<Tower>();
@@ -87,6 +89,11 @@ public class GameLogic implements State {
 
     }
 
+    @Override
+    public void playAudio(Audio audio)
+    {
+
+    }
     @Override
     public void render(Graphics gr) {
         //gr.setColor(0x00000000);

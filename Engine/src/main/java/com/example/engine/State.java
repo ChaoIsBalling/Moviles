@@ -11,4 +11,6 @@ public interface State {
 
     void handleInput(ArrayList<TouchEvent> list, double elapseTime);
 
+    void playAudio(Audio audio);
+
 }

@@ -12,6 +12,8 @@ public class AndroidAudio implements Audio {
 
     SoundPool spool;
     AssetManager assets;
+
+    String root="Audio/";
     public AndroidAudio(AssetManager assets)
     {
         this.assets=assets;
@@ -23,9 +25,8 @@ public class AndroidAudio implements Audio {
         int id=-1;
 
         try {
-            AssetFileDescriptor descriptor = this.assets.openFd(file);
+            AssetFileDescriptor descriptor = this.assets.openFd(root+file);
             id=this.spool.load(descriptor,1);
-
         }
         catch(IOException e)
         {
