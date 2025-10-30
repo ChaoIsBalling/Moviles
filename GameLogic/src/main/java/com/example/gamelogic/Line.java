@@ -29,6 +29,16 @@ public class Line implements Figure{
     }
 
     @Override
+    public void setX(float x) {
+
+    }
+
+    @Override
+    public void setY(float y) {
+
+    }
+
+    @Override
     public int getColor() {
         return this.color;
     }

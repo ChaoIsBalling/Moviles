@@ -12,6 +12,9 @@ public class ThunderTower implements Tower{
     float enfriamiento = 0;
     float rayo =1;
     boolean disparo = false;
+    float enemyX;
+    float enemyY;
+
     Tipo tipo = Tipo.rayo;
     ArrayList<Enemy> enemigos;
     public ThunderTower(float x, float y){
@@ -63,6 +66,8 @@ public class ThunderTower implements Tower{
         }
         if (this.enfriamiento <= 0 && this.enemigos.contains(cercano)){
             cercano.damage(this.ataque,this.tipo);
+            this.enemyX = cercano.getX();
+            this.enemyY = cercano.getY();
             this.enfriamiento = this.velocidad;
             this.disparo = true;
             this.rayo = 1;
@@ -78,8 +83,8 @@ public class ThunderTower implements Tower{
     public void Render(Graphics gr) {
         this.trianulo.Render(gr);
         if(this.disparo && this.rayo > 0){
-            gr.setColor(0x00ff0000);
-            gr.rellenarCuadrado(this.trianulo.getX(),this.trianulo.getY(),50,50);
+            gr.setColor(0x0000ffff);
+            gr.pintarLinea(this.trianulo.getX(),this.trianulo.getY(),this.enemyX,this.enemyY);
         }
     }
 }

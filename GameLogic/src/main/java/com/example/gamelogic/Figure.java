@@ -8,6 +8,10 @@ public interface Figure {
 
     float getY();
 
+    void setX(float x);
+
+    void setY(float y);
+
     int getColor();
 
     void setColor(int color);

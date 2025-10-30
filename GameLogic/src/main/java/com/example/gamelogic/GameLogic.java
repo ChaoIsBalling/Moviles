@@ -31,6 +31,12 @@ public class GameLogic implements State {
     float vida = 0;
     float dinero = 0;
 
+    float IniX;
+    float IniY;
+
+    float FinX;
+    float FinY;
+
     //mapa
     ArrayList<ArrayList<Casilla>> casillas;
     ArrayList<Tower> torres;
@@ -55,6 +61,14 @@ public class GameLogic implements State {
                     Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),35,35,true,true);
                     casilla.setColor(0xff944d03);
                     fila.add(casilla);
+                    if(j == 0){
+                        this.IniX = j*35+30;
+                        this.IniY = i*35+50;
+                    }
+                    if(j == this.col){
+                        this.FinX = j*35+30;
+                        this.FinY = i*35+50;
+                    }
                 }
 
             }
@@ -65,7 +79,7 @@ public class GameLogic implements State {
 
         this.torres.add(new ThunderTower(this.casillas.get(2).get(6).getX(),this.casillas.get(2).get(6).getY()));
         this.torres.get(0).setListaEnemigos(this.enemigos);
-        this.enemigos.add(new Enemy(this.casillas.get(1).get(6).getX(),this.casillas.get(1).get(6).getY(),10,10,10,10,Tipo.rayo));
+        this.enemigos.add(new Enemy(this.IniX,this.IniY,10,10,10,10,Tipo.rayo));
     }
 
     @Override
@@ -92,11 +106,11 @@ public class GameLogic implements State {
                 this.casillas.get(i).get(j).Render(gr);
             }
         }
-        for(int i = 0; i<this.torres.size(); i++){
-            this.torres.get(i).Render(gr);
-        }
         for(int i = 0; i<this.enemigos.size(); i++){
             this.enemigos.get(i).Render(gr);
+        }
+        for(int i = 0; i<this.torres.size(); i++){
+            this.torres.get(i).Render(gr);
         }
         this.botonMejoraCuadrados.Render(gr);
         this.botonMejoraTriangulos.Render(gr);
