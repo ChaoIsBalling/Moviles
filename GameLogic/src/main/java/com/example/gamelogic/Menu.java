@@ -5,6 +5,7 @@ import com.example.engine.Graphics;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 import com.example.engine.Audio;
+import com.example.engine.Sound;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -69,7 +70,12 @@ public class Menu implements State {
         botonInicial.Render(gr);
         textoInicial.Render(gr);
     }
-
+    @Override
+    public void playAudio(Audio audio)
+    {
+    //Sound sound = audio.newSound("Scorching Back.mp3");
+    //audio.playSound(sound);
+    }
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){

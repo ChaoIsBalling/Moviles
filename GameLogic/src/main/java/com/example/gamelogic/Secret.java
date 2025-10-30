@@ -1,5 +1,6 @@
 package com.example.gamelogic;
 
+import com.example.engine.Audio;
 import com.example.engine.Graphics;
 import com.example.engine.IFont;
 import com.example.engine.State;
@@ -47,7 +48,11 @@ public class Secret implements State {
         gr.pintarImagen(gr.newImage("Joker.png"),400,200);
 
     }
+    @Override
+    public void playAudio(Audio audio)
+    {
 
+    }
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
 

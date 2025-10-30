@@ -19,6 +19,7 @@ public class DesktopAudio implements Audio  {
     private HashMap<String, ArrayList<Clip>>pools;
     public static ArrayList<Clip> soundPool;
     public int count = 0;
+    String root = "data/";
     public DesktopAudio()
     {
         pools = new HashMap<String, ArrayList<Clip>>();
@@ -32,7 +33,7 @@ public class DesktopAudio implements Audio  {
             try {
                 Clip clip = AudioSystem.getClip();
                 Clip clip2 = AudioSystem.getClip();
-                File file = new File("data/" + name);
+                File file = new File(root + name);
                 AudioInputStream ais = AudioSystem.getAudioInputStream(file);
                 clip.open(ais);
                 AudioInputStream ais2 = AudioSystem.getAudioInputStream(file);
