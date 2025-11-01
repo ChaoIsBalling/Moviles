@@ -54,12 +54,18 @@ public class GameLogic implements State {
     Audio audio;
     Tower torreSeleccionada;
 
-    enum Estado{
+    private enum Estado{
         nada,botonRayo,botonFuego,botonHielo,torre
     }
     private Estado estado = Estado.nada;
-    public GameLogic(Engine engine){
+
+    public enum Dificultad{
+        corto,largo,infinito
+    }
+    private Dificultad dificultad;
+    public GameLogic(Engine engine, Dificultad dificultad){
         this.engine=engine;
+        this.dificultad = dificultad;
         this.torres = new ArrayList<Tower>();
         this.enemigos=new ArrayList<Enemy>();
         this.casillas = new ArrayList<ArrayList<Casilla>>();
