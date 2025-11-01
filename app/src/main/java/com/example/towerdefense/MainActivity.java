@@ -16,7 +16,6 @@ import com.example.gamelogic.Menu;
 public class MainActivity extends AppCompatActivity {
     private SurfaceView renderView;
     private AndroidEngine engine;
-    private Menu menu;
 
     private GameLogic gl;
     private GameLogic gameLogic;
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(this.renderView);
 
         this.engine = new AndroidEngine(this.renderView);
-        this.menu=new Menu(this.engine);
+        this.engine.setState(new Menu(this.engine));
     }
 
     @Override

@@ -44,9 +44,7 @@ public class Main {
         //Inicializamos el motor gráfico de escritorio usando el JFrame renderView
         DesktopEngine engine = new DesktopEngine(renderView);
 
-        Menu menu = new Menu(engine);
-
-        engine.setState(menu);
+        engine.setState(new Menu(engine));
 
         //Inicializamos el motor de juego
         engine.resume();
