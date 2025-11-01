@@ -2,6 +2,10 @@ package com.example.gamelogic;
 
 import com.example.engine.Graphics;
 
+import com.example.engine.Sound;
+
+import com.example.engine.Audio;
+
 import java.util.ArrayList;
 
 public class FireTower implements Tower {
@@ -15,17 +19,22 @@ public class FireTower implements Tower {
     float enemyX;
     float enemyY;
 
+    Audio audio;
+    Sound attack;
+
     Tipo tipo = Tipo.fuego;
     ArrayList<Enemy> enemigos;
 
     public FireTower(float x, float y){
         this.hexagono = new Hexagon(x,y,15,true);
         this.hexagono.setColor(0xffff0000);
+        this.attack=attack;
     }
     @Override
     public void UpdateAttack(float mejora) {
         this.ataque += mejora;
     }
+
 
     @Override
     public void UpdateRange(float mejora) {
@@ -42,6 +51,12 @@ public class FireTower implements Tower {
         this.enemigos = enemigos;
     }
 
+    @Override
+    public void setAudio(Audio audio)
+    {
+        this.audio=audio;
+        this.attack=audio.newSound("laser.wav");
+    }
     @Override
     public void Update(double deltaTime) {
         Enemy cercano = new Enemy(-100,-100,0,0,0,0,Tipo.rayo);
@@ -76,6 +91,7 @@ public class FireTower implements Tower {
             this.enfriamiento = this.velocidad;
             this.disparo = true;
             this.fuego = 1;
+            this.audio.playSound(this.attack);
         }
         else{
             this.enfriamiento -= deltaTime;

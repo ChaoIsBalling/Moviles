@@ -46,8 +46,11 @@ public class GameLogic implements State {
     ArrayList<String> leer;
     Engine engine;
 
-    public GameLogic(Engine engine){
+    Audio audio;
+
+    public GameLogic(Engine engine,Audio audio){
         this.engine=engine;
+        this.audio=audio;
         this.torres = new ArrayList<Tower>();
         this.enemigos=new ArrayList<Enemy>();
         this.casillas = new ArrayList<ArrayList<Casilla>>();
@@ -85,6 +88,7 @@ public class GameLogic implements State {
         this.torres.add(new ThunderTower(this.casillas.get(2).get(6).getX(),this.casillas.get(2).get(6).getY()));
         this.torres.get(0).setListaEnemigos(this.enemigos);
         this.torres.add(new FireTower(this.casillas.get(0).get(6).getX(),this.casillas.get(0).get(6).getY()));
+        this.torres.get(1).setAudio(this.audio);
         this.torres.get(1).setListaEnemigos(this.enemigos);
         this.torres.add(new IceTower(this.casillas.get(2).get(8).getX(),this.casillas.get(2).get(8).getY()));
         this.torres.get(2).setListaEnemigos(this.enemigos);
@@ -148,6 +152,11 @@ public class GameLogic implements State {
                     break;
             }
         }
+    }
+
+    @Override
+    public void setAudio(Audio audio) {
+        this.audio=audio;
     }
 
     public void inicializarUI(){

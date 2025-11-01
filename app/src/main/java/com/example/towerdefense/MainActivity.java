@@ -11,12 +11,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.androidengine.AndroidEngine;
 import com.example.gamelogic.GameLogic;
-import com.example.androidengine.AndroidGraphics;
 import com.example.gamelogic.Menu;
 
 public class MainActivity extends AppCompatActivity {
     private SurfaceView renderView;
-    private AndroidGraphics androidGraphics;
     private AndroidEngine engine;
     private Menu menu;
 
@@ -30,10 +28,8 @@ public class MainActivity extends AppCompatActivity {
         this.renderView = new SurfaceView(this);
         setContentView(this.renderView);
 
-        this.androidGraphics=new AndroidGraphics(this.renderView);
         this.engine = new AndroidEngine(this.renderView);
         this.menu=new Menu(this.engine);
-        this.gl = new GameLogic(this.engine);
         this.engine.setState(this.menu);
 
 

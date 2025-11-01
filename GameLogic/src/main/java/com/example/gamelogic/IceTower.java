@@ -1,5 +1,6 @@
 package com.example.gamelogic;
 
+import com.example.engine.Audio;
 import com.example.engine.Graphics;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class IceTower implements Tower{
         this.velocidad += mejora;
     }
 
+
     @Override
     public void setListaEnemigos(ArrayList<Enemy> enemigos) {
         this.enemigos = enemigos;
@@ -54,6 +56,11 @@ public class IceTower implements Tower{
                 this.enemigos.get(i).damage(this.ataque,this.tipo);
             }
         }
+    }
+
+    @Override
+    public void setAudio(Audio audio) {
+
     }
 
     @Override

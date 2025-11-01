@@ -15,6 +15,8 @@ public class Secret implements State {
     private float speed;
     boolean firstFrame = false;
 
+    private Audio audio;
+
     public Secret(){
         this.x =100;
         this.y=100;
@@ -67,6 +69,11 @@ public class Secret implements State {
                     break;
             }
         }
+    }
+
+    @Override
+    public void setAudio(Audio audio) {
+        this.audio=audio;
     }
 
 }

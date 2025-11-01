@@ -77,7 +77,9 @@ public class AndroidEngine implements Engine,Runnable {
 
     @Override
     public void setState(State state){
+
         this.state = state;
+        this.state.setAudio(this.audio);
     }
 
     @Override

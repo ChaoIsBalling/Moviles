@@ -1,5 +1,6 @@
 package com.example.gamelogic;
 
+import com.example.engine.Audio;
 import com.example.engine.Graphics;
 
 import java.util.ArrayList;
@@ -80,6 +81,11 @@ public class ThunderTower implements Tower{
             this.enfriamiento -= deltaTime;
             this.rayo -= deltaTime;
         }
+
+    }
+
+    @Override
+    public void setAudio(Audio audio) {
 
     }
 

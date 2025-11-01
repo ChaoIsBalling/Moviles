@@ -73,6 +73,7 @@ public class Menu implements State {
     @Override
     public void playAudio(Audio audio)
     {
+        this.audio=audio;
     }
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
@@ -80,7 +81,7 @@ public class Menu implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     if(botonInicial.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine);
+                        GameLogic gameLogic = new GameLogic(this.engine,this.audio);
                         this.engine.setState(gameLogic);
                     }
                     break;
@@ -91,6 +92,11 @@ public class Menu implements State {
                     break;
             }
         }
+
+    }
+
+    @Override
+    public void setAudio(Audio audio) {
 
     }
 }
