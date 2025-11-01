@@ -106,7 +106,7 @@ public class GameLogic implements State {
                         this.IniX = j*35+30;
                         this.IniY = i*35+50;
                     }
-                    if(j == this.col){
+                    if(j == this.col - 1){
                         this.FinX = j*35+30;
                         this.FinY = i*35+50;
                     }
@@ -137,7 +137,9 @@ public class GameLogic implements State {
         }
         for(int i = 0; i<this.enemigos.size(); i++){
             this.enemigos.get(i).Update(deltaTime);
-            if(this.enemigos.get(i).getX()==this.FinX&&this.enemigos.get(i).getY()==this.FinY){
+            //Si el enemigo llega a la casilla final, se elimina
+            if(this.enemigos.get(i).getX() >= this.FinX &&
+                    this.enemigos.get(i).getY() >= this.FinY){
                 this.vida--;
                 this.enemigos.get(i).setDead();
             }
@@ -158,7 +160,6 @@ public class GameLogic implements State {
 
     //Dada una posición (x,y) se determina en que casilla está a partir del ancho y alto de la casilla
     public Vector2D determinaCasilla(float x, float y){
-
         int offsetX = 30;
         int offsetY = 50;
 
@@ -181,6 +182,7 @@ public class GameLogic implements State {
         int i = (int) (((y + (this.altoCasilla/2)- offsetY)) / this.altoCasilla);
 
         Vector2D c = new Vector2D(i,j);
+        //System.out.println("("+c.getX()+","+c.getY()+")");
 
         return c;
     }
@@ -274,7 +276,7 @@ public class GameLogic implements State {
                             }
                             else {
                                 Vector2D casilla = this.determinaCasillaRaton(e.x,e.y);
-                                System.out.println("("+casilla.getX()+","+casilla.getY()+")");
+                                //System.out.println("("+casilla.getX()+","+casilla.getY()+")");
                                 if(casilla.getX() < this.fil && casilla.getY() < this.col && casilla.getX()>= 0 && casilla.getY()>=0){
                                     Tower torre = this.casillas.get(casilla.getX()).get(casilla.getY()).getTorre();
                                     if(torre != null){
