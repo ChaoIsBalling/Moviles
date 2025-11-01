@@ -65,4 +65,8 @@ public class Text {
         gr.setFont(fuente);
         gr.pintarTextoCentrado(this.text, x+this.x,y+this.y);
     }
+
+    public void setText(String text){
+        this.text = text;
+    }
 }
