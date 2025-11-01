@@ -125,4 +125,14 @@ public class FireTower implements Tower {
     public float getRange() {
         return this.rango;
     }
+
+    @Override
+    public float getX() {
+        return this.hexagono.getX();
+    }
+
+    @Override
+    public float getY() {
+        return this.hexagono.getY();
+    }
 }

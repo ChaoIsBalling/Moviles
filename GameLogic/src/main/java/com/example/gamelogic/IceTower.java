@@ -72,4 +72,14 @@ public class IceTower implements Tower{
     public float getRange() {
         return this.rango;
     }
+
+    @Override
+    public float getX() {
+        return this.cuadrado.getX();
+    }
+
+    @Override
+    public float getY() {
+        return this.cuadrado.getY();
+    }
 }
