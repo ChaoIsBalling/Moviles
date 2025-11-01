@@ -17,6 +17,9 @@ public class GameLogic implements State {
     private Button botonMejoraCuadrados;
     private Button botonMejoraHexagonos;
 
+    private Button botonMejoraAtaque;
+    private Button botonMejoraRango;
+    private Button botonMejoraVelocidad;
     private Square figuraBotonCuadrado;
     private Triangle figuraBotonTriangulo;
     private Hexagon figuraBotonHexagono;
@@ -26,6 +29,8 @@ public class GameLogic implements State {
     private Text costeMejoraCuadrados;
 
     private Text costeMejoraHexagonos;
+
+    private Square franjaGris;
 
     int fil;
     int col;
@@ -46,11 +51,14 @@ public class GameLogic implements State {
     ArrayList<String> leer;
     Engine engine;
 
-    Audio audio;
+    Tower torreSeleccionada;
 
-    public GameLogic(Engine engine,Audio audio){
+    enum Estado{
+        nada,botonRayo,botonFuego,botonHielo,torre
+    }
+    private Estado estado = Estado.nada;
+    public GameLogic(Engine engine){
         this.engine=engine;
-        this.audio=audio;
         this.torres = new ArrayList<Tower>();
         this.enemigos=new ArrayList<Enemy>();
         this.casillas = new ArrayList<ArrayList<Casilla>>();
@@ -130,11 +138,18 @@ public class GameLogic implements State {
         for(int i = 0; i<this.torres.size(); i++){
             this.torres.get(i).Render(gr);
         }
-        this.botonMejoraCuadrados.Render(gr);
-        this.botonMejoraTriangulos.Render(gr);
-        this.botonMejoraHexagonos.Render(gr);
+        if(this.estado != Estado.torre){
+            this.botonMejoraCuadrados.Render(gr);
+            this.botonMejoraTriangulos.Render(gr);
+            this.botonMejoraHexagonos.Render(gr);
+        }
+        else{
+            this.botonMejoraAtaque.Render(gr);
+            this.botonMejoraRango.Render(gr);
+            this.botonMejoraVelocidad.Render(gr);
+            //gr.pintarCirculo(casillaX,casillaY,torreSeleccionada.getRango());
+        }
     }
-
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
 
@@ -142,7 +157,69 @@ public class GameLogic implements State {
 
             switch (e.type){
                 case TOUCH_DOWN:
-                    
+                    switch (this.estado){
+                        case nada:
+                            if(this.botonMejoraTriangulos.contains(e.x,e.y)){
+                                this.cambiarEstado(Estado.botonRayo);
+                            }
+                            else if(this.botonMejoraHexagonos.contains(e.x,e.y)){
+                                this.cambiarEstado(Estado.botonFuego);
+                            }
+                            else if(this.botonMejoraCuadrados.contains(e.x,e.y)){
+                                this.cambiarEstado(Estado.botonHielo);
+                            }
+                            break;
+                        case torre:
+                            if(this.botonMejoraAtaque.contains(e.x,e.y)){
+                                //this.torreSeleccionada.UpdateAttack();
+                                this.cambiarEstado(Estado.nada);
+                            }
+                            else if(this.botonMejoraRango.contains(e.x,e.y)){
+                                //this.torreSeleccionada.UpdateRange();
+                                this.cambiarEstado(Estado.nada);
+                            }
+                            else if(this.botonMejoraVelocidad.contains(e.x,e.y)){
+                                //this.torreSeleccionada.UpdateFireRate();
+                                this.cambiarEstado(Estado.nada);
+                            }
+                            else{
+                                this.cambiarEstado(Estado.nada);
+                            }
+                            break;
+                        case botonRayo:
+                            if(this.botonMejoraHexagonos.contains(e.x,e.y)){
+                                this.cambiarEstado(Estado.botonFuego);
+                            }
+                            else if(this.botonMejoraCuadrados.contains(e.x,e.y)){
+                                this.cambiarEstado(Estado.botonHielo);
+                            }
+                            else{
+                                this.cambiarEstado(Estado.nada);
+                            }
+                            break;
+                        case botonFuego:
+                            if(this.botonMejoraTriangulos.contains(e.x,e.y)){
+                                this.cambiarEstado(Estado.botonRayo);
+                            }
+                            else if(this.botonMejoraCuadrados.contains(e.x,e.y)){
+                                this.cambiarEstado(Estado.botonHielo);
+                            }
+                            else{
+                                this.cambiarEstado(Estado.nada);
+                            }
+                            break;
+                        case botonHielo:
+                            if(this.botonMejoraTriangulos.contains(e.x,e.y)){
+                                this.cambiarEstado(Estado.botonRayo);
+                            }
+                            else if(this.botonMejoraHexagonos.contains(e.x,e.y)){
+                                this.cambiarEstado(Estado.botonFuego);
+                            }
+                            else{
+                                this.cambiarEstado(Estado.nada);
+                            }
+                            break;
+                    }
                     break;
                 case TOUCH_UP:
 
@@ -153,6 +230,35 @@ public class GameLogic implements State {
             }
         }
     }
+    private void cambiarEstado(Estado nuevoEstado){
+        switch (nuevoEstado){
+            case nada:
+                this.botonMejoraTriangulos.setColor(0xFF999999);
+                this.botonMejoraHexagonos.setColor(0xFF999999);
+                this.botonMejoraCuadrados.setColor(0xFF999999);
+                this.estado = nuevoEstado;
+                break;
+            case torre:
+                this.estado = nuevoEstado;
+                break;
+            case botonRayo:
+                this.botonMejoraTriangulos.setColor(0xfffffb64);
+                this.botonMejoraHexagonos.setColor(0xFF999999);
+                this.botonMejoraCuadrados.setColor(0xFF999999);
+                this.estado = nuevoEstado;
+                break;
+            case botonFuego:
+                this.botonMejoraTriangulos.setColor(0xFF999999);
+                this.botonMejoraHexagonos.setColor(0xfffffb64);
+                this.botonMejoraCuadrados.setColor(0xFF999999);
+                this.estado = nuevoEstado;
+                break;
+            case botonHielo:
+                this.botonMejoraTriangulos.setColor(0xFF999999);
+                this.botonMejoraHexagonos.setColor(0xFF999999);
+                this.botonMejoraCuadrados.setColor(0xfffffb64);
+                this.estado = nuevoEstado;
+                break;
 
     @Override
     public void setAudio(Audio audio) {
@@ -164,9 +270,17 @@ public class GameLogic implements State {
         this.botonMejoraTriangulos = new Button(440,350,50,50,true,20);
         this.botonMejoraHexagonos = new Button(560,350,50,50,true,20);
 
-        botonMejoraCuadrados.setColor(0xFF999999);
-        botonMejoraTriangulos.setColor(0xFF999999);
-        botonMejoraHexagonos.setColor(0xFF999999);
+        this.botonMejoraAtaque = new Button(500,350,50,50,true,20);
+        this.botonMejoraRango = new Button(440,350,50,50,true,20);
+        this.botonMejoraVelocidad = new Button(560,350,50,50,true,20);
+
+        this.botonMejoraCuadrados.setColor(0xFF999999);
+        this.botonMejoraTriangulos.setColor(0xFF999999);
+        this.botonMejoraHexagonos.setColor(0xFF999999);
+
+        this.botonMejoraAtaque.setColor(0xFF999999);
+        this.botonMejoraRango.setColor(0xFF999999);
+        this.botonMejoraVelocidad.setColor(0xFF999999);
 
         this.figuraBotonCuadrado = new Square(1,-5,30,30,true);
         this.figuraBotonCuadrado.setColor(0xFFC8A2C8);

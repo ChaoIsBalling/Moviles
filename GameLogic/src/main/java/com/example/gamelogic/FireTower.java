@@ -107,4 +107,9 @@ public class FireTower implements Tower {
             gr.rellenarCirculo(this.enemyX,this.enemyY,10);
         }
     }
+
+    @Override
+    public float getRange() {
+        return this.rango;
+    }
 }

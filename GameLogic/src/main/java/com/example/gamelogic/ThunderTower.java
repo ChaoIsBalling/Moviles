@@ -97,4 +97,9 @@ public class ThunderTower implements Tower{
             gr.pintarLinea(this.triangulo.getX(),this.triangulo.getY(),this.enemyX,this.enemyY,5);
         }
     }
+
+    @Override
+    public float getRange() {
+        return this.rango;
+    }
 }
