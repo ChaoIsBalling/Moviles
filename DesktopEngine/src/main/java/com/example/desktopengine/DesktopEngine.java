@@ -25,7 +25,7 @@ public class DesktopEngine implements Runnable, Engine {
     private DesktopInput input;
 
     private DesktopAudio audio;
-    String root = "data/";
+    String root = "data/Files/";
     public DesktopEngine(JFrame view){
         this.myView = view;
         this.gr = new DesktopGraphics(this.myView); //Sistema de gráficos
