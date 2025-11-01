@@ -7,7 +7,7 @@ public class Casilla {
     Tower tower;
     Boolean camino;
 
-    Coordenada coor;
+    Vector2D coor;
     public Casilla(float x, float y, float w, float h, boolean fill, boolean camino){
         this.cuadrado = new Square(x,y,w,h,fill);
         this.camino=camino;
@@ -34,8 +34,8 @@ public class Casilla {
     public float getY(){
         return this.cuadrado.getY();
     }
-    public Coordenada getCoor() {return this.coor;};
-    public void setCoor(Coordenada coor){this.coor = coor; }
+    public Vector2D getCoor() {return this.coor;};
+    public void setCoor(Vector2D coor){this.coor = coor; }
 
     public void Render(Graphics gr){
         this.cuadrado.Render(gr);

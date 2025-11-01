@@ -5,22 +5,23 @@ import com.example.engine.Graphics;
 public class Enemy {
     Circle circulo;
     float vida;
-    Coordenada velocidad;
+    Vector2D direccion;
 
-    float trueSpeed = 100;
+    float velocidad = 100;
     float defensa;
     float resistencia;
     Tipo tipo;
     GameLogic gl;
-    Coordenada coor;
+    Vector2D coor;
 
     Casilla casillaSig;
 
     Casilla casillaActual;
-    public Enemy(float x, float y, float vida, Coordenada velocidad, float defensa, float resistencia, Tipo tipoRes, GameLogic gl){
+    public Enemy(float x, float y, float vida, float velocidad, float defensa, float resistencia, Tipo tipoRes, GameLogic gl){
         this.circulo = new Circle(x,y,5,true);
         this.circulo.setColor(0xff00ff00);
         this.vida=vida;
+        this.direccion = new Vector2D(1,0);
         this.velocidad = velocidad;
         this.defensa = defensa;
         this.resistencia = resistencia;
@@ -38,7 +39,7 @@ public class Enemy {
 
     }
 
-    private boolean boundsPath(Coordenada c){
+    private boolean boundsPath(Vector2D c){
         return ((c.getX() < this.gl.fil && c.getX() >= 0) &&
                 (c.getY() >= 0 && c.getY() < this.gl.col));
     }
@@ -47,26 +48,27 @@ public class Enemy {
         this.coor = this.gl.determinaCasilla(this.circulo.getX(), this.circulo.getY());
         this.casillaActual = this.gl.casillas.get(this.coor.getX()).get(this.coor.getY());
 
-        //Si la casilla siguiente no es un camino
+        //Si llega a la casilla final
         if(this.casillaActual.coor.getX() == 6 && this.casillaActual.coor.getY() == 13){
-            this.velocidad.setX(0);
-            this.velocidad.setY(0);
+            this.direccion.setX(0);
+            this.direccion.setY(0);
         }
 
-        this.casillaSig = this.gl.casillas.get(this.coor.getX() + this.velocidad.getY()).get(this.coor.getY() + this.velocidad.getX());
+        this.casillaSig = this.gl.casillas.get(this.coor.getX() + this.direccion.getY()).get(this.coor.getY() + this.direccion.getX());
         boolean encontrado = false;
+        //Si la casilla siguiente no es un camino
         if(!this.casillaSig.esCamino()){
             //Mirar arriba y abajo
-            Casilla arriba = this.gl.casillas.get(this.coor.getX() + this.velocidad.getY()).get(this.coor.getY() + this.velocidad.getX() -1);
-            Casilla abajo = this.gl.casillas.get(this.coor.getX() + this.velocidad.getY()).get(this.coor.getY() + this.velocidad.getX() + 1);
+            Casilla arriba = this.gl.casillas.get(this.coor.getX() + this.direccion.getY()).get(this.coor.getY() + this.direccion.getX() -1);
+            Casilla abajo = this.gl.casillas.get(this.coor.getX() + this.direccion.getY()).get(this.coor.getY() + this.direccion.getX() + 1);
             if(arriba.esCamino()){
-                this.velocidad.setX(0);
-                this.velocidad.setY(1);
+                this.direccion.setX(0);
+                this.direccion.setY(1);
                 encontrado = true;
             }
             else if(abajo.esCamino()){
-                this.velocidad.setX(0);
-                this.velocidad.setY(-1);
+                this.direccion.setX(0);
+                this.direccion.setY(-1);
                 encontrado = true;
             }
 
@@ -77,13 +79,13 @@ public class Enemy {
                     Casilla izq = this.gl.casillas.get(this.casillaSig.getCoor().getX() -1).get(this.casillaSig.getCoor().getY() -1);
 
                     if(dcha.esCamino()){
-                        this.velocidad.setX(1);
-                        this.velocidad.setY(0);
+                        this.direccion.setX(1);
+                        this.direccion.setY(0);
                         encontrado = true;
                     }
                     else if(izq.esCamino()){
-                        this.velocidad.setX(-1);
-                        this.velocidad.setY(0);
+                        this.direccion.setX(-1);
+                        this.direccion.setY(0);
                         encontrado = true;
                     }
 
@@ -94,8 +96,8 @@ public class Enemy {
         }
 
 
-        this.circulo.setX((float)(this.circulo.getX() + (this.velocidad.getX() * trueSpeed* deltaTime)));
-        this.circulo.setY((float)(this.circulo.getY() + (this.velocidad.getY() * trueSpeed* deltaTime)));
+        this.circulo.setX((float)(this.circulo.getX() + (this.direccion.getX() * velocidad * deltaTime)));
+        this.circulo.setY((float)(this.circulo.getY() + (this.direccion.getY() * velocidad * deltaTime)));
 
     }
     public void Render(Graphics gr){

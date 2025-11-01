@@ -7,7 +7,6 @@ import com.example.engine.Engine;
 import com.example.engine.Audio;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.lang.Integer;
 public class GameLogic implements State {
 
@@ -95,13 +94,13 @@ public class GameLogic implements State {
                 if(leer.get(2+i).charAt(j) == 'h'){
                     Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,false,false);
                     casilla.setColor(0xff000000);
-                    casilla.setCoor(new Coordenada(i,j));
+                    casilla.setCoor(new Vector2D(i,j));
                     fila.add(casilla);
                 }
                 else{
                     Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,true,true);
                     casilla.setColor(0xff944d03);
-                    casilla.setCoor(new Coordenada(i,j));
+                    casilla.setCoor(new Vector2D(i,j));
                     fila.add(casilla);
                     if(j == 0){
                         this.IniX = j*35+30;
@@ -125,7 +124,7 @@ public class GameLogic implements State {
         this.torres.get(1).setListaEnemigos(this.enemigos);
         this.torres.add(new IceTower(this.casillas.get(2).get(8).getX(),this.casillas.get(2).get(8).getY()));
         this.torres.get(2).setListaEnemigos(this.enemigos);
-        this.enemigos.add(new Enemy(this.IniX,this.IniY,10,new Coordenada(1,0),10,10,Tipo.rayo, this));
+        this.enemigos.add(new Enemy(this.IniX,this.IniY,10,40,10,10,Tipo.rayo, this));
     }
 
     @Override
@@ -146,7 +145,7 @@ public class GameLogic implements State {
         for(int i=0;i<deadEnemies.size();i++){
             this.enemigos.remove(this.deadEnemies.get(i));
         }
-        this.deadEnemies.clear()
+        this.deadEnemies.clear();
             
         this.textoV.setText(String.valueOf(this.vida));
         this.textoD.setText(String.valueOf(this.dinero));
@@ -155,7 +154,7 @@ public class GameLogic implements State {
     }
 
     //Dada una posición (x,y) se determina en que casilla está a partir del ancho y alto de la casilla
-    public Coordenada determinaCasilla(float x, float y){
+    public Vector2D determinaCasilla(float x, float y){
 
         //int anchoCasilla = 35;
         //int altoCasilla = 35;
@@ -165,7 +164,7 @@ public class GameLogic implements State {
         int j = (int) ((x - offsetX) / this.anchoCasilla);
         int i = (int) ((y - offsetY) / this.altoCasilla);
 
-        Coordenada c = new Coordenada(i,j);
+        Vector2D c = new Vector2D(i,j);
         System.out.println("(" + i + " , " + j +")");
 
         return c;
