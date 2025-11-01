@@ -60,4 +60,9 @@ public class IceTower implements Tower{
     public void Render(Graphics gr) {
         this.cuadrado.Render(gr);
     }
+
+    @Override
+    public float getRange() {
+        return this.rango;
+    }
 }

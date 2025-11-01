@@ -11,4 +11,5 @@ public interface Tower {
     public void setListaEnemigos(ArrayList<Enemy> enemigos);
     public void Update(double deltaTime);
     public void Render(Graphics gr);
+    public float getRange();
 }
