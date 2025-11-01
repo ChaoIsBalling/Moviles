@@ -13,6 +13,4 @@ public interface State {
 
     void setAudio(Audio audio);
 
-    void playAudio(Audio audio);
-
 }

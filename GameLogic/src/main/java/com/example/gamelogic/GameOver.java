@@ -10,75 +10,79 @@ import com.example.engine.Sound;
 import java.awt.Color;
 import java.util.ArrayList;
 
-public class Menu implements State {
+public class GameOver implements State {
     private float x;
     private float y;
     private float w;
     private float h;
-    boolean firstFrame = false;
 
-    private Button botonInicial;
+    private Button botonMenu;
+    private Button botonReintentar;
 
-    private Square figuraBoton;
-
-    private Triangle tri;
-
-    private Hexagon hex;
-
-    private Line lin;
 
     private Text textoBoton;
+    private Text textoReintentar;
     private Text textoInicial;
     private Audio audio;
     Engine engine;
 
-    public Menu(Engine engine){
+    boolean win;
+    public GameOver(Engine engine,boolean win)
+    {
         this.x =100;
         this.y=100;
         this.w =200;
         this.h =100;
         this.engine = engine;
+        this.win=win;
 
-        botonInicial = new Button(300, 250, 200,50,true,20);
-        botonInicial.setColor(0xFF999999);
-        //figuraBoton = new Circle(-60,0,20, true);
-        //figuraBoton = new Square(-60,0,40,40, true);
-        //figuraBoton.setColor(0x0000FF00);
-        //tri = new Triangle(-60,0,40,true);
-        //tri.setColor(0x00000000);
-        //hex = new Hexagon(-60,0,40, true);
-        //hex.setColor(0x000000FF);
-        //botonInicial.setFigura(figuraBoton);
-        textoBoton = new Text("Inika-Regular.ttf","Jugar",0,0,30,true,true);
+        botonMenu = new Button(120, 250, 200,50,true,20);
+        botonMenu.setColor(0xFF999999);
+
+        botonReintentar = new Button(480, 250, 200,50,true,20);
+        botonReintentar.setColor(0xFF999999);
+
+        textoBoton = new Text("Inika-Regular.ttf","Menu",0,0,30,true,true);
         textoBoton.setColor(0xff00ffff);
-        botonInicial.setText(textoBoton);
-        textoInicial = new Text("Inika-Regular.ttf","TowerDefense",300,150,40,true,true);
+        textoReintentar = new Text("Inika-Regular.ttf","Reintentar",0,0,30,true,true);
+        textoReintentar.setColor(0xff00ffff);
+        botonMenu.setText(textoBoton);
+        botonReintentar.setText(textoReintentar);
+        if(win) {
+            textoInicial = new Text("Inika-Regular.ttf", "VICTORIA", 300, 150, 40, true, true);
+        }
+        else {
+            textoInicial = new Text("Inika-Regular.ttf", "DERROTA", 300, 150, 40, true, true);
+        }
         textoInicial.setColor(0Xff000000);
-        //this.lin = new Line(100,100,200,200,10);
-        //this.lin.setColor(0xFF0000FF);
     }
     @Override
     public void update(double deltatime) {
-        if(!this.firstFrame){
-            this.firstFrame = !this.firstFrame;
-        }
+
     }
 
     @Override
     public void render(Graphics gr) {
         gr.setColor(0x00000000);
-        botonInicial.Render(gr);
+        botonMenu.Render(gr);
         textoInicial.Render(gr);
+        botonReintentar.Render(gr);
     }
+
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
             switch (e.type){
                 case TOUCH_DOWN:
-                    if(this.botonInicial.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine);
+                    if(this.botonMenu.contains(e.x,e.y)){
+                        Menu menu= new Menu(this.engine);
+                        this.engine.setState(menu);
+                    }
+                    if(this.botonReintentar.contains(e.x,e.y)){
+                        GameLogic gameLogic= new GameLogic(this.engine);
                         this.engine.setState(gameLogic);
                     }
+
                     break;
                 case TOUCH_UP:
                     System.out.println("Has soltado el raton");
@@ -87,11 +91,11 @@ public class Menu implements State {
                     break;
             }
         }
-
     }
 
     @Override
     public void setAudio(Audio audio) {
-    this.audio=audio;
+        this.audio=audio;
     }
+
 }
