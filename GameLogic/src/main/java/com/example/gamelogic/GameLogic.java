@@ -34,7 +34,7 @@ public class GameLogic implements State {
     int fil;
     int col;
 
-    float vida = 0;
+    int vida = 0;
     float dinero = 0;
 
     float IniX;
@@ -43,11 +43,18 @@ public class GameLogic implements State {
     float FinX;
     float FinY;
 
+    float anchoCasilla = 35;
+
+    float altoCasilla = 35;
+
+
     //mapa
     ArrayList<ArrayList<Casilla>> casillas;
     ArrayList<Tower> torres;
     ArrayList<Enemy> enemigos;
+    ArrayList<Enemy> deadEnemies;
     ArrayList<String> leer;
+
     Engine engine;
 
     Audio audio;
@@ -67,9 +74,12 @@ public class GameLogic implements State {
     private Dificultad dificultad;
     public GameLogic(Engine engine, Dificultad dificultad){
         this.engine=engine;
+        this.vida=10;
+        this.dinero = 200;
         this.dificultad = dificultad;
         this.torres = new ArrayList<Tower>();
         this.enemigos=new ArrayList<Enemy>();
+        this.deadEnemies=new ArrayList<Enemy>();
         this.casillas = new ArrayList<ArrayList<Casilla>>();
         this.textoV = new Text("Inika-Regular.ttf",String.valueOf(this.vida),30,340,20);
         this.textoD = new Text("Inika-Regular.ttf",String.valueOf(this.dinero),30,370,20);
@@ -78,17 +88,20 @@ public class GameLogic implements State {
         this.leer = engine.readFile("mapa1.txt");
        this.fil=Integer.parseInt(leer.get(0));
        this.col=Integer.parseInt(leer.get(1));
+
         for (int i =0; i<this.fil;i++){
             ArrayList<Casilla> fila = new ArrayList<Casilla>();
             for(int j =0; j<this.col;j++){
                 if(leer.get(2+i).charAt(j) == 'h'){
-                    Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),35,35,false,false);
+                    Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,false,false);
                     casilla.setColor(0xff000000);
+                    casilla.setCoor(new Coordenada(i,j));
                     fila.add(casilla);
                 }
                 else{
-                    Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),35,35,true,true);
+                    Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,true,true);
                     casilla.setColor(0xff944d03);
+                    casilla.setCoor(new Coordenada(i,j));
                     fila.add(casilla);
                     if(j == 0){
                         this.IniX = j*35+30;
@@ -112,7 +125,7 @@ public class GameLogic implements State {
         this.torres.get(1).setListaEnemigos(this.enemigos);
         this.torres.add(new IceTower(this.casillas.get(2).get(8).getX(),this.casillas.get(2).get(8).getY()));
         this.torres.get(2).setListaEnemigos(this.enemigos);
-        this.enemigos.add(new Enemy(this.IniX,this.IniY,10,30,10,10,Tipo.rayo));
+        this.enemigos.add(new Enemy(this.IniX,this.IniY,10,new Coordenada(1,0),10,10,Tipo.rayo, this));
     }
 
     @Override
@@ -122,9 +135,40 @@ public class GameLogic implements State {
         }
         for(int i = 0; i<this.enemigos.size(); i++){
             this.enemigos.get(i).Update(deltaTime);
+            if(this.enemigos.get(i).getX()==this.FinX&&this.enemigos.get(i).getY()==this.FinY){
+                this.vida--;
+                this.enemigos.get(i).setDead();
+            }
+            if(this.enemigos.get(i).Dead()){
+                deadEnemies.add(this.enemigos.get(i));
+            }
         }
+        for(int i=0;i<deadEnemies.size();i++){
+            this.enemigos.remove(this.deadEnemies.get(i));
+        }
+        this.deadEnemies.clear()
+            
         this.textoV.setText(String.valueOf(this.vida));
         this.textoD.setText(String.valueOf(this.dinero));
+
+
+    }
+
+    //Dada una posición (x,y) se determina en que casilla está a partir del ancho y alto de la casilla
+    public Coordenada determinaCasilla(float x, float y){
+
+        //int anchoCasilla = 35;
+        //int altoCasilla = 35;
+        int offsetX = 30;
+        int offsetY = 50;
+
+        int j = (int) ((x - offsetX) / this.anchoCasilla);
+        int i = (int) ((y - offsetY) / this.altoCasilla);
+
+        Coordenada c = new Coordenada(i,j);
+        System.out.println("(" + i + " , " + j +")");
+
+        return c;
     }
 
     @Override
