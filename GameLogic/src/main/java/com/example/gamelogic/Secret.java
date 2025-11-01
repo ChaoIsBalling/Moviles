@@ -51,11 +51,6 @@ public class Secret implements State {
 
     }
     @Override
-    public void playAudio(Audio audio)
-    {
-
-    }
-    @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
 
         for(TouchEvent e: list){

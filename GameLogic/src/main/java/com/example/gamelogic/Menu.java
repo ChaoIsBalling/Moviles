@@ -71,11 +71,6 @@ public class Menu implements State {
         textoInicial.Render(gr);
     }
     @Override
-    public void playAudio(Audio audio)
-    {
-        this.audio=audio;
-    }
-    @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
             switch (e.type){
