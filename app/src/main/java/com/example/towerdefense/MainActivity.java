@@ -30,9 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
         this.engine = new AndroidEngine(this.renderView);
         this.menu=new Menu(this.engine);
-        this.engine.setState(this.menu);
-
-
     }
 
     @Override

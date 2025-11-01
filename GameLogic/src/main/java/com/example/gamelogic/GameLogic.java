@@ -51,6 +51,7 @@ public class GameLogic implements State {
     ArrayList<String> leer;
     Engine engine;
 
+    Audio audio;
     Tower torreSeleccionada;
 
     enum Estado{
@@ -96,7 +97,6 @@ public class GameLogic implements State {
         this.torres.add(new ThunderTower(this.casillas.get(2).get(6).getX(),this.casillas.get(2).get(6).getY()));
         this.torres.get(0).setListaEnemigos(this.enemigos);
         this.torres.add(new FireTower(this.casillas.get(0).get(6).getX(),this.casillas.get(0).get(6).getY()));
-        this.torres.get(1).setAudio(this.audio);
         this.torres.get(1).setListaEnemigos(this.enemigos);
         this.torres.add(new IceTower(this.casillas.get(2).get(8).getX(),this.casillas.get(2).get(8).getY()));
         this.torres.get(2).setListaEnemigos(this.enemigos);
@@ -149,6 +149,45 @@ public class GameLogic implements State {
             this.botonMejoraVelocidad.Render(gr);
             //gr.pintarCirculo(casillaX,casillaY,torreSeleccionada.getRango());
         }
+    }
+
+
+
+    public void inicializarUI() {
+        this.botonMejoraCuadrados = new Button(500, 350, 50, 50, true, 20);
+        this.botonMejoraTriangulos = new Button(440, 350, 50, 50, true, 20);
+        this.botonMejoraHexagonos = new Button(560, 350, 50, 50, true, 20);
+
+        this.botonMejoraAtaque = new Button(500, 350, 50, 50, true, 20);
+        this.botonMejoraRango = new Button(440, 350, 50, 50, true, 20);
+        this.botonMejoraVelocidad = new Button(560, 350, 50, 50, true, 20);
+
+        this.botonMejoraCuadrados.setColor(0xFF999999);
+        this.botonMejoraTriangulos.setColor(0xFF999999);
+        this.botonMejoraHexagonos.setColor(0xFF999999);
+
+        this.botonMejoraAtaque.setColor(0xFF999999);
+        this.botonMejoraRango.setColor(0xFF999999);
+        this.botonMejoraVelocidad.setColor(0xFF999999);
+
+        this.figuraBotonCuadrado = new Square(1, -5, 30, 30, true);
+        this.figuraBotonCuadrado.setColor(0xFFC8A2C8);
+        this.figuraBotonTriangulo = new Triangle(1, 1, 15, true);
+        this.figuraBotonHexagono = new Hexagon(1, -5, 15, true);
+        this.figuraBotonHexagono.setColor(0xFFFF0000);
+
+        this.botonMejoraCuadrados.setFigura(this.figuraBotonCuadrado);
+        this.botonMejoraTriangulos.setFigura(this.figuraBotonTriangulo);
+        this.botonMejoraHexagonos.setFigura(this.figuraBotonHexagono);
+
+        this.costeMejoraCuadrados = new Text("Inika-Regular.ttf", "150", 0, 15, 15, true, true);
+        this.botonMejoraCuadrados.setText(this.costeMejoraCuadrados);
+
+        this.costeMejoraTriangulos = new Text("Inika-Regular.ttf", "100", 0, 15, 15, true, true);
+        this.botonMejoraTriangulos.setText(this.costeMejoraTriangulos);
+
+        this.costeMejoraHexagonos = new Text("Inika-Regular.ttf", "200", 0, 15, 15, true, true);
+        this.botonMejoraHexagonos.setText(this.costeMejoraHexagonos);
     }
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
@@ -230,8 +269,20 @@ public class GameLogic implements State {
             }
         }
     }
-    private void cambiarEstado(Estado nuevoEstado){
-        switch (nuevoEstado){
+
+    @Override
+    public void setAudio(Audio audio) {
+        this.audio=audio;
+
+        for(int i=0;i<this.torres.size();i++)
+        {
+            this.torres.get(i).setAudio(this.audio);
+        }
+
+    }
+
+    private void cambiarEstado(Estado nuevoEstado) {
+        switch (nuevoEstado) {
             case nada:
                 this.botonMejoraTriangulos.setColor(0xFF999999);
                 this.botonMejoraHexagonos.setColor(0xFF999999);
@@ -260,46 +311,8 @@ public class GameLogic implements State {
                 this.estado = nuevoEstado;
                 break;
 
-    @Override
-    public void setAudio(Audio audio) {
-        this.audio=audio;
+        }
     }
 
-    public void inicializarUI(){
-        this.botonMejoraCuadrados = new Button(500,350,50,50,true,20);
-        this.botonMejoraTriangulos = new Button(440,350,50,50,true,20);
-        this.botonMejoraHexagonos = new Button(560,350,50,50,true,20);
-
-        this.botonMejoraAtaque = new Button(500,350,50,50,true,20);
-        this.botonMejoraRango = new Button(440,350,50,50,true,20);
-        this.botonMejoraVelocidad = new Button(560,350,50,50,true,20);
-
-        this.botonMejoraCuadrados.setColor(0xFF999999);
-        this.botonMejoraTriangulos.setColor(0xFF999999);
-        this.botonMejoraHexagonos.setColor(0xFF999999);
-
-        this.botonMejoraAtaque.setColor(0xFF999999);
-        this.botonMejoraRango.setColor(0xFF999999);
-        this.botonMejoraVelocidad.setColor(0xFF999999);
-
-        this.figuraBotonCuadrado = new Square(1,-5,30,30,true);
-        this.figuraBotonCuadrado.setColor(0xFFC8A2C8);
-        this.figuraBotonTriangulo = new Triangle(1,1,15, true);
-        this.figuraBotonHexagono = new Hexagon(1,-5,15,true);
-        this.figuraBotonHexagono.setColor(0xFFFF0000);
-
-        this.botonMejoraCuadrados.setFigura(this.figuraBotonCuadrado);
-        this.botonMejoraTriangulos.setFigura(this.figuraBotonTriangulo);
-        this.botonMejoraHexagonos.setFigura(this.figuraBotonHexagono);
-
-        this.costeMejoraCuadrados = new Text("Inika-Regular.ttf","150",0,15,15,true,true);
-        this.botonMejoraCuadrados.setText(this.costeMejoraCuadrados);
-
-        this.costeMejoraTriangulos = new Text("Inika-Regular.ttf","100",0,15,15,true,true);
-        this.botonMejoraTriangulos.setText(this.costeMejoraTriangulos);
-
-        this.costeMejoraHexagonos = new Text("Inika-Regular.ttf","200",0,15,15,true,true);
-        this.botonMejoraHexagonos.setText(this.costeMejoraHexagonos);
-    }
 
 }

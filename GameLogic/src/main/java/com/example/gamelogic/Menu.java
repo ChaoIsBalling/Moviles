@@ -97,6 +97,6 @@ public class Menu implements State {
 
     @Override
     public void setAudio(Audio audio) {
-
+    this.audio=audio;
     }
 }
