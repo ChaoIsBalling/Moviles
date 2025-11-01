@@ -48,12 +48,6 @@ public class Enemy {
         this.coor = this.gl.determinaCasilla(this.circulo.getX(), this.circulo.getY());
         this.casillaActual = this.gl.casillas.get(this.coor.getX()).get(this.coor.getY());
 
-        //Si llega a la casilla final
-        if(this.casillaActual.coor.getX() == 6 && this.casillaActual.coor.getY() == 13){
-            this.direccion.setX(0);
-            this.direccion.setY(0);
-        }
-
         this.casillaSig = this.gl.casillas.get(this.coor.getX() + this.direccion.getY()).get(this.coor.getY() + this.direccion.getX());
         boolean encontrado = false;
         //Si la casilla siguiente no es un camino
