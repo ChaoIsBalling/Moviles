@@ -79,8 +79,8 @@ public class GameOver implements State {
                         this.engine.setState(menu);
                     }
                     if(this.botonReintentar.contains(e.x,e.y)){
-                        GameLogic gameLogic= new GameLogic(this.engine);
-                        this.engine.setState(gameLogic);
+                        Dificultad dificultad = new Dificultad(this.engine);
+                        this.engine.setState(dificultad);
                     }
 
                     break;

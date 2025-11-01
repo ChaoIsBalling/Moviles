@@ -71,5 +71,5 @@ public class Dificultad implements State {
     public void setAudio(Audio audio) {
 
     }
-    
+
 }
