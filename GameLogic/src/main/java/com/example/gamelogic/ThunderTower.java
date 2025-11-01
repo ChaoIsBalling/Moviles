@@ -101,4 +101,14 @@ public class ThunderTower implements Tower{
     public float getRange() {
         return this.rango;
     }
+
+    @Override
+    public float getX() {
+        return this.triangulo.getX();
+    }
+
+    @Override
+    public float getY() {
+        return this.triangulo.getY();
+    }
 }

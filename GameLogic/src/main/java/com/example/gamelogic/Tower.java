@@ -15,4 +15,6 @@ public interface Tower {
     public void setAudio(Audio audio);
     public void Render(Graphics gr);
     public float getRange();
+    public float getX();
+    public float getY();
 }

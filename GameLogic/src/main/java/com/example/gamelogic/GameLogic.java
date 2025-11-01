@@ -120,10 +120,13 @@ public class GameLogic implements State {
 
         this.torres.add(new ThunderTower(this.casillas.get(2).get(6).getX(),this.casillas.get(2).get(6).getY()));
         this.torres.get(0).setListaEnemigos(this.enemigos);
+        this.casillas.get(2).get(6).setTorre(this.torres.get(0));
         this.torres.add(new FireTower(this.casillas.get(0).get(6).getX(),this.casillas.get(0).get(6).getY()));
         this.torres.get(1).setListaEnemigos(this.enemigos);
+        this.casillas.get(0).get(6).setTorre(this.torres.get(1));
         this.torres.add(new IceTower(this.casillas.get(2).get(8).getX(),this.casillas.get(2).get(8).getY()));
         this.torres.get(2).setListaEnemigos(this.enemigos);
+        this.casillas.get(2).get(8).setTorre(this.torres.get(2));
         this.enemigos.add(new Enemy(this.IniX,this.IniY,10,40,10,10,Tipo.rayo, this));
     }
 
@@ -164,7 +167,22 @@ public class GameLogic implements State {
         int i = (int) ((y - offsetY) / this.altoCasilla);
 
         Vector2D c = new Vector2D(i,j);
-        //System.out.println("(" + i + " , " + j +")");
+
+        return c;
+    }
+
+    public Vector2D determinaCasillaRaton(float x, float y){
+        if(x < 30 - this.anchoCasilla/2 || y < 50 -this.altoCasilla/2){
+            return new Vector2D(-1,-1);
+        }
+        int offsetX = 30;
+        int offsetY = 50;
+
+        int j = (int) (((x +(this.anchoCasilla/2)- offsetX)) / this.anchoCasilla);
+        int i = (int) (((y + (this.altoCasilla/2)- offsetY)) / this.altoCasilla);
+
+        Vector2D c = new Vector2D(i,j);
+        //System.out.println("("+c.getX()+","+c.getY()+")");
 
         return c;
     }
@@ -193,7 +211,8 @@ public class GameLogic implements State {
             this.botonMejoraAtaque.Render(gr);
             this.botonMejoraRango.Render(gr);
             this.botonMejoraVelocidad.Render(gr);
-            //gr.pintarCirculo(casillaX,casillaY,torreSeleccionada.getRango());
+            gr.setColor(0xff000000);
+            gr.pintarCirculo(this.torreSeleccionada.getX(),this.torreSeleccionada.getY(),this.torreSeleccionada.getRange());
         }
         this.textoV.Render(gr);
         this.textoD.Render(gr);
@@ -254,6 +273,17 @@ public class GameLogic implements State {
                             }
                             else if(this.botonMejoraCuadrados.contains(e.x,e.y)){
                                 this.cambiarEstado(Estado.botonHielo);
+                            }
+                            else {
+                                Vector2D casilla = this.determinaCasillaRaton(e.x,e.y);
+                                //System.out.println("("+casilla.getX()+","+casilla.getY()+")");
+                                if(casilla.getX() < this.fil && casilla.getY() < this.col && casilla.getX()>= 0 && casilla.getY()>=0){
+                                    Tower torre = this.casillas.get(casilla.getX()).get(casilla.getY()).getTorre();
+                                    if(torre != null){
+                                        this.torreSeleccionada = torre;
+                                        this.cambiarEstado(Estado.torre);
+                                    }
+                                }
                             }
                             break;
                         case torre:
