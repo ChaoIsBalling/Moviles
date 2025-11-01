@@ -13,11 +13,10 @@ public class ThunderTower implements Tower{
     float enfriamiento = 0;
     float rayo =1;
     boolean disparo = false;
-    float enemyX;
-    float enemyY;
 
     Tipo tipo = Tipo.rayo;
     ArrayList<Enemy> enemigos;
+    Enemy enemigo;
     public ThunderTower(float x, float y){
         this.triangulo = new Triangle(x,y,15,true);
         this.triangulo.setColor(0xFF000000);
@@ -44,38 +43,38 @@ public class ThunderTower implements Tower{
 
     @Override
     public void Update(double deltaTime) {
-        Enemy cercano = new Enemy(-100,-100,0,0,0,0,Tipo.rayo);
-        double distanciaC = -1;
-        for (int i = 0; i < this.enemigos.size(); i++){
-            float x = this.enemigos.get(i).getX();
-            float y = this.enemigos.get(i).getY();
-            double a = x-this.triangulo.getX();
-            double b = y-this.triangulo.getY();
-            a = Math.pow(a,2);
-            b = Math.pow(b,2);
-            double distancia = Math.sqrt(a+b);
-            if(distancia <= this.rango){
-                if(distanciaC == -1){
-                    cercano = this.enemigos.get(i);
-                    distanciaC = distancia;
-                    this.enemyX = cercano.getX();
-                    this.enemyY = cercano.getY();
-                }
-                else if(distancia < distanciaC){
-                    cercano = this.enemigos.get(i);
-                    distanciaC = distancia;
-                    this.enemyX = cercano.getX();
-                    this.enemyY = cercano.getY();
+
+        if (this.enfriamiento <= 0){
+            int enemigo = -1;
+            double distanciaC = -1;
+            for (int i = 0; i < this.enemigos.size(); i++){
+                float x = this.enemigos.get(i).getX();
+                float y = this.enemigos.get(i).getY();
+                double a = x-this.triangulo.getX();
+                double b = y-this.triangulo.getY();
+                a = Math.pow(a,2);
+                b = Math.pow(b,2);
+                double distancia = Math.sqrt(a+b);
+                if(distancia <= this.rango){
+                    if(distanciaC == -1){
+                        enemigo = i;
+                        distanciaC = distancia;
+                        this.enemigo = this.enemigos.get(i);
+                    }
+                    else if(distancia < distanciaC){
+                        enemigo = i;
+                        distanciaC = distancia;
+                        this.enemigo = this.enemigos.get(i);
+                    }
                 }
             }
-        }
-        if (this.enfriamiento <= 0 && this.enemigos.contains(cercano)){
-            cercano.damage(this.ataque,this.tipo);
-            this.enemyX = cercano.getX();
-            this.enemyY = cercano.getY();
-            this.enfriamiento = this.velocidad;
-            this.disparo = true;
-            this.rayo = 1;
+            if(enemigo != -1){
+                this.enemigo.damage(this.ataque,this.tipo);
+                this.enfriamiento = this.velocidad;
+                this.disparo = true;
+                this.rayo = 1;
+            }
+
         }
         else{
             this.enfriamiento -= deltaTime;
@@ -94,7 +93,7 @@ public class ThunderTower implements Tower{
         this.triangulo.Render(gr);
         if(this.disparo && this.rayo > 0){
             gr.setColor(0xff00ffff);
-            gr.pintarLinea(this.triangulo.getX(),this.triangulo.getY(),this.enemyX,this.enemyY,5);
+            gr.pintarLinea(this.triangulo.getX(),this.triangulo.getY(),this.enemigo.getX(),this.enemigo.getY(),5);
         }
     }
 
