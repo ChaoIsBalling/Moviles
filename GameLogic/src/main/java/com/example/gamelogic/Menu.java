@@ -73,8 +73,6 @@ public class Menu implements State {
     @Override
     public void playAudio(Audio audio)
     {
-    //Sound sound = audio.newSound("Scorching Back.mp3");
-    //audio.playSound(sound);
     }
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
