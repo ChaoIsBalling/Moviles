@@ -33,4 +33,13 @@ public class Enemy {
     public void Render(Graphics gr){
         this.circulo.Render(gr);
     }
+
+    public void setDead()
+    {
+        vida=0;
+    }
+    public boolean Dead()
+    {
+        return vida<=0;
+    }
 }

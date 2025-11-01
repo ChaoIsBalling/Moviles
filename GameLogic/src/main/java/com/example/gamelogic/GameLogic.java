@@ -35,7 +35,7 @@ public class GameLogic implements State {
     int fil;
     int col;
 
-    float vida = 0;
+    int vida = 0;
     float dinero = 0;
 
     float IniX;
@@ -48,7 +48,9 @@ public class GameLogic implements State {
     ArrayList<ArrayList<Casilla>> casillas;
     ArrayList<Tower> torres;
     ArrayList<Enemy> enemigos;
+    ArrayList<Enemy> deadEnemies;
     ArrayList<String> leer;
+
     Engine engine;
 
     Audio audio;
@@ -65,9 +67,11 @@ public class GameLogic implements State {
     private Dificultad dificultad;
     public GameLogic(Engine engine, Dificultad dificultad){
         this.engine=engine;
+        this.vida=10;
         this.dificultad = dificultad;
         this.torres = new ArrayList<Tower>();
         this.enemigos=new ArrayList<Enemy>();
+        this.deadEnemies=new ArrayList<Enemy>();
         this.casillas = new ArrayList<ArrayList<Casilla>>();
         this.leer = engine.readFile("mapa1.txt");
        this.fil=Integer.parseInt(leer.get(0));
@@ -120,8 +124,23 @@ public class GameLogic implements State {
             }
             for(int i = 0; i<this.enemigos.size(); i++){
                 this.enemigos.get(i).Update(deltaTime);
+                if(this.enemigos.get(i).getX()==this.FinX&&this.enemigos.get(i).getY()==this.FinY)
+                {
+                    vida--;
+                    this.enemigos.get(i).setDead();
+                }
+                if(this.enemigos.get(i).Dead())
+                {
+                    deadEnemies.add(this.enemigos.get(i));
+                }
             }
+            for(int i=0;i<deadEnemies.size();i++)
+            {
+                this.enemigos.remove(this.deadEnemies.get(i));
+            }
+            this.deadEnemies.clear();
         }
+
 
     }
 

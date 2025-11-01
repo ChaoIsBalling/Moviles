@@ -152,7 +152,6 @@ public class AndroidEngine implements Engine,Runnable {
             }
             ++frames;
             //reproducimos los sonidos
-            state.playAudio(audio);
             // Pintamos el frame
             this.gr.startFrame();
             this.state.render(this.gr);
