@@ -76,9 +76,9 @@ public class GameLogic implements State {
     Text textoV;
     Text textoD;
 
-    float damTorre = 2;
-    float ranTorre = (float) 11.7;
-    float velTorre = (float) -0.2;
+    float damTorre = 2;//mejora de daño
+    float ranTorre = (float) 11.7;//mejora de rango
+    float velTorre = (float) -0.2;//mejora de velocidad
 
     int oleada;//numero oleada
     int grupos;//grupos en oleada
@@ -238,7 +238,10 @@ public class GameLogic implements State {
         this.textoV.setText(String.valueOf(this.vida));
         this.textoD.setText(String.valueOf(this.dinero));
 
-
+        if(this.vida <= 0){
+            GameOver gameOver = new GameOver(this.engine,false);
+            this.engine.setState(gameOver);
+        }
     }
 
     //Dada una posición (x,y) se determina en que casilla está a partir del ancho y alto de la casilla
