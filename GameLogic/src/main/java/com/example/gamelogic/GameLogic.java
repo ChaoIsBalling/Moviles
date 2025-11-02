@@ -300,7 +300,6 @@ public class GameLogic implements State {
         this.textoV.Render(gr);
         this.textoD.Render(gr);
         this.textoOleadas.Render(gr);
-        this.imagenMejoraAtaque.Render(gr);
     }
 
 
@@ -350,13 +349,13 @@ public class GameLogic implements State {
         this.costeMejoraVelocidad = new Text("Inika-Regular.ttf", "100", 0, 15, 15, true, true);
         this.botonMejoraVelocidad.setText(this.costeMejoraVelocidad);
 
-        this.imagenMejoraAtaque = new Image("Espada.png",0, 0,50,50,this.gr);
+        this.imagenMejoraAtaque = new Image("Espada.png",-15, -20,30,30,this.gr);
         this.botonMejoraAtaque.setImagen(this.imagenMejoraAtaque);
 
-        this.imagenMejoraRango = new Image("Arco.png",0,0,this.gr);
+        this.imagenMejoraRango = new Image("Arco.png",-15, -20,30,30,this.gr);
         this.botonMejoraRango.setImagen(this.imagenMejoraRango);
 
-        this.imagenMejoraVelocidad = new Image("Reloj.png",0,0,this.gr);
+        this.imagenMejoraVelocidad = new Image("Reloj.png",-15, -20,30,30,this.gr);
         this.botonMejoraVelocidad.setImagen(this.imagenMejoraVelocidad);
     }
     @Override
