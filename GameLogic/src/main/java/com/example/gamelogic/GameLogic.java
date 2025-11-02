@@ -76,9 +76,9 @@ public class GameLogic implements State {
     Text textoV;
     Text textoD;
 
-    float damTorre = 2;
-    float ranTorre = (float) 11.7;
-    float velTorre = (float) -0.2;
+    float damTorre = 2;//mejora de daño
+    float ranTorre = (float) 11.7;//mejora de rango
+    float velTorre = (float) -0.2;//mejora de velocidad
 
     int oleada;//numero oleada
     int grupos;//grupos en oleada
@@ -175,35 +175,38 @@ public class GameLogic implements State {
 
     @Override
     public void update(double deltaTime) {
-        if(this.tiempGr<= 0){//si tiempo entre grupos<=0
-            if(this.numG < this.grupos){//si grupos generados<grupos
-                if(this.timpEnG<=0){//si tiempo entre enemigos<0
-                    if(this.numE < this.enemigosGrupo){//si enemigos generados<enemigos en grupo
-                        this.enemigos.add(new Enemy(this.IniX,this.IniY,10,40,10,10,Tipo.rayo, this));
-                        this.numE++;
+        if(this.dificultad == Dificultad.corto && this.oleada <4 || this.dificultad == Dificultad.largo && this.oleada <8 || this.dificultad == Dificultad.infinito){//continuar sacando oleadas hasta x oleada dependiendo de la dificultad
+            if(this.tiempGr<= 0){//si tiempo entre grupos<=0
+                if(this.numG < this.grupos){//si grupos generados<grupos
+                    if(this.timpEnG<=0){//si tiempo entre enemigos<0
+                        if(this.numE < this.enemigosGrupo){//si enemigos generados<enemigos en grupo
+                            this.enemigos.add(new Enemy(this.IniX,this.IniY,10,40,10,10,Tipo.rayo, this));
+                            this.numE++;
+                        }
+                        else{//si se han creado todos los enemigos del grupo
+                            this.numE=0;//resetear numero de enemigos generados
+                            this.numG +=1;//grupos generados +1
+                            this.tiempGr = this.tiempoGrupos;//resetear tiempo entre grupos
+                        }
+                        this.timpEnG = this.tiempoEnGrupo;//resetear tiempo entre enemigos
                     }
-                    else{//si se han creado todos los enemigos del grupo
-                        this.numE=0;//resetear numero de enemigos generados
-                        this.numG +=1;//grupos generados +1
-                        this.tiempGr = this.tiempoGrupos;//resetear tiempo entre grupos
-                    }
-                    this.timpEnG = this.tiempoEnGrupo;//resetear tiempo entre enemigos
                 }
             }
+            if(this.tiempOl<=0){//si tiempo entre oleadas <=0
+                this.oleada ++;//sigiente oleada
+                this.grupos++;//mas grupos
+                this.enemigosGrupo++;//mas enemigos por grupos
+                this.tiempoGrupos = 5 + (this.oleada-1);//mas tiempo entre grupos
+                this.tiempGr = 0;//que salga el primer grupo de imediato
+                this.tiempoOleada = this.tiempoGrupos*this.grupos + 2*this.oleada;//mas tiempo entre oleadas
+                this.tiempOl = this.tiempoOleada;//resetear tiempo entre oleadas
+                this.numG =0;//resetear grupos generados
+                this.numE=0;//resetear numero de enemigos generados
+                this.timpEnG =0;//que salga el primer enemigo de inmediato
+                this.textoOleadas.setText("Oleada:" + this.oleada);//cambiar texto oleadas
+            }
         }
-        if(this.tiempOl<=0){//si tiempo entre oleadas <=0
-            this.oleada ++;//sigiente oleada
-            this.grupos++;//mas grupos
-            this.enemigosGrupo++;//mas enemigos por grupos
-            this.tiempoGrupos = 5 + 2*(this.oleada-1);//mas tiempo entre grupos
-            this.tiempGr = 0;//que salga el primer grupo de imediato
-            this.tiempoOleada = this.tiempoGrupos*this.grupos + 3*this.oleada;//mas tiempo entre oleadas
-            this.tiempOl = this.tiempoOleada;//resetear tiempo entre oleadas
-            this.numG =0;//resetear grupos generados
-            this.numE=0;//resetear numero de enemigos generados
-            this.timpEnG =0;//que salga el primer enemigo de inmediato
-            this.textoOleadas.setText("Oleada:" + this.oleada);//cambiar texto oleadas
-        }
+
         this.timpEnG -= deltaTime;
         this.tiempGr -= deltaTime;
         this.tiempOl -= deltaTime;
@@ -237,8 +240,17 @@ public class GameLogic implements State {
             
         this.textoV.setText(String.valueOf(this.vida));
         this.textoD.setText(String.valueOf(this.dinero));
+        if(this.dificultad == Dificultad.corto && this.oleada >3 || this.dificultad == Dificultad.largo && this.oleada >7){
+            if(this.vida > 0 && this.enemigos.isEmpty()){
+                GameOver gameOver = new GameOver(this.engine,true);
+                this.engine.setState(gameOver);
+            }
+        }
 
-
+        if(this.vida <= 0){
+            GameOver gameOver = new GameOver(this.engine,false);
+            this.engine.setState(gameOver);
+        }
     }
 
     //Dada una posición (x,y) se determina en que casilla está a partir del ancho y alto de la casilla
