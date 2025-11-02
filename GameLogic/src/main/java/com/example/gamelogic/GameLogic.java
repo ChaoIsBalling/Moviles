@@ -287,50 +287,117 @@ public class GameLogic implements State {
                             }
                             break;
                         case torre:
-                            if(this.botonMejoraAtaque.contains(e.x,e.y)){
-                                //this.torreSeleccionada.UpdateAttack();
-                                this.cambiarEstado(Estado.nada);
+                            Vector2D casillaT = this.determinaCasillaRaton(e.x,e.y);
+                            if(this.botonMejoraAtaque.contains(e.x,e.y) && this.dinero >= 75){
+                                this.torreSeleccionada.UpdateAttack(10);
+                                this.dinero -= 75;
                             }
-                            else if(this.botonMejoraRango.contains(e.x,e.y)){
-                                //this.torreSeleccionada.UpdateRange();
-                                this.cambiarEstado(Estado.nada);
+                            else if(this.botonMejoraRango.contains(e.x,e.y) && this.dinero >= 75){
+                                this.torreSeleccionada.UpdateRange(10);
+                                this.dinero -= 75;
                             }
-                            else if(this.botonMejoraVelocidad.contains(e.x,e.y)){
-                                //this.torreSeleccionada.UpdateFireRate();
-                                this.cambiarEstado(Estado.nada);
+                            else if(this.botonMejoraVelocidad.contains(e.x,e.y) && this.dinero >= 75){
+                                this.torreSeleccionada.UpdateFireRate(10);
+                                this.dinero -= 100;
+                            }
+                            else if(casillaT.getX() < this.fil && casillaT.getY() < this.col && casillaT.getX()>= 0 && casillaT.getY()>=0){
+                                Tower torre = this.casillas.get(casillaT.getX()).get(casillaT.getY()).getTorre();
+                                if(torre != this.torreSeleccionada){
+                                    this.torreSeleccionada = torre;
+                                }
                             }
                             else{
                                 this.cambiarEstado(Estado.nada);
                             }
                             break;
                         case botonRayo:
+                            Vector2D casillaR = this.determinaCasillaRaton(e.x,e.y);
                             if(this.botonMejoraHexagonos.contains(e.x,e.y)){
                                 this.cambiarEstado(Estado.botonFuego);
                             }
                             else if(this.botonMejoraCuadrados.contains(e.x,e.y)){
                                 this.cambiarEstado(Estado.botonHielo);
                             }
+                            else if(casillaR.getX() < this.fil && casillaR.getY() < this.col && casillaR.getX()>= 0 && casillaR.getY()>=0){
+                                Tower torre = this.casillas.get(casillaR.getX()).get(casillaR.getY()).getTorre();
+                                if(torre != null){
+                                    this.torreSeleccionada = torre;
+                                    this.cambiarEstado(Estado.torre);
+                                }
+                                else if(this.dinero >= 100 && !this.casillas.get(casillaR.getX()).get(casillaR.getY()).esCamino()){
+                                    ThunderTower torreR = new ThunderTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY());
+                                    torreR.setListaEnemigos(this.enemigos);
+                                    torreR.setAudio(this.audio);
+                                    this.casillas.get(casillaR.getX()).get(casillaR.getY()).setTorre(torreR);
+                                    this.torres.add(torreR);
+                                    this.dinero -= 100;
+                                    this.cambiarEstado(Estado.nada);
+                                }
+                                else{
+                                    this.cambiarEstado(Estado.nada);
+                                }
+                            }
                             else{
                                 this.cambiarEstado(Estado.nada);
                             }
                             break;
                         case botonFuego:
+                            Vector2D casillaF = this.determinaCasillaRaton(e.x,e.y);
                             if(this.botonMejoraTriangulos.contains(e.x,e.y)){
                                 this.cambiarEstado(Estado.botonRayo);
                             }
                             else if(this.botonMejoraCuadrados.contains(e.x,e.y)){
                                 this.cambiarEstado(Estado.botonHielo);
                             }
+                            else if(casillaF.getX() < this.fil && casillaF.getY() < this.col && casillaF.getX()>= 0 && casillaF.getY()>=0){
+                                Tower torre = this.casillas.get(casillaF.getX()).get(casillaF.getY()).getTorre();
+                                if(torre != null){
+                                    this.torreSeleccionada = torre;
+                                    this.cambiarEstado(Estado.torre);
+                                }
+                                else if(this.dinero >= 200 && !this.casillas.get(casillaF.getX()).get(casillaF.getY()).esCamino()){
+                                    FireTower torreF = new FireTower(this.casillas.get(casillaF.getX()).get(casillaF.getY()).getX(),this.casillas.get(casillaF.getX()).get(casillaF.getY()).getY());
+                                    torreF.setListaEnemigos(this.enemigos);
+                                    torreF.setAudio(this.audio);
+                                    this.casillas.get(casillaF.getX()).get(casillaF.getY()).setTorre(torreF);
+                                    this.torres.add(torreF);
+                                    this.dinero -= 200;
+                                    this.cambiarEstado(Estado.nada);
+                                }
+                                else{
+                                    this.cambiarEstado(Estado.nada);
+                                }
+                            }
                             else{
                                 this.cambiarEstado(Estado.nada);
                             }
                             break;
                         case botonHielo:
+                            Vector2D casillaH = this.determinaCasillaRaton(e.x,e.y);
                             if(this.botonMejoraTriangulos.contains(e.x,e.y)){
                                 this.cambiarEstado(Estado.botonRayo);
                             }
                             else if(this.botonMejoraHexagonos.contains(e.x,e.y)){
                                 this.cambiarEstado(Estado.botonFuego);
+                            }
+                            else if(casillaH.getX() < this.fil && casillaH.getY() < this.col && casillaH.getX()>= 0 && casillaH.getY()>=0){
+                                Tower torre = this.casillas.get(casillaH.getX()).get(casillaH.getY()).getTorre();
+                                if(torre != null){
+                                    this.torreSeleccionada = torre;
+                                    this.cambiarEstado(Estado.torre);
+                                }
+                                else if(this.dinero >= 150 && !this.casillas.get(casillaH.getX()).get(casillaH.getY()).esCamino()){
+                                    IceTower torreH = new IceTower(this.casillas.get(casillaH.getX()).get(casillaH.getY()).getX(),this.casillas.get(casillaH.getX()).get(casillaH.getY()).getY());
+                                    torreH.setListaEnemigos(this.enemigos);
+                                    torreH.setAudio(this.audio);
+                                    this.casillas.get(casillaH.getX()).get(casillaH.getY()).setTorre(torreH);
+                                    this.torres.add(torreH);
+                                    this.dinero -= 150;
+                                    this.cambiarEstado(Estado.nada);
+                                }
+                                else{
+                                    this.cambiarEstado(Estado.nada);
+                                }
                             }
                             else{
                                 this.cambiarEstado(Estado.nada);
