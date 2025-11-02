@@ -28,6 +28,18 @@ public class GameLogic implements State {
 
     private Text costeMejoraHexagonos;
 
+    private Text costeMejoraAtaque;
+
+    private Text costeMejoraRango;
+
+    private Text costeMejoraVelocidad;
+
+    private Image imagenMejoraAtaque;
+
+    private Image imagenMejoraRango;
+
+    private Image imagenMejoraVelocidad;
+
     private Square franjaGris;
 
     int fil;
@@ -216,6 +228,7 @@ public class GameLogic implements State {
         }
         this.textoV.Render(gr);
         this.textoD.Render(gr);
+        this.imagenMejoraAtaque.Render(gr);
     }
 
 
@@ -255,6 +268,24 @@ public class GameLogic implements State {
 
         this.costeMejoraHexagonos = new Text("Inika-Regular.ttf", "200", 0, 15, 15, true, true);
         this.botonMejoraHexagonos.setText(this.costeMejoraHexagonos);
+
+        this.costeMejoraAtaque = new Text("Inika-Regular.ttf", "75", 0, 15, 15, true, true);
+        this.botonMejoraAtaque.setText(this.costeMejoraAtaque);
+
+        this.costeMejoraRango = new Text("Inika-Regular.ttf", "75", 0, 15, 15, true, true);
+        this.botonMejoraRango.setText(this.costeMejoraRango);
+
+        this.costeMejoraVelocidad = new Text("Inika-Regular.ttf", "100", 0, 15, 15, true, true);
+        this.botonMejoraVelocidad.setText(this.costeMejoraVelocidad);
+
+        this.imagenMejoraAtaque = new Image("Espada.png",0,0);
+        this.botonMejoraAtaque.setImagen(this.imagenMejoraAtaque);
+
+        this.imagenMejoraRango = new Image("Arco.png",0,0);
+        this.botonMejoraRango.setImagen(this.imagenMejoraRango);
+
+        this.imagenMejoraVelocidad = new Image("Reloj.png",0,0);
+        this.botonMejoraVelocidad.setImagen(this.imagenMejoraVelocidad);
     }
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
@@ -302,8 +333,11 @@ public class GameLogic implements State {
                             }
                             else if(casillaT.getX() < this.fil && casillaT.getY() < this.col && casillaT.getX()>= 0 && casillaT.getY()>=0){
                                 Tower torre = this.casillas.get(casillaT.getX()).get(casillaT.getY()).getTorre();
-                                if(torre != this.torreSeleccionada){
+                                if(torre != this.torreSeleccionada && torre != null){
                                     this.torreSeleccionada = torre;
+                                }
+                                else{
+                                    this.cambiarEstado(Estado.nada);
                                 }
                             }
                             else{
