@@ -214,9 +214,19 @@ public class AndroidGraphics implements Graphics {
     public void setColor(int color) {
         this.paint.setColor(color);
     }
-
     @Override
     public IImage newImage(String f) {
+        InputStream is = null;
+        try {
+            is = assetManager.open(imageDir+f);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Bitmap bitmap = BitmapFactory.decodeStream(is);
+        return new AndroidImage(bitmap);
+    }
+    @Override
+    public IImage newImage(String f,int height, int width) {
         InputStream is = null;
         try {
             is = assetManager.open(imageDir+f);
@@ -251,6 +261,9 @@ public class AndroidGraphics implements Graphics {
     {
         return new AndroidFont(this.assetManager,fontDir+path,size,bold,italic);
     }
+
+
+
     @Override
     public void escalar(float x, float y) {
         this.canvas.scale(x,y);

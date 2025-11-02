@@ -114,6 +114,7 @@ public class DesktopGraphics implements Runnable, Graphics{
     public void pintarImagen(IImage img, int x, int y) {
         DesktopImage imagen = (DesktopImage)img;
         this.graphics2D.drawImage(imagen.getCurrentImage(), x, y, null);
+
     }
 
     @Override
@@ -126,7 +127,7 @@ public class DesktopGraphics implements Runnable, Graphics{
     }
 
     @Override
-    public IImage newImage(String path)
+    public IImage newImage(String path, int height,int width)
     {
         java.awt.Image im =null;
         try
@@ -137,7 +138,7 @@ public class DesktopGraphics implements Runnable, Graphics{
         {
             throw new RuntimeException("Error al leer imagen..."+path,io);
         }
-        return new DesktopImage(im);
+        return new DesktopImage(im,height,width);
     }
 
     @Override
@@ -306,6 +307,20 @@ public class DesktopGraphics implements Runnable, Graphics{
             throw new RuntimeException(e);
         }
         return font;
+    }
+
+    @Override
+    public IImage newImage(String path) {
+        java.awt.Image im =null;
+        try
+        {
+            im = ImageIO.read(new File(root +"/images/"+path));
+        }
+        catch(IOException io)
+        {
+            throw new RuntimeException("Error al leer imagen..."+path,io);
+        }
+        return new DesktopImage(im);
     }
 
     @Override

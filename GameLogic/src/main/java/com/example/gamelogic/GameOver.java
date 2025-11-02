@@ -70,6 +70,11 @@ public class GameOver implements State {
     }
 
     @Override
+    public void setGraphics(Graphics gr) {
+
+    }
+
+    @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
             switch (e.type){

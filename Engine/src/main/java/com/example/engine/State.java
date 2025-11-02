@@ -9,6 +9,9 @@ public interface State {
 
     void render(Graphics gr);
 
+
+    void setGraphics(Graphics gr);
+
     void handleInput(ArrayList<TouchEvent> list, double elapseTime);
 
     void setAudio(Audio audio);
