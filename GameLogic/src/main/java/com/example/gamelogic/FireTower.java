@@ -56,7 +56,7 @@ public class FireTower implements Tower {
     public void setAudio(Audio audio)
     {
         this.audio=audio;
-        this.attack=audio.newSound("laser.wav");
+        this.attack=audio.newSound("fire.wav");
     }
     @Override
     public void Update(double deltaTime) {

@@ -2,6 +2,7 @@ package com.example.gamelogic;
 
 import com.example.engine.Audio;
 import com.example.engine.Graphics;
+import com.example.engine.Sound;
 
 import java.util.ArrayList;
 
@@ -11,8 +12,10 @@ public class IceTower implements Tower{
     float rango= 70;
     float velocidad = 4;
     float enfriamiento = 0;
-    float fuego =1;
     boolean disparo = false;
+
+    Audio audio;
+    Sound attack;
 
     Tipo tipo = Tipo.hielo;
     ArrayList<Enemy> enemigos;
@@ -53,6 +56,7 @@ public class IceTower implements Tower{
             b = Math.pow(b,2);
             double distancia = Math.sqrt(a+b);
             if(distancia <= this.rango){
+                this.audio.playSound(this.attack);
                 this.enemigos.get(i).damage(this.ataque,this.tipo);
             }
         }
@@ -60,7 +64,8 @@ public class IceTower implements Tower{
 
     @Override
     public void setAudio(Audio audio) {
-
+        this.audio=audio;
+        this.attack=audio.newSound("ice.wav");
     }
 
     @Override
