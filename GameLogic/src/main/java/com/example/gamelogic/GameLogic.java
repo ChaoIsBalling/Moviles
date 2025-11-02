@@ -74,6 +74,11 @@ public class GameLogic implements State {
     Text textoV;
     Text textoD;
 
+    float damTorre = 2;
+    float ranTorre = (float) 11.7;
+    float velTorre = (float) -0.2;
+
+    
     private enum Estado{
         nada,botonRayo,botonFuego,botonHielo,torre
     }
@@ -86,7 +91,7 @@ public class GameLogic implements State {
     public GameLogic(Engine engine, Dificultad dificultad){
         this.engine=engine;
         this.vida=10;
-        this.dinero = 200;
+        this.dinero = 300;
         this.dificultad = dificultad;
         this.torres = new ArrayList<Tower>();
         this.enemigos=new ArrayList<Enemy>();
@@ -140,6 +145,7 @@ public class GameLogic implements State {
         this.torres.get(2).setListaEnemigos(this.enemigos);
         this.casillas.get(2).get(8).setTorre(this.torres.get(2));
         this.enemigos.add(new Enemy(this.IniX,this.IniY,10,40,10,10,Tipo.rayo, this));
+        this.enemigos.add(new Enemy(this.IniX-15,this.IniY,10,40,10,10,Tipo.rayo, this));
     }
 
     @Override
@@ -186,7 +192,7 @@ public class GameLogic implements State {
         int i = (int) ((y - offsetY) / this.altoCasilla);
 
         Vector2D c = new Vector2D(i,j);
-
+        //System.out.println("("+c.getX()+","+c.getY()+")");
         return c;
     }
 
@@ -245,8 +251,8 @@ public class GameLogic implements State {
         this.botonMejoraTriangulos = new Button(440, 360, 50, 50, true, 20);
         this.botonMejoraHexagonos = new Button(560, 360, 50, 50, true, 20);
 
-        this.botonMejoraAtaque = new Button(500, 360, 50, 50, true, 20);
-        this.botonMejoraRango = new Button(440, 360, 50, 50, true, 20);
+        this.botonMejoraAtaque = new Button(440, 360, 50, 50, true, 20);
+        this.botonMejoraRango = new Button(500, 360, 50, 50, true, 20);
         this.botonMejoraVelocidad = new Button(560, 360, 50, 50, true, 20);
 
         this.botonMejoraCuadrados.setColor(0xFFffffff);
@@ -327,15 +333,15 @@ public class GameLogic implements State {
                         case torre:
                             Vector2D casillaT = this.determinaCasillaRaton(e.x,e.y);
                             if(this.botonMejoraAtaque.contains(e.x,e.y) && this.dinero >= 75){
-                                this.torreSeleccionada.UpdateAttack(10);
+                                this.torreSeleccionada.UpdateAttack(this.damTorre);
                                 this.dinero -= 75;
                             }
                             else if(this.botonMejoraRango.contains(e.x,e.y) && this.dinero >= 75){
-                                this.torreSeleccionada.UpdateRange(10);
+                                this.torreSeleccionada.UpdateRange(this.ranTorre);
                                 this.dinero -= 75;
                             }
                             else if(this.botonMejoraVelocidad.contains(e.x,e.y) && this.dinero >= 75){
-                                this.torreSeleccionada.UpdateFireRate(10);
+                                this.torreSeleccionada.UpdateFireRate(this.velTorre);
                                 this.dinero -= 100;
                             }
                             else if(casillaT.getX() < this.fil && casillaT.getY() < this.col && casillaT.getX()>= 0 && casillaT.getY()>=0){

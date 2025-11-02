@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class FireTower implements Tower {
     Hexagon hexagono;
-    float ataque=10;
-    float rango= 105;
+    float ataque=2;
+    float rango= 70;
     float velocidad = 4;
     float enfriamiento = 0;
     float fuego =1;
@@ -42,7 +42,9 @@ public class FireTower implements Tower {
 
     @Override
     public void UpdateFireRate(float mejora) {
-        this.velocidad += mejora;
+        if(this.velocidad > 0.5){
+            this.velocidad += mejora;
+        }
     }
 
     @Override
@@ -93,8 +95,8 @@ public class FireTower implements Tower {
                     if(this.enemigos.get(i) != this.enemigo){
                         float x = this.enemigos.get(i).getX();
                         float y = this.enemigos.get(i).getY();
-                        double a = x-this.hexagono.getX();
-                        double b = y-this.hexagono.getY();
+                        double a = x-this.enemigo.getX();
+                        double b = y-this.enemigo.getY();
                         a = Math.pow(a,2);
                         b = Math.pow(b,2);
                         double distancia = Math.sqrt(a+b);
