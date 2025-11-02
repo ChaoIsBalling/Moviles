@@ -234,7 +234,7 @@ public class GameLogic implements State {
             if(this.enemigos.get(i).Dead()){
 
                 deadEnemies.add(this.enemigos.get(i));
-                this.dinero+=25;
+                this.dinero+=75;
             }
             if(this.enemigos.get(i).Win()){
 
