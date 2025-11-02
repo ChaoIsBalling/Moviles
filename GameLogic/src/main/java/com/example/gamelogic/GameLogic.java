@@ -40,6 +40,10 @@ public class GameLogic implements State {
 
     private Image imagenMejoraVelocidad;
 
+    private Image imagenVida;
+
+    private Image imagenDinero;
+
     private Square franjaGris;
 
     int fil;
@@ -79,6 +83,13 @@ public class GameLogic implements State {
     float damTorre = 2;//mejora de daño
     float ranTorre = (float) 11.7;//mejora de rango
     float velTorre = (float) -0.2;//mejora de velocidad
+
+    float megVidaEn = 2;//mejora de vida de enemigo
+    float megVelEn = 2;//mejora de velocidad de enemigo
+    float megDefEn = 2;//mejora de defensa de enemigo
+    float megResEn = 1;//mejora de resistencia de enemigo
+
+    int tipoResEn =0;
 
     int oleada;//numero oleada
     int grupos;//grupos en oleada
@@ -124,8 +135,6 @@ public class GameLogic implements State {
         this.enemigos=new ArrayList<Enemy>();
         this.deadEnemies=new ArrayList<Enemy>();
         this.casillas = new ArrayList<ArrayList<Casilla>>();
-        this.textoV = new Text("Inika-Regular.ttf",String.valueOf(this.vida),30,340,20);
-        this.textoD = new Text("Inika-Regular.ttf",String.valueOf(this.dinero),30,370,20);
         this.franjaGris = new Square(300,370,600,100,true);
         this.franjaGris.setColor(0xFF999999);
         this.leer = engine.readFile("mapa1.txt");
@@ -160,17 +169,6 @@ public class GameLogic implements State {
             this.casillas.add(fila);
         }
 
-        this.torres.add(new ThunderTower(this.casillas.get(2).get(6).getX(),this.casillas.get(2).get(6).getY()));
-        this.torres.get(0).setListaEnemigos(this.enemigos);
-        this.casillas.get(2).get(6).setTorre(this.torres.get(0));
-        this.torres.add(new FireTower(this.casillas.get(0).get(6).getX(),this.casillas.get(0).get(6).getY()));
-        this.torres.get(1).setListaEnemigos(this.enemigos);
-        this.casillas.get(0).get(6).setTorre(this.torres.get(1));
-        this.torres.add(new IceTower(this.casillas.get(2).get(8).getX(),this.casillas.get(2).get(8).getY()));
-        this.torres.get(2).setListaEnemigos(this.enemigos);
-        this.casillas.get(2).get(8).setTorre(this.torres.get(2));
-        this.enemigos.add(new Enemy(this.IniX,this.IniY,10,40,10,10,Tipo.rayo, this));
-        this.enemigos.add(new Enemy(this.IniX-15,this.IniY,10,40,10,10,Tipo.rayo, this));
     }
 
     @Override
@@ -180,7 +178,18 @@ public class GameLogic implements State {
                 if(this.numG < this.grupos){//si grupos generados<grupos
                     if(this.timpEnG<=0){//si tiempo entre enemigos<0
                         if(this.numE < this.enemigosGrupo){//si enemigos generados<enemigos en grupo
-                            this.enemigos.add(new Enemy(this.IniX,this.IniY,10,40,10,10,Tipo.rayo, this));
+                            Tipo tipoRes;
+                            if(this.tipoResEn ==0){//resistencia de enemigos secuencial
+                                tipoRes = Tipo.rayo;
+                            }
+                            else if(this.tipoResEn ==1){
+                                tipoRes = Tipo.fuego;
+                            }
+                            else{
+                                tipoRes = Tipo.hielo;
+                            }
+                            this.tipoResEn = (this.tipoResEn+1)%3;
+                            this.enemigos.add(new Enemy(this.IniX,this.IniY,8+(this.megVidaEn*(this.oleada-1)),30+(this.megVelEn*(this.oleada-1)),0+(this.megDefEn*(this.oleada-1)),0+(this.megResEn*(this.oleada-1)),tipoRes, this));
                             this.numE++;
                         }
                         else{//si se han creado todos los enemigos del grupo
@@ -311,6 +320,8 @@ public class GameLogic implements State {
         }
         this.textoV.Render(gr);
         this.textoD.Render(gr);
+        this.imagenVida.Render();
+        this.imagenDinero.Render();
         this.textoOleadas.Render(gr);
     }
 
@@ -369,6 +380,11 @@ public class GameLogic implements State {
 
         this.imagenMejoraVelocidad = new Image("Reloj.png",-15, -20,30,30,this.gr);
         this.botonMejoraVelocidad.setImagen(this.imagenMejoraVelocidad);
+
+        this.textoV = new Text("Inika-Regular.ttf",String.valueOf(this.vida),30,340,20);
+        this.textoD = new Text("Inika-Regular.ttf",String.valueOf(this.dinero),30,370,20);
+        this.imagenVida = new Image("Vida.png",60, 330,30,30,this.gr);
+        this.imagenDinero = new Image("Dinero.png",60, 360,30,30,this.gr);
     }
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
