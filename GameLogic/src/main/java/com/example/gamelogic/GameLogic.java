@@ -291,7 +291,7 @@ public class GameLogic implements State {
         this.costeMejoraVelocidad = new Text("Inika-Regular.ttf", "100", 0, 15, 15, true, true);
         this.botonMejoraVelocidad.setText(this.costeMejoraVelocidad);
 
-        this.imagenMejoraAtaque = new Image("Espada.png",0,0,this.gr);
+        this.imagenMejoraAtaque = new Image("Espada.png",0, 0,50,50,this.gr);
         this.botonMejoraAtaque.setImagen(this.imagenMejoraAtaque);
 
         this.imagenMejoraRango = new Image("Arco.png",0,0,this.gr);

@@ -12,13 +12,13 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.androidengine.AndroidEngine;
 import com.example.gamelogic.GameLogic;
 import com.example.gamelogic.Menu;
+import com.example.gamelogic.Secret;
 
 public class MainActivity extends AppCompatActivity {
     private SurfaceView renderView;
     private AndroidEngine engine;
 
     private GameLogic gl;
-    private GameLogic gameLogic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(this.renderView);
 
         this.engine = new AndroidEngine(this.renderView);
-        this.engine.setState(new Menu(this.engine));
+        this.engine.setState(new Menu(engine));
     }
 
     @Override

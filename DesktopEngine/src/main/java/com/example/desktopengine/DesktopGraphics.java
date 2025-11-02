@@ -127,7 +127,7 @@ public class DesktopGraphics implements Runnable, Graphics{
     }
 
     @Override
-    public IImage newImage(String path, int height,int width)
+    public IImage newImage(String path, int width,int height)
     {
         java.awt.Image im =null;
         try
@@ -138,7 +138,7 @@ public class DesktopGraphics implements Runnable, Graphics{
         {
             throw new RuntimeException("Error al leer imagen..."+path,io);
         }
-        return new DesktopImage(im,height,width);
+        return new DesktopImage(im,width,height);
     }
 
     @Override

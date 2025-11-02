@@ -7,9 +7,9 @@ import java.awt.image.ImageObserver;
 public class DesktopImage  implements IImage{
     private Image img; //Guarda la imagen real
     private ImageObserver observer;
-    DesktopImage(Image im,int height, int width){
+    DesktopImage(Image im,int width, int height){
 
-        this.img = im.getScaledInstance(height, width, Image.SCALE_DEFAULT);
+        this.img = im.getScaledInstance(width, height, Image.SCALE_DEFAULT);
 
     }
     DesktopImage(Image im){

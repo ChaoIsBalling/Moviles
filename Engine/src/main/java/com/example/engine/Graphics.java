@@ -23,7 +23,7 @@ public interface Graphics {
 
     public IFont newFont(String f, float size, boolean bold, boolean italic);
     public IImage newImage(String path);
-    public IImage newImage(String path, int height,int width);
+    public IImage newImage(String path, int width,int height);
 
     public void setFont(IFont font);
 

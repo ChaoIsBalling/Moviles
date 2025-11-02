@@ -226,7 +226,7 @@ public class AndroidGraphics implements Graphics {
         return new AndroidImage(bitmap);
     }
     @Override
-    public IImage newImage(String f,int height, int width) {
+    public IImage newImage(String f,int width, int height) {
         InputStream is = null;
         try {
             is = assetManager.open(imageDir+f);
@@ -234,7 +234,7 @@ public class AndroidGraphics implements Graphics {
             throw new RuntimeException(e);
         }
         Bitmap bitmap = BitmapFactory.decodeStream(is);
-        return new AndroidImage(bitmap);
+        return new AndroidImage(bitmap,width,height);
     }
 
     @Override

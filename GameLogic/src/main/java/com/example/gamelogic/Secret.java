@@ -46,7 +46,7 @@ public class Secret implements State {
         gr.setFont(f);
         gr.pintarTextoCentrado("Balatrito", 300,200);
 
-        gr.pintarImagen(gr.newImage("asgore.png",10,10),0,210);
+        gr.pintarImagen(gr.newImage("asgore.png",1000,1000),0,210);
         gr.pintarImagen(gr.newImage("Joker.png",10,10),400,200);
 
     }

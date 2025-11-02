@@ -3,7 +3,7 @@ package com.example.desktopgame;
 import com.example.desktopengine.DesktopEngine;
 import com.example.gamelogic.GameLogic;
 import com.example.gamelogic.Menu;
-
+import com.example.gamelogic.Secret;
 
 import java.awt.Insets;
 
