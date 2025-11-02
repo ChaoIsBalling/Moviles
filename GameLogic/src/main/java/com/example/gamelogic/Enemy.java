@@ -45,7 +45,7 @@ public class Enemy {
         else{
             this.vida -= damage;
         }
-        System.out.println("("+damage+","+tipo+")");
+        //System.out.println("("+damage+","+tipo+")");
     }
 
     private boolean boundsPath(Vector2D c){
