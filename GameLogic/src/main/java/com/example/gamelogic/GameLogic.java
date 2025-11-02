@@ -69,6 +69,8 @@ public class GameLogic implements State {
     Engine engine;
 
     Audio audio;
+
+    Graphics gr;
     Tower torreSeleccionada;
 
     Text textoV;
@@ -157,8 +159,6 @@ public class GameLogic implements State {
             }
             this.casillas.add(fila);
         }
-
-        this.inicializarUI();
 
         this.torres.add(new ThunderTower(this.casillas.get(2).get(6).getX(),this.casillas.get(2).get(6).getY()));
         this.torres.get(0).setListaEnemigos(this.enemigos);
@@ -300,6 +300,7 @@ public class GameLogic implements State {
         this.textoV.Render(gr);
         this.textoD.Render(gr);
         this.textoOleadas.Render(gr);
+        this.imagenMejoraAtaque.Render(gr);
     }
 
 
@@ -349,13 +350,13 @@ public class GameLogic implements State {
         this.costeMejoraVelocidad = new Text("Inika-Regular.ttf", "100", 0, 15, 15, true, true);
         this.botonMejoraVelocidad.setText(this.costeMejoraVelocidad);
 
-        this.imagenMejoraAtaque = new Image("Espada.png",0,0);
+        this.imagenMejoraAtaque = new Image("Espada.png",0,0,this.gr);
         this.botonMejoraAtaque.setImagen(this.imagenMejoraAtaque);
 
-        this.imagenMejoraRango = new Image("Arco.png",0,0);
+        this.imagenMejoraRango = new Image("Arco.png",0,0,this.gr);
         this.botonMejoraRango.setImagen(this.imagenMejoraRango);
 
-        this.imagenMejoraVelocidad = new Image("Reloj.png",0,0);
+        this.imagenMejoraVelocidad = new Image("Reloj.png",0,0,this.gr);
         this.botonMejoraVelocidad.setImagen(this.imagenMejoraVelocidad);
     }
     @Override
@@ -529,6 +530,11 @@ public class GameLogic implements State {
             this.torres.get(i).setAudio(this.audio);
         }
 
+    }
+    @Override
+    public void setGraphics(Graphics gr) {
+        this.gr=gr;
+        this.inicializarUI();
     }
 
     private void cambiarEstado(Estado nuevoEstado) {

@@ -121,6 +121,7 @@ public class DesktopEngine implements Runnable, Engine {
 
         this.state = state;
         this.state.setAudio(this.audio);
+        this.state.setGraphics(this.gr);
     }
     @Override
     public State getState()

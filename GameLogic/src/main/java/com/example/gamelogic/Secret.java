@@ -46,10 +46,16 @@ public class Secret implements State {
         gr.setFont(f);
         gr.pintarTextoCentrado("Balatrito", 300,200);
 
-        gr.pintarImagen(gr.newImage("asgore.png"),0,210);
-        gr.pintarImagen(gr.newImage("Joker.png"),400,200);
+        gr.pintarImagen(gr.newImage("asgore.png",10,10),0,210);
+        gr.pintarImagen(gr.newImage("Joker.png",10,10),400,200);
 
     }
+
+    @Override
+    public void setGraphics(Graphics gr) {
+
+    }
+
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
 

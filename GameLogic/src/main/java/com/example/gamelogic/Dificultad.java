@@ -13,6 +13,8 @@ public class Dificultad implements State {
     private Button botonLargo;
     private Button botonInfinito;
     private Engine engine;
+
+    Graphics gr;
     public Dificultad(Engine engine){
         this.engine = engine;
         botonCorto = new Button(300,100,220,50,true,20);
@@ -38,6 +40,11 @@ public class Dificultad implements State {
         botonCorto.Render(gr);
         botonLargo.Render(gr);
         botonInfinito.Render(gr);
+    }
+
+    @Override
+    public void setGraphics(Graphics gr) {
+        this.gr=gr;
     }
 
     @Override

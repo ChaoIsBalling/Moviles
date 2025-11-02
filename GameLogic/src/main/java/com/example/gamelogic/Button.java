@@ -67,7 +67,7 @@ public class Button {
             gr.rellenarCuadrado(this.x,this.y,this.w,this.h);
 
         if(this.imagen != null){
-            this.imagen.RenderCentrado(gr,(int)this.x,(int)this.y);
+            this.imagen.RenderCentrado((int)this.x,(int)this.y);
         }
 
         if(this.text != null){

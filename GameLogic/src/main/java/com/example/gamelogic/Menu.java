@@ -18,6 +18,8 @@ public class Menu implements State {
     private Audio audio;
     Engine engine;
 
+    Graphics gr;
+
     public Menu(Engine engine){
         this.engine = engine;
 
@@ -39,6 +41,12 @@ public class Menu implements State {
         botonInicial.Render(gr);
         textoInicial.Render(gr);
     }
+
+    @Override
+    public void setGraphics(Graphics gr) {
+        this.gr=gr;
+    }
+
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
