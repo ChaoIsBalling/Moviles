@@ -10,7 +10,7 @@ public class ThunderTower implements Tower{
     Triangle triangulo;
     float ataque=4;
     float rango= 70;
-    float velocidad = 3;
+    float velocidad = (float )1.6;
     float enfriamiento = 0;
     float rayo =1;
 

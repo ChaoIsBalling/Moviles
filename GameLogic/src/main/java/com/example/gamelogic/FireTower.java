@@ -12,7 +12,7 @@ public class FireTower implements Tower {
     Hexagon hexagono;
     float ataque=2;
     float rango= 70;
-    float velocidad = 4;
+    float velocidad = 2;
     float enfriamiento = 0;
     float fuego =1;
     boolean disparo = false;
