@@ -40,10 +40,24 @@ public class Enemy {
     }
     public void damage(float damage, Tipo tipo){
         if(tipo == Tipo.hielo && damage > this.realentizar){
-            this.realentizar = damage;
+            float dam = damage;
+            if(this.tipo == tipo){
+                dam -= this.resistencia;
+            }
+            if(dam < 7){
+                dam = 7;
+            }
+            this.realentizar = dam;
         }
         else{
-            this.vida -= damage;
+            float dam = damage - this.defensa;
+            if(this.tipo == tipo){
+                dam -= this.resistencia;
+            }
+            if(dam <2){
+                dam = 2;
+            }
+            this.vida -= dam;
         }
         //System.out.println("("+damage+","+tipo+")");
     }

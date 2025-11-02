@@ -86,7 +86,7 @@ public class GameLogic implements State {
 
     float megVidaEn = 2;//mejora de vida de enemigo
     float megVelEn = 2;//mejora de velocidad de enemigo
-    float megDefEn = 2;//mejora de defensa de enemigo
+    float megDefEn = 1;//mejora de defensa de enemigo
     float megResEn = 1;//mejora de resistencia de enemigo
 
     int tipoResEn =0;
