@@ -5,6 +5,7 @@ import com.example.engine.Graphics;
 public class Enemy {
     Circle circulo;
     float vida;
+    boolean win;
     Vector2D direccion;
 
     float velocidad = 100;
@@ -98,10 +99,10 @@ public class Enemy {
         this.circulo.Render(gr);
     }
 
-    public void setDead()
-    {
-        vida=0;
+    public void setWin()
+    {this.win=true;
     }
+    public boolean Win(){return this.win;}
     public boolean Dead()
     {
         return vida<=0;

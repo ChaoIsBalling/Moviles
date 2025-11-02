@@ -153,11 +153,18 @@ public class GameLogic implements State {
             if(this.enemigos.get(i).getX() >= this.FinX &&
                     this.enemigos.get(i).getY() >= this.FinY){
                 this.vida--;
-                this.enemigos.get(i).setDead();
+                this.enemigos.get(i).setWin();
             }
             if(this.enemigos.get(i).Dead()){
+
+                deadEnemies.add(this.enemigos.get(i));
+                this.dinero+=25;
+            }
+            if(this.enemigos.get(i).Win()){
+
                 deadEnemies.add(this.enemigos.get(i));
             }
+
         }
         for(int i=0;i<deadEnemies.size();i++){
             this.enemigos.remove(this.deadEnemies.get(i));
