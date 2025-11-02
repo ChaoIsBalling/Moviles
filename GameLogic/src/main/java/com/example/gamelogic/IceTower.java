@@ -9,16 +9,15 @@ import java.util.ArrayList;
 public class IceTower implements Tower{
     Square cuadrado;
     float ataque=10;
-    float rango= 105;
+    float rango= 70;
     float velocidad = 4;
     float enfriamiento = 0;
-    float fuego =1;
     boolean disparo = false;
 
     Audio audio;
     Sound attack;
 
-    Tipo tipo = Tipo.fuego;
+    Tipo tipo = Tipo.hielo;
     ArrayList<Enemy> enemigos;
 
     public IceTower(float x, float y){

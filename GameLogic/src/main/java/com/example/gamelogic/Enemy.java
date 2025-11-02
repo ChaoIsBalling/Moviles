@@ -15,6 +15,8 @@ public class Enemy {
     GameLogic gl;
     Vector2D coor;
 
+    float realentizar =0;
+
     Casilla casillaSig;
 
     Casilla casillaActual;
@@ -37,7 +39,13 @@ public class Enemy {
         return this.circulo.getY();
     }
     public void damage(float damage, Tipo tipo){
-
+        if(tipo == Tipo.hielo && damage > this.realentizar){
+            this.realentizar = damage;
+        }
+        else{
+            this.vida -= damage;
+        }
+        System.out.println("("+damage+","+tipo+")");
     }
 
     private boolean boundsPath(Vector2D c){
@@ -90,18 +98,18 @@ public class Enemy {
 
         }
 
+        float movimiento = this.velocidad-this.realentizar;
 
-        this.circulo.setX((float)(this.circulo.getX() + (this.direccion.getX() * velocidad * deltaTime)));
-        this.circulo.setY((float)(this.circulo.getY() + (this.direccion.getY() * velocidad * deltaTime)));
+        this.circulo.setX((float)(this.circulo.getX() + (this.direccion.getX() * movimiento * deltaTime)));
+        this.circulo.setY((float)(this.circulo.getY() + (this.direccion.getY() * movimiento * deltaTime)));
 
+        this.realentizar =0;
     }
     public void Render(Graphics gr){
         this.circulo.Render(gr);
     }
 
-    public void setWin()
-    {this.win=true;
-    }
+    public void setWin() {this.win=true;}
     public boolean Win(){return this.win;}
     public boolean Dead()
     {

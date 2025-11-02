@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class ThunderTower implements Tower{
     Triangle triangulo;
-    float ataque=10;
-    float rango= 105;
-    float velocidad = 4;
+    float ataque=4;
+    float rango= 70;
+    float velocidad = 3;
     float enfriamiento = 0;
     float rayo =1;
 
@@ -37,7 +37,9 @@ public class ThunderTower implements Tower{
 
     @Override
     public void UpdateFireRate(float mejora) {
-        this.velocidad += mejora;
+        if(this.velocidad > 0.5){
+            this.velocidad += mejora;
+        }
     }
 
     @Override
