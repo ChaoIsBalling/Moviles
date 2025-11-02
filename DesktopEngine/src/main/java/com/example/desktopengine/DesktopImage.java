@@ -2,6 +2,7 @@ package com.example.desktopengine;
 
 import com.example.engine.IImage;
 import java.awt.Image;
+import java.awt.image.ImageObserver;
 
 public class DesktopImage  implements IImage{
     private Image img; //Guarda la imagen real

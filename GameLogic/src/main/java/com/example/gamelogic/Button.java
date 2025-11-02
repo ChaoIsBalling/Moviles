@@ -6,16 +6,6 @@ package com.example.gamelogic;
 import com.example.engine.Graphics;
 import com.example.engine.IFont;
 public class Button {
-    class Imagen{
-        int x;
-        int y;
-        int w;
-        int h;
-        String image;
-        void Render(Graphics gr){
-
-        }
-    }
 
     //Atributos del botón
     private float x;
@@ -30,7 +20,7 @@ public class Button {
     Text text;
 
     int color = 0xFF000000;
-    Imagen imagen;
+    Image imagen;
     Figure figura;
 
     public Button(float x, float y, float w, float h, boolean isRound, float ar){
@@ -64,6 +54,9 @@ public class Button {
     public void setFigura(Figure fig){
         this.figura = fig;
     }
+
+    public void setImagen(Image img){this.imagen = img;}
+
     public void Render(Graphics gr) {
         //Renderizamos el cuadrado que representa el botón
         gr.setColor(color);
@@ -72,6 +65,10 @@ public class Button {
             gr.rellenarCuadradoRedondeado(this.x,this.y,this.w,this.h,this.arcRadius);
         else
             gr.rellenarCuadrado(this.x,this.y,this.w,this.h);
+
+        if(this.imagen != null){
+            this.imagen.RenderCentrado(gr,(int)this.x,(int)this.y);
+        }
 
         if(this.text != null){
             this.text.RenderCentrado(gr,this.x,this.y);
