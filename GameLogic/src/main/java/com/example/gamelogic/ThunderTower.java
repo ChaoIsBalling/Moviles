@@ -2,6 +2,7 @@ package com.example.gamelogic;
 
 import com.example.engine.Audio;
 import com.example.engine.Graphics;
+import com.example.engine.Sound;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,9 @@ public class ThunderTower implements Tower{
     float velocidad = 4;
     float enfriamiento = 0;
     float rayo =1;
+
+    Audio audio;
+    Sound attack;
     boolean disparo = false;
 
     Tipo tipo = Tipo.rayo;
@@ -72,6 +76,7 @@ public class ThunderTower implements Tower{
                 this.enemigo.damage(this.ataque,this.tipo);
                 this.enfriamiento = this.velocidad;
                 this.disparo = true;
+                this.audio.playSound(this.attack);
                 this.rayo = 1;
             }
 
@@ -85,7 +90,8 @@ public class ThunderTower implements Tower{
 
     @Override
     public void setAudio(Audio audio) {
-
+    this.audio=audio;
+    this.attack=audio.newSound("laser.wav");
     }
 
     @Override
