@@ -49,6 +49,8 @@ public interface Graphics {
 
     public void rellenarPoligono(float cx, float cy, float r, int nv);
 
+    public void rellenarHexagono(float cx, float cy, float r);
+
     public float real2LogicX(float x);
 
     public float real2LogicY(float y);

@@ -24,10 +24,14 @@ public class GameOver implements State {
     private Text textoReintentar;
     private Text textoInicial;
     private Audio audio;
+
+    private Sound victory;
+
+    private Sound lose;
     Engine engine;
 
     boolean win;
-    public GameOver(Engine engine,boolean win)
+    public GameOver(Engine engine, Audio audio,boolean win)
     {
         this.x =100;
         this.y=100;
@@ -50,9 +54,15 @@ public class GameOver implements State {
         botonReintentar.setText(textoReintentar);
         if(win) {
             textoInicial = new Text("Inika-Regular.ttf", "VICTORIA", 300, 150, 40, true, true);
+            this.setAudio(audio);
+            this.victory = this.audio.newSound("victory_trumpet.wav");
+            this.audio.playSound(this.victory);
         }
         else {
             textoInicial = new Text("Inika-Regular.ttf", "DERROTA", 300, 150, 40, true, true);
+            this.setAudio(audio);
+            this.lose = this.audio.newSound("death_sound.wav");
+            this.audio.playSound(this.lose);
         }
         textoInicial.setColor(0Xff000000);
     }

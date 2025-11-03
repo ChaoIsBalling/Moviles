@@ -241,6 +241,25 @@ public class DesktopGraphics implements Runnable, Graphics{
         graphics2D.fillPolygon(coorX,coorY,nv);
     }
 
+    @Override
+    public void rellenarHexagono(float cx, float cy, float r) {
+        //Coordendadas de los vertices del poligono
+        int [] coorX = new int[6];
+        int [] coorY = new int[6];
+
+        double angleStep = 2 * Math.PI / 6;
+
+        //Para dibujar el hexagono, empezamos a dibujar en la esquina superior izquierda en vez de arriba
+        for(int i = 0; i<6;i++){
+            double angle = angleStep* i - (3/4)*Math.PI;
+            int x = (int) (cx + r * Math.cos(angle));
+            int y = (int) (cy + r * Math.sin(angle));
+            coorX[i] = x; coorY[i]= y;
+        }
+
+        graphics2D.fillPolygon(coorX,coorY,6);
+    }
+
     public void rellenarTriangulo(float x1,float y1,float x2,float y2, float x3, float y3)
      {
          this.graphics2D.fillPolygon(new int[]{(int)x1,(int)x2,(int)x3},
