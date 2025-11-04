@@ -323,6 +323,33 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
+    public void rellenarHexagono(float cx, float cy, float r) {
+        this.paint.setStyle(Paint.Style.FILL);
+
+        //Coordendadas de los vertices del poligono
+        int [] coorX = new int[6];
+        int [] coorY = new int[6];
+
+        double angleStep = 2 * Math.PI / 6;
+
+        //Para dibujar el hexagono, empezamos a dibujar en la esquina superior izquierda en vez de arriba
+        for(int i = 0; i<6;i++){
+            double angle = angleStep* i - (3/4) * Math.PI ;
+            int x = (int) (cx + r * Math.cos(angle));
+            int y = (int) (cy + r * Math.sin(angle));
+            coorX[i] = x; coorY[i]= y;
+        }
+        Path wallpath = new Path();
+        wallpath.reset();
+        wallpath.moveTo(coorX[0], coorY[0]);//Primer punto
+        for(int i = 1; i<6;i++) {
+            wallpath.lineTo(coorX[i], coorY[i]);
+        }
+        wallpath.lineTo(coorX[0], coorY[0]);//Volvemos al primer punto
+        this.canvas.drawPath(wallpath, this.paint);
+    }
+
+    @Override
     public float real2LogicX(float x) {
         return (x - offsetX) / scale;
     }

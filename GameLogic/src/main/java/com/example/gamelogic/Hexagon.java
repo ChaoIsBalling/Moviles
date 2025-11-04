@@ -60,10 +60,10 @@ public class Hexagon implements Figure{
     public void Render(Graphics gr) {
         gr.setColor(this.color);
         if(isFill){
-            gr.rellenarPoligono(this.cx,this.cy,this.r, 6);
+            gr.rellenarHexagono(this.cx, this.cy,this.r);
         }
         else {
-            gr.pintarPoligono(this.cx,this.cy,this.r, 6);
+            gr.rellenarHexagono(this.cx, this.cy,this.r);
         }
     }
 
@@ -71,10 +71,10 @@ public class Hexagon implements Figure{
     public void RenderCentrado(Graphics gr, float x, float y) {
         gr.setColor(this.color);
         if(isFill){
-            gr.rellenarPoligono(x+this.cx,y+this.cy,this.r, 6);
+            gr.rellenarHexagono(x+this.cx, y+ this.cy,this.r);
         }
         else {
-            gr.pintarPoligono(x+this.cx,x+this.cy,this.r, 6);
+            gr.rellenarHexagono(x + this.cx, y+ this.cy,this.r);
         }
     }
 }

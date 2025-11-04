@@ -3,16 +3,11 @@ package com.example.towerdefense;
 import android.os.Bundle;
 import android.view.SurfaceView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.androidengine.AndroidEngine;
 import com.example.gamelogic.GameLogic;
 import com.example.gamelogic.Menu;
-import com.example.gamelogic.Secret;
 
 public class MainActivity extends AppCompatActivity {
     private SurfaceView renderView;

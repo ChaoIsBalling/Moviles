@@ -251,13 +251,13 @@ public class GameLogic implements State {
         this.textoD.setText(String.valueOf(this.dinero));
         if(this.dificultad == Dificultad.corto && this.oleada >3 || this.dificultad == Dificultad.largo && this.oleada >7){
             if(this.vida > 0 && this.enemigos.isEmpty()){
-                GameOver gameOver = new GameOver(this.engine,true);
+                GameOver gameOver = new GameOver(this.engine,this.audio,true);
                 this.engine.setState(gameOver);
             }
         }
 
         if(this.vida <= 0){
-            GameOver gameOver = new GameOver(this.engine,false);
+            GameOver gameOver = new GameOver(this.engine,this.audio,false);
             this.engine.setState(gameOver);
         }
     }
@@ -556,7 +556,6 @@ public class GameLogic implements State {
         {
             this.torres.get(i).setAudio(this.audio);
         }
-
     }
     @Override
     public void setGraphics(Graphics gr) {
