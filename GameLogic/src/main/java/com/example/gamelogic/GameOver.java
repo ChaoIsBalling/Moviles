@@ -11,10 +11,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 public class GameOver implements State {
-    private float x;
-    private float y;
-    private float w;
-    private float h;
 
     private Button botonMenu;
     private Button botonReintentar;
@@ -33,10 +29,6 @@ public class GameOver implements State {
     boolean win;
     public GameOver(Engine engine, Audio audio,boolean win)
     {
-        this.x =100;
-        this.y=100;
-        this.w =200;
-        this.h =100;
         this.engine = engine;
         this.win=win;
 
