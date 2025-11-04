@@ -7,9 +7,13 @@ import com.example.engine.TouchEvent;
 import com.example.engine.Audio;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.io.FileReader;
 
@@ -132,5 +136,23 @@ public class DesktopEngine implements Runnable, Engine {
     @Override
     public Graphics getGraphics() {
         return gr;
+    }
+
+    @Override
+    public InputStream readFile(String file) {
+        try {
+            return new FileInputStream("/data"+ file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public OutputStream writeFile(String file) {
+        try {
+            return new FileOutputStream("/data"+ file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

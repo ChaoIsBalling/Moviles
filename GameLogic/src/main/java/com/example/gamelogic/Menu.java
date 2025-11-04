@@ -8,6 +8,10 @@ import com.example.engine.Audio;
 import com.example.engine.Sound;
 
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class Menu implements State {
@@ -55,6 +59,17 @@ public class Menu implements State {
                     if(this.botonInicial.contains(e.x,e.y)){
                         Dificultad dificultad = new Dificultad(this.engine);
                         this.engine.setState(dificultad);
+                        OutputStream is = this.engine.writeFile("hola.txt");
+                        is.write("dasdaw", getBytes());
+
+                        InputStream is = this.engine.readFile("hola.txt");
+                        InputStreamReader inputStreamReader= new InputStreamReader(is);
+                        bufferedReader bf = new BufferedReader(inputStreamReader);
+
+                        try{
+                            String content = bf.readLine();
+                            //menu.setText(this.e.getGraphics(), content,30);
+                        }
                     }
                     break;
                 case TOUCH_UP:

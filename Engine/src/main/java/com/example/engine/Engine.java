@@ -1,5 +1,7 @@
 package com.example.engine;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public interface Engine {
@@ -29,4 +31,8 @@ public interface Engine {
      */
     public State getState();
     public Graphics getGraphics();
+
+    public InputStream readFile2(String file);
+    public String openAssetFile(String file);
+    public OutputStream writeFile(String file);
 }

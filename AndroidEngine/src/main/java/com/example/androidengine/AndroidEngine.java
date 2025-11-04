@@ -10,7 +10,9 @@ import com.example.engine.State;
 import com.example.engine.Graphics;
 import com.example.engine.TouchEvent;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -95,6 +97,28 @@ public class AndroidEngine implements Engine,Runnable {
     }
     public Graphics getGraphics(){
         return this.gr;
+    }
+
+    @Override
+    public InputStream readFile2(String file) {
+        InputStream is = null;
+        try {
+           is = this.sView.getContext().openFileInput(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return is;
+    }
+
+    @Override
+    public OutputStream writeFile(String file) {
+        OutputStream os = null;
+        try {
+           os=  this.sView.getContext().openFileOutput(file, MODE_PRIVATE);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return os;
     }
 
     @Override
