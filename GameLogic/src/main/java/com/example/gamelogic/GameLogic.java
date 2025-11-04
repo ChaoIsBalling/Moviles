@@ -104,7 +104,7 @@ public class GameLogic implements State {
 
     int numE=0;//enemigos generados
     float tiempoEnGrupo;//tiempo de espera entre enemigos de un grupo
-    float timpEnG;//tiempo que falta para nuevo enemigo
+    float tiempEnG;//tiempo que falta para nuevo enemigo
 
     Text textoOleadas;
     private enum Estado{
@@ -128,7 +128,7 @@ public class GameLogic implements State {
         this.tiempoOleada = this.tiempoGrupos*this.grupos + 5;
         this.tiempOl = this.tiempoOleada;
         this.tiempoEnGrupo = (float) 0.3;
-        this.timpEnG =0;
+        this.tiempEnG =0;
         this.textoOleadas = new Text("Inika-Regular.ttf","Oleada:" + this.oleada,60,15,25);
         this.dificultad = dificultad;
         this.torres = new ArrayList<Tower>();
@@ -176,7 +176,7 @@ public class GameLogic implements State {
         if(this.dificultad == Dificultad.corto && this.oleada <4 || this.dificultad == Dificultad.largo && this.oleada <8 || this.dificultad == Dificultad.infinito){//continuar sacando oleadas hasta x oleada dependiendo de la dificultad
             if(this.tiempGr<= 0){//si tiempo entre grupos<=0
                 if(this.numG < this.grupos){//si grupos generados<grupos
-                    if(this.timpEnG<=0){//si tiempo entre enemigos<0
+                    if(this.tiempEnG<=0){//si tiempo entre enemigos<0
                         if(this.numE < this.enemigosGrupo){//si enemigos generados<enemigos en grupo
                             Tipo tipoRes;
                             if(this.tipoResEn ==0){//resistencia de enemigos secuencial
@@ -197,7 +197,7 @@ public class GameLogic implements State {
                             this.numG +=1;//grupos generados +1
                             this.tiempGr = this.tiempoGrupos;//resetear tiempo entre grupos
                         }
-                        this.timpEnG = this.tiempoEnGrupo;//resetear tiempo entre enemigos
+                        this.tiempEnG = this.tiempoEnGrupo;//resetear tiempo entre enemigos
                     }
                 }
             }
@@ -211,12 +211,12 @@ public class GameLogic implements State {
                 this.tiempOl = this.tiempoOleada;//resetear tiempo entre oleadas
                 this.numG =0;//resetear grupos generados
                 this.numE=0;//resetear numero de enemigos generados
-                this.timpEnG =0;//que salga el primer enemigo de inmediato
+                this.tiempEnG =0;//que salga el primer enemigo de inmediato
                 this.textoOleadas.setText("Oleada:" + this.oleada);//cambiar texto oleadas
             }
         }
 
-        this.timpEnG -= deltaTime;
+        this.tiempEnG -= deltaTime;
         this.tiempGr -= deltaTime;
         this.tiempOl -= deltaTime;
 
