@@ -15,7 +15,7 @@ public class Enemy {
     GameLogic gl;
     Vector2D coor;
 
-    float realentizar =0;
+    float ralentizar =0;
 
     Casilla casillaSig;
 
@@ -39,7 +39,7 @@ public class Enemy {
         return this.circulo.getY();
     }
     public void damage(float damage, Tipo tipo){
-        if(tipo == Tipo.hielo && damage > this.realentizar){
+        if(tipo == Tipo.hielo && damage > this.ralentizar){
             float dam = damage;
             if(this.tipo == tipo){
                 dam -= this.resistencia;
@@ -47,7 +47,7 @@ public class Enemy {
             if(dam < 7){
                 dam = 7;
             }
-            this.realentizar = dam;
+            this.ralentizar = dam;
         }
         else{
             float dam = damage - this.defensa;
@@ -112,12 +112,12 @@ public class Enemy {
 
         }
 
-        float movimiento = this.velocidad-this.realentizar;
+        float movimiento = this.velocidad-this.ralentizar;
 
         this.circulo.setX((float)(this.circulo.getX() + (this.direccion.getX() * movimiento * deltaTime)));
         this.circulo.setY((float)(this.circulo.getY() + (this.direccion.getY() * movimiento * deltaTime)));
 
-        this.realentizar =0;
+        this.ralentizar =0;
     }
     public void Render(Graphics gr){
         this.circulo.Render(gr);
