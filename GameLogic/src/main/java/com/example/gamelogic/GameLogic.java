@@ -84,10 +84,10 @@ public class GameLogic implements State {
     float ranTorre = (float) 11.7;//mejora de rango
     float velTorre = (float) -0.2;//mejora de velocidad
 
-    float megVidaEn = 2;//mejora de vida de enemigo
-    float megVelEn = 2;//mejora de velocidad de enemigo
-    float megDefEn = 1;//mejora de defensa de enemigo
-    float megResEn = 1;//mejora de resistencia de enemigo
+    float mejVidaEn = 2;//mejora de vida de enemigo
+    float mejVelEn = 2;//mejora de velocidad de enemigo
+    float mejDefEn = 1;//mejora de defensa de enemigo
+    float mejResEn = 1;//mejora de resistencia de enemigo
 
     int tipoResEn =0;
 
@@ -189,7 +189,7 @@ public class GameLogic implements State {
                                 tipoRes = Tipo.hielo;
                             }
                             this.tipoResEn = (this.tipoResEn+1)%3;
-                            this.enemigos.add(new Enemy(this.IniX,this.IniY,8+(this.megVidaEn*(this.oleada-1)),30+(this.megVelEn*(this.oleada-1)),0+(this.megDefEn*(this.oleada-1)),0+(this.megResEn*(this.oleada-1)),tipoRes, this));
+                            this.enemigos.add(new Enemy(this.IniX,this.IniY,8+(this.mejVidaEn*(this.oleada-1)),30+(this.mejVelEn*(this.oleada-1)),0+(this.mejDefEn*(this.oleada-1)),0+(this.mejResEn*(this.oleada-1)),tipoRes, this));
                             this.numE++;
                         }
                         else{//si se han creado todos los enemigos del grupo

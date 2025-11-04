@@ -31,7 +31,7 @@ public class Dificultad implements State {
         botonInfinito.setColor(0xFF999999);
     }
     @Override
-    public void update(double deltatime) {
+    public void update(double deltaTime) {
 
     }
 

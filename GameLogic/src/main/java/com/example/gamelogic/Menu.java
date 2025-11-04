@@ -32,7 +32,7 @@ public class Menu implements State {
         this.textoInicial.setColor(0Xff000000);
     }
     @Override
-    public void update(double deltatime) {
+    public void update(double deltaTime) {
 
     }
 

@@ -67,7 +67,7 @@ public class GameOver implements State {
         textoInicial.setColor(0Xff000000);
     }
     @Override
-    public void update(double deltatime) {
+    public void update(double deltaTime) {
 
     }
 
