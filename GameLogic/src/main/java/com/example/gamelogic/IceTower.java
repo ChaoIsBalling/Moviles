@@ -11,8 +11,6 @@ public class IceTower implements Tower{
     float ataque=10;
     float rango= 70;
     float velocidad = 4;
-    float enfriamiento = 0;
-    boolean disparo = false;
 
     Audio audio;
     Sound attack;
