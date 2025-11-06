@@ -9,6 +9,7 @@ import com.example.engine.Sound;
 
 import java.awt.Color;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -59,16 +60,24 @@ public class Menu implements State {
                     if(this.botonInicial.contains(e.x,e.y)){
                         Dificultad dificultad = new Dificultad(this.engine);
                         this.engine.setState(dificultad);
-                        OutputStream is = this.engine.writeFile("hola.txt");
-                        is.write("dasdaw", getBytes());
 
-                        InputStream is = this.engine.readFile("hola.txt");
+                        OutputStream os = this.engine.writeFile("hola.txt");
+                        String s = "dasdaw";
+                        try {
+                            os.write(s.getBytes());
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+
+                        InputStream is = this.engine.readFile2("hola.txt");
                         InputStreamReader inputStreamReader= new InputStreamReader(is);
-                        bufferedReader bf = new BufferedReader(inputStreamReader);
+                        BufferedReader bf = new BufferedReader(inputStreamReader);
 
                         try{
                             String content = bf.readLine();
                             //menu.setText(this.e.getGraphics(), content,30);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
                         }
                     }
                     break;

@@ -139,18 +139,23 @@ public class DesktopEngine implements Runnable, Engine {
     }
 
     @Override
-    public InputStream readFile(String file) {
+    public InputStream readFile2(String file) {
         try {
-            return new FileInputStream("/data"+ file);
+            return new FileInputStream(root+ file);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
+    public String openAssetFile(String file) {
+        return "";
+    }
+
+    @Override
     public OutputStream writeFile(String file) {
         try {
-            return new FileOutputStream("/data"+ file);
+            return new FileOutputStream(root + file);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
