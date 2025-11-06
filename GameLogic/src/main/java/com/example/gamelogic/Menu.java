@@ -28,7 +28,7 @@ public class Menu implements State {
     public Menu(Engine engine){
         this.engine = engine;
 
-        this.botonInicial = new Button(300, 250, 200,50,true,20);
+        this.botonInicial = new Button(150, 250, 200,50,true,20);
         this.botonInicial.setColor(0xFF999999);
         Text textoBoton = new Text("Inika-Regular.ttf","Jugar",0,0,30,true,true);
         textoBoton.setColor(0xff00ffff);

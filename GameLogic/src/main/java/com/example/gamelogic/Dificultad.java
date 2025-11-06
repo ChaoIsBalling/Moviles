@@ -53,15 +53,15 @@ public class Dificultad implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     if(this.botonCorto.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.corto);
+                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.corto,"");
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonLargo.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.largo);
+                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.largo,"");
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonInfinito.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.infinito);
+                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.infinito,"");
                         this.engine.setState(gameLogic);
                     }
                     break;

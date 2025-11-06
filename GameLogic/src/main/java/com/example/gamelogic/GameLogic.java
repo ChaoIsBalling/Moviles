@@ -105,7 +105,7 @@ public class GameLogic implements State {
     int numE=0;//enemigos generados
     float tiempoEnGrupo;//tiempo de espera entre enemigos de un grupo
     float timpEnG;//tiempo que falta para nuevo enemigo
-
+    int numOl;
     Text textoOleadas;
     private enum Estado{
         nada,botonRayo,botonFuego,botonHielo,torre
@@ -113,10 +113,10 @@ public class GameLogic implements State {
     private Estado estado = Estado.nada;
 
     public enum Dificultad{
-        corto,largo,infinito
+        corto,largo,infinito,aventura
     }
     private Dificultad dificultad;
-    public GameLogic(Engine engine, Dificultad dificultad){
+    public GameLogic(Engine engine, Dificultad dificultad, String mapa){
         this.engine=engine;
         this.vida=10;
         this.dinero = 300;
@@ -173,7 +173,7 @@ public class GameLogic implements State {
 
     @Override
     public void update(double deltaTime) {
-        if(this.dificultad == Dificultad.corto && this.oleada <4 || this.dificultad == Dificultad.largo && this.oleada <8 || this.dificultad == Dificultad.infinito){//continuar sacando oleadas hasta x oleada dependiendo de la dificultad
+        if(this.dificultad == Dificultad.corto && this.oleada <4 || this.dificultad == Dificultad.largo && this.oleada <8 || this.dificultad == Dificultad.infinito || this.dificultad == Dificultad.aventura && this.oleada <(this.numOl+1)){//continuar sacando oleadas hasta x oleada dependiendo de la dificultad
             if(this.tiempGr<= 0){//si tiempo entre grupos<=0
                 if(this.numG < this.grupos){//si grupos generados<grupos
                     if(this.timpEnG<=0){//si tiempo entre enemigos<0
@@ -250,6 +250,12 @@ public class GameLogic implements State {
         this.textoV.setText(String.valueOf(this.vida));
         this.textoD.setText(String.valueOf(this.dinero));
         if(this.dificultad == Dificultad.corto && this.oleada >3 || this.dificultad == Dificultad.largo && this.oleada >7){
+            if(this.vida > 0 && this.enemigos.isEmpty()){
+                GameOver gameOver = new GameOver(this.engine,this.audio,true);
+                this.engine.setState(gameOver);
+            }
+        }
+        if(this.dificultad == Dificultad.aventura && this.oleada >this.numOl){
             if(this.vida > 0 && this.enemigos.isEmpty()){
                 GameOver gameOver = new GameOver(this.engine,this.audio,true);
                 this.engine.setState(gameOver);
