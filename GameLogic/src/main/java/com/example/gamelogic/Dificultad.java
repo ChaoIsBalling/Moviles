@@ -13,6 +13,7 @@ public class Dificultad implements State {
     private Button botonLargo;
     private Button botonInfinito;
     private Engine engine;
+    private Button botonVolver;
 
     Graphics gr;
     public Dificultad(Engine engine){
@@ -29,6 +30,8 @@ public class Dificultad implements State {
         Text textI = new Text("Inika-Regular.ttf","Modo Infinito",0,0,30,true,true);
         botonInfinito.setText(textI);
         botonInfinito.setColor(0xFF999999);
+        this.botonVolver = new Button(30,30,30,30,true,15);
+        this.botonVolver.setColor(0xffff0000);
     }
     @Override
     public void update(double deltatime) {
@@ -40,6 +43,7 @@ public class Dificultad implements State {
         botonCorto.Render(gr);
         botonLargo.Render(gr);
         botonInfinito.Render(gr);
+        botonVolver.Render(gr);
     }
 
     @Override
@@ -53,16 +57,20 @@ public class Dificultad implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     if(this.botonCorto.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.corto,"");
+                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.corto);
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonLargo.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.largo,"");
+                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.largo);
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonInfinito.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.infinito,"");
+                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.infinito);
                         this.engine.setState(gameLogic);
+                    }
+                    else if(this.botonVolver.contains(e.x,e.y)){
+                        Menu menu = new Menu(this.engine);
+                        this.engine.setState(menu);
                     }
                     break;
                 case TOUCH_UP:

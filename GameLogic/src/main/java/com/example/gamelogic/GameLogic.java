@@ -116,7 +116,7 @@ public class GameLogic implements State {
         corto,largo,infinito,aventura
     }
     private Dificultad dificultad;
-    public GameLogic(Engine engine, Dificultad dificultad, String mapa){
+    public GameLogic(Engine engine, Dificultad dificultad){
         this.engine=engine;
         this.vida=10;
         this.dinero = 300;
@@ -140,6 +140,62 @@ public class GameLogic implements State {
         this.leer = engine.readFile("mapa1.txt");
        this.fil=Integer.parseInt(leer.get(0));
        this.col=Integer.parseInt(leer.get(1));
+
+        for (int i =0; i<this.fil;i++){
+            ArrayList<Casilla> fila = new ArrayList<Casilla>();
+            for(int j =0; j<this.col;j++){
+                if(leer.get(2+i).charAt(j) == 'h'){
+                    Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,false,false);
+                    casilla.setColor(0xff000000);
+                    casilla.setCoor(new Vector2D(i,j));
+                    fila.add(casilla);
+                }
+                else{
+                    Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,true,true);
+                    casilla.setColor(0xff944d03);
+                    casilla.setCoor(new Vector2D(i,j));
+                    fila.add(casilla);
+                    if(j == 0){
+                        this.IniX = j*35+30;
+                        this.IniY = i*35+50;
+                    }
+                    if(j == this.col - 1){
+                        this.FinX = j*35+30;
+                        this.FinY = i*35+50;
+                    }
+                }
+
+            }
+            this.casillas.add(fila);
+        }
+
+    }
+
+    public GameLogic(Engine engine, String mapa){
+        this.engine=engine;
+        this.vida=10;
+        this.dinero = 300;
+        this.oleada =1;
+        this.grupos = 2;
+        this.enemigosGrupo = 1;
+        this.tiempoGrupos = 5;
+        this.tiempGr = this.tiempoGrupos;
+        this.tiempoOleada = this.tiempoGrupos*this.grupos + 5;
+        this.tiempOl = this.tiempoOleada;
+        this.tiempoEnGrupo = (float) 0.3;
+        this.timpEnG =0;
+        this.numOl = 1;
+        this.textoOleadas = new Text("Inika-Regular.ttf","Oleada:" + this.oleada,60,15,25);
+        this.dificultad = Dificultad.aventura;
+        this.torres = new ArrayList<Tower>();
+        this.enemigos=new ArrayList<Enemy>();
+        this.deadEnemies=new ArrayList<Enemy>();
+        this.casillas = new ArrayList<ArrayList<Casilla>>();
+        this.franjaGris = new Square(300,370,600,100,true);
+        this.franjaGris.setColor(0xFF999999);
+        this.leer = engine.readFile(mapa);
+        this.fil=Integer.parseInt(leer.get(0));
+        this.col=Integer.parseInt(leer.get(1));
 
         for (int i =0; i<this.fil;i++){
             ArrayList<Casilla> fila = new ArrayList<Casilla>();
