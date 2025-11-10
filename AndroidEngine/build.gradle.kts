@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(project(":Engine"))
+    implementation(libs.json.simple)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

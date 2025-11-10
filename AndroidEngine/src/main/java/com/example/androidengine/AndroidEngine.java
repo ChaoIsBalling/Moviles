@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 
 
 
@@ -98,7 +102,15 @@ public class AndroidEngine implements Engine,Runnable {
     public Graphics getGraphics(){
         return this.gr;
     }
-
+    public JSONObject readFileJSON(String path)
+    {
+        Object obj=JSONValue.parse(filesDir+path);
+        //Para sacar valores del json hay que hacer un get
+        JSONObject jsonObjectdecode = (JSONObject)obj;
+        //Ejemplo
+        //String name= (String)jsonObjectdecode.get("name");
+        return jsonObjectdecode;
+    }
     @Override
     public InputStream readFile2(String file) {
         InputStream is = null;
@@ -111,10 +123,15 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     @Override
+    public String openAssetFile(String file) {
+        return "";
+    }
+
+    @Override
     public OutputStream writeFile(String file) {
         OutputStream os = null;
         try {
-           os=  this.sView.getContext().openFileOutput(file, MODE_PRIVATE);
+           os=  this.sView.getContext().openFileOutput(file, this.sView.getContext().MODE_PRIVATE);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
