@@ -18,8 +18,14 @@ import java.util.ArrayList;
 public class Menu implements State {
 
     private Button botonInicial;
-
     private Text textoInicial;
+
+    private Button botonAventura;
+
+    private Button botonTienda;
+
+    private Text textoDiamantes;
+
     private Audio audio;
     Engine engine;
 
@@ -35,6 +41,21 @@ public class Menu implements State {
         this.botonInicial.setText(textoBoton);
         this.textoInicial = new Text("Inika-Regular.ttf","TowerDefense",300,150,40,true,true);
         this.textoInicial.setColor(0Xff000000);
+
+        this.botonAventura = new Button(450, 250, 200,50,true,20);
+        this.botonAventura.setColor(0xFF999999);
+        Text textoAventura = new Text("Inika-Regular.ttf","Aventura",0,0,30,true,true);
+        textoAventura.setColor(0xff00ffff);
+        this.botonAventura.setText(textoAventura);
+
+        this.botonTienda = new Button(150, 350, 200,50,true,20);
+        this.botonTienda.setColor(0xFF00ffff);
+        Text textoTienda = new Text("Inika-Regular.ttf","Tienda",0,0,30,true,true);
+        textoTienda.setColor(0xff000000);
+        this.botonTienda.setText(textoTienda);
+
+        this.textoDiamantes = new Text("Inika-Regular.ttf","0",450,350,40,true,true);
+        this.textoDiamantes.setColor(0Xff00ffff);
     }
     @Override
     public void update(double deltatime) {
@@ -45,6 +66,9 @@ public class Menu implements State {
     public void render(Graphics gr) {
         botonInicial.Render(gr);
         textoInicial.Render(gr);
+        botonAventura.Render(gr);
+        botonTienda.Render(gr);
+        textoDiamantes.Render(gr);
     }
 
     @Override
@@ -79,6 +103,14 @@ public class Menu implements State {
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
+                    }
+                    else if(this.botonAventura.contains(e.x,e.y)){
+                        Mundo mundo = new Mundo(this.engine);
+                        this.engine.setState(mundo);
+                    }
+                    else if(this.botonTienda.contains(e.x,e.y)){
+                        Tienda tienda = new Tienda(this.engine);
+                        this.engine.setState(tienda);
                     }
                     break;
                 case TOUCH_UP:
