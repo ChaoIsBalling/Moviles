@@ -7,5 +7,4 @@ java {
 }
 dependencies {
     implementation(project(":Engine"))
-    implementation(libs.json.simple)
 }

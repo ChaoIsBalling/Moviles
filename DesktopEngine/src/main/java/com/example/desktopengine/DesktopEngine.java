@@ -16,10 +16,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.io.FileReader;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
 
 import javax.swing.JFrame;
 
@@ -123,17 +119,6 @@ public class DesktopEngine implements Runnable, Engine {
             throw new RuntimeException(e);
         }
         return file;
-    }
-
-
-    public JSONObject readFileJSON(String path)
-    {
-
-        Object obj=JSONValue.parse(root+path);
-        //Para sacar valores del json hay que hacer un get
-        JSONObject jsonObjectdecode = (JSONObject)obj;
-
-        return jsonObjectdecode;
     }
     @Override
     public void setState(State state) {
