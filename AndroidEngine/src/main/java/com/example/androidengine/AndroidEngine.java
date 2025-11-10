@@ -111,10 +111,15 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     @Override
+    public String openAssetFile(String file) {
+        return "";
+    }
+
+    @Override
     public OutputStream writeFile(String file) {
         OutputStream os = null;
         try {
-           os=  this.sView.getContext().openFileOutput(file, MODE_PRIVATE);
+           os=  this.sView.getContext().openFileOutput(file, this.sView.getContext().MODE_PRIVATE);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
