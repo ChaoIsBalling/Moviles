@@ -6,6 +6,8 @@ import com.example.engine.TouchEvent;
 import com.example.engine.Engine;
 import com.example.engine.Audio;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.lang.Integer;
 public class GameLogic implements State {
@@ -118,81 +120,43 @@ public class GameLogic implements State {
     private Dificultad dificultad;
     public GameLogic(Engine engine, Dificultad dificultad){
         this.engine=engine;
-        this.vida=10;
-        this.dinero = 300;
-        this.oleada =1;
-        this.grupos = 2;
-        this.enemigosGrupo = 1;
-        this.tiempoGrupos = 5;
-        this.tiempGr = this.tiempoGrupos;
-        this.tiempoOleada = this.tiempoGrupos*this.grupos + 5;
-        this.tiempOl = this.tiempoOleada;
-        this.tiempoEnGrupo = (float) 0.3;
-        this.timpEnG =0;
-        this.textoOleadas = new Text("Inika-Regular.ttf","Oleada:" + this.oleada,60,15,25);
+        this.init();
         this.dificultad = dificultad;
-        this.torres = new ArrayList<Tower>();
-        this.enemigos=new ArrayList<Enemy>();
-        this.deadEnemies=new ArrayList<Enemy>();
-        this.casillas = new ArrayList<ArrayList<Casilla>>();
-        this.franjaGris = new Square(300,370,600,100,true);
-        this.franjaGris.setColor(0xFF999999);
-        this.leer = engine.readFile("mapa1.txt");
-       this.fil=Integer.parseInt(leer.get(0));
-       this.col=Integer.parseInt(leer.get(1));
-
-        for (int i =0; i<this.fil;i++){
-            ArrayList<Casilla> fila = new ArrayList<Casilla>();
-            for(int j =0; j<this.col;j++){
-                if(leer.get(2+i).charAt(j) == 'h'){
-                    Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,false,false);
-                    casilla.setColor(0xff000000);
-                    casilla.setCoor(new Vector2D(i,j));
-                    fila.add(casilla);
-                }
-                else{
-                    Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,true,true);
-                    casilla.setColor(0xff944d03);
-                    casilla.setCoor(new Vector2D(i,j));
-                    fila.add(casilla);
-                    if(j == 0){
-                        this.IniX = j*35+30;
-                        this.IniY = i*35+50;
-                    }
-                    if(j == this.col - 1){
-                        this.FinX = j*35+30;
-                        this.FinY = i*35+50;
-                    }
-                }
-
-            }
-            this.casillas.add(fila);
-        }
+        this.leerMapa("mapa1.txt");
 
     }
 
     public GameLogic(Engine engine, String mapa){
         this.engine=engine;
-        this.vida=10;
-        this.dinero = 300;
-        this.oleada =1;
-        this.grupos = 2;
-        this.enemigosGrupo = 1;
-        this.tiempoGrupos = 5;
-        this.tiempGr = this.tiempoGrupos;
-        this.tiempoOleada = this.tiempoGrupos*this.grupos + 5;
-        this.tiempOl = this.tiempoOleada;
-        this.tiempoEnGrupo = (float) 0.3;
-        this.timpEnG =0;
-        this.numOl = 1;
-        this.textoOleadas = new Text("Inika-Regular.ttf","Oleada:" + this.oleada,60,15,25);
         this.dificultad = Dificultad.aventura;
-        this.torres = new ArrayList<Tower>();
-        this.enemigos=new ArrayList<Enemy>();
-        this.deadEnemies=new ArrayList<Enemy>();
-        this.casillas = new ArrayList<ArrayList<Casilla>>();
-        this.franjaGris = new Square(300,370,600,100,true);
-        this.franjaGris.setColor(0xFF999999);
+        this.init();
+        this.leerMapa(mapa);
+
+    }
+    private void init()
+    {
+    this.vida=10;
+    this.dinero = 300;
+    this.oleada =1;
+    this.grupos = 2;
+    this.enemigosGrupo = 1;
+    this.tiempoGrupos = 5;
+    this.tiempGr = this.tiempoGrupos;
+    this.tiempoOleada = this.tiempoGrupos*this.grupos + 5;
+    this.tiempOl = this.tiempoOleada;
+    this.tiempoEnGrupo = (float) 0.3;
+    this.timpEnG =0;
+    this.textoOleadas = new Text("Inika-Regular.ttf","Oleada:" + this.oleada,60,15,25);
+    this.torres = new ArrayList<Tower>();
+    this.enemigos=new ArrayList<Enemy>();
+    this.deadEnemies=new ArrayList<Enemy>();
+    this.casillas = new ArrayList<ArrayList<Casilla>>();
+    this.franjaGris = new Square(300,370,600,100,true);
+    this.franjaGris.setColor(0xFF999999);
+}
+    private void leerMapa(String mapa)
+    {
+        JSONObject obj=engine.readJsonFile("mapa1.json");
         this.leer = engine.readFile(mapa);
         this.fil=Integer.parseInt(leer.get(0));
         this.col=Integer.parseInt(leer.get(1));
@@ -224,9 +188,7 @@ public class GameLogic implements State {
             }
             this.casillas.add(fila);
         }
-
     }
-
     @Override
     public void update(double deltaTime) {
         if(this.dificultad == Dificultad.corto && this.oleada <4 || this.dificultad == Dificultad.largo && this.oleada <8 || this.dificultad == Dificultad.infinito || this.dificultad == Dificultad.aventura && this.oleada <(this.numOl+1)){//continuar sacando oleadas hasta x oleada dependiendo de la dificultad
