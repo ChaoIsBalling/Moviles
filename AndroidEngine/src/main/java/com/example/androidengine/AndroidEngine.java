@@ -1,6 +1,8 @@
 package com.example.androidengine;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.view.SurfaceView;
 
@@ -44,6 +46,7 @@ public class AndroidEngine implements Engine,Runnable {
 
     private String filesDir="Files/";
 
+    private String sharedPrefFile = "sharedprefs";
 
     public AndroidEngine(SurfaceView view){
         this.sView = view;
@@ -152,6 +155,23 @@ public class AndroidEngine implements Engine,Runnable {
             throw new RuntimeException(e);
         }
         return os;
+    }
+
+    @Override
+    public void SaveValueInt(String key, int value) {
+        Context context = this.sView.getContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(this.sharedPrefFile , Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(key, value);
+        editor.apply();
+    }
+
+    @Override
+    public int LoadValueInt(String key) {
+        Context context = this.sView.getContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(this.sharedPrefFile , Context.MODE_PRIVATE);
+        int value = sharedPref.getInt(key, 0);
+        return value;
     }
 
     @Override

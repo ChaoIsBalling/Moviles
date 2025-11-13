@@ -40,4 +40,7 @@ public interface Engine {
     public JSONObject readJsonFile(String file);
     public String openAssetFile(String file);
     public OutputStream writeFile(String file);
+
+    public void SaveValueInt(String key, int value);
+    public int LoadValueInt(String key);
 }

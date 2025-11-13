@@ -38,7 +38,7 @@ tasks.preBuild(){
     dependsOn("Copy")
 }
 dependencies {
-
+    implementation("com.google.android.gms:play-services-ads:24.7.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
