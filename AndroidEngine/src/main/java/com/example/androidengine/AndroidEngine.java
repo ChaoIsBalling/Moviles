@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import org.json.JSONObject;
 import org.json.JSONException;
 import org.json.JSONArray;
@@ -120,8 +118,15 @@ public class AndroidEngine implements Engine,Runnable {
     public JSONObject readJsonFile(String file) {
         JSONObject jsonObject;
     try{
-        String content = new String(Files.readAllBytes(Paths.get(filesDir+file)));
-        jsonObject = new JSONObject(content);
+        InputStream is = null;
+        StringBuilder jsonText = new StringBuilder();
+        is = assetManager.open(filesDir+file);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            jsonText.append(line);
+        }
+        jsonObject = new JSONObject(jsonText.toString());
     } catch (IOException e) {
         throw new RuntimeException(e);
     }

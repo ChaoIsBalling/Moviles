@@ -156,7 +156,7 @@ public class GameLogic implements State {
 }
     private void leerMapa(String mapa)
     {
-        //JSONObject obj=engine.readJsonFile("mapa1.json");
+        JSONObject obj=engine.readJsonFile("mapa1.json");
         this.leer = engine.readFile(mapa);
         this.fil=Integer.parseInt(leer.get(0));
         this.col=Integer.parseInt(leer.get(1));
