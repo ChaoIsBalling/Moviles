@@ -31,6 +31,7 @@ public class Menu implements State {
 
     Graphics gr;
 
+
     public Menu(Engine engine){
         this.engine = engine;
 
@@ -56,6 +57,7 @@ public class Menu implements State {
 
         this.textoDiamantes = new Text("Inika-Regular.ttf","0",450,350,40,true,true);
         this.textoDiamantes.setColor(0Xff00ffff);
+
     }
     @Override
     public void update(double deltatime) {

@@ -35,4 +35,7 @@ public interface Engine {
     public InputStream readFile2(String file);
     public String openAssetFile(String file);
     public OutputStream writeFile(String file);
+
+    public void SaveValueInt(String key, int value);
+    public int LoadValueInt(String key);
 }
