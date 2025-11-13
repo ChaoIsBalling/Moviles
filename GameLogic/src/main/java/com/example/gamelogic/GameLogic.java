@@ -158,8 +158,8 @@ public class GameLogic implements State {
     {
         JSONObject obj=engine.readJsonFile("mapa1.json");
         this.leer = engine.readFile(mapa);
-        this.fil=Integer.parseInt(leer.get(0));
-        this.col=Integer.parseInt(leer.get(1));
+        this.fil=obj.getInt("fila");
+        this.col=obj.getInt("columna");
 
         for (int i =0; i<this.fil;i++){
             ArrayList<Casilla> fila = new ArrayList<Casilla>();
