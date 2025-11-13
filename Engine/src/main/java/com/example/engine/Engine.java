@@ -1,8 +1,11 @@
 package com.example.engine;
 
+import org.json.JSONObject;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import org.json.JSONObject;
 
 public interface Engine {
     /**
@@ -33,6 +36,8 @@ public interface Engine {
     public Graphics getGraphics();
 
     public InputStream readFile2(String file);
+
+    public JSONObject readJsonFile(String file);
     public String openAssetFile(String file);
     public OutputStream writeFile(String file);
 }
