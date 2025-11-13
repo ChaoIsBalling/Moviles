@@ -13,6 +13,9 @@ import com.example.androidengine.AndroidEngine;
 import com.example.gamelogic.GameLogic;
 import com.example.gamelogic.Menu;
 import com.example.gamelogic.Secret;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 public class MainActivity extends AppCompatActivity {
     private SurfaceView renderView;
@@ -23,12 +26,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                // cargamos los anuncios
+            }
+        });
+        new Thread(() -> {
+            // Initialize the Google Mobile Ads SDK on a background thread.
+            MobileAds.initialize(this, initializationStatus -> {});
+        })
+                .start();
         this.renderView = new SurfaceView(this);
         setContentView(this.renderView);
-
         this.engine = new AndroidEngine(this.renderView);
         this.engine.setState(new Menu(engine));
+
+
     }
 
     @Override
