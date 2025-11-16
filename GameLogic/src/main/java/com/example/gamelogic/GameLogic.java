@@ -7,7 +7,7 @@ import com.example.engine.Engine;
 import com.example.engine.Audio;
 
 import org.json.JSONObject;
-
+import org.json.JSONArray;
 import java.util.ArrayList;
 import java.lang.Integer;
 public class GameLogic implements State {
@@ -160,11 +160,11 @@ public class GameLogic implements State {
         this.leer = engine.readFile(mapa);
         this.fil=obj.getInt("fila");
         this.col=obj.getInt("columna");
-
+        JSONArray arr= obj.getJSONArray("mapa");
         for (int i =0; i<this.fil;i++){
             ArrayList<Casilla> fila = new ArrayList<Casilla>();
             for(int j =0; j<this.col;j++){
-                if(leer.get(2+i).charAt(j) == 'h'){
+                if(arr.get(i).toString().charAt(j) == 'h'){
                     Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,false,false);
                     casilla.setColor(0xff000000);
                     casilla.setCoor(new Vector2D(i,j));
