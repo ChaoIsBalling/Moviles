@@ -5,6 +5,8 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
 import org.json.JSONObject;
 
 public interface Engine {
@@ -43,4 +45,9 @@ public interface Engine {
 
     public void SaveValueInt(String key, int value);
     public int LoadValueInt(String key);
+
+    public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText);
+    public void showNotificacion(String title, String firstText);
+    public void setNotificationIcon(int icono);
+
 }

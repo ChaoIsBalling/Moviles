@@ -1,10 +1,17 @@
 package com.example.androidengine;
 
 
+import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.os.Build;
 import android.view.SurfaceView;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.example.engine.Audio;
 import com.example.engine.Engine;
@@ -19,10 +26,13 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.TimeUnit;
+
 import org.json.JSONObject;
 import org.json.JSONException;
 import org.json.JSONArray;
-
+//import androidx.work.Worker;
+//import androidx.work.WorkerParameters;
 
 
 
@@ -47,6 +57,12 @@ public class AndroidEngine implements Engine,Runnable {
     private String filesDir="Files/";
 
     private String sharedPrefFile = "sharedprefs";
+
+    private int iconNotification;
+
+    private final String CHANNEL_NAME = "chanel";
+    private final String CHANNEL_DESCRIPTION = "description";
+    private final String CHANNEL_ID = "id";
 
     public AndroidEngine(SurfaceView view){
         this.sView = view;
@@ -172,6 +188,50 @@ public class AndroidEngine implements Engine,Runnable {
         SharedPreferences sharedPref = context.getSharedPreferences(this.sharedPrefFile , Context.MODE_PRIVATE);
         int value = sharedPref.getInt(key, 0);
         return value;
+    }
+
+    @Override
+    public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText) {
+        WorkRequest request = new OneTimeWorkRequest.Builder(ReminderWorker.class)
+                .setInitialDelay(time, timeunit)
+                .setImputData(new Data.Builder()
+                        .putString("title",title)
+                        .putString(firstText,firstText)
+                        .putInt(iconNotification,icon)
+                );
+    }
+
+    @Override
+    public void showNotificacion(String title, String firstText) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder( this.sView.getContext(), CHANNEL_ID)
+                .setSmallIcon(this.iconNotification)
+                .setContentTitle( title )
+                .setContentText( firstText )
+                .setStyle( new NotificationCompat.BigTextStyle()
+                        .bigText( firstText ))
+                .setPriority(NotificationCompat. PRIORITY_DEFAULT);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.sView.getContext());
+// notificationId is a unique int for each notification that you must define.
+        notificationManager.notify(notificationId, builder.build());
+        if(Activity.Com)
+    }
+
+    @Override
+    public void setNotificationIcon(int icono) {
+        this.iconNotification=icono;
+    }
+
+    private void createNotificationChannel(){
+        if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
+            int importance = NotificationManager. IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID , CHANNEL_NAME, importance) ;
+            channel.setDescription(CHANNEL_DESCRIPTION) ;
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.sView.getContext());
+            notificationManager.createNotificationChannel(channel) ;
+        }
+
     }
 
     @Override
