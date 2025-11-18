@@ -54,7 +54,6 @@ public class AndroidInput implements Input,View.OnTouchListener{
     @Override
     public synchronized ArrayList<TouchEvent> getTouchEvents() {
         this.events.addAll(this.pendingEvents);
-        System.out.println("Holooooooo");
         this.pendingEvents.clear();
         return this.events;
     }

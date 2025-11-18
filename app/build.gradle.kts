@@ -31,7 +31,7 @@ android {
     }
 }
 tasks.register<Copy>("Copy"){
-    from(rootDir.getAbsolutePath() + "/assets")
+    from(rootDir.getAbsolutePath() + "/data")
     into("src/main/assets")
 }
 tasks.preBuild(){
