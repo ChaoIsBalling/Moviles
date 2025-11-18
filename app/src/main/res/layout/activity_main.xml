@@ -7,17 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+   <!--SurfaceView en el que se va a almacenar el juego-->
+    <SurfaceView
+        android:id="@+id/game"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
-    <!-- Ad view container that fills the width of the screen and adjusts its
-     height to the content of the ad. -->
+    <!-- Contendor del anuncio banner-->
     <FrameLayout
         android:id="@+id/ad_view_container"
         android:layout_width="match_parent"
