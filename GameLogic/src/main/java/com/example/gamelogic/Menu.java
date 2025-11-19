@@ -58,7 +58,7 @@ public class Menu implements State {
                     }
                     break;
                 case TOUCH_UP:
-                    System.out.println("Has soltado el raton");
+
                     break;
                 case TOUCH_MOVE:
                     break;

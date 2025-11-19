@@ -542,7 +542,7 @@ public class GameLogic implements State {
 
                     break;
                 case TOUCH_MOVE:
-                    System.out.println("Dedooo");
+
                     break;
             }
         }
