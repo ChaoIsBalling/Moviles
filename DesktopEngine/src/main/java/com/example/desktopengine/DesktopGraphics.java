@@ -102,7 +102,8 @@ public class DesktopGraphics implements Runnable, Graphics{
     {
         //this.graphics2D.setColor(new java.awt.Color(0xFFFFFFFF, true));
         this.setColor(0xFFFFFFF);
-        this.rellenarCuadrado(logicW/2,logicH/2,this.myView.getWidth(),this.myView.getHeight());
+        this.graphics2D.clearRect(0,0,this.myView.getWidth(),this.myView.getHeight());
+        //this.rellenarCuadrado(logicW/2,logicH/2,this.myView.getWidth(),this.myView.getHeight());
     }
     public void pintarTexto(String texto, float x, float y)
     {
