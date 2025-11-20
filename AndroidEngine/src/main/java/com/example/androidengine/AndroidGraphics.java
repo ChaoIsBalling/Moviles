@@ -3,6 +3,7 @@ package com.example.androidengine;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.fonts.Font;
@@ -20,6 +21,8 @@ import android.graphics.BitmapFactory;
 import android.content.res.AssetManager;
 import android.content.Context;
 import android.graphics.Path;
+import android.graphics.PorterDuff.Mode;
+
 public class AndroidGraphics implements Graphics {
     AssetManager assetManager;
     private SurfaceHolder holder;
@@ -92,7 +95,8 @@ public class AndroidGraphics implements Graphics {
     }
 
     protected void clear(){
-        this.canvas.drawColor(0xFFFFFFF);
+        this.canvas.drawColor(Color.TRANSPARENT, Mode.CLEAR);
+        this.canvas.drawColor(Color.WHITE);
     }
 
     protected void endFrame(){
