@@ -134,7 +134,7 @@ public class AndroidGraphics implements Graphics {
     {
         this.paint.setStyle(Paint.Style.FILL);
         RectF r = new RectF(x - w/2,y - h/2,x+w/2,y+h/2);
-        this.canvas.drawRoundRect(r,x,y,this.paint);
+        this.canvas.drawRoundRect(r,ar,ar,this.paint);
     }
     @Override
     public void pintarCuadrado(float x, float y, float w, float h) {
