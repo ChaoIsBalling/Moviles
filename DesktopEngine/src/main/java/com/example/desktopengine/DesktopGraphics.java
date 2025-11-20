@@ -135,7 +135,7 @@ public class DesktopGraphics implements Runnable, Graphics{
         java.awt.Image im =null;
         try
         {
-            im = ImageIO.read(new File(root +"/images/"+path));
+            im = ImageIO.read(new File(root +"/Images/"+path));
         }
         catch(IOException io)
         {
@@ -283,7 +283,7 @@ public class DesktopGraphics implements Runnable, Graphics{
 
         DesktopFont font = null;
         try {
-            font = new DesktopFont(root +"/fonts/"+f);
+            font = new DesktopFont(root +"/Fonts/"+f);
         } catch (FontFormatException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
