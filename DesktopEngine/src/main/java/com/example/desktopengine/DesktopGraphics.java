@@ -99,6 +99,7 @@ public class DesktopGraphics implements Runnable, Graphics{
     }
 
     //Método que limpia la pantalla
+    @Override
     public void clear()
     {
         //this.graphics2D.setColor(new java.awt.Color(0xFFFFFFFF, true));

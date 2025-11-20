@@ -3,8 +3,8 @@ package com.example.engine;
 import java.awt.Font;
 
 public interface Graphics {
+    public void clear();
     public int getWidth();
-
     public void pintarFondo(int color);
 
     public void pintarTexto(String texto, float x, float y);

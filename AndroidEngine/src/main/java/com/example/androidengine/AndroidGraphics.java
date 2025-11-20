@@ -94,7 +94,8 @@ public class AndroidGraphics implements Graphics {
 
     }
 
-    protected void clear(){
+    @Override
+    public void clear(){
         this.canvas.drawColor(Color.TRANSPARENT, Mode.CLEAR);
         this.canvas.drawColor(Color.WHITE);
     }
