@@ -48,6 +48,7 @@ public class DesktopGraphics implements Runnable, Graphics{
         this.bufferStrategy= this.myView.getBufferStrategy();
         this.graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
         this.insets = myView.getInsets();
+        myView.getContentPane().setBackground(Color.WHITE);
         myView.setSize(myView.getWidth()+ insets.left+ insets.right,
                 myView.getHeight()+ insets.top+ insets.bottom);
 
