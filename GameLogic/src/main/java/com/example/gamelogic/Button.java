@@ -70,13 +70,13 @@ public class Button {
             this.imagen.RenderCentrado((int)this.x,(int)this.y);
         }
 
-        if(this.text != null){
-            this.text.RenderCentrado(gr,this.x,this.y);
-        }
-
         //Renderizamos figura centrada
         if(this.figura != null){
             this.figura.RenderCentrado(gr,this.x,this.y);
+        }
+
+        if(this.text != null){
+            this.text.RenderCentrado(gr,this.x,this.y);
         }
     }
 
