@@ -315,7 +315,6 @@ public class GameLogic implements State {
             this.botonMejoraAtaque.Render(gr);
             this.botonMejoraRango.Render(gr);
             this.botonMejoraVelocidad.Render(gr);
-            gr.setColor(0xff000000);
             gr.pintarCirculo(this.torreSeleccionada.getX(),this.torreSeleccionada.getY(),this.torreSeleccionada.getRange());
         }
         this.textoV.Render(gr);
@@ -394,7 +393,7 @@ public class GameLogic implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     switch (this.estado){
-                        case nada://no hauy nada seleccionado obiamente
+                        case nada://no hauy nada seleccionado
                             if(this.botonMejoraTriangulos.contains(e.x,e.y)){
                                 this.cambiarEstado(Estado.botonRayo);
                             }
