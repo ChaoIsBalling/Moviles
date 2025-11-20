@@ -394,7 +394,7 @@ public class GameLogic implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     switch (this.estado){
-                        case nada:
+                        case nada://no hauy nada seleccionado obiamente
                             if(this.botonMejoraTriangulos.contains(e.x,e.y)){
                                 this.cambiarEstado(Estado.botonRayo);
                             }
@@ -416,7 +416,7 @@ public class GameLogic implements State {
                                 }
                             }
                             break;
-                        case torre:
+                        case torre://esta seleccionada una torre en el mapa
                             Vector2D casillaT = this.determinaCasillaRaton(e.x,e.y);
                             if(this.botonMejoraAtaque.contains(e.x,e.y) && this.dinero >= 75){
                                 this.torreSeleccionada.UpdateAttack(this.damTorre);
@@ -443,7 +443,7 @@ public class GameLogic implements State {
                                 this.cambiarEstado(Estado.nada);
                             }
                             break;
-                        case botonRayo:
+                        case botonRayo://has tocado el boton para crear una torre de rayo
                             Vector2D casillaR = this.determinaCasillaRaton(e.x,e.y);
                             if(this.botonMejoraHexagonos.contains(e.x,e.y)){
                                 this.cambiarEstado(Estado.botonFuego);
@@ -474,7 +474,7 @@ public class GameLogic implements State {
                                 this.cambiarEstado(Estado.nada);
                             }
                             break;
-                        case botonFuego:
+                        case botonFuego://has tocado el boton para crear una torre de fuego
                             Vector2D casillaF = this.determinaCasillaRaton(e.x,e.y);
                             if(this.botonMejoraTriangulos.contains(e.x,e.y)){
                                 this.cambiarEstado(Estado.botonRayo);
@@ -505,7 +505,7 @@ public class GameLogic implements State {
                                 this.cambiarEstado(Estado.nada);
                             }
                             break;
-                        case botonHielo:
+                        case botonHielo://has tocado el boton para crear una torre de hielo
                             Vector2D casillaH = this.determinaCasillaRaton(e.x,e.y);
                             if(this.botonMejoraTriangulos.contains(e.x,e.y)){
                                 this.cambiarEstado(Estado.botonRayo);
