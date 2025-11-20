@@ -294,6 +294,7 @@ public class GameLogic implements State {
     @Override
     public void render(Graphics gr) {
         //gr.setColor(0x00000000);
+        gr.clear();
         for (int i =0; i<this.fil;i++){
             for(int j =0; j<this.col;j++){
                 this.casillas.get(i).get(j).Render(gr);

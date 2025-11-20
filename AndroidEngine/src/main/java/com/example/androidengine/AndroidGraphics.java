@@ -128,6 +128,7 @@ public class AndroidGraphics implements Graphics {
     public void pintarCirculo(float x, float y, float r) {
         this.paint.setStyle(Paint.Style.STROKE);
         this.canvas.drawCircle(x,y,r,this.paint);
+        this.paint.setStyle(Paint.Style.FILL); //Devolvemos al valor por defecto
     }
     @Override
     public void rellenarCuadradoRedondeado(float x, float y, float w, float h, float ar)
@@ -140,6 +141,7 @@ public class AndroidGraphics implements Graphics {
     public void pintarCuadrado(float x, float y, float w, float h) {
         this.paint.setStyle(Paint.Style.STROKE);
         this.canvas.drawRect(x - w/2,y -h/2,x+w /2,y+h/2,this.paint);
+        this.paint.setStyle(Paint.Style.FILL); //Devolvemos al valor por defecto
     }
 
     @Override
@@ -169,6 +171,7 @@ public class AndroidGraphics implements Graphics {
         }
         wallpath.lineTo(coorX[0], coorY[0]);//Volvemos al primer punto
         this.canvas.drawPath(wallpath, this.paint);
+        this.paint.setStyle(Paint.Style.FILL); //Devolvemos al valor por defecto
     }
 
     @Override
