@@ -21,6 +21,9 @@ public class Enemy {
     Casilla casillaActual;
 
     Casilla casillaAnterior;
+
+
+    Casilla casillaInicial;
     public Enemy(float x, float y, float vida, float velocidad, float defensa, float resistencia, Tipo tipoRes, GameLogic gl){
         this.circulo = new Circle(x,y,5,true);
         this.circulo.setColor(0xff00ff00);
@@ -32,6 +35,7 @@ public class Enemy {
         this.tipo = tipoRes;
         this.gl = gl;
         this.coor = gl.determinaCasilla(this.circulo.getY(), this.circulo.getX());
+        this.casillaInicial = this.gl.casillas.get(this.coor.getX()).get(this.coor.getY());
     }
     public float getX(){
         return this.circulo.getX();
@@ -81,9 +85,10 @@ public class Enemy {
 
 
         //Si por alguna razón (por un deltatime elevado al principio) el enemigo se sale del camino,
-        //lo devolvemos a la casilla válida anterior
+        //lo devolvemos a la casilla de inicio
         if(!this.casillaActual.esCamino()){
-            this.casillaActual = this.casillaAnterior;
+            //this.casillaActual = this.casillaAnterior;
+            this.casillaActual = this.casillaInicial;
             this.coor = this.gl.determinaCasilla(this.casillaActual.getX(), this.casillaActual.getY());
         }
 
