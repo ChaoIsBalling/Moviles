@@ -77,20 +77,11 @@ public class Enemy {
         this.coor = this.gl.determinaCasilla(this.circulo.getX(), this.circulo.getY());
         this.casillaActual = this.gl.casillas.get(this.coor.getX()).get(this.coor.getY());
 
-        //Comprobamos que no obtiene una casilla fuera del tablero
-        Vector2D antCoor = new Vector2D(this.coor.getX() - this.direccion.getY(),this.coor.getY()-this.direccion.getX());
-        if(boundsPath(antCoor))
-            //Obtenemos la casilla anterior
-            this.casillaAnterior = this.gl.casillas.get(this.coor.getX() -this.direccion.getY()).get(this.coor.getY()-this.direccion.getX());
 
-
-        //Si por alguna razón (por un deltatime elevado al principio) el enemigo se sale del camino,
-        //lo devolvemos a la casilla de inicio
-        if(!this.casillaActual.esCamino()){
-            //this.casillaActual = this.casillaAnterior;
-            this.casillaActual = this.casillaInicial;
-            this.coor = this.gl.determinaCasilla(this.casillaActual.getX(), this.casillaActual.getY());
-        }
+//        if(!this.casillaActual.esCamino()){
+//            this.casillaActual = this.casillaInicial;
+//            this.coor = this.gl.determinaCasilla(this.casillaActual.getX(), this.casillaActual.getY());
+//        }
 
         //Determinamos la casilla siguiente
         this.casillaSig = this.gl.casillas.get(this.coor.getX() + this.direccion.getY()).get(this.coor.getY() + this.direccion.getX());
@@ -131,12 +122,31 @@ public class Enemy {
             }
         }
 
+        //Comprobamos que no obtiene una casilla fuera del tablero
+//        Vector2D antCoor = new Vector2D(this.coor.getX() - this.direccion.getY(),this.coor.getY()-this.direccion.getX());
+//        if(boundsPath(antCoor))
+//            //Obtenemos la casilla anterior
+//            this.casillaAnterior = this.gl.casillas.get(this.coor.getX() -this.direccion.getY()).get(this.coor.getY()-this.direccion.getX());
+//
         float movimiento = this.velocidad-this.ralentizar;
 
-        this.circulo.setX((float)(this.circulo.getX() + (this.direccion.getX() * movimiento * deltaTime)));
-        this.circulo.setY((float)(this.circulo.getY() + (this.direccion.getY() * movimiento * deltaTime)));
+        float compX = (float)(this.circulo.getX() + (this.direccion.getX() * movimiento * deltaTime));
+        float compY = (float)(this.circulo.getY() + (this.direccion.getY() * movimiento * deltaTime));
 
-        this.ralentizar =0;
+        Vector2D compCoor = this.gl.determinaCasilla(compX,compY);
+        Casilla casillaComp = this.gl.casillas.get(compCoor.getX()).get(compCoor.getY());
+
+        //Si por alguna razón (por un deltatime elevado al principio) el enemigo se sale del camino,
+        //lo devolvemos a la casilla valida
+        if(casillaComp.esCamino()){
+            this.circulo.setX(compX);
+            this.circulo.setY(compY);
+        }else{
+            this.circulo.setX(this.circulo.getX() + this.direccion.getX());
+            this.circulo.setY(this.circulo.getY() +this.direccion.getY());
+        }
+
+        this.ralentizar = 0;
     }
     public void Render(Graphics gr){
         this.circulo.Render(gr);
