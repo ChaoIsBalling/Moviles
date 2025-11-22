@@ -2,7 +2,14 @@ package com.example.engine;
 
 import java.util.List;
 
+
+/**
+ * Interfaz que define las entradas propias de cada motor
+ */
 public interface Input {
-    //Lista de TouchEvents
+    /**
+     * Devuelve la lista de TouchEvents
+     * @return lista
+     */
     public List<TouchEvent> getTouchEvents();
 }
