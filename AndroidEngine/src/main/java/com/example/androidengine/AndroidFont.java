@@ -41,12 +41,5 @@ public class AndroidFont implements IFont {
         return false;
     }
 
-    /*public AndroidFont(AssetManager assets,String file, float size){
-        this(assets,file,size,false,false);
-    }
 
-    public AndroidFont(AssetManager assets, String file, float size, boolean bold){
-        this.tFont = Typeface.createFromAsset(assets,file);
-        this.size = size;
-    }*/
 }

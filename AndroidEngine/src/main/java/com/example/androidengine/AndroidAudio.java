@@ -31,6 +31,7 @@ public class AndroidAudio implements Audio {
         int id=-1;
 
         try {
+            //se asigna el descriptor y se le pasa al spool
             AssetFileDescriptor descriptor = this.assets.openFd(root+file);
             id=this.spool.load(descriptor,1);
 

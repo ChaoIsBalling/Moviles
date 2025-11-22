@@ -73,8 +73,6 @@ public class AndroidGraphics implements Graphics {
     protected void startFrame(){
         while(!this.holder.getSurface().isValid());
         this.canvas = this.holder.lockHardwareCanvas();
-
-
         calculateTransforms();
         this.clear();
         this.trasladar(this.offsetX,this.offsetY);
@@ -108,17 +106,6 @@ public class AndroidGraphics implements Graphics {
         this.canvas.drawText(text,x,y,this.paint);
     }
 
-    /*public Image createImage(String path){
-        Bitmap bm = null;
-
-        try{
-            bm = BitmapFactory.decodeStream(this.asset.open(path));
-        }catch (IOException ex){
-            throw new RuntimeException("Error reading "+ path, ex);
-        }
-        return new AndroidImage(bm);
-
-    }*/
     @Override
     public int getWidth()
     {
@@ -135,7 +122,8 @@ public class AndroidGraphics implements Graphics {
     {
         this.paint.setStyle(Paint.Style.FILL);
         RectF r = new RectF(x - w/2,y - h/2,x+w/2,y+h/2);
-        this.canvas.drawRoundRect(r,ar/2,ar/2,this.paint);
+        this.canvas.drawRoundRect(r,ar/2,ar/2,this.paint);//El radio que le pasamos está dividido a la mitad
+                                                                 //para tener un aspecto más consistente con desktop
     }
     @Override
     public void pintarCuadrado(float x, float y, float w, float h) {
@@ -155,7 +143,7 @@ public class AndroidGraphics implements Graphics {
         int [] coorY = new int[nv];
 
         double angleStep = 2 * Math.PI / nv;
-
+        //posicionamiento de los puntos del poligono
         for(int i = 0; i<nv;i++){
             double angle = angleStep* i - Math.PI /2;
             int x = (int) (cx + r * Math.cos(angle));
@@ -196,7 +184,6 @@ public class AndroidGraphics implements Graphics {
         Paint.FontMetrics metrics= this.paint.getFontMetrics();
         Rect r= new Rect();
         this.paint.getTextBounds(texto,0,texto.length(),r);
-
         this.canvas.drawText(texto,x-r.width()/2,y+r.height()/2,this.paint);
     }
 
@@ -212,6 +199,7 @@ public class AndroidGraphics implements Graphics {
         Rect r= new Rect();
         this.paint.setTextSize(af.getSize());
         this.paint.getTextBounds(texto,0,texto.length(),r);
+        //calculo de posicion centrada del texto respecto a la x e y que tenemos
         float xPos = x - (paint.measureText(texto)/2);
         float yPos =  (y - ((paint.descent() + paint.ascent()) / 2)) ;
         this.canvas.drawText(texto,xPos,yPos,this.paint);
@@ -324,6 +312,7 @@ public class AndroidGraphics implements Graphics {
         for(int i = 1; i<nv;i++) {
             wallpath.lineTo(coorX[i], coorY[i]);
         }
+
         wallpath.lineTo(coorX[0], coorY[0]);//Volvemos al primer punto
         this.canvas.drawPath(wallpath, this.paint);
 

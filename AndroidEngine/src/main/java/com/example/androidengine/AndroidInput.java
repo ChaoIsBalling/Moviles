@@ -25,7 +25,8 @@ public class AndroidInput implements Input,View.OnTouchListener{
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-
+        //pasamos la posición del touch respecto a la pantalla y dependiendo del tipo de movimiento le asignamos
+        //un touch type
         TouchEvent myEvent = new TouchEvent();
         myEvent.x = event.getX();
         myEvent.y = event.getY();
