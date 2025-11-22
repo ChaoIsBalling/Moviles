@@ -264,6 +264,7 @@ public class GameLogic implements State {
 
     //Dada una posición (x,y) se determina en que casilla está a partir del ancho y alto de la casilla
     public Vector2D determinaCasilla(float x, float y){
+
         int offsetX = 30;
         int offsetY = 50;
 
