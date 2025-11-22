@@ -394,73 +394,7 @@ public class GameLogic implements State {
 
             switch (e.type){
                 case TOUCH_DOWN:
-                    switch (this.estado){
-                        case nada://no hauy nada seleccionado
-                            if(this.botonMejoraTriangulos.contains(e.x,e.y)){
-                                this.cambiarEstado(Estado.botonRayo);
-                            }
-                            else if(this.botonMejoraHexagonos.contains(e.x,e.y)){
-                                this.cambiarEstado(Estado.botonFuego);
-                            }
-                            else if(this.botonMejoraCuadrados.contains(e.x,e.y)){
-                                this.cambiarEstado(Estado.botonHielo);
-                            }
-                            else {
-                                Vector2D casilla = this.determinaCasillaRaton(e.x,e.y);
-                                //System.out.println("("+casilla.getX()+","+casilla.getY()+")");
-                                if(casilla.getX() < this.fil && casilla.getY() < this.col && casilla.getX()>= 0 && casilla.getY()>=0){
-                                    Tower torre = this.casillas.get(casilla.getX()).get(casilla.getY()).getTorre();
-                                    if(torre != null){
-                                        this.torreSeleccionada = torre;
-                                        this.cambiarEstado(Estado.torre);
-                                    }
-                                }
-                            }
-                            break;
-                        case torre://esta seleccionada una torre en el mapa
-                            Vector2D casillaT = this.determinaCasillaRaton(e.x,e.y);
-                            if(this.botonMejoraAtaque.contains(e.x,e.y) && this.dinero >= 75){
-                                this.torreSeleccionada.UpdateAttack(this.damTorre);
-                                this.dinero -= 75;
-                            }
-                            else if(this.botonMejoraRango.contains(e.x,e.y) && this.dinero >= 75){
-                                this.torreSeleccionada.UpdateRange(this.ranTorre);
-                                this.dinero -= 75;
-                            }
-                            else if(this.botonMejoraVelocidad.contains(e.x,e.y) && this.dinero >= 75){
-                                this.torreSeleccionada.UpdateFireRate(this.velTorre);
-                                this.dinero -= 100;
-                            }
-                            else if(casillaT.getX() < this.fil && casillaT.getY() < this.col && casillaT.getX()>= 0 && casillaT.getY()>=0){
-                                Tower torre = this.casillas.get(casillaT.getX()).get(casillaT.getY()).getTorre();
-                                if(torre != this.torreSeleccionada && torre != null){
-                                    this.torreSeleccionada = torre;
-                                }
-                                else{
-                                    this.cambiarEstado(Estado.nada);
-                                }
-                            }
-                            else{
-                                this.cambiarEstado(Estado.nada);
-                            }
-                            break;
-                        case botonRayo://has tocado el boton para crear una torre de rayo
-                            botonTorres(e,100);
-                            break;
-                        case botonFuego://has tocado el boton para crear una torre de fuego
-                            botonTorres(e,200);
-                            break;
-                        case botonHielo://has tocado el boton para crear una torre de hielo
-                            botonTorres(e,150);
-                            break;
-                    }
-                    break;
-                case TOUCH_UP:
-
-                    break;
-                case TOUCH_MOVE:
-
-                    break;
+                gestiónEstadosJuego(e);
             }
         }
     }
@@ -479,8 +413,92 @@ public class GameLogic implements State {
         this.gr=gr;
         this.inicializarUI();
     }
-
-    private void botonTorres(TouchEvent e, float precio)//metodo que maneja la logica cuando tocas un boton de torre
+private void gestiónEstadosJuego(TouchEvent e) //maneja los estados del juego cuando pulsas botones o las torres
+{
+    switch (this.estado){
+        case nada://cuando ningun boton o torre está seleccionado
+            if(this.botonMejoraTriangulos.contains(e.x,e.y)){
+                this.cambiarEstado(Estado.botonRayo);
+            }
+            else if(this.botonMejoraHexagonos.contains(e.x,e.y)){
+                this.cambiarEstado(Estado.botonFuego);
+            }
+            else if(this.botonMejoraCuadrados.contains(e.x,e.y)){
+                this.cambiarEstado(Estado.botonHielo);
+            }
+            else {
+                Vector2D casilla = this.determinaCasillaRaton(e.x,e.y);
+                if(casilla.getX() < this.fil && casilla.getY() < this.col && casilla.getX()>= 0 && casilla.getY()>=0){
+                    Tower torre = this.casillas.get(casilla.getX()).get(casilla.getY()).getTorre();
+                    if(torre != null){
+                        this.torreSeleccionada = torre;
+                        this.cambiarEstado(Estado.torre);
+                    }
+                }
+            }
+            break;
+        case torre://esta seleccionada una torre en el mapa
+            Vector2D casillaT = this.determinaCasillaRaton(e.x,e.y);
+            if(this.botonMejoraAtaque.contains(e.x,e.y) && this.dinero >= 75){
+                this.torreSeleccionada.UpdateAttack(this.damTorre);
+                this.dinero -= 75;
+            }
+            else if(this.botonMejoraRango.contains(e.x,e.y) && this.dinero >= 75){
+                this.torreSeleccionada.UpdateRange(this.ranTorre);
+                this.dinero -= 75;
+            }
+            else if(this.botonMejoraVelocidad.contains(e.x,e.y) && this.dinero >= 75){
+                this.torreSeleccionada.UpdateFireRate(this.velTorre);
+                this.dinero -= 100;
+            }
+            else if(casillaT.getX() < this.fil && casillaT.getY() < this.col && casillaT.getX()>= 0 && casillaT.getY()>=0){
+                Tower torre = this.casillas.get(casillaT.getX()).get(casillaT.getY()).getTorre();
+                if(torre != this.torreSeleccionada && torre != null){
+                    this.torreSeleccionada = torre;
+                }
+                else{
+                    this.cambiarEstado(Estado.nada);
+                }
+            }
+            else{
+                this.cambiarEstado(Estado.nada);
+            }
+            break;
+        case botonRayo://has tocado el boton para crear una torre de rayo
+            crearTorres(e,100);
+            break;
+        case botonFuego://has tocado el boton para crear una torre de fuego
+            crearTorres(e,200);
+            break;
+        case botonHielo://has tocado el boton para crear una torre de hielo
+            crearTorres(e,150);
+            break;
+    }
+}
+private void pulsarBotones(TouchEvent e)
+{
+    if(this.botonMejoraTriangulos.contains(e.x,e.y)){
+        this.cambiarEstado(Estado.botonRayo);
+    }
+    else if(this.botonMejoraHexagonos.contains(e.x,e.y)){
+        this.cambiarEstado(Estado.botonFuego);
+    }
+    else if(this.botonMejoraCuadrados.contains(e.x,e.y)){
+        this.cambiarEstado(Estado.botonHielo);
+    }
+    else {
+        Vector2D casilla = this.determinaCasillaRaton(e.x,e.y);
+        if(casilla.getX() < this.fil && casilla.getY() < this.col && casilla.getX()>= 0 && casilla.getY()>=0){
+            Tower torre = this.casillas.get(casilla.getX()).get(casilla.getY()).getTorre();
+            if(torre != null){
+                this.torreSeleccionada = torre;
+                this.cambiarEstado(Estado.torre);
+            }
+            
+        }
+    }
+}
+private void crearTorres(TouchEvent e, float precio)//metodo que maneja la logica cuando tocas un boton de torre
     {
         Vector2D casillaR = this.determinaCasillaRaton(e.x,e.y);
         if(this.botonMejoraTriangulos.contains(e.x,e.y)){
@@ -501,7 +519,6 @@ public class GameLogic implements State {
             else if(this.dinero >= precio && !this.casillas.get(casillaR.getX()).get(casillaR.getY()).esCamino()){
                 Tower torreR;
                 switch(this.estado) {
-
                     case botonRayo:
                         torreR = new ThunderTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(), this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY());
                         break;
