@@ -69,6 +69,19 @@ public class DesktopAudio implements Audio  {
         s.setClip(c);
     }
 
+    @Override
+    public void loopSound(Sound sound) {
+        DesktopSound s = (DesktopSound)sound;
+        ArrayList<Clip>p =this.pools.get(s.getName());
+        Clip c= p.get(count);
+        count= (count+1)%2;
+        c.setFramePosition(0);
+        c.start();
+        c.loop(Clip.LOOP_CONTINUOUSLY);
+        //(DesktopSound)sound.setClip(c);
+        s.setClip(c);
+    }
+
 
     @Override
     public void stopSound(Sound sound)

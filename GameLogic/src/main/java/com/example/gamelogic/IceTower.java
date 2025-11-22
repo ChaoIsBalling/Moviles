@@ -18,6 +18,8 @@ public class IceTower implements Tower{
     Tipo tipo = Tipo.hielo;
     ArrayList<Enemy> enemigos;
 
+    boolean enRango;
+
     public IceTower(float x, float y){
         this.cuadrado = new Square(x,y,20,20,true);
         this.cuadrado.setColor(0xFFC8A2C8);
@@ -45,6 +47,7 @@ public class IceTower implements Tower{
 
     @Override
     public void Update(double deltaTime) {
+        boolean encontrar = false;
         for (int i = 0; i < this.enemigos.size(); i++){
             float x = this.enemigos.get(i).getX();
             float y = this.enemigos.get(i).getY();
@@ -54,9 +57,17 @@ public class IceTower implements Tower{
             b = Math.pow(b,2);
             double distancia = Math.sqrt(a+b);
             if(distancia <= this.rango){
-                this.audio.playSound(this.attack);
+                encontrar = true;
+                if(!this.enRango){
+                    this.audio.loopSound(this.attack);
+                    this.enRango = true;
+                }
                 this.enemigos.get(i).damage(this.ataque,this.tipo);
             }
+        }
+        if(!encontrar && this.enRango){
+            this.enRango = false;
+            this.audio.stopSound(this.attack);
         }
     }
 

@@ -6,5 +6,7 @@ public interface Audio {
 
     public void playSound(Sound sound);
 
+    public void loopSound(Sound sound);
+
     public void stopSound(Sound sound);
 }

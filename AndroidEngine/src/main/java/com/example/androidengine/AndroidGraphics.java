@@ -214,7 +214,7 @@ public class AndroidGraphics implements Graphics {
         this.paint.setTextSize(af.getSize());
         this.paint.getTextBounds(texto,0,texto.length(),r);
         float xc= x-r.width()/2;
-        float yc= y+r.height()/2- metrics.descent;
+        float yc= y+r.height()*(float)0.75- metrics.descent;//tres cuartos en vez de la mitad
         this.canvas.drawText(texto,xc,yc,this.paint);
     }
 

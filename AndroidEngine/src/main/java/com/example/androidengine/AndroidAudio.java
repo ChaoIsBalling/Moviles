@@ -48,6 +48,13 @@ public class AndroidAudio implements Audio {
         AndroidSound s =(AndroidSound)sound;
         this.spool.play(s.getID(),1,1,0,0,1);
     }
+
+    @Override
+    public void loopSound(Sound sound) {
+        AndroidSound s =(AndroidSound)sound;
+        this.spool.play(s.getID(),1,1,0,-1,1);
+    }
+
     @Override
     public void stopSound(Sound sound)
     {
