@@ -7,7 +7,6 @@ public class Enemy {
     float vida;
     boolean win;
     Vector2D direccion;
-
     float velocidad = 100;
     float defensa;
     float resistencia;
@@ -20,6 +19,8 @@ public class Enemy {
     Casilla casillaSig;
 
     Casilla casillaActual;
+
+    Casilla casillaAnterior;
     public Enemy(float x, float y, float vida, float velocidad, float defensa, float resistencia, Tipo tipoRes, GameLogic gl){
         this.circulo = new Circle(x,y,5,true);
         this.circulo.setColor(0xff00ff00);
@@ -68,10 +69,27 @@ public class Enemy {
     }
     public void Update(double deltaTime){
 
+        //A partir de la coordenada del enemigo, determinamos la casilla en la que está
         this.coor = this.gl.determinaCasilla(this.circulo.getX(), this.circulo.getY());
         this.casillaActual = this.gl.casillas.get(this.coor.getX()).get(this.coor.getY());
 
+        //Comprobamos que no obtiene una casilla fuera del tablero
+        Vector2D antCoor = new Vector2D(this.coor.getX() - this.direccion.getY(),this.coor.getY()-this.direccion.getX());
+        if(boundsPath(antCoor))
+            //Obtenemos la casilla anterior
+            this.casillaAnterior = this.gl.casillas.get(this.coor.getX() -this.direccion.getY()).get(this.coor.getY()-this.direccion.getX());
+
+
+        //Si por alguna razón (por un deltatime elevado al principio) el enemigo se sale del camino,
+        //lo devolvemos a la casilla válida anterior
+        if(!this.casillaActual.esCamino()){
+            this.casillaActual = this.casillaAnterior;
+            this.coor = this.gl.determinaCasilla(this.casillaActual.getX(), this.casillaActual.getY());
+        }
+
+        //Determinamos la casilla siguiente
         this.casillaSig = this.gl.casillas.get(this.coor.getX() + this.direccion.getY()).get(this.coor.getY() + this.direccion.getX());
+
         boolean encontrado = false;
         //Si la casilla siguiente no es un camino
         if(!this.casillaSig.esCamino()){
@@ -94,7 +112,6 @@ public class Enemy {
                 if(boundsPath(casillaSig.coor)){
                     Casilla dcha = this.gl.casillas.get(this.casillaSig.getCoor().getX() -1).get(this.casillaSig.getCoor().getY() + 1);
                     Casilla izq = this.gl.casillas.get(this.casillaSig.getCoor().getX() -1).get(this.casillaSig.getCoor().getY() -1);
-
                     if(dcha.esCamino()){
                         this.direccion.setX(1);
                         this.direccion.setY(0);
@@ -105,11 +122,8 @@ public class Enemy {
                         this.direccion.setY(0);
                         encontrado = true;
                     }
-
                 }
-
             }
-
         }
 
         float movimiento = this.velocidad-this.ralentizar;
