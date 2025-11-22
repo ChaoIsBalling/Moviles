@@ -59,7 +59,7 @@ public class IceTower implements Tower{
             if(distancia <= this.rango){
                 encontrar = true;
                 if(!this.enRango){
-                    this.audio.playSound(this.attack);
+                    this.audio.loopSound(this.attack);
                     this.enRango = true;
                 }
                 this.enemigos.get(i).damage(this.ataque,this.tipo);
