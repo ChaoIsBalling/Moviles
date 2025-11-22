@@ -135,7 +135,7 @@ public class AndroidGraphics implements Graphics {
     {
         this.paint.setStyle(Paint.Style.FILL);
         RectF r = new RectF(x - w/2,y - h/2,x+w/2,y+h/2);
-        this.canvas.drawRoundRect(r,ar,ar,this.paint);
+        this.canvas.drawRoundRect(r,ar/2,ar/2,this.paint);
     }
     @Override
     public void pintarCuadrado(float x, float y, float w, float h) {
@@ -209,13 +209,12 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void pintarTextoCentrado(String texto, float x, float y) {
-        Paint.FontMetrics metrics= this.paint.getFontMetrics();
         Rect r= new Rect();
         this.paint.setTextSize(af.getSize());
         this.paint.getTextBounds(texto,0,texto.length(),r);
-        float xc= x-r.width()/2;
-        float yc= y+r.height()*(float)0.75- metrics.descent;//tres cuartos en vez de la mitad
-        this.canvas.drawText(texto,xc,yc,this.paint);
+        float xPos = x - (paint.measureText(texto)/2);
+        float yPos =  (y - ((paint.descent() + paint.ascent()) / 2)) ;
+        this.canvas.drawText(texto,xPos,yPos,this.paint);
     }
 
     @Override
