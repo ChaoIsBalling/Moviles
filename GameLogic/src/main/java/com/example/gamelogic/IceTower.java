@@ -65,7 +65,7 @@ public class IceTower implements Tower{
                 this.enemigos.get(i).damage(this.ataque,this.tipo);
             }
         }
-        if(!encontrar){
+        if(!encontrar && this.enRango){
             this.enRango = false;
             this.audio.stopSound(this.attack);
         }
