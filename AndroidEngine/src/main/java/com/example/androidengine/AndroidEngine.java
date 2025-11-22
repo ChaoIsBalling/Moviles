@@ -50,7 +50,7 @@ public class AndroidEngine implements Engine,Runnable {
     }
     @Override
     public ArrayList<String> readFile(String path)
-    {
+    {//usa el input stream y elbuffered reader para leer linea a linea un fichero y pasarlo a un arraylist
         ArrayList<String> file = new ArrayList<>();
 
         try {
@@ -117,7 +117,7 @@ public class AndroidEngine implements Engine,Runnable {
     @Override
     public void run() {
         if (renderThread != Thread.currentThread()) {
-            //Evitamos que otra clase llame a este método
+            //Evitamos que otra clase llame a este metodo
             throw new RuntimeException("run() should not be called directly");
         }
 

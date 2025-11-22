@@ -12,7 +12,6 @@ public class AndroidImage implements IImage {
 
     AndroidImage(Bitmap bm,int width, int height) {
         this.bm =  Bitmap.createScaledBitmap(bm, width, height, false);
-
     }
 
     protected Bitmap getBitmap() {return bm;}
