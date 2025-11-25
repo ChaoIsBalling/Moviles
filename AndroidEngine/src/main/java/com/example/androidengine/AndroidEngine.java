@@ -72,6 +72,7 @@ public class AndroidEngine implements Engine,Runnable {
         this.gr = new AndroidGraphics(view);
         this.audio=new AndroidAudio(sView.getContext().getAssets());
 
+        System.loadLibrary("AndroidEngine");
     }
     @Override
     public ArrayList<String> readFile(String path)
@@ -220,6 +221,13 @@ public class AndroidEngine implements Engine,Runnable {
     public void setNotificationIcon(int icono) {
         this.iconNotification=icono;
     }
+
+    @Override
+    public String hashSHA256(String string) {
+        return nativeHash(string);
+    }
+
+    private native String nativeHash(String s);
 
     private void createNotificationChannel(){
         if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {

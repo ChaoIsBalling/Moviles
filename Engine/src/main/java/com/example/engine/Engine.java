@@ -50,4 +50,6 @@ public interface Engine {
     public void showNotificacion(String title, String firstText);
     public void setNotificationIcon(int icono);
 
+    public String hashSHA256(String string);
+
 }
