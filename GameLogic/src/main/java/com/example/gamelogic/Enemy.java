@@ -77,6 +77,12 @@ public class Enemy {
         this.coor = this.gl.determinaCasilla(this.circulo.getX(), this.circulo.getY());
         this.casillaActual = this.gl.casillas.get(this.coor.getX()).get(this.coor.getY());
 
+
+//        if(!this.casillaActual.esCamino()){
+//            this.casillaActual = this.casillaInicial;
+//            this.coor = this.gl.determinaCasilla(this.casillaActual.getX(), this.casillaActual.getY());
+//        }
+
         //Determinamos la casilla siguiente
         this.casillaSig = this.gl.casillas.get(this.coor.getX() + this.direccion.getY()).get(this.coor.getY() + this.direccion.getX());
 
@@ -116,7 +122,14 @@ public class Enemy {
             }
         }
 
+        //Comprobamos que no obtiene una casilla fuera del tablero
+//        Vector2D antCoor = new Vector2D(this.coor.getX() - this.direccion.getY(),this.coor.getY()-this.direccion.getX());
+//        if(boundsPath(antCoor))
+//            //Obtenemos la casilla anterior
+//            this.casillaAnterior = this.gl.casillas.get(this.coor.getX() -this.direccion.getY()).get(this.coor.getY()-this.direccion.getX());
+//
         float movimiento = this.velocidad-this.ralentizar;
+
 
         //Posicion con deltatime aplicado
         float compX = (float)(this.circulo.getX() + (this.direccion.getX() * movimiento * deltaTime));
@@ -125,17 +138,16 @@ public class Enemy {
         //Casilla si le aplico el deltatime
         Vector2D compCoor = this.gl.determinaCasilla(compX,compY);
 
-        //Si esa casilla con deltatime esta en el tablero, la guardo.
-        //De lo contrario será igual a la casilla actual, es decir, la posicion antes del deltatime
+        //Si esa casilla esta en el tablero, la guardo
         Casilla casillaComp;
-        if(boundsPath(compCoor))
-            casillaComp = this.gl.casillas.get(compCoor.getX()).get(compCoor.getY());
-        else
-            casillaComp = this.casillaActual;
+        if(boundsPath(compCoor)){
+             casillaComp = this.gl.casillas.get(compCoor.getX()).get(compCoor.getY());
+        }else
+            casillaComp =  this.casillaActual;
 
-        //Si es un camino la casilla con deltatime, lo movemos a dicha casilla
+
         //Si por alguna razón (por un deltatime elevado al principio) el enemigo se sale del camino,
-        //lo devolvemos a la casilla valida (la propia posicion sin el deltatime)
+        //lo devolvemos a la casilla valida
         if(casillaComp.esCamino()){
             this.circulo.setX(compX);
             this.circulo.setY(compY);

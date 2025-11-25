@@ -21,7 +21,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class DesktopAudio implements Audio  {
 
     /**
-     * Mapa Hash es una estructura que almacena pools de audios.
+     * Estructura que almacena pools de audios.
      * La clave es el nombre del sonido y el valor es un array de Clips de audio
      */
     private HashMap<String, ArrayList<Clip>>pools;

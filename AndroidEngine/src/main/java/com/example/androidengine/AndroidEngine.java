@@ -16,14 +16,27 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-
+/**
+ * Clase que implementa el motor principal del juego para Android.
+ * Se encarga de la inicialización de otros módulos del motor y gestiona el bucle principal
+ * Implementa Runnable (propia de Java) y la interfaz Engine.
+ */
 
 public class AndroidEngine implements Engine,Runnable {
 
+    /**
+     * Instancia del Android Graphics
+     */
     private AndroidGraphics gr;
 
+    /**
+     * Instancia de los AssetManager de Android
+     */
     private AssetManager assetManager;
 
+    /**
+     *
+     */
     private Thread renderThread;
 
     private boolean running;

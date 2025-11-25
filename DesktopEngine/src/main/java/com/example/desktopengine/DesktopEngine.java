@@ -33,7 +33,6 @@ public class DesktopEngine implements Runnable, Engine {
      * Instancia del Desktop Graphics que se encarga del renderizado
      */
     DesktopGraphics gr;
-
     /**
      * booleano que indica el estado del bucle principal
      */
@@ -59,7 +58,6 @@ public class DesktopEngine implements Runnable, Engine {
      * Ruta raiz de los assets que se usan para el motor
      */
     String root = "data/Files/";
-
     /**
      * Constructora que inicializa el motor de escritorio.
      * @param view Venta de los gráficos
