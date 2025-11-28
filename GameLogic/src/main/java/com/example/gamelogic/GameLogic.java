@@ -177,29 +177,25 @@ public class GameLogic implements State {
     @Override
     public void update(double deltaTime) {
         if (this.dificultad == Dificultad.corto && this.oleada < 4 || this.dificultad == Dificultad.largo && this.oleada < 8 || this.dificultad == Dificultad.infinito) {//continuar sacando oleadas hasta x oleada dependiendo de la dificultad
-            if (this.tiempGr <= 0) {//si tiempo entre grupos<=0
-                if (this.numG < this.grupos) {//si grupos generados<grupos
-                    if (this.tiempEnG <= 0) {//si tiempo entre enemigos<0
-                        if (this.numE < this.enemigosGrupo) {//si enemigos generados<enemigos en grupo
-                            Tipo tipoRes;
-                            if (this.tipoResEn == 0) {//resistencia de enemigos secuencial
-                                tipoRes = Tipo.rayo;
-                            } else if (this.tipoResEn == 1) {
-                                tipoRes = Tipo.fuego;
-                            } else {
-                                tipoRes = Tipo.hielo;
-                            }
-                            this.tipoResEn = (this.tipoResEn + 1) % 3;
-                            this.enemigos.add(new Enemy(this.IniX, this.IniY, 8 + (this.mejVidaEn * (this.oleada - 1)), 30 + (this.mejVelEn * (this.oleada - 1)), 0 + (this.mejDefEn * (this.oleada - 1)), 0 + (this.mejResEn * (this.oleada - 1)), tipoRes, this));
-                            this.numE++;
-                        } else {//si se han creado todos los enemigos del grupo
-                            this.numE = 0;//resetear numero de enemigos generados
-                            this.numG += 1;//grupos generados +1
-                            this.tiempGr = this.tiempoGrupos;//resetear tiempo entre grupos
-                        }
-                        this.tiempEnG = this.tiempoEnGrupo;//resetear tiempo entre enemigos
+            if (this.tiempGr <= 0 && this.numG < this.grupos && this.tiempEnG <= 0) {//si tiempo entre grupos<=0 y si grupos generados<grupos y si tiempo entre enemigos<0
+                if (this.numE < this.enemigosGrupo) {//si enemigos generados<enemigos en grupo
+                    Tipo tipoRes;
+                    if (this.tipoResEn == 0) {//resistencia de enemigos secuencial
+                        tipoRes = Tipo.rayo;
+                    } else if (this.tipoResEn == 1) {
+                        tipoRes = Tipo.fuego;
+                    } else {
+                        tipoRes = Tipo.hielo;
                     }
+                    this.tipoResEn = (this.tipoResEn + 1) % 3;
+                    this.enemigos.add(new Enemy(this.IniX, this.IniY, 8 + (this.mejVidaEn * (this.oleada - 1)), 30 + (this.mejVelEn * (this.oleada - 1)), 0 + (this.mejDefEn * (this.oleada - 1)), 0 + (this.mejResEn * (this.oleada - 1)), tipoRes, this));
+                    this.numE++;
+                } else {//si se han creado todos los enemigos del grupo
+                    this.numE = 0;//resetear numero de enemigos generados
+                    this.numG += 1;//grupos generados +1
+                    this.tiempGr = this.tiempoGrupos;//resetear tiempo entre grupos
                 }
+                this.tiempEnG = this.tiempoEnGrupo;//resetear tiempo entre enemigos
             }
             if (this.tiempOl <= 0) {//si tiempo entre oleadas <=0
                 this.oleada++;//sigiente oleada
@@ -251,12 +247,14 @@ public class GameLogic implements State {
         this.textoD.setText(String.valueOf(this.dinero));
         if (this.dificultad == Dificultad.corto && this.oleada > 3 || this.dificultad == Dificultad.largo && this.oleada > 7) {
             if (this.vida > 0 && this.enemigos.isEmpty()) {
+                this.stopSoundTorres();
                 GameOver gameOver = new GameOver(this.engine, this.audio, true);
                 this.engine.setState(gameOver);
             }
         }
 
         if (this.vida <= 0) {
+            this.stopSoundTorres();
             GameOver gameOver = new GameOver(this.engine, this.audio, false);
             this.engine.setState(gameOver);
         }
@@ -546,6 +544,12 @@ public class GameLogic implements State {
                 this.estado = nuevoEstado;
                 break;
 
+        }
+    }
+
+    private void stopSoundTorres(){
+        for(int i =0; i < this.torres.size(); i++){
+            this.torres.get(i).stopAudio();
         }
     }
 

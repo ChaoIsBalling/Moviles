@@ -96,4 +96,9 @@ public class IceTower implements Tower{
     public float getY() {
         return this.cuadrado.getY();
     }
+
+    @Override
+    public void stopAudio() {
+        this.audio.stopSound(this.attack);
+    }
 }

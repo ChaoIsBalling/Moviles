@@ -17,4 +17,6 @@ public interface Tower {
     public float getRange();
     public float getX();
     public float getY();
+
+    public void stopAudio();
 }

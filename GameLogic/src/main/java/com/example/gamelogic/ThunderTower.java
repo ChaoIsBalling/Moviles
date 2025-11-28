@@ -119,4 +119,9 @@ public class ThunderTower implements Tower{
     public float getY() {
         return this.triangulo.getY();
     }
+
+    @Override
+    public void stopAudio() {
+        this.audio.stopSound(this.attack);
+    }
 }

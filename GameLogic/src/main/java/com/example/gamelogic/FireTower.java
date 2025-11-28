@@ -137,4 +137,9 @@ public class FireTower implements Tower {
     public float getY() {
         return this.hexagono.getY();
     }
+
+    @Override
+    public void stopAudio() {
+        this.audio.stopSound(this.attack);
+    }
 }
