@@ -150,16 +150,9 @@ public class GameLogic implements State {
         if (this.oleadasRestantes!=0) {//continuar sacando oleadas hasta que lleguemos a 0
             if (this.tiempGr <= 0 && this.numG < this.grupos && this.tiempEnG <= 0) {//si tiempo entre grupos<=0 y si grupos generados<grupos y si tiempo entre enemigos<0
                 if (this.numE < this.enemigosGrupo) {//si enemigos generados<enemigos en grupo
-                    Tipo tipoRes;
-                    if (this.tipoResEn == 0) {//resistencia de enemigos secuencial
-                        tipoRes = Tipo.rayo;
-                    } else if (this.tipoResEn == 1) {
-                        tipoRes = Tipo.fuego;
-                    } else {
-                        tipoRes = Tipo.hielo;
-                    }
-                    this.tipoResEn = (this.tipoResEn + 1) % 3;
-                    this.enemigos.add(new Enemy(this.IniX, this.IniY, 8 + (this.mejVidaEn * (this.oleada - 1)), 30 + (this.mejVelEn * (this.oleada - 1)), 0 + (this.mejDefEn * (this.oleada - 1)), 0 + (this.mejResEn * (this.oleada - 1)), tipoRes, this));
+                    this.enemigos.add(new Enemy(this.IniX, this.IniY,8 + (this.mejVidaEn * (this.oleada - 1)),
+                            30 + (this.mejVelEn * (this.oleada - 1)), 0 + (this.mejDefEn * (this.oleada - 1)),
+                            0 + (this.mejResEn * (this.oleada - 1)),Tipo.getRandomType(),this));
                     this.numE++;
                 } else {//si se han creado todos los enemigos del grupo
                     this.numE = 0;//resetear numero de enemigos generados
