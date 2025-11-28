@@ -488,7 +488,7 @@ public class GameLogic implements State {
             }
         }
     }
-    
+
     private void crearTorres(TouchEvent e, float precio)//metodo que maneja la logica cuando tocas un boton de torre
     {
         Vector2D casillaR = this.determinaCasillaRaton(e.x, e.y);
