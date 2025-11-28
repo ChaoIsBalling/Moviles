@@ -92,6 +92,7 @@ public class GameLogic implements State {
     int tipoResEn = 0;
 
     int oleada;//numero oleada
+    int oleadasRestantes;
     int grupos;//grupos en oleada
     int enemigosGrupo;//enemigos en grupo
 
@@ -120,7 +121,7 @@ public class GameLogic implements State {
 
     private Dificultad dificultad;
 
-    public GameLogic(Engine engine, Dificultad dificultad) {
+    public GameLogic(Engine engine, int oleadasRestantes) {
         this.engine = engine;
         this.vida = 10;
         this.dinero = 300;
@@ -134,7 +135,8 @@ public class GameLogic implements State {
         this.tiempoEnGrupo = (float) 0.3;
         this.tiempEnG = 0;
         this.textoOleadas = new Text("Inika-Regular.ttf", "Oleada:" + this.oleada, 60, 15, 25);
-        this.dificultad = dificultad;
+       this.oleadasRestantes=oleadasRestantes;
+
         this.torres = new ArrayList<Tower>();
         this.enemigos = new ArrayList<Enemy>();
         this.deadEnemies = new ArrayList<Enemy>();
@@ -176,7 +178,7 @@ public class GameLogic implements State {
 
     @Override
     public void update(double deltaTime) {
-        if (this.dificultad == Dificultad.corto && this.oleada < 4 || this.dificultad == Dificultad.largo && this.oleada < 8 || this.dificultad == Dificultad.infinito) {//continuar sacando oleadas hasta x oleada dependiendo de la dificultad
+        if (this.oleadasRestantes!=0) {//continuar sacando oleadas hasta que lleguemos a 0
             if (this.tiempGr <= 0 && this.numG < this.grupos && this.tiempEnG <= 0) {//si tiempo entre grupos<=0 y si grupos generados<grupos y si tiempo entre enemigos<0
                 if (this.numE < this.enemigosGrupo) {//si enemigos generados<enemigos en grupo
                     Tipo tipoRes;
@@ -199,6 +201,7 @@ public class GameLogic implements State {
             }
             if (this.tiempOl <= 0) {//si tiempo entre oleadas <=0
                 this.oleada++;//sigiente oleada
+                this.oleadasRestantes--;
                 this.grupos++;//mas grupos
                 this.enemigosGrupo++;//mas enemigos por grupos
                 this.tiempoGrupos = 5 + (this.oleada - 1);//mas tiempo entre grupos
@@ -222,30 +225,26 @@ public class GameLogic implements State {
         for (int i = 0; i < this.enemigos.size(); i++) {
             this.enemigos.get(i).Update(deltaTime);
             //Si el enemigo llega a la casilla final, se elimina
-            if (this.enemigos.get(i).getX() >= this.FinX &&
-                    this.enemigos.get(i).getY() >= this.FinY) {
+            if (this.enemigos.get(i).getX() >= this.FinX && this.enemigos.get(i).getY() >= this.FinY) {
                 this.vida--;
+                this.textoV.setText(String.valueOf(this.vida));
                 this.enemigos.get(i).setWin();
             }
             if (this.enemigos.get(i).Dead()) {
-
                 deadEnemies.add(this.enemigos.get(i));
                 this.dinero += 50;
+                this.textoD.setText(String.valueOf(this.dinero));
             }
             if (this.enemigos.get(i).Win()) {
-
                 deadEnemies.add(this.enemigos.get(i));
             }
-
         }
         for (int i = 0; i < deadEnemies.size(); i++) {
             this.enemigos.remove(this.deadEnemies.get(i));
         }
         this.deadEnemies.clear();
 
-        this.textoV.setText(String.valueOf(this.vida));
-        this.textoD.setText(String.valueOf(this.dinero));
-        if (this.dificultad == Dificultad.corto && this.oleada > 3 || this.dificultad == Dificultad.largo && this.oleada > 7) {
+        if (this.oleadasRestantes==0) { //si nos quedamos sin oleadas parar
             if (this.vida > 0 && this.enemigos.isEmpty()) {
                 this.stopSoundTorres();
                 GameOver gameOver = new GameOver(this.engine, this.audio, true);
@@ -437,12 +436,15 @@ public class GameLogic implements State {
                 if (this.botonMejoraAtaque.contains(e.x, e.y) && this.dinero >= 75) {
                     this.torreSeleccionada.UpdateAttack(this.damTorre);
                     this.dinero -= 75;
+                    this.textoD.setText(String.valueOf(this.dinero));
                 } else if (this.botonMejoraRango.contains(e.x, e.y) && this.dinero >= 75) {
                     this.torreSeleccionada.UpdateRange(this.ranTorre);
                     this.dinero -= 75;
+                    this.textoD.setText(String.valueOf(this.dinero));
                 } else if (this.botonMejoraVelocidad.contains(e.x, e.y) && this.dinero >= 75) {
                     this.torreSeleccionada.UpdateFireRate(this.velTorre);
                     this.dinero -= 100;
+                    this.textoD.setText(String.valueOf(this.dinero));
                 } else if (casillaT.getX() < this.fil && casillaT.getY() < this.col && casillaT.getX() >= 0 && casillaT.getY() >= 0) {
                     Tower torre = this.casillas.get(casillaT.getX()).get(casillaT.getY()).getTorre();
                     if (torre != this.torreSeleccionada && torre != null) {
@@ -508,6 +510,7 @@ public class GameLogic implements State {
                 this.casillas.get(casillaR.getX()).get(casillaR.getY()).setTorre(torreR);
                 this.torres.add(torreR);
                 this.dinero -= precio;
+                this.textoD.setText(String.valueOf(this.dinero));
                 this.cambiarEstado(Estado.nada);
         } else {
             this.cambiarEstado(Estado.nada);
