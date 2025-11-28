@@ -145,6 +145,82 @@ public class GameLogic implements State {
 
     }
 
+
+    private void actualizarTiempos(double deltaTime){
+        this.tiempEnG -= deltaTime;
+        this.tiempGr -= deltaTime;
+        this.tiempOl -= deltaTime;
+    }
+
+    private void actualizarTorres(double deltaTime){
+        for (int i = 0; i < this.torres.size(); i++) {
+            this.torres.get(i).Update(deltaTime);
+        }
+    }
+
+    private boolean haAcabado (Enemy e){
+        return e.getX() >= this.FinX && e.getY() >= this.FinY;
+    }
+
+    private void limpiarListaEnemigos(){
+        //Comprobamos si hay enemigos en la lista de muertos
+        for (int i = 0; i < deadEnemies.size(); i++) {
+            this.enemigos.remove(this.deadEnemies.get(i));
+        }
+        this.deadEnemies.clear();
+    }
+
+    private void actualizarEnemigos(double deltaTime){
+
+        //Vamos actualizando la lista de enemigos
+        for (int i = 0; i < this.enemigos.size(); i++) {
+            this.enemigos.get(i).Update(deltaTime);
+            //Si el enemigo llega a la casilla final
+            if (haAcabado(this.enemigos.get(i))) {
+                this.vida--;
+                this.textoV.setText(String.valueOf(this.vida));
+                //Añadimos al enemigo en la lista de ganadores para que sea eliminado (se comprueba en el tercer if)
+                this.enemigos.get(i).setWin();
+            }
+            if (this.enemigos.get(i).Dead()) { //En caso de morir nos da dinero y lo eliminamos
+                deadEnemies.add(this.enemigos.get(i));
+                this.dinero += 50;
+                this.textoD.setText(String.valueOf(this.dinero));
+            }
+            if (this.enemigos.get(i).Win()) {//Si un enemigo gana se mete en la lista de muertos para ser eliminado
+                deadEnemies.add(this.enemigos.get(i));
+            }
+        }
+
+        limpiarListaEnemigos();
+    }
+
+    private void comprobarFinal(){
+        //si nos quedamos sin oleadas parar
+        //En caso de que haya ganado
+        if (this.oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()) {
+            this.stopSoundTorres();
+            GameOver gameOver = new GameOver(this.engine, this.audio, true);
+            this.engine.setState(gameOver);
+        }
+
+        if (this.vida <= 0) {
+            this.stopSoundTorres();
+            GameOver gameOver = new GameOver(this.engine, this.audio, false);
+            this.engine.setState(gameOver);
+        }
+    }
+
+    private void gestionarOleadas(){
+
+        //Si no hay más oleadas, no generamos más
+        if(this.oleadasRestantes == 0)
+            return;
+
+
+        
+    }
+
     @Override
     public void update(double deltaTime) {
         if (this.oleadasRestantes!=0) {//continuar sacando oleadas hasta que lleguemos a 0
@@ -176,47 +252,19 @@ public class GameLogic implements State {
                 this.textoOleadas.setText("Oleada:" + this.oleada);//cambiar texto oleadas
             }
         }
-        this.tiempEnG -= deltaTime;
-        this.tiempGr -= deltaTime;
-        this.tiempOl -= deltaTime;
 
-        for (int i = 0; i < this.torres.size(); i++) {
-            this.torres.get(i).Update(deltaTime);
-        }
-        for (int i = 0; i < this.enemigos.size(); i++) {
-            this.enemigos.get(i).Update(deltaTime);
-            //Si el enemigo llega a la casilla final, se elimina
-            if (this.enemigos.get(i).getX() >= this.FinX && this.enemigos.get(i).getY() >= this.FinY) {
-                this.vida--;
-                this.textoV.setText(String.valueOf(this.vida));
-                this.enemigos.get(i).setWin();
-            }
-            if (this.enemigos.get(i).Dead()) { //En caso de morir nos da dinero y lo eliminamos
-                deadEnemies.add(this.enemigos.get(i));
-                this.dinero += 50;
-                this.textoD.setText(String.valueOf(this.dinero));
-            }
-            if (this.enemigos.get(i).Win()) {//Si un enemigo gana se mete en la lista de muertos para ser eliminado
-                deadEnemies.add(this.enemigos.get(i));
-            }
-        }
-        for (int i = 0; i < deadEnemies.size(); i++) { //Gestión de matar enemigos
-            this.enemigos.remove(this.deadEnemies.get(i));
-        }
-        this.deadEnemies.clear();
 
-        if (this.oleadasRestantes==0) { //si nos quedamos sin oleadas parar
-            if (this.vida > 0 && this.enemigos.isEmpty()) {
-                this.stopSoundTorres();
-                GameOver gameOver = new GameOver(this.engine, this.audio, true);
-                this.engine.setState(gameOver);
-            }
-        }
-        if (this.vida <= 0) {
-            this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, false);
-            this.engine.setState(gameOver);
-        }
+        //Actualizamos las variables necesarias
+        actualizarTiempos(deltaTime);
+        actualizarTorres(deltaTime);
+        actualizarEnemigos(deltaTime);
+
+
+        //Comprobamos si se ha acabado la partida
+        comprobarFinal();
+
+
+
     }
 
     private void leerMapa(String path)//Metodo que lee el pmapa de un archivo
