@@ -176,7 +176,6 @@ public class GameLogic implements State {
                 this.textoOleadas.setText("Oleada:" + this.oleada);//cambiar texto oleadas
             }
         }
-
         this.tiempEnG -= deltaTime;
         this.tiempGr -= deltaTime;
         this.tiempOl -= deltaTime;
@@ -192,16 +191,16 @@ public class GameLogic implements State {
                 this.textoV.setText(String.valueOf(this.vida));
                 this.enemigos.get(i).setWin();
             }
-            if (this.enemigos.get(i).Dead()) {
+            if (this.enemigos.get(i).Dead()) { //En caso de morir nos da dinero y lo eliminamos
                 deadEnemies.add(this.enemigos.get(i));
                 this.dinero += 50;
                 this.textoD.setText(String.valueOf(this.dinero));
             }
-            if (this.enemigos.get(i).Win()) {
+            if (this.enemigos.get(i).Win()) {//Si un enemigo gana se mete en la lista de muertos para ser eliminado
                 deadEnemies.add(this.enemigos.get(i));
             }
         }
-        for (int i = 0; i < deadEnemies.size(); i++) {
+        for (int i = 0; i < deadEnemies.size(); i++) { //Gestión de matar enemigos
             this.enemigos.remove(this.deadEnemies.get(i));
         }
         this.deadEnemies.clear();
