@@ -104,15 +104,15 @@ public class GameLogic implements State {
 
     int numE = 0;//enemigos generados
     float tiempoEnGrupo;//tiempo de espera entre enemigos de un grupo
-    float tiempEnG;//tiempo que falta para nuevo enemigo
+    float tiempEnG;//tiempo que falta para generar un nuevo enemigo en el grupo
 
     Text textoOleadas;
 
     private enum Estado {
-        nada, botonRayo, botonFuego, botonHielo, torre
+        normal, botonRayo, botonFuego, botonHielo, torre
     }
 
-    private Estado estado = Estado.nada;
+    private Estado estado = Estado.normal;
 
     public enum Dificultad {
         corto, largo, infinito
@@ -197,13 +197,14 @@ public class GameLogic implements State {
 
     private void comprobarFinal(){
         //si nos quedamos sin oleadas parar
-        //En caso de que haya ganado
+        //En caso de que haya ganado, no habrá oleadas, enemigos y la vida es mayor a 0
         if (this.oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()) {
             this.stopSoundTorres();
             GameOver gameOver = new GameOver(this.engine, this.audio, true);
             this.engine.setState(gameOver);
         }
 
+        //En caso de que haya perdido
         if (this.vida <= 0) {
             this.stopSoundTorres();
             GameOver gameOver = new GameOver(this.engine, this.audio, false);
@@ -213,58 +214,87 @@ public class GameLogic implements State {
 
     private void gestionarOleadas(){
 
-        //Si no hay más oleadas, no generamos más
+        if(oleadasRestantes==0)
+            return;
+
+        if (this.tiempOl <= 0) {//si tiempo entre oleadas es menor o igual a 0
+            //siguiente oleada
+            this.oleada++;
+            this.oleadasRestantes--;
+
+            //aumentamos grupos y enemigos por grupo y mas tiempo entre grupos
+            this.grupos++;
+            this.enemigosGrupo++;
+            this.tiempoGrupos = 5 + (this.oleada - 1);
+
+            //Resetear numero de grupos generados y numero de enemigos generados
+            this.numG = 0;
+            this.numE = 0;
+
+            this.tiempGr = 0;//sale el primer grupo de imediato
+
+            this.tiempoOleada = this.tiempoGrupos * this.grupos + 2 * this.oleada;//mas tiempo entre oleadas
+            this.tiempOl = this.tiempoOleada;//resetear tiempo entre oleadas
+
+            this.tiempEnG = 0;//que salga el primer enemigo de inmediato
+
+            //actualizar texto de oleadas
+            if(this.oleadasRestantes!=0)
+                this.textoOleadas.setText("Oleada:" + this.oleada);
+        }
+    }
+
+    private void generarEnemigo(){
+
+        //Si no hay oleadas, no generamos enemigos
         if(this.oleadasRestantes == 0)
             return;
 
+        //Si el tiempo que falta para un nuevo grupo es mayor a 0
+        //Si el número de grupos generado es mayor o igual al número total de grupos en la oleada
+        //Si el número para generar un nuevo enemigo en el grupo es mayor a 0
 
-        
+        //No generamos más enemigos
+        if(this.tiempGr > 0 || this.numG >= this.grupos || this.tiempEnG > 0)
+            return;
+
+        //si el numero de enemigos generados es menor al numero de enemigos en su grupo
+        if (this.numE < this.enemigosGrupo) {
+            //Generamos enemigo
+            this.enemigos.add(new Enemy(this.IniX, this.IniY,
+                    8 + (this.mejVidaEn * (this.oleada - 1)),
+                    30 + (this.mejVelEn * (this.oleada - 1)),
+                    0 + (this.mejDefEn * (this.oleada - 1)),
+                    0 + (this.mejResEn * (this.oleada - 1)),
+                    Tipo.getRandomType(),
+                    this));
+
+            //Incrementamos número de grupo
+            this.numE++;
+        }
+        //si se han creado todos los enemigos del grupo
+        else {
+            this.numE = 0;//resetear numero de enemigos generados
+            this.numG++;//incrementamos numero de grupos generados
+            this.tiempGr = this.tiempoGrupos;//resetear tiempo entre grupos para que se vuelva a generar uno nuevo
+        }
+
+        this.tiempEnG = this.tiempoEnGrupo;//resetear tiempo entre enemigos
     }
 
     @Override
     public void update(double deltaTime) {
-        if (this.oleadasRestantes!=0) {//continuar sacando oleadas hasta que lleguemos a 0
-            if (this.tiempGr <= 0 && this.numG < this.grupos && this.tiempEnG <= 0) {//si tiempo entre grupos<=0 y si grupos generados<grupos y si tiempo entre enemigos<0
-                if (this.numE < this.enemigosGrupo) {//si enemigos generados<enemigos en grupo
-                    this.enemigos.add(new Enemy(this.IniX, this.IniY,8 + (this.mejVidaEn * (this.oleada - 1)),
-                            30 + (this.mejVelEn * (this.oleada - 1)), 0 + (this.mejDefEn * (this.oleada - 1)),
-                            0 + (this.mejResEn * (this.oleada - 1)),Tipo.getRandomType(),this));
-                    this.numE++;
-                } else {//si se han creado todos los enemigos del grupo
-                    this.numE = 0;//resetear numero de enemigos generados
-                    this.numG += 1;//grupos generados +1
-                    this.tiempGr = this.tiempoGrupos;//resetear tiempo entre grupos
-                }
-                this.tiempEnG = this.tiempoEnGrupo;//resetear tiempo entre enemigos
-            }
-            if (this.tiempOl <= 0) {//si tiempo entre oleadas <=0
-                this.oleada++;//sigiente oleada
-                this.oleadasRestantes--;
-                this.grupos++;//mas grupos
-                this.enemigosGrupo++;//mas enemigos por grupos
-                this.tiempoGrupos = 5 + (this.oleada - 1);//mas tiempo entre grupos
-                this.tiempGr = 0;//que salga el primer grupo de imediato
-                this.tiempoOleada = this.tiempoGrupos * this.grupos + 2 * this.oleada;//mas tiempo entre oleadas
-                this.tiempOl = this.tiempoOleada;//resetear tiempo entre oleadas
-                this.numG = 0;//resetear grupos generados
-                this.numE = 0;//resetear numero de enemigos generados
-                this.tiempEnG = 0;//que salga el primer enemigo de inmediato
-                this.textoOleadas.setText("Oleada:" + this.oleada);//cambiar texto oleadas
-            }
-        }
+        //Primero gestionamos las oleadas y después los enemigos siempre y cuando haya oleadas
+        gestionarOleadas();
+        generarEnemigo();
 
-
-        //Actualizamos las variables necesarias
+        //Actualizamos las variables y entidades necesarias
         actualizarTiempos(deltaTime);
         actualizarTorres(deltaTime);
         actualizarEnemigos(deltaTime);
 
-
         //Comprobamos si se ha acabado la partida
         comprobarFinal();
-
-
-
     }
 
     private void leerMapa(String path)//Metodo que lee el pmapa de un archivo
@@ -453,7 +483,7 @@ public class GameLogic implements State {
     private void gestiónEstadosJuego(TouchEvent e) //maneja los estados del juego cuando pulsas botones o las torres
     {
         switch (this.estado) {
-            case nada://cuando ningun boton o torre está seleccionado
+            case normal://cuando ningun boton o torre está seleccionado
                 if (this.botonMejoraTriangulos.contains(e.x, e.y)) {
                     this.cambiarEstado(Estado.botonRayo);
                 } else if (this.botonMejoraHexagonos.contains(e.x, e.y)) {
@@ -490,10 +520,10 @@ public class GameLogic implements State {
                     if (torre != this.torreSeleccionada && torre != null) {
                         this.torreSeleccionada = torre;
                     } else {
-                        this.cambiarEstado(Estado.nada);
+                        this.cambiarEstado(Estado.normal);
                     }
                 } else {
-                    this.cambiarEstado(Estado.nada);
+                    this.cambiarEstado(Estado.normal);
                 }
                 break;
             case botonRayo://has tocado el boton para crear una torre de rayo
@@ -551,15 +581,15 @@ public class GameLogic implements State {
                 this.torres.add(torreR);
                 this.dinero -= precio;
                 this.textoD.setText(String.valueOf(this.dinero));
-                this.cambiarEstado(Estado.nada);
+                this.cambiarEstado(Estado.normal);
         } else {
-            this.cambiarEstado(Estado.nada);
+            this.cambiarEstado(Estado.normal);
         }
     }
 
     private void cambiarEstado(Estado nuevoEstado) {
         switch (nuevoEstado) {
-            case nada:
+            case normal:
                 this.botonMejoraTriangulos.setColor(0xFFffffff);
                 this.botonMejoraHexagonos.setColor(0xFFffffff);
                 this.botonMejoraCuadrados.setColor(0xFFffffff);
