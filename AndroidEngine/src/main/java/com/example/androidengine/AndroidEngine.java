@@ -193,28 +193,28 @@ public class AndroidEngine implements Engine,Runnable {
 
     @Override
     public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText) {
-        WorkRequest request = new OneTimeWorkRequest.Builder(ReminderWorker.class)
-                .setInitialDelay(time, timeunit)
-                .setImputData(new Data.Builder()
-                        .putString("title",title)
-                        .putString(firstText,firstText)
-                        .putInt(iconNotification,icon)
-                );
+//        WorkRequest request = new OneTimeWorkRequest.Builder(ReminderWorker.class)
+//                .setInitialDelay(time, timeunit)
+//                .setImputData(new Data.Builder()
+//                        .putString("title",title)
+//                        .putString(firstText,firstText)
+//                        .putInt(iconNotification,icon)
+//                );
     }
 
     @Override
     public void showNotificacion(String title, String firstText) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder( this.sView.getContext(), CHANNEL_ID)
-                .setSmallIcon(this.iconNotification)
-                .setContentTitle( title )
-                .setContentText( firstText )
-                .setStyle( new NotificationCompat.BigTextStyle()
-                        .bigText( firstText ))
-                .setPriority(NotificationCompat. PRIORITY_DEFAULT);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.sView.getContext());
-// notificationId is a unique int for each notification that you must define.
-        notificationManager.notify(notificationId, builder.build());
-        if(Activity.Com)
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder( this.sView.getContext(), CHANNEL_ID)
+//                .setSmallIcon(this.iconNotification)
+//                .setContentTitle( title )
+//                .setContentText( firstText )
+//                .setStyle( new NotificationCompat.BigTextStyle()
+//                        .bigText( firstText ))
+//                .setPriority(NotificationCompat. PRIORITY_DEFAULT);
+//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.sView.getContext());
+//// notificationId is a unique int for each notification that you must define.
+//        notificationManager.notify(notificationId, builder.build());
+//        if(Activity.Com)
     }
 
     @Override

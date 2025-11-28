@@ -16,7 +16,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.io.FileReader;
-
+import java.util.concurrent.TimeUnit;
+import org.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONArray;
 import javax.swing.JFrame;
 
 public class DesktopEngine implements Runnable, Engine {
@@ -148,6 +151,11 @@ public class DesktopEngine implements Runnable, Engine {
     }
 
     @Override
+    public JSONObject readJsonFile(String file) {
+        return null;
+    }
+
+    @Override
     public String openAssetFile(String file) {
         return "";
     }
@@ -159,5 +167,35 @@ public class DesktopEngine implements Runnable, Engine {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void SaveValueInt(String key, int value) {
+
+    }
+
+    @Override
+    public int LoadValueInt(String key) {
+        return 0;
+    }
+
+    @Override
+    public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText) {
+
+    }
+
+    @Override
+    public void showNotificacion(String title, String firstText) {
+
+    }
+
+    @Override
+    public void setNotificationIcon(int icono) {
+
+    }
+
+    @Override
+    public String hashSHA256(String string) {
+        return "";
     }
 }

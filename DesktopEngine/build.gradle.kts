@@ -7,4 +7,5 @@ java {
 }
 dependencies {
     implementation(project(":Engine"))
+    implementation(files("../app/libs/json-20250517.jar"))
 }
