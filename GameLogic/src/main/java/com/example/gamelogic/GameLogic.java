@@ -547,7 +547,7 @@ public class GameLogic implements State {
         }
     }
 
-    private void stopSoundTorres(){
+    private void stopSoundTorres(){//parar los onidos de la torre
         for(int i =0; i < this.torres.size(); i++){
             this.torres.get(i).stopAudio();
         }
