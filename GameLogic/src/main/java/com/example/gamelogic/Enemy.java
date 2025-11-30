@@ -24,28 +24,41 @@ public class Enemy {
 
 
     Casilla casillaInicial;
+
+    /**
+     * Constructora de la clase Enemy con todos sus parámetros a inicializar
+     */
     public Enemy(float x, float y, float vida, float velocidad, float defensa, float resistencia, Tipo tipoRes, GameLogic gl){
+        //El enmeigo se representa mediante un círculo
         this.circulo = new Circle(x,y,5,true);
         this.circulo.setColor(0xff00ff00);
-        this.vida=vida;
-        this.direccion = new Vector2D(1,0);
-        this.velocidad = velocidad;
-        this.defensa = defensa;
-        this.resistencia = resistencia;
-        this.tipo = tipoRes;
-        this.gl = gl;
+        this.vida=vida; //Vida
+        this.direccion = new Vector2D(1,0); //Direccion representado por un Vector2D
+        this.velocidad = velocidad; //Velocidad con la que se mueve
+        this.defensa = defensa; //Defensa
+        this.resistencia = resistencia; //Daño infligido con resistencia activada
+        this.tipo = tipoRes; //El tipo del ataque al que resiste
+        this.gl = gl; //Instancia del gameLogic
+        //Obtenemos casilla actual a partir de sus coordenadas
         this.coor = gl.determinaCasilla(this.circulo.getY(), this.circulo.getX());
         this.casillaInicial = this.gl.casillas.get(this.coor.getX()).get(this.coor.getY());
     }
+
+    /**
+     * Getter de las coordenadas x e y
+     */
     public float getX(){
         return this.circulo.getX();
     }
     public float getY(){
         return this.circulo.getY();
     }
+
+    /**
+     * Metodo que se llama cada vez que el enemigo sufre daño
+     */
     public void damage(float damage, Tipo tipo){
         if(tipo == Tipo.hielo){
-
             float dam = damage;
             if(this.tipo == tipo){
                 dam -= this.resistencia;
@@ -71,21 +84,20 @@ public class Enemy {
         //System.out.println(this.vida);
     }
 
+    /**
+     * Para comprobar si no se sale del tablero
+     */
     private boolean boundsPath(Vector2D c){
         return ((c.getX() < this.gl.fil && c.getX() >= 0) &&
                 (c.getY() >= 0 && c.getY() < this.gl.col));
     }
+
+    //Se añade la lógica de movimiento del enemigo
     public void Update(double deltaTime){
 
         //A partir de la coordenada del enemigo, determinamos la casilla en la que está
         this.coor = this.gl.determinaCasilla(this.circulo.getX(), this.circulo.getY());
         this.casillaActual = this.gl.casillas.get(this.coor.getX()).get(this.coor.getY());
-
-
-//        if(!this.casillaActual.esCamino()){
-//            this.casillaActual = this.casillaInicial;
-//            this.coor = this.gl.determinaCasilla(this.casillaActual.getX(), this.casillaActual.getY());
-//        }
 
         //Determinamos la casilla siguiente
         this.casillaSig = this.gl.casillas.get(this.coor.getX() + this.direccion.getY()).get(this.coor.getY() + this.direccion.getX());
@@ -126,12 +138,7 @@ public class Enemy {
             }
         }
 
-        //Comprobamos que no obtiene una casilla fuera del tablero
-//        Vector2D antCoor = new Vector2D(this.coor.getX() - this.direccion.getY(),this.coor.getY()-this.direccion.getX());
-//        if(boundsPath(antCoor))
-//            //Obtenemos la casilla anterior
-//            this.casillaAnterior = this.gl.casillas.get(this.coor.getX() -this.direccion.getY()).get(this.coor.getY()-this.direccion.getX());
-//
+
         float movimiento = this.velocidad-this.ralentizar;
 
 
@@ -162,12 +169,24 @@ public class Enemy {
 
         this.ralentizar = 0;
     }
+
+    /**
+     * Metodo para renderizar al enemigo
+     * @param gr Graphics
+     */
     public void Render(Graphics gr){
         this.circulo.Render(gr);
     }
 
+    /**
+     * Metodos para añadir el enemigo a la lista de ganadores
+     */
     public void setWin() {this.win=true;}
     public boolean Win(){return this.win;}
+
+    /**
+     * Determina si esta muerto
+     */
     public boolean Dead()
     {
         return vida<=0;

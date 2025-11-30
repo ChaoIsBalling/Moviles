@@ -18,64 +18,66 @@ public class GameLogic implements State {
     private Button botonMejoraAtaque;
     private Button botonMejoraRango;
     private Button botonMejoraVelocidad;
+
+    //Figuras que tenrán los botones
     private Square figuraBotonCuadrado;
     private Triangle figuraBotonTriangulo;
     private Hexagon figuraBotonHexagono;
 
     private Text costeMejoraTriangulos;
-
     private Text costeMejoraCuadrados;
-
     private Text costeMejoraHexagonos;
 
     private Text costeMejoraAtaque;
-
     private Text costeMejoraRango;
-
     private Text costeMejoraVelocidad;
 
+
+    //Imagenes de los botones en modo torre
     private Image imagenMejoraAtaque;
-
     private Image imagenMejoraRango;
-
     private Image imagenMejoraVelocidad;
 
+    //Imagen de los stats
     private Image imagenVida;
-
     private Image imagenDinero;
 
+    //Franja en la que están los botones
     private Square franjaGris;
 
+    //Numero de filas y columnas
     int fil;
     int col;
 
     int vida = 0;
     float dinero = 0;
 
+    //Posiciones iniciales y finales
     float IniX;
     float IniY;
-
     float FinX;
     float FinY;
 
+    //Las dimensiones de una casilla
     float anchoCasilla = 35;
-
     float altoCasilla = 35;
 
 
-    //mapa
+    //Arrays de casillas, torres y enemigos
     ArrayList<ArrayList<Casilla>> casillas;
     ArrayList<Tower> torres;
     ArrayList<Enemy> enemigos;
     ArrayList<Enemy> deadEnemies;
 
+    //referencias a módulos del motor
     Engine engine;
-
     Audio audio;
-
     Graphics gr;
+
+    //La torre que mantengamos seleccionada
     Tower torreSeleccionada;
 
+    //Textos de vida y dinero
     Text textoV;
     Text textoD;
 
@@ -106,12 +108,14 @@ public class GameLogic implements State {
     float tiempoEnGrupo;//tiempo de espera entre enemigos de un grupo
     float tiempEnG;//tiempo que falta para generar un nuevo enemigo en el grupo
 
-    Text textoOleadas;
+    Text textoOleadas; //Numero de oleadas en texto
 
+    //Enumaerado que determina en que estado de juego estamos
     private enum Estado {
         normal, botonRayo, botonFuego, botonHielo, torre
     }
 
+    //Estado actual de juego
     private Estado estado = Estado.normal;
 
     public enum Dificultad {
@@ -120,6 +124,11 @@ public class GameLogic implements State {
 
     private Dificultad dificultad;
 
+    /**
+     * Constructora del estado principal de juego
+     * @param engine Motor
+     * @param oleadasRestantes Cuantas oleadas hay que derrortar (-1 si es el modo infinto)
+     */
     public GameLogic(Engine engine, int oleadasRestantes) {
         this.engine = engine;
         this.vida = 10;
