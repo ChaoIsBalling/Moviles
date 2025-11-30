@@ -44,7 +44,8 @@ public class Enemy {
         return this.circulo.getY();
     }
     public void damage(float damage, Tipo tipo){
-        if(tipo == Tipo.hielo && damage > this.ralentizar){
+        if(tipo == Tipo.hielo){
+
             float dam = damage;
             if(this.tipo == tipo){
                 dam -= this.resistencia;
@@ -52,7 +53,9 @@ public class Enemy {
             if(dam < 7){
                 dam = 7;
             }
-            this.ralentizar = dam;
+            if(this.ralentizar < dam){
+                this.ralentizar = dam;
+            }
         }
         else{
             float dam = damage - this.defensa;
@@ -65,6 +68,7 @@ public class Enemy {
             this.vida -= dam;
         }
         //System.out.println("("+damage+","+tipo+")");
+        System.out.println(this.vida);
     }
 
     private boolean boundsPath(Vector2D c){
