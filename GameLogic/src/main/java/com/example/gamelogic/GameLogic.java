@@ -130,6 +130,7 @@ public class GameLogic implements State {
      * @param oleadasRestantes Cuantas oleadas hay que derrortar (-1 si es el modo infinto)
      */
     public GameLogic(Engine engine, int oleadasRestantes) {
+        //Inicializamos todos los parametros necesarios
         this.engine = engine;
         this.vida = 10;
         this.dinero = 300;
@@ -150,27 +151,39 @@ public class GameLogic implements State {
         this.casillas = new ArrayList<ArrayList<Casilla>>();
         this.franjaGris = new Square(300, 370, 600, 100, true);
         this.franjaGris.setColor(0xFF999999);
-        leerMapa("mapa1.txt");
-
+        leerMapa("mapa1.txt"); //leemos el mapa
     }
 
 
+    /**
+     * Actualiza los contadores de tiempo de acuerdo al deltatime
+     */
     private void actualizarTiempos(double deltaTime){
         this.tiempEnG -= deltaTime;
         this.tiempGr -= deltaTime;
         this.tiempOl -= deltaTime;
     }
 
+    /**
+     * Actualiza la lista de torres
+     */
     private void actualizarTorres(double deltaTime){
         for (int i = 0; i < this.torres.size(); i++) {
             this.torres.get(i).Update(deltaTime);
         }
     }
 
+    /**
+     * Determina si el enemigo ha llegado al final del mapa
+     * @param e Enemigo
+     */
     private boolean haAcabado (Enemy e){
         return e.getX() >= this.FinX && e.getY() >= this.FinY;
     }
 
+    /**
+     * Elimina los enemigos derrotados de la lista de enemigos
+     */
     private void limpiarListaEnemigos(){
         //Comprobamos si hay enemigos en la lista de muertos
         for (int i = 0; i < deadEnemies.size(); i++) {
@@ -179,6 +192,9 @@ public class GameLogic implements State {
         this.deadEnemies.clear();
     }
 
+    /**
+     * Actualiza la lista de enemigos
+     */
     private void actualizarEnemigos(double deltaTime){
 
         //Vamos actualizando la lista de enemigos
@@ -204,6 +220,9 @@ public class GameLogic implements State {
         limpiarListaEnemigos();
     }
 
+    /**
+     * Comprueba si se ha acabado la partida
+     */
     private void comprobarFinal(){
         //si nos quedamos sin oleadas parar
         //En caso de que haya ganado, no habrá oleadas, enemigos y la vida es mayor a 0
@@ -221,6 +240,9 @@ public class GameLogic implements State {
         }
     }
 
+    /**
+     * Metodo que gestiona la aparición de nuevas oleadas
+     */
     private void gestionarOleadas(){
 
         if(oleadasRestantes==0)
@@ -253,6 +275,9 @@ public class GameLogic implements State {
         }
     }
 
+    /**
+     * Metodo que determina cuando generar un nuevo enemigo
+     */
     private void generarEnemigo(){
 
         //Si no hay oleadas, no generamos enemigos
@@ -291,6 +316,10 @@ public class GameLogic implements State {
         this.tiempEnG = this.tiempoEnGrupo;//resetear tiempo entre enemigos
     }
 
+    /**
+     * Bucle principal del estado de juego
+     * @param deltaTime Tiempo trascurrido
+     */
     @Override
     public void update(double deltaTime) {
         //Primero gestionamos las oleadas y después los enemigos siempre y cuando haya oleadas
@@ -306,6 +335,10 @@ public class GameLogic implements State {
         comprobarFinal();
     }
 
+    /**
+     * Metodo que lee mapa de un archivo txt
+     * @param path ruta del archivo
+     */
     private void leerMapa(String path)//Metodo que lee el pmapa de un archivo
     { ArrayList<String> leer= engine.readFile(path);
         this.fil = Integer.parseInt(leer.get(0));
@@ -338,7 +371,11 @@ public class GameLogic implements State {
             this.casillas.add(fila);
         }
     }
-    //Dada una posición (x,y) se determina en que casilla está a partir del ancho y alto de la casilla
+
+    /**
+     * Dada una posición (x,y) se determina en que casilla está a partir
+     * del ancho y alto de la casilla
+     */
     public Vector2D determinaCasilla(float x, float y) {
 
         int offsetX = 30;
@@ -352,6 +389,9 @@ public class GameLogic implements State {
         return c;
     }
 
+    /**
+     * Dada una posición (x,y) del ratón se determina a que casilla esta clicando
+     */
     public Vector2D determinaCasillaRaton(float x, float y) {
         if (x < 30 - this.anchoCasilla / 2 || y < 50 - this.altoCasilla / 2) {
             return new Vector2D(-1, -1);
@@ -368,6 +408,10 @@ public class GameLogic implements State {
         return c;
     }
 
+    /**
+     * Metodo que renderiza el tablero, entidades y botones
+     * @param gr Graphics del motor
+     */
     @Override
     public void render(Graphics gr) {
         //gr.setColor(0x00000000);
@@ -402,6 +446,9 @@ public class GameLogic implements State {
     }
 
 
+    /**
+     * Metodo que inicializa todos los botones y otros elementos de la UI
+     */
     public void inicializarUI() {
         this.botonMejoraCuadrados = new Button(500, 360, 50, 50, true, 20);
         this.botonMejoraTriangulos = new Button(440, 360, 50, 50, true, 20);
@@ -462,6 +509,11 @@ public class GameLogic implements State {
         this.imagenDinero = new Image("Dinero.png", 60, 360, 30, 30, this.gr);
     }
 
+    /**
+     * Gestiona la interacción de la entrada con el juego
+     * @param list Lista de eventos
+     * @param elapseTime Tiempo trascurrido
+     */
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
 
@@ -474,6 +526,10 @@ public class GameLogic implements State {
         }
     }
 
+    /**
+     * Inicializa un audio a las torres
+     * @param audio Interfaz Audio
+     */
     @Override
     public void setAudio(Audio audio) {
         this.audio = audio;
@@ -483,12 +539,19 @@ public class GameLogic implements State {
         }
     }
 
+    /**
+     * Inicializa grpahics y la UI
+     * @param gr Graphics
+     */
     @Override
     public void setGraphics(Graphics gr) {
         this.gr = gr;
         this.inicializarUI();
     }
 
+    /**
+     * Metodo que gestiona los estados del juego
+     */
     private void gestiónEstadosJuego(TouchEvent e) //maneja los estados del juego cuando pulsas botones o las torres
     {
         switch (this.estado) {
@@ -547,6 +610,9 @@ public class GameLogic implements State {
         }
     }
 
+    /**
+     * Metodo que gestiona la pulsación del boton para crear torres
+     */
     private void pulsarBotones(TouchEvent e, float precio) {
         if (this.botonMejoraTriangulos.contains(e.x, e.y)) {
             this.cambiarEstado(Estado.botonRayo);
@@ -568,7 +634,10 @@ public class GameLogic implements State {
         }
     }
 
-    private void crearTorres(TouchEvent e, float precio)//metodo que maneja la logica cuando tocas un boton de torre
+    /**
+     * Metodo que maneja la logica cuando tocas un boton de torre
+     */
+    private void crearTorres(TouchEvent e, float precio)
     {
         Vector2D casillaR = this.determinaCasillaRaton(e.x, e.y);
         if (this.dinero >= precio && !this.casillas.get(casillaR.getX()).get(casillaR.getY()).esCamino()) {
@@ -596,6 +665,10 @@ public class GameLogic implements State {
         }
     }
 
+    /**
+     * Metodo que cambia el estado del juego y el color de los botones
+     * @param nuevoEstado
+     */
     private void cambiarEstado(Estado nuevoEstado) {
         switch (nuevoEstado) {
             case normal:
@@ -629,12 +702,14 @@ public class GameLogic implements State {
         }
     }
 
-    private void stopSoundTorres(){//parar los onidos de la torre
+    /**
+     * Parar los sonidos de la torre
+     */
+    private void stopSoundTorres(){
         for(int i =0; i < this.torres.size(); i++){
             this.torres.get(i).stopAudio();
         }
     }
-
 }
 
 
