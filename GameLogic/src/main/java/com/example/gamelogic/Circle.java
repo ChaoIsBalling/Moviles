@@ -3,12 +3,16 @@ package com.example.gamelogic;
 import com.example.engine.Graphics;
 
 public class Circle implements Figure{
+    //Atributos del circulo
     private float x;
     private float y;
-    private float r;
+    private float r; //radio
     private int color;
-    private boolean isFill;
+    private boolean isFill; //Si esta relleno o no
 
+    /**
+     * Constructora con su posición, radio y si esta relleno o no
+     */
     public Circle(float x, float y, float r, boolean isFill){
         this.x = x;
         this.y = y;
@@ -21,6 +25,10 @@ public class Circle implements Figure{
         this.y = y;
         this.r = r;
     }
+
+    /**
+     * Getters
+     */
     @Override
     public float getX() {
         return this.x;
@@ -30,7 +38,14 @@ public class Circle implements Figure{
     public float getY() {
         return this.y;
     }
+    @Override
+    public int getColor() {
+        return this.color;
+    }
 
+    /**
+     * setters
+     */
     @Override
     public void setX(float x) {
         this.x = x;
@@ -42,15 +57,13 @@ public class Circle implements Figure{
     }
 
     @Override
-    public int getColor() {
-        return this.color;
-    }
-
-    @Override
     public void setColor(int color) {
         this.color = color;
     }
 
+    /**
+     * Renderiza el circulo
+     */
     @Override
     public void Render(Graphics gr) {
         gr.setColor(this.color);
@@ -60,7 +73,9 @@ public class Circle implements Figure{
         else
             gr.pintarCirculo(this.x, this.y,this.r);
     }
-
+    /**
+     * Renderiza el circulo de forma centrada a partir de una coordenada x,y
+     */
     @Override
     public void RenderCentrado(Graphics gr, float x, float y) {
         gr.setColor(this.color);

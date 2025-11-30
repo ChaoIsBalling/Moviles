@@ -19,10 +19,13 @@ public class Button {
 
     Text text;
 
-    int color = 0xFF000000;
-    Image imagen;
-    Figure figura;
+    int color = 0xFF000000; //Color por defecto
+    Image imagen; //Imagen
+    Figure figura; //Figura del botón
 
+    /**
+     * Constructora del botón que inicializa su posición, dimensiones, y si es redondeado o no
+     */
     public Button(float x, float y, float w, float h, boolean isRound, float ar){
         this.x = x;
         this.y = y;
@@ -38,6 +41,9 @@ public class Button {
         this.h = h;
     }
 
+    /**
+     * Setters de atributos del botón
+     */
     public void setText(Text text) {
         this.text = text;
     }
@@ -45,27 +51,36 @@ public class Button {
     public void setColor(int color){
         this.color = color;
     }
-
-    public boolean contains(float x, float y){
-        return x >= this.x-this.w/2 && x <= this.x + this.w/2 &&
-                y >= this.y-this.h/2 && y <= this.y + this.h/2;
-    }
-
     public void setFigura(Figure fig){
         this.figura = fig;
     }
 
     public void setImagen(Image img){this.imagen = img;}
 
+    /**
+     * Comprueba si la coordenada x,y está dentro del botón
+     */
+    public boolean contains(float x, float y){
+        return x >= this.x-this.w/2 && x <= this.x + this.w/2 &&
+                y >= this.y-this.h/2 && y <= this.y + this.h/2;
+    }
+
+
+    /**
+     * Metodo que renderiza el boton
+     * @param gr
+     */
     public void Render(Graphics gr) {
         //Renderizamos el cuadrado que representa el botón
         gr.setColor(color);
 
+        //Vemos si es redondeado o no
         if(isRound)
             gr.rellenarCuadradoRedondeado(this.x,this.y,this.w,this.h,this.arcRadius);
         else
             gr.rellenarCuadrado(this.x,this.y,this.w,this.h);
 
+        //Renderizamos imagen si la tiene
         if(this.imagen != null){
             this.imagen.RenderCentrado((int)this.x,(int)this.y);
         }
@@ -75,6 +90,7 @@ public class Button {
             this.figura.RenderCentrado(gr,this.x,this.y);
         }
 
+        //Renderizamos texto centrado
         if(this.text != null){
             this.text.RenderCentrado(gr,this.x,this.y);
         }

@@ -540,7 +540,7 @@ public class GameLogic implements State {
     }
 
     /**
-     * Inicializa grpahics y la UI
+     * Inicializa graphics y la UI
      * @param gr Graphics
      */
     @Override

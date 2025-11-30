@@ -2,7 +2,9 @@ package com.example.gamelogic;
 
 import com.example.engine.Graphics;
 
-//Interfaz para la figura
+/**
+ * Interfaz para cada uno de todos los tipos de figuras
+ */
 public interface Figure {
     float getX();
 
