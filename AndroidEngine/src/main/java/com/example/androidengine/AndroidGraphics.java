@@ -69,7 +69,10 @@ public class AndroidGraphics implements Graphics {
         logicH=400;
         logicW=600;
     }
-
+    /**
+     * Metodo que gestiona el inicio de un nuevo frame, recalculando las escalas
+     * y limpiando la pantalla
+     */
     protected void startFrame(){
         while(!this.holder.getSurface().isValid());
         this.canvas = this.holder.lockHardwareCanvas();
@@ -80,7 +83,9 @@ public class AndroidGraphics implements Graphics {
 
 
     }
-
+    /**
+     * Metodo que calcula la escala y desplazamientos para centrar el area de juego en la ventana
+     */
     private void calculateTransforms(){
         float tempY = this.sView.getHeight()/logicH;
         float tempX = this.sView.getWidth()/logicW;
@@ -91,32 +96,46 @@ public class AndroidGraphics implements Graphics {
         this.offsetY =(this.sView.getHeight() -this.scale*logicH)/2;
 
     }
-
+    /**
+     * Metodo que limpia la pantalla
+     */
     @Override
     public void clear(){
         this.canvas.drawColor(Color.TRANSPARENT, Mode.CLEAR);
         this.canvas.drawColor(Color.WHITE);
     }
-
+    /**
+     * Metodo que desbloque el canvas
+     */
     protected void endFrame(){
         this.holder.unlockCanvasAndPost(canvas);
     }
-
+    /**
+     * Metodo que limpia y pinta el texto
+     */
     public void createText(String text, float x, float y){
         this.canvas.drawText(text,x,y,this.paint);
     }
-
+    /**
+     * Metodo que devuelve el ancho del juego
+     */
     @Override
     public int getWidth()
     {
         return this.sView.getWidth();
     }
+    /**
+     * Metodo que pinta un circulo
+     */
     @Override
     public void pintarCirculo(float x, float y, float r) {
         this.paint.setStyle(Paint.Style.STROKE);
         this.canvas.drawCircle(x,y,r,this.paint);
         this.paint.setStyle(Paint.Style.FILL); //Devolvemos al valor por defecto
     }
+    /**
+     * Metodo que pinta un cuadrado con esquinas redondeadas
+     */
     @Override
     public void rellenarCuadradoRedondeado(float x, float y, float w, float h, float ar)
     {
@@ -125,13 +144,18 @@ public class AndroidGraphics implements Graphics {
         this.canvas.drawRoundRect(r,ar/2,ar/2,this.paint);//El radio que le pasamos está dividido a la mitad
                                                                  //para tener un aspecto más consistente con desktop
     }
+    /**
+     * Metodo que pinta un cuadrado
+     */
     @Override
     public void pintarCuadrado(float x, float y, float w, float h) {
         this.paint.setStyle(Paint.Style.STROKE);
         this.canvas.drawRect(x - w/2,y -h/2,x+w /2,y+h/2,this.paint);
         this.paint.setStyle(Paint.Style.FILL); //Devolvemos al valor por defecto
     }
-
+    /**
+     * Metodo que pinta un poligono
+     */
     @Override
     public void pintarPoligono(float cx, float cy, float r, int nv) {
         this.paint.setStyle(Paint.Style.STROKE);
@@ -161,7 +185,9 @@ public class AndroidGraphics implements Graphics {
         this.canvas.drawPath(wallpath, this.paint);
         this.paint.setStyle(Paint.Style.FILL); //Devolvemos al valor por defecto
     }
-
+    /**
+     * Metodo que pinta una linea
+     */
     @Override
     public void pintarLinea(float x1, float y1, float x2, float y2, float width) {
         float currWidth = this.paint.getStrokeWidth();
@@ -170,7 +196,9 @@ public class AndroidGraphics implements Graphics {
         this.paint.setStrokeWidth(0);
 
     }
-
+    /**
+     * Metodo que rellena el fondo
+     */
     @Override
     public void pintarFondo(int color) {
         this.paint.setColor(color);
@@ -178,7 +206,9 @@ public class AndroidGraphics implements Graphics {
         this.canvas.drawRect(0,0,this.canvas.getWidth(),this.canvas.getHeight(),this.paint);
 
     }
-
+    /**
+     * Metodo que pinta el texto
+     */
     @Override
     public void pintarTexto(String texto, float x, float y) {
         Paint.FontMetrics metrics= this.paint.getFontMetrics();
@@ -187,13 +217,17 @@ public class AndroidGraphics implements Graphics {
         this.canvas.drawText(texto,x-r.width()/2,y+r.height()/2,this.paint);
     }
 
-
+    /**
+     * Metodo que pinta una imagen
+     */
     @Override
     public void pintarImagen(IImage img, int x, int y) {
        AndroidImage image= (AndroidImage)img;
        canvas.drawBitmap(image.getBitmap(),x,y,null);
     }
-
+    /**
+     * Metodo que pinta un texto centrado
+     */
     @Override
     public void pintarTextoCentrado(String texto, float x, float y) {
         Rect r= new Rect();
@@ -204,11 +238,16 @@ public class AndroidGraphics implements Graphics {
         float yPos =  (y - ((paint.descent() + paint.ascent()) / 2)) ;
         this.canvas.drawText(texto,xPos,yPos,this.paint);
     }
-
+    /**
+     * seteo del color de la pintura
+     */
     @Override
     public void setColor(int color) {
         this.paint.setColor(color);
     }
+    /**
+     * creacion de una nueva pintura
+     */
     @Override
     public IImage newImage(String f) {
         InputStream is = null;
@@ -219,7 +258,9 @@ public class AndroidGraphics implements Graphics {
         }
         Bitmap bitmap = BitmapFactory.decodeStream(is);
         return new AndroidImage(bitmap);
-    }
+    }  /**
+     * creacion de una nueva pintura con ancho y altura
+     */
     @Override
     public IImage newImage(String f,int width, int height) {
         InputStream is = null;
@@ -231,62 +272,85 @@ public class AndroidGraphics implements Graphics {
         Bitmap bitmap = BitmapFactory.decodeStream(is);
         return new AndroidImage(bitmap,width,height);
     }
-
+    /**
+     * seteo de una fuente
+     */
     @Override
     public void setFont(IFont font) {
         this.af =(AndroidFont) font;
         this.paint.setTypeface(this.af.getTypeface());
     }
-
+    /**
+     * creacion de una nueva fuente con tamaño
+     */
     @Override
     public IFont newFont(String f, float size) {
         return this.newFont(f, size, false, false);
     }
+    /**
+     * creacion de una nueva fuente
+     */
     @Override
     public IFont newFont(String f) {
         return this.newFont(f,10, false, false);
     }
+    /**
+     * creacion de una nueva fuente con tamaño y negrita
+     */
     @Override
     public IFont newFont(String path, float size,boolean bold )
     {
         return this.newFont(path,size,bold,false);
     }
+    /**
+     * creacion de una nueva fuente con tamaño , negrita e italics
+     */
     @Override
     public IFont newFont(String path, float size,boolean bold, boolean italic )
     {
         return new AndroidFont(this.assetManager,fontDir+path,size,bold,italic);
     }
-
-
-
+    /**
+     * escalado del canvas
+     */
     @Override
     public void escalar(float x, float y) {
         this.canvas.scale(x,y);
     }
-
+    /**
+     * traslado del canvas
+     */
     @Override
     public void trasladar(float x, float y) {
         this.canvas.translate(x,y);
     }
-
+    /**
+     * seteo de los tamaños logicos
+     */
     @Override
     public void setLogicSize(float w, float h) {
         this.logicW =w;
         this.logicH =h;
     }
-
+    /**
+     * metodo que crea un circulo relleno
+     */
     @Override
     public void rellenarCirculo(float x, float y, float r) {
         this.paint.setStyle(Paint.Style.FILL);
         this.canvas.drawCircle(x,y,r,this.paint);
     }
-
+    /**
+     * metodo que crea un cuadrado relleno
+     */
     @Override
     public void rellenarCuadrado(float x, float y, float w, float h) {
         this.paint.setStyle(Paint.Style.FILL);
         this.canvas.drawRect(x - w/2,y -h/2,x+w /2,y+h/2,this.paint);
     }
-
+    /**
+     * metodo que crea un poligono relleno
+     */
     @Override
     public void rellenarPoligono(float cx, float cy, float r, int nv) {
         this.paint.setStyle(Paint.Style.FILL);
@@ -317,10 +381,13 @@ public class AndroidGraphics implements Graphics {
         this.canvas.drawPath(wallpath, this.paint);
 
     }
-
+    /**
+     * metodo que crea un hexagono relleno
+     */
     @Override
     public void rellenarHexagono(float cx, float cy, float r) {
         this.paint.setStyle(Paint.Style.FILL);
+
 
         //Coordendadas de los vertices del poligono
         int [] coorX = new int[6];
@@ -344,12 +411,12 @@ public class AndroidGraphics implements Graphics {
         wallpath.lineTo(coorX[0], coorY[0]);//Volvemos al primer punto
         this.canvas.drawPath(wallpath, this.paint);
     }
-
+    //devuelve una conversión de la coordenada X real a la coordenada X en logica
     @Override
     public float real2LogicX(float x) {
         return (x - offsetX) / scale;
     }
-
+    //devuelve una conversión de la coordenada Y real a la coordenada Y en logica
     @Override
     public float real2LogicY(float y) {
         return (y - offsetY) / scale;
