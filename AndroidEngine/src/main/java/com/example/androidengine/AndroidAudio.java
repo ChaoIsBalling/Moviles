@@ -79,7 +79,8 @@ public class AndroidAudio implements Audio {
     public void playSound(Sound sound)
     {
         AndroidSound s =(AndroidSound)sound;
-        this.spool.play(s.getID(),1,1,0,0,1);
+        int streamId =this.spool.play(s.getID(),1,1,0,0,1);
+        s.setStreamId(streamId);
     }
 
     /**
@@ -90,7 +91,8 @@ public class AndroidAudio implements Audio {
     @Override
     public void loopSound(Sound sound) {
         AndroidSound s =(AndroidSound)sound;
-        this.spool.play(s.getID(),1,1,0,-1,1);
+        int streamId =this.spool.play(s.getID(),1,1,0,-1,1);
+        s.setStreamId(streamId);
     }
 
     /**
@@ -101,6 +103,6 @@ public class AndroidAudio implements Audio {
     public void stopSound(Sound sound)
     {
         AndroidSound s =(AndroidSound)sound;
-        this.spool.stop(s.getID());
+        this.spool.stop(s.getStreamId());
     }
 }

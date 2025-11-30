@@ -69,6 +69,7 @@ public class IceTower implements Tower{
             this.enRango = false;
             this.audio.stopSound(this.attack);
         }
+
     }
 
     @Override
