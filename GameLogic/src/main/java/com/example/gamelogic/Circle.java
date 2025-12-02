@@ -2,6 +2,9 @@ package com.example.gamelogic;
 
 import com.example.engine.Graphics;
 
+/**
+ * Clase que representa un círculo e implementa a Figura
+ */
 public class Circle implements Figure{
     //Atributos del circulo
     private float x;

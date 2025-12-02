@@ -8,6 +8,10 @@ import com.example.engine.Audio;
 
 import java.util.ArrayList;
 import java.lang.Integer;
+
+/**
+ * Clase que representa la interfaz principal de juego, donde se desarrolla toda su lógica de gameplay
+ */
 public class GameLogic implements State {
 
     //Botones

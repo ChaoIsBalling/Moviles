@@ -2,18 +2,26 @@ package com.example.gamelogic;
 
 import com.example.engine.Graphics;
 
+/**
+ * Clase que representa un traingulo e implementa los métodos de Figura
+ */
 public class Triangle implements Figure {
-    private float cx;
 
+    //Centro del triangulo
+    private float cx;
     private float cy;
 
+    //radio desde el que generar los vertices del triangulo
     private float r;
-
+    //color
     private int color = 0xFF000000;
-
+    //Indica si esta relleno o no
     private boolean isFill;
 
 
+    /**
+     * Constructora del triangulo con su posición, radio y booleano de rellenado
+     */
     public Triangle(float x, float y, float r, boolean isFill){
         this.cx = x;
         this.cy = y;
@@ -25,16 +33,26 @@ public class Triangle implements Figure {
         this.cy = y;
         this.r = r;
     }
+
+    /**
+     * Getters
+     */
     @Override
     public float getX() {
         return this.cx;
     }
-
     @Override
     public float getY() {
         return this.cy;
     }
+    @Override
+    public int getColor() {
+        return this.color;
+    }
 
+    /**
+     * Setters
+     */
     @Override
     public void setX(float x) {
         this.cx = x;
@@ -44,17 +62,15 @@ public class Triangle implements Figure {
     public void setY(float y) {
         this.cy = y;
     }
-
-    @Override
-    public int getColor() {
-        return this.color;
-    }
-
     @Override
     public void setColor(int color) {
         this.color = color;
     }
 
+    /**
+     * Renderiza el triangulo de forma centrada o no
+     * @param gr Interfaz Graphics
+     */
     @Override
     public void Render(Graphics gr) {
         gr.setColor(this.color);
@@ -65,7 +81,6 @@ public class Triangle implements Figure {
             gr.pintarPoligono(this.cx,this.cy,this.r, 3);
         }
     }
-
     @Override
     public void RenderCentrado(Graphics gr, float x, float y) {
         gr.setColor(this.color);

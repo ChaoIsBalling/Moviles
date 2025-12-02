@@ -58,18 +58,15 @@ public class IceTower implements Tower{
 
     /**
      * getters
-     * @return
      */
     @Override
     public float getRange() {
         return this.rango;
     }
-
     @Override
     public float getX() {
         return this.cuadrado.getX();
     }
-
     @Override
     public float getY() {
         return this.cuadrado.getY();
@@ -94,30 +91,28 @@ public class IceTower implements Tower{
     @Override
     public void Update(double deltaTime) {
         boolean encontrar = false;
-        for (int i = 0; i < this.enemigos.size(); i++){
+        for (int i = 0; i < this.enemigos.size(); i++) {
             float x = this.enemigos.get(i).getX();
             float y = this.enemigos.get(i).getY();
-            double a = x-this.cuadrado.getX();
-            double b = y-this.cuadrado.getY();
-            a = Math.pow(a,2);
-            b = Math.pow(b,2);
-            double distancia = Math.sqrt(a+b);
-            if(distancia <= this.rango){
+            double a = x - this.cuadrado.getX();
+            double b = y - this.cuadrado.getY();
+            a = Math.pow(a, 2);
+            b = Math.pow(b, 2);
+            double distancia = Math.sqrt(a + b);
+            if (distancia <= this.rango) {
                 encontrar = true;
-                if(!this.enRango){
+                if (!this.enRango) {
                     this.audio.loopSound(this.attack);
                     this.enRango = true;
                 }
-                this.enemigos.get(i).damage(this.ataque,this.tipo);
+                this.enemigos.get(i).damage(this.ataque, this.tipo);
             }
         }
-        if(!encontrar && this.enRango){
+        if (!encontrar && this.enRango) {
             this.enRango = false;
             this.audio.stopSound(this.attack);
         }
-
     }
-
 
     /**
      * Renderizado de la figura

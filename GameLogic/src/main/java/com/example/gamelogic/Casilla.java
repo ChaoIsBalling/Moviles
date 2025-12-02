@@ -2,6 +2,9 @@ package com.example.gamelogic;
 
 import com.example.engine.Graphics;
 
+/**
+ * Clase que representa una casilla del mapa en el juego
+ */
 public class Casilla {
     //Atributos de una casilla
     Square cuadrado; //Figura que representa la casilla

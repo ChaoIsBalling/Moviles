@@ -8,6 +8,9 @@ import com.example.engine.TouchEvent;
 
 import java.util.ArrayList;
 
+/**
+ * Clase que representa el menú de seleccción de dificultad
+ */
 public class Dificultad implements State {
     //Botones del menú de dificultad
     private Button botonCorto;

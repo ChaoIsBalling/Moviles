@@ -5,6 +5,10 @@ package com.example.gamelogic;
 
 import com.example.engine.Graphics;
 import com.example.engine.IFont;
+
+/**
+ * Clase que representa un boton en la interfaz del juego
+ */
 public class Button {
 
     //Atributos del botón
@@ -13,10 +17,12 @@ public class Button {
     private float w;
     private float h;
 
+    //Determina si tiene esquinas redondeadas
     private boolean isRound = false;
-
+    //Radio del arco bordeado
     private float arcRadius;
 
+    //Texto del boton
     Text text;
 
     int color = 0xFF000000; //Color por defecto
