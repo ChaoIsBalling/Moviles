@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.androidengine.AndroidEngine;
 import com.example.gamelogic.GameLogic;
 import com.example.gamelogic.Menu;
-import com.example.gamelogic.Secret;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
