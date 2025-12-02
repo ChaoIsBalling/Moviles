@@ -61,6 +61,7 @@ public class AndroidEngine implements Engine,Runnable {
         this.audio=new AndroidAudio(sView.getContext().getAssets());
 
     }
+    //lector de archivos
     @Override
     public ArrayList<String> readFile(String path)
     {//usa el input stream y elbuffered reader para leer linea a linea un fichero y pasarlo a un arraylist
@@ -78,6 +79,7 @@ public class AndroidEngine implements Engine,Runnable {
         }
         return file;
     }
+    //quita el paua
     @Override
     public void resume(){
         if(!this.running){
@@ -87,7 +89,7 @@ public class AndroidEngine implements Engine,Runnable {
             this.renderThread.start();
         }
     }
-
+//setter del estado
     @Override
     public void setState(State state){
 
@@ -95,21 +97,22 @@ public class AndroidEngine implements Engine,Runnable {
         this.state.setAudio(this.audio);
         this.state.setGraphics(this.gr);
     }
-
+//getter del audio
     @Override
     public Audio getAudio() {
         return this.audio;
     }
-
+//getter del estado
     @Override
     public State getState()
     {
         return this.state;
     }
+    //getter de los graficos
     public Graphics getGraphics(){
         return this.gr;
     }
-
+//la pausa del juego
     @Override
     public void pause(){
         if(this.running){
@@ -126,7 +129,7 @@ public class AndroidEngine implements Engine,Runnable {
         }
     }
 
-
+//Metodo que corre el bucle principal del motor
     @Override
     public void run() {
         if (renderThread != Thread.currentThread()) {
