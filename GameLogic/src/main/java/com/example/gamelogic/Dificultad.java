@@ -16,7 +16,6 @@ public class Dificultad implements State {
     private Button botonCorto;
     private Button botonLargo;
     private Button botonInfinito;
-    private Engine engine;
     private Button botonVolver;
 
     //Referencias de modulos del motor
@@ -80,15 +79,15 @@ public class Dificultad implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     if(this.botonCorto.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, 3);
+                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.corto);
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonLargo.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, 7);
+                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.largo);
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonInfinito.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, -1);//el -1 es para indicar que es infinito
+                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.infinito);//el -1 es para indicar que es infinito
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonVolver.contains(e.x,e.y)){

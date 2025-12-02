@@ -112,15 +112,13 @@ public class GameLogic implements State {
 
     int numE = 0;//enemigos generados
     float tiempoEnGrupo;//tiempo de espera entre enemigos de un grupo
-    float timpEnG;//tiempo que falta para generar un nuevo enemigo en el grupo
+    float tiempEnG;//tiempo que falta para generar un nuevo enemigo en el grupo
     int numOl;
     Text textoOleadas;//Numero de oleadas en texto
       //Enumaerado que determina en que estado de juego estamos
     private enum Estado {
         normal, botonRayo, botonFuego, botonHielo, torre
     }
-
-    private Estado estado = Estado.normal;
 
     //Estado actual de juego
     private Estado estado = Estado.normal;
@@ -135,13 +133,26 @@ public class GameLogic implements State {
        /**
      * Constructora del estado principal de juego
      * @param engine Motor
-     * @param oleadasRestantes Cuantas oleadas hay que derrortar (-1 si es el modo infinto)
      */
     public GameLogic(Engine engine, Dificultad dificultad){
+        switch(dificultad) {
+            case corto:
+                this.oleadasRestantes = 3;
+                break;
+            case largo:
+                this.oleadasRestantes=7;
+                break;
+            case infinito:
+                this.oleadasRestantes =-1;
+                break;
+            case aventura:
+                this.oleadasRestantes=3;
+                break;
+        }
         this.engine=engine;
         this.init();
         this.dificultad = dificultad;
-        this.leerMapa("mapa1.txt");
+        this.leerMapa("mapa1.json");
 
     }
 
@@ -152,6 +163,7 @@ public class GameLogic implements State {
         this.leerMapa(mapa);
 
     }
+
     private void init()
     {
     this.vida=10;
@@ -164,7 +176,7 @@ public class GameLogic implements State {
     this.tiempoOleada = this.tiempoGrupos*this.grupos + 5;
     this.tiempOl = this.tiempoOleada;
     this.tiempoEnGrupo = (float) 0.3;
-    this.timpEnG =0;
+    this.tiempEnG =0;
     this.textoOleadas = new Text("Inika-Regular.ttf","Oleada:" + this.oleada,60,15,25);
     this.torres = new ArrayList<Tower>();
     this.enemigos=new ArrayList<Enemy>();
@@ -175,12 +187,11 @@ public class GameLogic implements State {
 }
  /**
      * Metodo que lee mapa de un archivo txt
-     * @param path ruta del archivo
+     * @param mapa ruta del archivo
      */
     private void leerMapa(String mapa)
     {
-        JSONObject obj=engine.readJsonFile("mapa1.json");
-        this.leer = engine.readFile(mapa);
+        JSONObject obj=engine.readJsonFile(mapa);
         this.fil=obj.getInt("fila");
         this.col=obj.getInt("columna");
         JSONArray arr= obj.getJSONArray("mapa");
