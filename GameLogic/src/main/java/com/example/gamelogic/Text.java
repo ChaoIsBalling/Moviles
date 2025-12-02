@@ -3,6 +3,9 @@ package com.example.gamelogic;
 import com.example.engine.Graphics;
 import com.example.engine.IFont;
 
+/**
+ * Clase que
+ */
 public class Text {
     String text;
     String font;

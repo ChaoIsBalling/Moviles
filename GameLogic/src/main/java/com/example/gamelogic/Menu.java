@@ -10,16 +10,24 @@ import com.example.engine.Sound;
 import java.awt.Color;
 import java.util.ArrayList;
 
+/**
+ * Clase que implementa el menú inicial
+ */
 public class Menu implements State {
 
+    //Boton y titulo inicial
     private Button botonInicial;
-
     private Text textoInicial;
+
+
+    //Referencias al Audio Manager, al motor y a Graphics
     private Audio audio;
     Engine engine;
-
     Graphics gr;
 
+    /**
+     * Constructora del menú
+     */
     public Menu(Engine engine){
         this.engine = engine;
 
@@ -33,20 +41,32 @@ public class Menu implements State {
     }
     @Override
     public void update(double deltaTime) {
-
     }
 
+    /**
+     * Renderiza la UI
+     * @param gr Graphics del motor
+     */
     @Override
     public void render(Graphics gr) {
         botonInicial.Render(gr);
         textoInicial.Render(gr);
     }
 
+    /**
+     * Inicializa Graphics
+     * @param gr Graphics
+     */
     @Override
     public void setGraphics(Graphics gr) {
         this.gr=gr;
     }
 
+    /**
+     * Gestiona la entrada del jugador
+     * @param list Lista de eventos
+     * @param elapseTime Tiempo trascurrido
+     */
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
@@ -67,6 +87,10 @@ public class Menu implements State {
 
     }
 
+    /**
+     * Inicializa el Audio
+     * @param audio Interfaz Audio
+     */
     @Override
     public void setAudio(Audio audio) {
     this.audio=audio;
