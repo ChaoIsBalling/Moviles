@@ -6,10 +6,13 @@ import com.example.engine.IFont;
 
 public class AndroidFont implements IFont {
     private Typeface tFont;
-    private float size;
 
+    boolean bold;
+    private float size;
+    //contructora que inicializa una font con tamaño, bold e italics
     public AndroidFont(AssetManager as,String file, float size, boolean bold, boolean italic)
     {
+        this.bold=bold;
         Typeface tmp=Typeface.createFromAsset(as,file);
         this.size=size;
         int style =tmp.getStyle();
@@ -22,31 +25,21 @@ public class AndroidFont implements IFont {
         }
         this.tFont =Typeface.create(tmp,style);
     }
-
+    //getter de la font
     public Typeface getTypeface()
     {
         return this.tFont;
     }
-
+    //getter del tamaño
     @Override
     public int getSize() {
         return (int)size;
     }
-    public Typeface getFont()
-{
-    return tFont;
-}
+    //getter del bold
     @Override
     public boolean isBold() {
-        return false;
+        return this.bold;
     }
 
-    /*public AndroidFont(AssetManager assets,String file, float size){
-        this(assets,file,size,false,false);
-    }
 
-    public AndroidFont(AssetManager assets, String file, float size, boolean bold){
-        this.tFont = Typeface.createFromAsset(assets,file);
-        this.size = size;
-    }*/
 }

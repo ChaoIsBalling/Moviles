@@ -18,14 +18,16 @@ public class AndroidInput implements Input,View.OnTouchListener{
 
     ArrayList<TouchEvent> events;
     ArrayList<TouchEvent> pendingEvents;
+    //inicializa las listas de la clase
     public AndroidInput(){
         events = new ArrayList<TouchEvent>();
         pendingEvents = new ArrayList<TouchEvent>();
     }
-
+//metodo que registra una acción de touch cuando tocas la pantalla del movil y lo pasa a una lista de eventos pendientes
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-
+        //pasamos la posición del touch respecto a la pantalla y dependiendo del tipo de movimiento le asignamos
+        //un touch type
         TouchEvent myEvent = new TouchEvent();
         myEvent.x = event.getX();
         myEvent.y = event.getY();
@@ -50,11 +52,13 @@ public class AndroidInput implements Input,View.OnTouchListener{
 
         return true;
     }
-
+    /**
+     * Añade los eventos pendientes a la lista de eventos actaules y limpia la lista de pendientes
+     * @return Eventos pendientes
+     */
     @Override
     public synchronized ArrayList<TouchEvent> getTouchEvents() {
         this.events.addAll(this.pendingEvents);
-        System.out.println("Holooooooo");
         this.pendingEvents.clear();
         return this.events;
     }

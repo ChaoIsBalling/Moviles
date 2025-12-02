@@ -10,11 +10,22 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Clase que implementa la interfaz IFont de Engine
+ * Se encarga de la lectura de nuevas fuentes Font.
+ */
 public class DesktopFont implements IFont {
 
+    /**
+     * Font propia de Java
+     */
     private Font awtFont;
 
-    // Constructor que crea la fuente
+    /**
+     * Varias constructoras que inicializan un Font de escritorio a partir de varios parametros.
+     * Se lanzarán excepciones en caso de que ocurra algún error
+     * @param fileFont Nombre del archivo que contiene el font
+     */
     public DesktopFont(String fileFont) throws FileNotFoundException, FontFormatException, IOException {
 
         //Leemos el archivo fileFont y creamos la fuente
@@ -44,7 +55,6 @@ public class DesktopFont implements IFont {
             this.awtFont = baseFont.deriveFont(Font.BOLD, size);
         }
     }
-
     public DesktopFont(String fileFont, float size, boolean bold, boolean italic) throws FileNotFoundException, FontFormatException, IOException {
 
         //Leemos el archivo fileFont y creamos la fuente
@@ -61,16 +71,28 @@ public class DesktopFont implements IFont {
         this.awtFont = baseFont.deriveFont(style, size);
     }
 
-    // Método para obtener el Font propio de Java
+    /**
+     * Metodo para obtener el Font propio de Java
+     * @return Font
+     */
+
     public Font getCurrentFont() {
         return this.awtFont;
     }
 
+    /**
+     * Metodo para obtener el tamaño del font (el de Java)
+     * @return
+     */
     @Override
     public int getSize() {
         return this.awtFont.getSize();
     }
 
+    /**
+     * Devuelve si el font es en negrita o no (el de Java)
+     * @return booleano que indica si es negrita o no
+     */
     @Override
     public boolean isBold() {
         return this.awtFont.isBold();

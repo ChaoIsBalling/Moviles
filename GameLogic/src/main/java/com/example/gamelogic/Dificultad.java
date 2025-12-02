@@ -8,14 +8,25 @@ import com.example.engine.TouchEvent;
 
 import java.util.ArrayList;
 
+/**
+ * Clase que representa el menú de seleccción de dificultad
+ */
 public class Dificultad implements State {
+    //Botones del menú de dificultad
     private Button botonCorto;
     private Button botonLargo;
     private Button botonInfinito;
     private Engine engine;
     private Button botonVolver;
 
+    //Referencias de modulos del motor
+    private Engine engine;
     Graphics gr;
+
+    /**
+     * Constructora del menú de dificultad con los tres botones que representan los tres modos de juego
+     * @param engine
+     */
     public Dificultad(Engine engine){
         this.engine = engine;
         botonCorto = new Button(300,100,220,50,true,20);
@@ -34,10 +45,13 @@ public class Dificultad implements State {
         this.botonVolver.setColor(0xffff0000);
     }
     @Override
-    public void update(double deltatime) {
+    public void update(double deltaTime) {
 
     }
 
+    /**
+     * Renderiza los botones
+     */
     @Override
     public void render(Graphics gr) {
         botonCorto.Render(gr);
@@ -46,26 +60,35 @@ public class Dificultad implements State {
         botonVolver.Render(gr);
     }
 
+    /**
+     * setter del graphics
+     * @param gr Graphics
+     */
     @Override
     public void setGraphics(Graphics gr) {
         this.gr=gr;
     }
 
+    /**
+     * Dependiendo del modo elegido, iremos al estado GameLogic
+     * @param list Lista de eventos
+     * @param elapseTime Tiempo trascurrido
+     */
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
             switch (e.type){
                 case TOUCH_DOWN:
                     if(this.botonCorto.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.corto);
+                        GameLogic gameLogic = new GameLogic(this.engine, 3);
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonLargo.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.largo);
+                        GameLogic gameLogic = new GameLogic(this.engine, 7);
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonInfinito.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.infinito);
+                        GameLogic gameLogic = new GameLogic(this.engine, -1);//el -1 es para indicar que es infinito
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonVolver.contains(e.x,e.y)){

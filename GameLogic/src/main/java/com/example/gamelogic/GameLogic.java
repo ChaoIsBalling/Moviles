@@ -10,6 +10,10 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import java.util.ArrayList;
 import java.lang.Integer;
+
+/**
+ * Clase que representa la interfaz principal de juego, donde se desarrolla toda su lógica de gameplay
+ */
 public class GameLogic implements State {
 
     //Botones
@@ -20,65 +24,66 @@ public class GameLogic implements State {
     private Button botonMejoraAtaque;
     private Button botonMejoraRango;
     private Button botonMejoraVelocidad;
+
+    //Figuras que tenrán los botones
     private Square figuraBotonCuadrado;
     private Triangle figuraBotonTriangulo;
     private Hexagon figuraBotonHexagono;
 
     private Text costeMejoraTriangulos;
-
     private Text costeMejoraCuadrados;
-
     private Text costeMejoraHexagonos;
 
     private Text costeMejoraAtaque;
-
     private Text costeMejoraRango;
-
     private Text costeMejoraVelocidad;
 
+
+    //Imagenes de los botones en modo torre
     private Image imagenMejoraAtaque;
-
     private Image imagenMejoraRango;
-
     private Image imagenMejoraVelocidad;
 
+    //Imagen de los stats
     private Image imagenVida;
-
     private Image imagenDinero;
 
+    //Franja en la que están los botones
     private Square franjaGris;
 
+    //Numero de filas y columnas
     int fil;
     int col;
 
     int vida = 0;
     float dinero = 0;
 
+    //Posiciones iniciales y finales
     float IniX;
     float IniY;
-
     float FinX;
     float FinY;
 
+    //Las dimensiones de una casilla
     float anchoCasilla = 35;
-
     float altoCasilla = 35;
 
 
-    //mapa
+    //Arrays de casillas, torres y enemigos
     ArrayList<ArrayList<Casilla>> casillas;
     ArrayList<Tower> torres;
     ArrayList<Enemy> enemigos;
     ArrayList<Enemy> deadEnemies;
-    ArrayList<String> leer;
 
+    //referencias a módulos del motor
     Engine engine;
-
     Audio audio;
-
     Graphics gr;
+
+    //La torre que mantengamos seleccionada
     Tower torreSeleccionada;
 
+    //Textos de vida y dinero
     Text textoV;
     Text textoD;
 
@@ -86,38 +91,52 @@ public class GameLogic implements State {
     float ranTorre = (float) 11.7;//mejora de rango
     float velTorre = (float) -0.2;//mejora de velocidad
 
-    float megVidaEn = 2;//mejora de vida de enemigo
-    float megVelEn = 2;//mejora de velocidad de enemigo
-    float megDefEn = 1;//mejora de defensa de enemigo
-    float megResEn = 1;//mejora de resistencia de enemigo
+    float mejVidaEn = 2;//mejora de vida de enemigo
+    float mejVelEn = 2;//mejora de velocidad de enemigo
+    float mejDefEn = 1;//mejora de defensa de enemigo
+    float mejResEn = 1;//mejora de resistencia de enemigo
 
-    int tipoResEn =0;
+    int tipoResEn = 0;
 
     int oleada;//numero oleada
+    int oleadasRestantes;
     int grupos;//grupos en oleada
     int enemigosGrupo;//enemigos en grupo
 
     float tiempoGrupos;//tiempo de espera entre grupo y grupo
     float tiempoOleada;//tiempo de espera entre oleadas
 
-    int numG =0;//grupos generados
+    int numG = 0;//grupos generados
     float tiempGr;//tiempo que falta para el nuevo grupo
     float tiempOl;//tiempo que falta para la nueva oleada
 
-    int numE=0;//enemigos generados
+    int numE = 0;//enemigos generados
     float tiempoEnGrupo;//tiempo de espera entre enemigos de un grupo
-    float timpEnG;//tiempo que falta para nuevo enemigo
+    float timpEnG;//tiempo que falta para generar un nuevo enemigo en el grupo
     int numOl;
-    Text textoOleadas;
-    private enum Estado{
-        nada,botonRayo,botonFuego,botonHielo,torre
+    Text textoOleadas;//Numero de oleadas en texto
+      //Enumaerado que determina en que estado de juego estamos
+    private enum Estado {
+        normal, botonRayo, botonFuego, botonHielo, torre
     }
-    private Estado estado = Estado.nada;
 
-    public enum Dificultad{
-        corto,largo,infinito,aventura
+    private Estado estado = Estado.normal;
+
+    //Estado actual de juego
+    private Estado estado = Estado.normal;
+
+    public enum Dificultad {
+        corto, largo, infinito, aventura
     }
+
     private Dificultad dificultad;
+   
+   
+       /**
+     * Constructora del estado principal de juego
+     * @param engine Motor
+     * @param oleadasRestantes Cuantas oleadas hay que derrortar (-1 si es el modo infinto)
+     */
     public GameLogic(Engine engine, Dificultad dificultad){
         this.engine=engine;
         this.init();
@@ -154,6 +173,10 @@ public class GameLogic implements State {
     this.franjaGris = new Square(300,370,600,100,true);
     this.franjaGris.setColor(0xFF999999);
 }
+ /**
+     * Metodo que lee mapa de un archivo txt
+     * @param path ruta del archivo
+     */
     private void leerMapa(String mapa)
     {
         JSONObject obj=engine.readJsonFile("mapa1.json");
@@ -166,22 +189,21 @@ public class GameLogic implements State {
             for(int j =0; j<this.col;j++){
                 if(arr.get(i).toString().charAt(j) == 'h'){
                     Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,false,false);
-                    casilla.setColor(0xff000000);
-                    casilla.setCoor(new Vector2D(i,j));
+                                 casilla.setColor(0xff000000);
+                    casilla.setCoor(new Vector2D(i, j));
                     fila.add(casilla);
-                }
-                else{
-                    Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,true,true);
+                } else {
+                    Casilla casilla = new Casilla((float) (j * 35 + 30), (float) (i * 35 + 50), this.anchoCasilla, this.altoCasilla, true, true);
                     casilla.setColor(0xff944d03);
-                    casilla.setCoor(new Vector2D(i,j));
+                    casilla.setCoor(new Vector2D(i, j));
                     fila.add(casilla);
-                    if(j == 0){
-                        this.IniX = j*35+30;
-                        this.IniY = i*35+50;
+                    if (j == 0) {
+                        this.IniX = j * 35 + 30;
+                        this.IniY = i * 35 + 50;
                     }
-                    if(j == this.col - 1){
-                        this.FinX = j*35+30;
-                        this.FinY = i*35+50;
+                    if (j == this.col - 1) {
+                        this.FinX = j * 35 + 30;
+                        this.FinY = i * 35 + 50;
                     }
                 }
 
@@ -189,158 +211,255 @@ public class GameLogic implements State {
             this.casillas.add(fila);
         }
     }
-    @Override
-    public void update(double deltaTime) {
-        if(this.dificultad == Dificultad.corto && this.oleada <4 || this.dificultad == Dificultad.largo && this.oleada <8 || this.dificultad == Dificultad.infinito || this.dificultad == Dificultad.aventura && this.oleada <(this.numOl+1)){//continuar sacando oleadas hasta x oleada dependiendo de la dificultad
-            if(this.tiempGr<= 0){//si tiempo entre grupos<=0
-                if(this.numG < this.grupos){//si grupos generados<grupos
-                    if(this.timpEnG<=0){//si tiempo entre enemigos<0
-                        if(this.numE < this.enemigosGrupo){//si enemigos generados<enemigos en grupo
-                            Tipo tipoRes;
-                            if(this.tipoResEn ==0){//resistencia de enemigos secuencial
-                                tipoRes = Tipo.rayo;
-                            }
-                            else if(this.tipoResEn ==1){
-                                tipoRes = Tipo.fuego;
-                            }
-                            else{
-                                tipoRes = Tipo.hielo;
-                            }
-                            this.tipoResEn = (this.tipoResEn+1)%3;
-                            this.enemigos.add(new Enemy(this.IniX,this.IniY,8+(this.megVidaEn*(this.oleada-1)),30+(this.megVelEn*(this.oleada-1)),0+(this.megDefEn*(this.oleada-1)),0+(this.megResEn*(this.oleada-1)),tipoRes, this));
-                            this.numE++;
-                        }
-                        else{//si se han creado todos los enemigos del grupo
-                            this.numE=0;//resetear numero de enemigos generados
-                            this.numG +=1;//grupos generados +1
-                            this.tiempGr = this.tiempoGrupos;//resetear tiempo entre grupos
-                        }
-                        this.timpEnG = this.tiempoEnGrupo;//resetear tiempo entre enemigos
-                    }
-                }
-            }
-            if(this.tiempOl<=0){//si tiempo entre oleadas <=0
-                this.oleada ++;//sigiente oleada
-                this.grupos++;//mas grupos
-                this.enemigosGrupo++;//mas enemigos por grupos
-                this.tiempoGrupos = 5 + (this.oleada-1);//mas tiempo entre grupos
-                this.tiempGr = 0;//que salga el primer grupo de imediato
-                this.tiempoOleada = this.tiempoGrupos*this.grupos + 2*this.oleada;//mas tiempo entre oleadas
-                this.tiempOl = this.tiempoOleada;//resetear tiempo entre oleadas
-                this.numG =0;//resetear grupos generados
-                this.numE=0;//resetear numero de enemigos generados
-                this.timpEnG =0;//que salga el primer enemigo de inmediato
-                this.textoOleadas.setText("Oleada:" + this.oleada);//cambiar texto oleadas
-            }
-        }
 
-        this.timpEnG -= deltaTime;
+
+    /**
+     * Actualiza los contadores de tiempo de acuerdo al deltatime
+     */
+    private void actualizarTiempos(double deltaTime){
+        this.tiempEnG -= deltaTime;
         this.tiempGr -= deltaTime;
         this.tiempOl -= deltaTime;
+    }
 
-        for(int i = 0; i<this.torres.size(); i++){
+    /**
+     * Actualiza la lista de torres
+     */
+    private void actualizarTorres(double deltaTime){
+        for (int i = 0; i < this.torres.size(); i++) {
             this.torres.get(i).Update(deltaTime);
         }
-        for(int i = 0; i<this.enemigos.size(); i++){
-            this.enemigos.get(i).Update(deltaTime);
-            //Si el enemigo llega a la casilla final, se elimina
-            if(this.enemigos.get(i).getX() >= this.FinX &&
-                    this.enemigos.get(i).getY() >= this.FinY){
-                this.vida--;
-                this.enemigos.get(i).setWin();
-            }
-            if(this.enemigos.get(i).Dead()){
+    }
 
-                deadEnemies.add(this.enemigos.get(i));
-                this.dinero+=50;
-            }
-            if(this.enemigos.get(i).Win()){
+    /**
+     * Determina si el enemigo ha llegado al final del mapa
+     * @param e Enemigo
+     */
+    private boolean haAcabado (Enemy e){
+        return e.getX() >= this.FinX && e.getY() >= this.FinY;
+    }
 
-                deadEnemies.add(this.enemigos.get(i));
-            }
-
-        }
-        for(int i=0;i<deadEnemies.size();i++){
+    /**
+     * Elimina los enemigos derrotados de la lista de enemigos
+     */
+    private void limpiarListaEnemigos(){
+        //Comprobamos si hay enemigos en la lista de muertos
+        for (int i = 0; i < deadEnemies.size(); i++) {
             this.enemigos.remove(this.deadEnemies.get(i));
         }
         this.deadEnemies.clear();
-            
-        this.textoV.setText(String.valueOf(this.vida));
-        this.textoD.setText(String.valueOf(this.dinero));
-        if(this.dificultad == Dificultad.corto && this.oleada >3 || this.dificultad == Dificultad.largo && this.oleada >7){
-            if(this.vida > 0 && this.enemigos.isEmpty()){
-                GameOver gameOver = new GameOver(this.engine,this.audio,true);
-                this.engine.setState(gameOver);
+    }
+
+    /**
+     * Actualiza la lista de enemigos
+     */
+    private void actualizarEnemigos(double deltaTime){
+
+        //Vamos actualizando la lista de enemigos
+        for (int i = 0; i < this.enemigos.size(); i++) {
+            this.enemigos.get(i).Update(deltaTime);
+            //Si el enemigo llega a la casilla final
+            if (haAcabado(this.enemigos.get(i))) {
+                this.vida--;
+                this.textoV.setText(String.valueOf(this.vida));
+                //Añadimos al enemigo en la lista de ganadores para que sea eliminado (se comprueba en el tercer if)
+                this.enemigos.get(i).setWin();
             }
-        }
-        if(this.dificultad == Dificultad.aventura && this.oleada >this.numOl){
-            if(this.vida > 0 && this.enemigos.isEmpty()){
-                GameOver gameOver = new GameOver(this.engine,this.audio,true);
-                this.engine.setState(gameOver);
+            if (this.enemigos.get(i).Dead()) { //En caso de morir nos da dinero y lo eliminamos
+                deadEnemies.add(this.enemigos.get(i));
+                this.dinero += 50;
+                this.textoD.setText(String.valueOf(this.dinero));
+            }
+            if (this.enemigos.get(i).Win()) {//Si un enemigo gana se mete en la lista de muertos para ser eliminado
+                deadEnemies.add(this.enemigos.get(i));
             }
         }
 
-        if(this.vida <= 0){
-            GameOver gameOver = new GameOver(this.engine,this.audio,false);
+        limpiarListaEnemigos();
+    }
+
+    /**
+     * Comprueba si se ha acabado la partida
+     */
+    private void comprobarFinal(){
+        //si nos quedamos sin oleadas parar
+        //En caso de que haya ganado, no habrá oleadas, enemigos y la vida es mayor a 0
+        if (this.oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()) {
+            this.stopSoundTorres();
+            GameOver gameOver = new GameOver(this.engine, this.audio, true);
+            this.engine.setState(gameOver);
+        }
+
+        //En caso de que haya perdido
+        if (this.vida <= 0) {
+            this.stopSoundTorres();
+            GameOver gameOver = new GameOver(this.engine, this.audio, false);
             this.engine.setState(gameOver);
         }
     }
 
-    //Dada una posición (x,y) se determina en que casilla está a partir del ancho y alto de la casilla
-    public Vector2D determinaCasilla(float x, float y){
+    /**
+     * Metodo que gestiona la aparición de nuevas oleadas
+     */
+    private void gestionarOleadas(){
+
+        if(oleadasRestantes==0)
+            return;
+
+        if (this.tiempOl <= 0) {//si tiempo entre oleadas es menor o igual a 0
+            //siguiente oleada
+            this.oleada++;
+            this.oleadasRestantes--;
+
+            //aumentamos grupos y enemigos por grupo y mas tiempo entre grupos
+            this.grupos++;
+            this.enemigosGrupo++;
+            this.tiempoGrupos = 5 + (this.oleada - 1);
+
+            //Resetear numero de grupos generados y numero de enemigos generados
+            this.numG = 0;
+            this.numE = 0;
+
+            this.tiempGr = 0;//sale el primer grupo de imediato
+
+            this.tiempoOleada = this.tiempoGrupos * this.grupos + 2 * this.oleada;//mas tiempo entre oleadas
+            this.tiempOl = this.tiempoOleada;//resetear tiempo entre oleadas
+
+            this.tiempEnG = 0;//que salga el primer enemigo de inmediato
+
+            //actualizar texto de oleadas
+            if(this.oleadasRestantes!=0)
+                this.textoOleadas.setText("Oleada:" + this.oleada);
+        }
+    }
+
+    /**
+     * Metodo que determina cuando generar un nuevo enemigo
+     */
+    private void generarEnemigo(){
+
+        //Si no hay oleadas, no generamos enemigos
+        if(this.oleadasRestantes == 0)
+            return;
+
+        //Si el tiempo que falta para un nuevo grupo es mayor a 0
+        //Si el número de grupos generado es mayor o igual al número total de grupos en la oleada
+        //Si el número para generar un nuevo enemigo en el grupo es mayor a 0
+
+        //No generamos más enemigos
+        if(this.tiempGr > 0 || this.numG >= this.grupos || this.tiempEnG > 0)
+            return;
+
+        //si el numero de enemigos generados es menor al numero de enemigos en su grupo
+        if (this.numE < this.enemigosGrupo) {
+            //Generamos enemigo
+            this.enemigos.add(new Enemy(this.IniX, this.IniY,
+                    8 + (this.mejVidaEn * (this.oleada - 1)),
+                    30 + (this.mejVelEn * (this.oleada - 1)),
+                    0 + (this.mejDefEn * (this.oleada - 1)),
+                    0 + (this.mejResEn * (this.oleada - 1)),
+                    Tipo.getRandomType(),
+                    this));
+
+            //Incrementamos número de grupo
+            this.numE++;
+        }
+        //si se han creado todos los enemigos del grupo
+        else {
+            this.numE = 0;//resetear numero de enemigos generados
+            this.numG++;//incrementamos numero de grupos generados
+            this.tiempGr = this.tiempoGrupos;//resetear tiempo entre grupos para que se vuelva a generar uno nuevo
+        }
+
+        this.tiempEnG = this.tiempoEnGrupo;//resetear tiempo entre enemigos
+    }
+
+    /**
+     * Bucle principal del estado de juego
+     * @param deltaTime Tiempo trascurrido
+     */
+    @Override
+    public void update(double deltaTime) {
+        //Primero gestionamos las oleadas y después los enemigos siempre y cuando haya oleadas
+        gestionarOleadas();
+        generarEnemigo();
+
+        //Actualizamos las variables y entidades necesarias
+        actualizarTiempos(deltaTime);
+        actualizarTorres(deltaTime);
+        actualizarEnemigos(deltaTime);
+
+        //Comprobamos si se ha acabado la partida
+        comprobarFinal();
+    }
+
+       
+
+    /**
+     * Dada una posición (x,y) se determina en que casilla está a partir
+     * del ancho y alto de la casilla
+     */
+    public Vector2D determinaCasilla(float x, float y) {
+
         int offsetX = 30;
         int offsetY = 50;
 
         int j = (int) ((x - offsetX) / this.anchoCasilla);
         int i = (int) ((y - offsetY) / this.altoCasilla);
 
-        Vector2D c = new Vector2D(i,j);
+        Vector2D c = new Vector2D(i, j);
         //System.out.println("("+c.getX()+","+c.getY()+")");
         return c;
     }
 
-    public Vector2D determinaCasillaRaton(float x, float y){
-        if(x < 30 - this.anchoCasilla/2 || y < 50 -this.altoCasilla/2){
-            return new Vector2D(-1,-1);
+    /**
+     * Dada una posición (x,y) del ratón se determina a que casilla esta clicando
+     */
+    public Vector2D determinaCasillaRaton(float x, float y) {
+        if (x < 30 - this.anchoCasilla / 2 || y < 50 - this.altoCasilla / 2) {
+            return new Vector2D(-1, -1);
         }
         int offsetX = 30;
         int offsetY = 50;
 
-        int j = (int) (((x +(this.anchoCasilla/2)- offsetX)) / this.anchoCasilla);
-        int i = (int) (((y + (this.altoCasilla/2)- offsetY)) / this.altoCasilla);
+        int j = (int) (((x + (this.anchoCasilla / 2) - offsetX)) / this.anchoCasilla);
+        int i = (int) (((y + (this.altoCasilla / 2) - offsetY)) / this.altoCasilla);
 
-        Vector2D c = new Vector2D(i,j);
+        Vector2D c = new Vector2D(i, j);
         //System.out.println("("+c.getX()+","+c.getY()+")");
 
         return c;
     }
 
+    /**
+     * Metodo que renderiza el tablero, entidades y botones
+     * @param gr Graphics del motor
+     */
     @Override
     public void render(Graphics gr) {
         //gr.setColor(0x00000000);
-        for (int i =0; i<this.fil;i++){
-            for(int j =0; j<this.col;j++){
+        gr.clear();
+        for (int i = 0; i < this.fil; i++) {
+            for (int j = 0; j < this.col; j++) {
                 this.casillas.get(i).get(j).Render(gr);
             }
         }
-        for(int i = 0; i<this.enemigos.size(); i++){
+        for (int i = 0; i < this.enemigos.size(); i++) {
             this.enemigos.get(i).Render(gr);
         }
-        for(int i = 0; i<this.torres.size(); i++){
+        for (int i = 0; i < this.torres.size(); i++) {
             this.torres.get(i).Render(gr);
         }
         this.franjaGris.Render(gr);
-        if(this.estado != Estado.torre){
+        if (this.estado != Estado.torre) {
             this.botonMejoraCuadrados.Render(gr);
             this.botonMejoraTriangulos.Render(gr);
             this.botonMejoraHexagonos.Render(gr);
-        }
-        else{
+        } else {
             this.botonMejoraAtaque.Render(gr);
             this.botonMejoraRango.Render(gr);
             this.botonMejoraVelocidad.Render(gr);
-            gr.setColor(0xff000000);
-            gr.pintarCirculo(this.torreSeleccionada.getX(),this.torreSeleccionada.getY(),this.torreSeleccionada.getRange());
+            gr.pintarCirculo(this.torreSeleccionada.getX(), this.torreSeleccionada.getY(), this.torreSeleccionada.getRange());
         }
         this.textoV.Render(gr);
         this.textoD.Render(gr);
@@ -350,7 +469,9 @@ public class GameLogic implements State {
     }
 
 
-
+    /**
+     * Metodo que inicializa todos los botones y otros elementos de la UI
+     */
     public void inicializarUI() {
         this.botonMejoraCuadrados = new Button(500, 360, 50, 50, true, 20);
         this.botonMejoraTriangulos = new Button(440, 360, 50, 50, true, 20);
@@ -396,200 +517,184 @@ public class GameLogic implements State {
         this.costeMejoraVelocidad = new Text("Inika-Regular.ttf", "100", 0, 15, 15, true, true);
         this.botonMejoraVelocidad.setText(this.costeMejoraVelocidad);
 
-        this.imagenMejoraAtaque = new Image("Espada.png",-15, -20,30,30,this.gr);
+        this.imagenMejoraAtaque = new Image("Espada.png", -15, -20, 30, 30, this.gr);
         this.botonMejoraAtaque.setImagen(this.imagenMejoraAtaque);
 
-        this.imagenMejoraRango = new Image("Arco.png",-15, -20,30,30,this.gr);
+        this.imagenMejoraRango = new Image("Arco.png", -15, -20, 30, 30, this.gr);
         this.botonMejoraRango.setImagen(this.imagenMejoraRango);
 
-        this.imagenMejoraVelocidad = new Image("Reloj.png",-15, -20,30,30,this.gr);
+        this.imagenMejoraVelocidad = new Image("Reloj.png", -15, -20, 30, 30, this.gr);
         this.botonMejoraVelocidad.setImagen(this.imagenMejoraVelocidad);
 
-        this.textoV = new Text("Inika-Regular.ttf",String.valueOf(this.vida),30,340,20);
-        this.textoD = new Text("Inika-Regular.ttf",String.valueOf(this.dinero),30,370,20);
-        this.imagenVida = new Image("Vida.png",60, 330,30,30,this.gr);
-        this.imagenDinero = new Image("Dinero.png",60, 360,30,30,this.gr);
+        this.textoV = new Text("Inika-Regular.ttf", String.valueOf(this.vida), 30, 340, 20);
+        this.textoD = new Text("Inika-Regular.ttf", String.valueOf(this.dinero), 30, 370, 20);
+        this.imagenVida = new Image("Vida.png", 60, 330, 30, 30, this.gr);
+        this.imagenDinero = new Image("Dinero.png", 60, 360, 30, 30, this.gr);
     }
+
+    /**
+     * Gestiona la interacción de la entrada con el juego
+     * @param list Lista de eventos
+     * @param elapseTime Tiempo trascurrido
+     */
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
 
-        for(TouchEvent e: list){
+        for (TouchEvent e : list) {
 
-            switch (e.type){
+            switch (e.type) {
                 case TOUCH_DOWN:
-                    switch (this.estado){
-                        case nada:
-                            if(this.botonMejoraTriangulos.contains(e.x,e.y)){
-                                this.cambiarEstado(Estado.botonRayo);
-                            }
-                            else if(this.botonMejoraHexagonos.contains(e.x,e.y)){
-                                this.cambiarEstado(Estado.botonFuego);
-                            }
-                            else if(this.botonMejoraCuadrados.contains(e.x,e.y)){
-                                this.cambiarEstado(Estado.botonHielo);
-                            }
-                            else {
-                                Vector2D casilla = this.determinaCasillaRaton(e.x,e.y);
-                                //System.out.println("("+casilla.getX()+","+casilla.getY()+")");
-                                if(casilla.getX() < this.fil && casilla.getY() < this.col && casilla.getX()>= 0 && casilla.getY()>=0){
-                                    Tower torre = this.casillas.get(casilla.getX()).get(casilla.getY()).getTorre();
-                                    if(torre != null){
-                                        this.torreSeleccionada = torre;
-                                        this.cambiarEstado(Estado.torre);
-                                    }
-                                }
-                            }
-                            break;
-                        case torre:
-                            Vector2D casillaT = this.determinaCasillaRaton(e.x,e.y);
-                            if(this.botonMejoraAtaque.contains(e.x,e.y) && this.dinero >= 75){
-                                this.torreSeleccionada.UpdateAttack(this.damTorre);
-                                this.dinero -= 75;
-                            }
-                            else if(this.botonMejoraRango.contains(e.x,e.y) && this.dinero >= 75){
-                                this.torreSeleccionada.UpdateRange(this.ranTorre);
-                                this.dinero -= 75;
-                            }
-                            else if(this.botonMejoraVelocidad.contains(e.x,e.y) && this.dinero >= 75){
-                                this.torreSeleccionada.UpdateFireRate(this.velTorre);
-                                this.dinero -= 100;
-                            }
-                            else if(casillaT.getX() < this.fil && casillaT.getY() < this.col && casillaT.getX()>= 0 && casillaT.getY()>=0){
-                                Tower torre = this.casillas.get(casillaT.getX()).get(casillaT.getY()).getTorre();
-                                if(torre != this.torreSeleccionada && torre != null){
-                                    this.torreSeleccionada = torre;
-                                }
-                                else{
-                                    this.cambiarEstado(Estado.nada);
-                                }
-                            }
-                            else{
-                                this.cambiarEstado(Estado.nada);
-                            }
-                            break;
-                        case botonRayo:
-                            Vector2D casillaR = this.determinaCasillaRaton(e.x,e.y);
-                            if(this.botonMejoraHexagonos.contains(e.x,e.y)){
-                                this.cambiarEstado(Estado.botonFuego);
-                            }
-                            else if(this.botonMejoraCuadrados.contains(e.x,e.y)){
-                                this.cambiarEstado(Estado.botonHielo);
-                            }
-                            else if(casillaR.getX() < this.fil && casillaR.getY() < this.col && casillaR.getX()>= 0 && casillaR.getY()>=0){
-                                Tower torre = this.casillas.get(casillaR.getX()).get(casillaR.getY()).getTorre();
-                                if(torre != null){
-                                    this.torreSeleccionada = torre;
-                                    this.cambiarEstado(Estado.torre);
-                                }
-                                else if(this.dinero >= 100 && !this.casillas.get(casillaR.getX()).get(casillaR.getY()).esCamino()){
-                                    ThunderTower torreR = new ThunderTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY());
-                                    torreR.setListaEnemigos(this.enemigos);
-                                    torreR.setAudio(this.audio);
-                                    this.casillas.get(casillaR.getX()).get(casillaR.getY()).setTorre(torreR);
-                                    this.torres.add(torreR);
-                                    this.dinero -= 100;
-                                    this.cambiarEstado(Estado.nada);
-                                }
-                                else{
-                                    this.cambiarEstado(Estado.nada);
-                                }
-                            }
-                            else{
-                                this.cambiarEstado(Estado.nada);
-                            }
-                            break;
-                        case botonFuego:
-                            Vector2D casillaF = this.determinaCasillaRaton(e.x,e.y);
-                            if(this.botonMejoraTriangulos.contains(e.x,e.y)){
-                                this.cambiarEstado(Estado.botonRayo);
-                            }
-                            else if(this.botonMejoraCuadrados.contains(e.x,e.y)){
-                                this.cambiarEstado(Estado.botonHielo);
-                            }
-                            else if(casillaF.getX() < this.fil && casillaF.getY() < this.col && casillaF.getX()>= 0 && casillaF.getY()>=0){
-                                Tower torre = this.casillas.get(casillaF.getX()).get(casillaF.getY()).getTorre();
-                                if(torre != null){
-                                    this.torreSeleccionada = torre;
-                                    this.cambiarEstado(Estado.torre);
-                                }
-                                else if(this.dinero >= 200 && !this.casillas.get(casillaF.getX()).get(casillaF.getY()).esCamino()){
-                                    FireTower torreF = new FireTower(this.casillas.get(casillaF.getX()).get(casillaF.getY()).getX(),this.casillas.get(casillaF.getX()).get(casillaF.getY()).getY());
-                                    torreF.setListaEnemigos(this.enemigos);
-                                    torreF.setAudio(this.audio);
-                                    this.casillas.get(casillaF.getX()).get(casillaF.getY()).setTorre(torreF);
-                                    this.torres.add(torreF);
-                                    this.dinero -= 200;
-                                    this.cambiarEstado(Estado.nada);
-                                }
-                                else{
-                                    this.cambiarEstado(Estado.nada);
-                                }
-                            }
-                            else{
-                                this.cambiarEstado(Estado.nada);
-                            }
-                            break;
-                        case botonHielo:
-                            Vector2D casillaH = this.determinaCasillaRaton(e.x,e.y);
-                            if(this.botonMejoraTriangulos.contains(e.x,e.y)){
-                                this.cambiarEstado(Estado.botonRayo);
-                            }
-                            else if(this.botonMejoraHexagonos.contains(e.x,e.y)){
-                                this.cambiarEstado(Estado.botonFuego);
-                            }
-                            else if(casillaH.getX() < this.fil && casillaH.getY() < this.col && casillaH.getX()>= 0 && casillaH.getY()>=0){
-                                Tower torre = this.casillas.get(casillaH.getX()).get(casillaH.getY()).getTorre();
-                                if(torre != null){
-                                    this.torreSeleccionada = torre;
-                                    this.cambiarEstado(Estado.torre);
-                                }
-                                else if(this.dinero >= 150 && !this.casillas.get(casillaH.getX()).get(casillaH.getY()).esCamino()){
-                                    IceTower torreH = new IceTower(this.casillas.get(casillaH.getX()).get(casillaH.getY()).getX(),this.casillas.get(casillaH.getX()).get(casillaH.getY()).getY());
-                                    torreH.setListaEnemigos(this.enemigos);
-                                    torreH.setAudio(this.audio);
-                                    this.casillas.get(casillaH.getX()).get(casillaH.getY()).setTorre(torreH);
-                                    this.torres.add(torreH);
-                                    this.dinero -= 150;
-                                    this.cambiarEstado(Estado.nada);
-                                }
-                                else{
-                                    this.cambiarEstado(Estado.nada);
-                                }
-                            }
-                            else{
-                                this.cambiarEstado(Estado.nada);
-                            }
-                            break;
-                    }
-                    break;
-                case TOUCH_UP:
-
-                    break;
-                case TOUCH_MOVE:
-                    System.out.println("Dedooo");
-                    break;
+                    gestiónEstadosJuego(e);
             }
         }
     }
 
+    /**
+     * Inicializa un audio a las torres
+     * @param audio Interfaz Audio
+     */
     @Override
     public void setAudio(Audio audio) {
-        this.audio=audio;
+        this.audio = audio;
 
-        for(int i=0;i<this.torres.size();i++)
-        {
+        for (int i = 0; i < this.torres.size(); i++) {
             this.torres.get(i).setAudio(this.audio);
         }
     }
+
+    /**
+     * Inicializa graphics y la UI
+     * @param gr Graphics
+     */
     @Override
     public void setGraphics(Graphics gr) {
-        this.gr=gr;
+        this.gr = gr;
         this.inicializarUI();
     }
 
+    /**
+     * Metodo que gestiona los estados del juego
+     */
+    private void gestiónEstadosJuego(TouchEvent e) //maneja los estados del juego cuando pulsas botones o las torres
+    {
+        switch (this.estado) {
+            case normal://cuando ningun boton o torre está seleccionado
+                if (this.botonMejoraTriangulos.contains(e.x, e.y)) {
+                    this.cambiarEstado(Estado.botonRayo);
+                } else if (this.botonMejoraHexagonos.contains(e.x, e.y)) {
+                    this.cambiarEstado(Estado.botonFuego);
+                } else if (this.botonMejoraCuadrados.contains(e.x, e.y)) {
+                    this.cambiarEstado(Estado.botonHielo);
+                } else {
+                    Vector2D casilla = this.determinaCasillaRaton(e.x, e.y);
+                    if (casilla.getX() < this.fil && casilla.getY() < this.col && casilla.getX() >= 0 && casilla.getY() >= 0) {
+                        Tower torre = this.casillas.get(casilla.getX()).get(casilla.getY()).getTorre();
+                        if (torre != null) {
+                            this.torreSeleccionada = torre;
+                            this.cambiarEstado(Estado.torre);
+                        }
+                    }
+                }
+                break;
+            case torre://esta seleccionada una torre en el mapa
+                Vector2D casillaT = this.determinaCasillaRaton(e.x, e.y);
+                if (this.botonMejoraAtaque.contains(e.x, e.y) && this.dinero >= 75) {
+                    this.torreSeleccionada.UpdateAttack(this.damTorre);
+                    this.dinero -= 75;
+                    this.textoD.setText(String.valueOf(this.dinero));
+                } else if (this.botonMejoraRango.contains(e.x, e.y) && this.dinero >= 75) {
+                    this.torreSeleccionada.UpdateRange(this.ranTorre);
+                    this.dinero -= 75;
+                    this.textoD.setText(String.valueOf(this.dinero));
+                } else if (this.botonMejoraVelocidad.contains(e.x, e.y) && this.dinero >= 75) {
+                    this.torreSeleccionada.UpdateFireRate(this.velTorre);
+                    this.dinero -= 100;
+                    this.textoD.setText(String.valueOf(this.dinero));
+                } else if (casillaT.getX() < this.fil && casillaT.getY() < this.col && casillaT.getX() >= 0 && casillaT.getY() >= 0) {
+                    Tower torre = this.casillas.get(casillaT.getX()).get(casillaT.getY()).getTorre();
+                    if (torre != this.torreSeleccionada && torre != null) {
+                        this.torreSeleccionada = torre;
+                    } else {
+                        this.cambiarEstado(Estado.normal);
+                    }
+                } else {
+                    this.cambiarEstado(Estado.normal);
+                }
+                break;
+            case botonRayo://has tocado el boton para crear una torre de rayo
+                pulsarBotones(e, 100);
+                break;
+            case botonFuego://has tocado el boton para crear una torre de fuego
+                pulsarBotones(e, 200);
+                break;
+            case botonHielo://has tocado el boton para crear una torre de hielo
+                pulsarBotones(e, 150);
+                break;
+        }
+    }
+
+    /**
+     * Metodo que gestiona la pulsación del boton para crear torres
+     */
+    private void pulsarBotones(TouchEvent e, float precio) {
+        if (this.botonMejoraTriangulos.contains(e.x, e.y)) {
+            this.cambiarEstado(Estado.botonRayo);
+        } else if (this.botonMejoraHexagonos.contains(e.x, e.y)) {
+            this.cambiarEstado(Estado.botonFuego);
+        } else if (this.botonMejoraCuadrados.contains(e.x, e.y)) {
+            this.cambiarEstado(Estado.botonHielo);
+        } else {
+            Vector2D casilla = this.determinaCasillaRaton(e.x, e.y);
+            if (casilla.getX() < this.fil && casilla.getY() < this.col && casilla.getX() >= 0 && casilla.getY() >= 0) {
+                Tower torre = this.casillas.get(casilla.getX()).get(casilla.getY()).getTorre();
+                if (torre != null) {
+                    this.torreSeleccionada = torre;
+                    this.cambiarEstado(Estado.torre);
+                } else {
+                    this.crearTorres(e, precio);
+                }
+            }
+        }
+    }
+
+    /**
+     * Metodo que maneja la logica cuando tocas un boton de torre
+     */
+    private void crearTorres(TouchEvent e, float precio)
+    {
+        Vector2D casillaR = this.determinaCasillaRaton(e.x, e.y);
+        if (this.dinero >= precio && !this.casillas.get(casillaR.getX()).get(casillaR.getY()).esCamino()) {
+            Tower torreR;
+            switch (this.estado) {
+                    case botonRayo:
+                        torreR = new ThunderTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(), this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY());
+                        break;
+                    case botonFuego:
+                        torreR = new FireTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(), this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY());
+                        break;
+                    default:
+                        torreR = new IceTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(), this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY());
+                        break;
+                }
+                torreR.setListaEnemigos(this.enemigos);
+                torreR.setAudio(this.audio);
+                this.casillas.get(casillaR.getX()).get(casillaR.getY()).setTorre(torreR);
+                this.torres.add(torreR);
+                this.dinero -= precio;
+                this.textoD.setText(String.valueOf(this.dinero));
+                this.cambiarEstado(Estado.normal);
+        } else {
+            this.cambiarEstado(Estado.normal);
+        }
+    }
+
+    /**
+     * Metodo que cambia el estado del juego y el color de los botones
+     * @param nuevoEstado
+     */
     private void cambiarEstado(Estado nuevoEstado) {
         switch (nuevoEstado) {
-            case nada:
+            case normal:
                 this.botonMejoraTriangulos.setColor(0xFFffffff);
                 this.botonMejoraHexagonos.setColor(0xFFffffff);
                 this.botonMejoraCuadrados.setColor(0xFFffffff);
@@ -620,5 +725,14 @@ public class GameLogic implements State {
         }
     }
 
-
+    /**
+     * Parar los sonidos de la torre
+     */
+    private void stopSoundTorres(){
+        for(int i =0; i < this.torres.size(); i++){
+            this.torres.get(i).stopAudio();
+        }
+    }
 }
+
+

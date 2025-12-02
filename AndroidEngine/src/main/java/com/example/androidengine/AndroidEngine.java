@@ -34,14 +34,27 @@ import org.json.JSONArray;
 //import androidx.work.Worker;
 //import androidx.work.WorkerParameters;
 
-
+/**
+ * Clase que implementa el motor principal del juego para Android.
+ * Se encarga de la inicialización de otros módulos del motor y gestiona el bucle principal
+ * Implementa Runnable (propia de Java) y la interfaz Engine.
+ */
 
 public class AndroidEngine implements Engine,Runnable {
 
+    /**
+     * Instancia del Android Graphics
+     */
     private AndroidGraphics gr;
 
+    /**
+     * Instancia de los AssetManager de Android
+     */
     private AssetManager assetManager;
 
+    /**
+     *
+     */
     private Thread renderThread;
 
     private boolean running;
@@ -74,9 +87,10 @@ public class AndroidEngine implements Engine,Runnable {
 
         System.loadLibrary("AndroidEngine");
     }
+    //lector de archivos
     @Override
     public ArrayList<String> readFile(String path)
-    {
+    {//usa el input stream y elbuffered reader para leer linea a linea un fichero y pasarlo a un arraylist
         ArrayList<String> file = new ArrayList<>();
 
         try {
@@ -91,6 +105,7 @@ public class AndroidEngine implements Engine,Runnable {
         }
         return file;
     }
+    //quita el paua
     @Override
     public void resume(){
         if(!this.running){
@@ -100,7 +115,7 @@ public class AndroidEngine implements Engine,Runnable {
             this.renderThread.start();
         }
     }
-
+//setter del estado
     @Override
     public void setState(State state){
 
@@ -108,21 +123,22 @@ public class AndroidEngine implements Engine,Runnable {
         this.state.setAudio(this.audio);
         this.state.setGraphics(this.gr);
     }
-
+//getter del audio
     @Override
     public Audio getAudio() {
         return this.audio;
     }
-
+//getter del estado
     @Override
     public State getState()
     {
         return this.state;
     }
+    //getter de los graficos
     public Graphics getGraphics(){
         return this.gr;
     }
-
+//la pausa del juego
     @Override
     public InputStream readFile2(String file) {
         InputStream is = null;
@@ -258,11 +274,11 @@ public class AndroidEngine implements Engine,Runnable {
         }
     }
 
-
+//Metodo que corre el bucle principal del motor
     @Override
     public void run() {
         if (renderThread != Thread.currentThread()) {
-            //Evitamos que otra clase llame a este método
+            //Evitamos que otra clase llame a este metodo
             throw new RuntimeException("run() should not be called directly");
         }
 
