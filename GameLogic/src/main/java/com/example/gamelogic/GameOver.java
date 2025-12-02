@@ -10,25 +10,30 @@ import com.example.engine.Sound;
 import java.awt.Color;
 import java.util.ArrayList;
 
+/**
+ * Clase que representa el estado de final de partida
+ */
 public class GameOver implements State {
 
+    //Botones de retorno al menú y al menú de dificultad
     private Button botonMenu;
     private Button botonReintentar;
 
-
+    //Textos
     private Text textoBoton;
     private Text textoReintentar;
     private Text textoInicial;
-    private Audio audio;
 
+    //Sonidos de victoria y derrota
     private Sound victory;
-
     private Sound lose;
+    private Audio audio;
     Engine engine;
-
+    //Determina si el jugador ha ganado
     boolean win;
     public GameOver(Engine engine, Audio audio,boolean win)
     {
+        //Inicializamos los botones y textos
         this.engine = engine;
         this.win=win;
 
@@ -44,6 +49,7 @@ public class GameOver implements State {
         textoReintentar.setColor(0xff00ffff);
         botonMenu.setText(textoBoton);
         botonReintentar.setText(textoReintentar);
+        //Dependiendo del resultado reproducimos un sonido distinto
         if(win) {
             textoInicial = new Text("Inika-Regular.ttf", "VICTORIA", 300, 150, 40, true, true);
             this.setAudio(audio);
@@ -63,6 +69,10 @@ public class GameOver implements State {
 
     }
 
+    /**
+     * Renderiza los elementos de la UI
+     * @param gr Graphics del motor
+     */
     @Override
     public void render(Graphics gr) {
         gr.setColor(0x00000000);
@@ -76,6 +86,11 @@ public class GameOver implements State {
 
     }
 
+    /**
+     * Gestion del input
+     * @param list Lista de eventos
+     * @param elapseTime Tiempo trascurrido
+     */
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
@@ -100,6 +115,10 @@ public class GameOver implements State {
         }
     }
 
+    /**
+     * Inicializamos la referencia al Audio Manager
+     * @param audio Interfaz Audio
+     */
     @Override
     public void setAudio(Audio audio) {
         this.audio=audio;

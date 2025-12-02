@@ -2,19 +2,28 @@ package com.example.gamelogic;
 
 import com.example.engine.Graphics;
 
+/**
+ * Clase que representa un Hexágono
+ */
 public class Hexagon implements Figure{
 
-    private float cx;
 
+    //Centro de la figura
+    private float cx;
     private float cy;
 
+    //radio desde el centro
     private float r;
 
+    //Color del hexágono
     private int color;
 
+    //Indica si es relleno o no
     private boolean isFill;
 
-
+    /**
+     * Constructora de la clase Hexagono con su coordenada x,y, su radio y si esta relleno o no
+     */
     public Hexagon(float x, float y, float r, boolean isFill){
         this.cx = x;
         this.cy = y;
@@ -26,14 +35,29 @@ public class Hexagon implements Figure{
         this.cy = y;
         this.r = r;
     }
+
+    /**
+     * Getters
+     */
     @Override
     public float getX() {
         return this.cx;
     }
-
     @Override
     public float getY() {
         return this.cy;
+    }
+    @Override
+    public int getColor() {
+        return this.color;
+    }
+
+    /**
+     * setters
+     */
+    @Override
+    public void setColor(int color) {
+        this.color= color;
     }
 
     @Override
@@ -46,16 +70,10 @@ public class Hexagon implements Figure{
         this.cy = y;
     }
 
-    @Override
-    public int getColor() {
-        return this.color;
-    }
-
-    @Override
-    public void setColor(int color) {
-        this.color= color;
-    }
-
+    /**
+     * Renderiza el circulo con o sin relleno
+     * @param gr Interfaz Graphics
+     */
     @Override
     public void Render(Graphics gr) {
         gr.setColor(this.color);
@@ -67,6 +85,9 @@ public class Hexagon implements Figure{
         }
     }
 
+    /**
+     * Renderiza de forma centrada el círculo a partir de una posicion x,y
+     */
     @Override
     public void RenderCentrado(Graphics gr, float x, float y) {
         gr.setColor(this.color);

@@ -2,17 +2,28 @@ package com.example.gamelogic;
 
 import com.example.engine.Graphics;
 
+/**
+ * Clase que representa una casilla del mapa en el juego
+ */
 public class Casilla {
-    Square cuadrado;
-    Tower tower;
-    Boolean camino;
+    //Atributos de una casilla
+    Square cuadrado; //Figura que representa la casilla
+    Tower tower; //Torre que está en la casilla
+    Boolean camino; //Determinar si es un camino o no
+    Vector2D coor; //Coordenadas reales de la casilla
 
-    Vector2D coor;
+    /**
+     * Constructora de una casilla con su posición, dimensiones y si es un camino o no
+     */
     public Casilla(float x, float y, float w, float h, boolean fill, boolean camino){
         this.cuadrado = new Square(x,y,w,h,fill);
         this.camino=camino;
 
     }
+
+    /**
+     * Setters
+     */
     public void setColor(int color){
         this.cuadrado.setColor(color);
     }
@@ -21,7 +32,11 @@ public class Casilla {
             this.tower = tower;
         }
     }
+    public void setCoor(Vector2D coor){this.coor = coor; }
 
+    /**
+     * getters
+     */
     public boolean esCamino(){
         return this.camino;
     }
@@ -35,8 +50,10 @@ public class Casilla {
         return this.cuadrado.getY();
     }
     public Vector2D getCoor() {return this.coor;};
-    public void setCoor(Vector2D coor){this.coor = coor; }
 
+    /**
+     * Renderiza el cuadrado de la casilla
+     */
     public void Render(Graphics gr){
         this.cuadrado.Render(gr);
     }

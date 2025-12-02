@@ -8,13 +8,23 @@ import com.example.engine.TouchEvent;
 
 import java.util.ArrayList;
 
+/**
+ * Clase que representa el menú de seleccción de dificultad
+ */
 public class Dificultad implements State {
+    //Botones del menú de dificultad
     private Button botonCorto;
     private Button botonLargo;
     private Button botonInfinito;
-    private Engine engine;
 
+    //Referencias de modulos del motor
+    private Engine engine;
     Graphics gr;
+
+    /**
+     * Constructora del menú de dificultad con los tres botones que representan los tres modos de juego
+     * @param engine
+     */
     public Dificultad(Engine engine){
         this.engine = engine;
         botonCorto = new Button(300,100,220,50,true,20);
@@ -35,6 +45,9 @@ public class Dificultad implements State {
 
     }
 
+    /**
+     * Renderiza los botones
+     */
     @Override
     public void render(Graphics gr) {
         botonCorto.Render(gr);
@@ -42,11 +55,20 @@ public class Dificultad implements State {
         botonInfinito.Render(gr);
     }
 
+    /**
+     * setter del graphics
+     * @param gr Graphics
+     */
     @Override
     public void setGraphics(Graphics gr) {
         this.gr=gr;
     }
 
+    /**
+     * Dependiendo del modo elegido, iremos al estado GameLogic
+     * @param list Lista de eventos
+     * @param elapseTime Tiempo trascurrido
+     */
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){

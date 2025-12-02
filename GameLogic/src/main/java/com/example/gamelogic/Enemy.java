@@ -2,27 +2,37 @@ package com.example.gamelogic;
 
 import com.example.engine.Graphics;
 
+/**
+ * Clase que representa un enemigo en el juego
+ */
 public class Enemy {
+    //Figura que representa el enemigo
     Circle circulo;
+    //vida del enemigo
     float vida;
+    //Determina si ha llegado al final del camino sin morir
     boolean win;
+    //Direccion a la que se mueve
     Vector2D direccion;
+    //stats
     float velocidad = 100;
     float defensa;
     float resistencia;
+    //Tipo al que es resistente
     Tipo tipo;
+
+    //Referencia a la escena de juego
     GameLogic gl;
+
+    //Coordenada de casilla en la que se encuentra
     Vector2D coor;
 
+    //factor ralentizar
     float ralentizar =0;
 
+    //Casillas para calcular el movimiento
     Casilla casillaSig;
-
     Casilla casillaActual;
-
-    Casilla casillaAnterior;
-
-
     Casilla casillaInicial;
 
     /**
@@ -92,7 +102,10 @@ public class Enemy {
                 (c.getY() >= 0 && c.getY() < this.gl.col));
     }
 
-    //Se añade la lógica de movimiento del enemigo
+    /**
+     * Se actualiza la lógica de movimiento del enemigo
+     * @param deltaTime tiempo trascurrido
+     */
     public void Update(double deltaTime){
 
         //A partir de la coordenada del enemigo, determinamos la casilla en la que está
