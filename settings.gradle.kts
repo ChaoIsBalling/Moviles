@@ -15,8 +15,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "TowerDefense"
 include(":app")
-include(":DesktopGame")
 include(":AndroidEngine")
-include(":DesktopEngine")
 include(":GameLogic")
 include(":Engine")
