@@ -1,0 +1,22 @@
+{
+    "BotonVolver":    
+    {   "x":30,
+        "y":30,
+        "w":30,
+        "h":30,
+        "isRound":true,
+        "ar":15,
+        "color":"#FFFF0000"
+    },
+        "TextoDiamantes":
+    {
+        "texto":"Tienes 0",
+        "font":"Inika-Regular.ttf",
+        "x":300,
+        "y":50,
+        "size":40,
+        "bold":true,
+        "italic":true,
+        "color":"#FF000000"
+    }
+}

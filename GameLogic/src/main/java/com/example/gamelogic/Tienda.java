@@ -6,6 +6,8 @@ import com.example.engine.Graphics;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class Tienda implements State {
@@ -17,12 +19,10 @@ public class Tienda implements State {
     private Text textoDiamantes;
     public Tienda(Engine engine){
         this.engine=engine;
+        JSONObject botones=engine.readJsonFile("Tienda/style.json");
+        this.botonVolver = new Button(botones.getJSONObject("BotonVolver"));
 
-        this.botonVolver = new Button(30,30,30,30,true,15);
-        this.botonVolver.setColor("#FFFF0000");
-
-        this.textoDiamantes = new Text("Inika-Regular.ttf","Tienes 0",300,50,40,true,true);
-        this.textoDiamantes.setColor("#FF000000");
+        this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantes"));
     }
 
     @Override
