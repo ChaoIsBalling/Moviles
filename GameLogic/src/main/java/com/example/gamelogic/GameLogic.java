@@ -145,9 +145,6 @@ public class GameLogic implements State {
             case infinito:
                 this.oleadasRestantes =-1;
                 break;
-            case aventura:
-                this.oleadasRestantes=3;
-                break;
         }
         this.engine=engine;
         this.init();
@@ -159,9 +156,9 @@ public class GameLogic implements State {
     public GameLogic(Engine engine, String mapa){
         this.engine=engine;
         this.dificultad = Dificultad.aventura;
+        this.oleadasRestantes=3;
         this.init();
         this.leerMapa(mapa);
-
     }
 
     private void init()
