@@ -45,32 +45,23 @@ public class Menu implements State {
      */
     public Menu(Engine engine){
         this.engine = engine;
-
         JSONObject botones=engine.readJsonFile("Menu/style.json");
-          JSONObject no= botones.getJSONObject("BotonInicial");
-        this.botonInicial = new Button(no);
-        Text textoBoton = new Text("Inika-Regular.ttf","Jugar",0,0,30,true,true);
-        textoBoton.setColor(0xff00ffff);
+
+        this.botonInicial = new Button(botones.getJSONObject("BotonInicial"));
+        Text textoBoton = new Text(botones.getJSONObject("TextoBoton"));
         this.botonInicial.setText(textoBoton);
 
-        this.textoInicial = new Text("Inika-Regular.ttf","TowerDefense",300,150,40,true,true);
-        this.textoInicial.setColor(0Xff000000);
+        this.textoInicial = new Text(botones.getJSONObject("TextoInicial"));
 
-        this.botonAventura = new Button(450, 250, 200,50,true,20);
-        this.botonAventura.setColor(0xFF999999);
-        Text textoAventura = new Text("Inika-Regular.ttf","Aventura",0,0,30,true,true);
-        textoAventura.setColor(0xff00ffff);
+        this.botonAventura = new Button(botones.getJSONObject("BotonAventura"));
+        Text textoAventura = new Text(botones.getJSONObject("TextoAventura"));
         this.botonAventura.setText(textoAventura);
 
-        this.botonTienda = new Button(150, 350, 200,50,true,20);
-        this.botonTienda.setColor(0xFF00ffff);
-        Text textoTienda = new Text("Inika-Regular.ttf","Tienda",0,0,30,true,true);
-        textoTienda.setColor(0xff000000);
+        this.botonTienda = new Button(botones.getJSONObject("BotonTienda"));
+        Text textoTienda = new Text(botones.getJSONObject("TextoTienda"));
         this.botonTienda.setText(textoTienda);
 
-        this.textoDiamantes = new Text("Inika-Regular.ttf","0",450,350,40,true,true);
-        this.textoDiamantes.setColor(0Xff00ffff);
-
+        this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantes"));
     }
     @Override
     public void update(double deltaTime) {

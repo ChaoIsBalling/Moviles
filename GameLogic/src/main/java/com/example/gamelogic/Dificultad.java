@@ -31,17 +31,17 @@ public class Dificultad implements State {
         botonCorto = new Button(300,100,220,50,true,20);
         Text textC = new Text("Inika-Regular.ttf","Partida corta",0,0,30,true,true);
         botonCorto.setText(textC);
-        botonCorto.setColor(0xFF999999);
+        botonCorto.setColor("#FF999999");
         botonLargo = new Button(300,200,220,50,true,20);
         Text textL = new Text("Inika-Regular.ttf","Partida larga",0,0,30,true,true);
         botonLargo.setText(textL);
-        botonLargo.setColor(0xFF999999);
+        botonLargo.setColor("#FF999999");
         botonInfinito = new Button(300,300,220,50,true,20);
         Text textI = new Text("Inika-Regular.ttf","Modo Infinito",0,0,30,true,true);
         botonInfinito.setText(textI);
-        botonInfinito.setColor(0xFF999999);
+        botonInfinito.setColor("#FF999999");
         this.botonVolver = new Button(30,30,30,30,true,15);
-        this.botonVolver.setColor(0xffff0000);
+        this.botonVolver.setColor("#FFFF0000");
     }
     @Override
     public void update(double deltaTime) {

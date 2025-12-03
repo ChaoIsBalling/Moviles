@@ -492,13 +492,13 @@ public class GameLogic implements State {
         this.botonMejoraRango = new Button(500, 360, 50, 50, true, 20);
         this.botonMejoraVelocidad = new Button(560, 360, 50, 50, true, 20);
 
-        this.botonMejoraCuadrados.setColor(0xFFffffff);
-        this.botonMejoraTriangulos.setColor(0xFFffffff);
-        this.botonMejoraHexagonos.setColor(0xFFffffff);
+        this.botonMejoraCuadrados.setColor("#FFFFFFFF");
+        this.botonMejoraTriangulos.setColor("#FFFFFFFF");
+        this.botonMejoraHexagonos.setColor("#FFFFFFFF");
 
-        this.botonMejoraAtaque.setColor(0xFFffffff);
-        this.botonMejoraRango.setColor(0xFFffffff);
-        this.botonMejoraVelocidad.setColor(0xFFffffff);
+        this.botonMejoraAtaque.setColor("#FFFFFFFF");
+        this.botonMejoraRango.setColor("#FFFFFFFF");
+        this.botonMejoraVelocidad.setColor("#FFFFFFFF");
 
         this.figuraBotonCuadrado = new Square(1, -5, 30, 30, true);
         this.figuraBotonCuadrado.setColor(0xFFC8A2C8);
@@ -706,30 +706,30 @@ public class GameLogic implements State {
     private void cambiarEstado(Estado nuevoEstado) {
         switch (nuevoEstado) {
             case normal:
-                this.botonMejoraTriangulos.setColor(0xFFffffff);
-                this.botonMejoraHexagonos.setColor(0xFFffffff);
-                this.botonMejoraCuadrados.setColor(0xFFffffff);
+                this.botonMejoraTriangulos.setColor("#FFFFFFFF");
+                this.botonMejoraHexagonos.setColor("#FFFFFFFF");
+                this.botonMejoraCuadrados.setColor("#FFFFFFFF");
                 this.estado = nuevoEstado;
                 break;
             case torre:
                 this.estado = nuevoEstado;
                 break;
             case botonRayo:
-                this.botonMejoraTriangulos.setColor(0xfffffb64);
-                this.botonMejoraHexagonos.setColor(0xFFffffff);
-                this.botonMejoraCuadrados.setColor(0xFFffffff);
+                this.botonMejoraTriangulos.setColor("#FFFFFB64");
+                this.botonMejoraHexagonos.setColor("#FFFFFFFF");
+                this.botonMejoraCuadrados.setColor("#FFFFFFFF");
                 this.estado = nuevoEstado;
                 break;
             case botonFuego:
-                this.botonMejoraTriangulos.setColor(0xFFffffff);
-                this.botonMejoraHexagonos.setColor(0xfffffb64);
-                this.botonMejoraCuadrados.setColor(0xFFffffff);
+                this.botonMejoraTriangulos.setColor("#FFFFFFFF");
+                this.botonMejoraHexagonos.setColor("#FFFFFB64");
+                this.botonMejoraCuadrados.setColor("#FFFFFFFF");
                 this.estado = nuevoEstado;
                 break;
             case botonHielo:
-                this.botonMejoraTriangulos.setColor(0xFFffffff);
-                this.botonMejoraHexagonos.setColor(0xFFffffff);
-                this.botonMejoraCuadrados.setColor(0xfffffb64);
+                this.botonMejoraTriangulos.setColor("#FFFFFFFF");
+                this.botonMejoraHexagonos.setColor("#FFFFFFFF");
+                this.botonMejoraCuadrados.setColor("#FFFFFB64");
                 this.estado = nuevoEstado;
                 break;
 

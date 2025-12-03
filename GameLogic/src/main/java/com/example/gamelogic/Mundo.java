@@ -30,22 +30,22 @@ public class Mundo implements State {
         this.engine=engine;
 
         this.nivelMundo = new Button(75,150,100,100);
-        this.nivelMundo.setColor(0xff88ff00);
+        this.nivelMundo.setColor("#FF88FF00");
         Text nivel1 = new Text("Inika-Regular.ttf","1",0,0,40,true,true);
-        nivel1.setColor(0xff000000);
+        nivel1.setColor("#FF000000");
         this.nivelMundo.setText(nivel1);
 
         this.textoMundo = new Text("Inika-Regular.ttf","Mundo1",300,50,40,true,true);
-        this.textoMundo.setColor(0xff000000);
+        this.textoMundo.setColor("#FF000000");
         this.fondoTexto = new Square(300,50,300,70,true);
         this.fondoTexto.setColor(0xff009900);
 
         this.siguienteMundo = new Button(110,50,50,50,true,30);
-        this.siguienteMundo.setColor(0xff0000ff);
+        this.siguienteMundo.setColor("FF0000FF");
         this.anteriorMundo = new Button(490,50,50,50,true,30);
-        this.anteriorMundo.setColor(0xff0000ff);
+        this.anteriorMundo.setColor("#FF0000FF");
         this.botonVolver = new Button(30,30,30,30,true,15);
-        this.botonVolver.setColor(0xffff0000);
+        this.botonVolver.setColor("FFFF0000");
     }
 
     @Override

@@ -38,15 +38,15 @@ public class GameOver implements State {
         this.win=win;
 
         botonMenu = new Button(120, 250, 200,50,true,20);
-        botonMenu.setColor(0xFF999999);
+        botonMenu.setColor("#FF999999");
 
         botonReintentar = new Button(480, 250, 200,50,true,20);
-        botonReintentar.setColor(0xFF999999);
+        botonReintentar.setColor("#FF999999");
 
         textoBoton = new Text("Inika-Regular.ttf","Menu",0,0,30,true,true);
-        textoBoton.setColor(0xff00ffff);
+        textoBoton.setColor("#FF00FFFF");
         textoReintentar = new Text("Inika-Regular.ttf","Reintentar",0,0,30,true,true);
-        textoReintentar.setColor(0xff00ffff);
+        textoReintentar.setColor("#FF00FFFF");
         botonMenu.setText(textoBoton);
         botonReintentar.setText(textoReintentar);
         //Dependiendo del resultado reproducimos un sonido distinto
@@ -62,7 +62,7 @@ public class GameOver implements State {
             this.lose = this.audio.newSound("death_sound.wav");
             this.audio.playSound(this.lose);
         }
-        textoInicial.setColor(0Xff000000);
+        textoInicial.setColor("#FF000000");
     }
     @Override
     public void update(double deltaTime) {

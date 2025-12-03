@@ -21,7 +21,7 @@ public class Text {
     boolean bold;
     boolean italic;
     //color del texto
-    int color = 0xFF000000;
+    String color = "#FF000000";
 
     /**
      * Constructora del texto con su contenido, posición, tamaño y si es en negrito e italica
@@ -71,12 +71,12 @@ public class Text {
         this.size=json.getInt("size");
         this.bold= json.getBoolean("bold");
         this.italic =json.getBoolean("italic");
-        this.color=json.getInt("color");
+        this.color=json.getString("color");
     }
     /**
      * Setters
      */
-    public void setColor(int color){
+    public void setColor(String color){
         this.color = color;
     }
     public void setText(String text){

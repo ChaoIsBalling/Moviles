@@ -19,10 +19,10 @@ public class Tienda implements State {
         this.engine=engine;
 
         this.botonVolver = new Button(30,30,30,30,true,15);
-        this.botonVolver.setColor(0xffff0000);
+        this.botonVolver.setColor("#FFFF0000");
 
         this.textoDiamantes = new Text("Inika-Regular.ttf","Tienes 0",300,50,40,true,true);
-        this.textoDiamantes.setColor(0xff000000);
+        this.textoDiamantes.setColor("#FF000000");
     }
 
     @Override

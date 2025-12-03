@@ -28,7 +28,7 @@ public class Button {
     //Texto del boton
     Text text;
 
-    int color; //Color por defecto
+    String color; //Color por defecto
     Image imagen; //Imagen
     Figure figura; //Figura del botón
 
@@ -58,8 +58,7 @@ public class Button {
         this.h=json.getInt("h");
         this.isRound=json.getBoolean("isRound");
         this.arcRadius=json.getInt("ar");
-//        String a=json.getString("color");
-//        Color.decode(a);
+        this.color=json.getString("color");
     }
     /**
      * Setters de atributos del botón
@@ -68,7 +67,7 @@ public class Button {
         this.text = text;
     }
 
-    public void setColor(int color){
+    public void setColor(String color){
         this.color = color;
     }
     public void setFigura(Figure fig){
@@ -92,7 +91,7 @@ public class Button {
      */
     public void Render(Graphics gr) {
         //Renderizamos el cuadrado que representa el botón
-        gr.setColor(color);
+        gr.setColor(this.color);
 
         //Vemos si es redondeado o no
         if(isRound)
