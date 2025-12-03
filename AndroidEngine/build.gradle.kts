@@ -54,8 +54,8 @@ dependencies {
     implementation(project(":Engine"))
     implementation(files("../app/libs/json-20250517.jar"))
     implementation(libs.work.runtime)
-    implementation(libs.play.services.ads.api)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("com.google.android.gms:play-services-ads:24.8.0")
 }

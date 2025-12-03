@@ -65,12 +65,14 @@ public class MainActivity extends AppCompatActivity {
         //Container de anuncios
         this.adContainerView = findViewById(R.id.ad_view_container);
 
-        //Añadimos banner al container
-        this.adContainerView.removeAllViews();
-        this.adContainerView.addView(adView);
+
 
         //Inicializamos motor e interfaz de mobile que accede a los metodos de main activity
         this.mobile = new AndroidMobile(this,this.renderView,this.adView);
+        //Añadimos banner al container
+        //this.adContainerView.removeAllViews();
+        //this.adContainerView.addView(this.adView);
+
         this.engine = new AndroidEngine(this.renderView,this.mobile);
         this.engine.setState(new Menu(engine));
 

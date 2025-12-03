@@ -58,24 +58,26 @@ public class AndroidMobile implements Mobile {
         MobileAds.initialize(activity, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
-                //Cargamos anuncio recompensado
-                loadRewardedAd();
-                //Cargamos anuncio banner
-                if(adView != null){
-                    loadBannerAd();
-                }
+
             }
         });
+        //Cargamos anuncio recompensado
+        loadRewardedAd();
+        //Cargamos anuncio banner
+        if(this.adView == null){
+            // Crear un addView en el que meter el anuncio
+            this.adView = new AdView(activity);
+            this.adView.setAdUnitId(AD_UNIT_ID);
+            this.adView.setAdSize(AdSize.BANNER);
+            loadBannerAd();
+        }
     }
 
     /**
      * Metodo para cargar un anuncio Banner
      */
     private void loadBannerAd(){
-        // Crear un addView en el que meter el anuncio
-        adView = new AdView(activity);
-        adView.setAdUnitId(AD_UNIT_ID);
-        adView.setAdSize(AdSize.BANNER);
+
 
         // cargamos el anuncio banner
         AdRequest adRequest = new AdRequest.Builder().build();
