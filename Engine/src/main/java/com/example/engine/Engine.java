@@ -54,6 +54,12 @@ public interface Engine {
      */
     public Graphics getGraphics();
 
+    /**
+     * Este metodo devuelve el gestor de las funciones propias de Android
+     * @return gestor Mobile
+     */
+    public Mobile getMobile();
+
     public InputStream readFile2(String file);
 
     public JSONObject readJsonFile(String file);

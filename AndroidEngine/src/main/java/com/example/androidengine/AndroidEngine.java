@@ -2,6 +2,7 @@ package com.example.androidengine;
 
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -10,11 +11,13 @@ import android.content.res.AssetManager;
 import android.os.Build;
 import android.view.SurfaceView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.engine.Audio;
 import com.example.engine.Engine;
+import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.Graphics;
 import com.example.engine.TouchEvent;
@@ -67,6 +70,8 @@ public class AndroidEngine implements Engine,Runnable {
 
     private AndroidAudio audio;
 
+    private AndroidMobile mobile;
+
     private String filesDir="Files/";
 
     private String sharedPrefFile = "sharedprefs";
@@ -77,13 +82,14 @@ public class AndroidEngine implements Engine,Runnable {
     private final String CHANNEL_DESCRIPTION = "description";
     private final String CHANNEL_ID = "id";
 
-    public AndroidEngine(SurfaceView view){
+    public AndroidEngine(SurfaceView view, AndroidMobile androidMobile){
         this.sView = view;
         this.input = new AndroidInput();
         this.sView.setOnTouchListener(this.input);
         assetManager=this.sView.getContext().getAssets();
         this.gr = new AndroidGraphics(view);
         this.audio=new AndroidAudio(sView.getContext().getAssets());
+        this.mobile = androidMobile;
 
         System.loadLibrary("AndroidEngine");
     }
@@ -115,20 +121,20 @@ public class AndroidEngine implements Engine,Runnable {
             this.renderThread.start();
         }
     }
-//setter del estado
+    //setter del estado
     @Override
     public void setState(State state){
-
         this.state = state;
         this.state.setAudio(this.audio);
         this.state.setGraphics(this.gr);
+        this.state.setMobile(this.mobile);
     }
-//getter del audio
+    //getter del audio
     @Override
     public Audio getAudio() {
         return this.audio;
     }
-//getter del estado
+    //getter del estado
     @Override
     public State getState()
     {
@@ -138,7 +144,12 @@ public class AndroidEngine implements Engine,Runnable {
     public Graphics getGraphics(){
         return this.gr;
     }
-//la pausa del juego
+
+    //getter de mobile
+    @Override
+    public Mobile getMobile() { return this.mobile; }
+
+    //la pausa del juego
     @Override
     public InputStream readFile2(String file) {
         InputStream is = null;
@@ -220,17 +231,17 @@ public class AndroidEngine implements Engine,Runnable {
 
     @Override
     public void showNotificacion(String title, String firstText) {
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder( this.sView.getContext(), CHANNEL_ID)
-//                .setSmallIcon(this.iconNotification)
-//                .setContentTitle( title )
-//                .setContentText( firstText )
-//                .setStyle( new NotificationCompat.BigTextStyle()
-//                        .bigText( firstText ))
-//                .setPriority(NotificationCompat. PRIORITY_DEFAULT);
-//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.sView.getContext());
-//// notificationId is a unique int for each notification that you must define.
-//        notificationManager.notify(notificationId, builder.build());
-//        if(Activity.Com)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder( this.sView.getContext(), CHANNEL_ID)
+                .setSmallIcon(this.iconNotification)
+                .setContentTitle( title )
+                .setContentText( firstText )
+                .setStyle( new NotificationCompat.BigTextStyle()
+                        .bigText( firstText ))
+                .setPriority(NotificationCompat. PRIORITY_DEFAULT);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.sView.getContext());
+// notificationId is a unique int for each notification that you must define.
+        //notificationManager.notify(notificationId, builder.build());
+        //if(Activity.Com)
     }
 
     @Override
@@ -249,7 +260,7 @@ public class AndroidEngine implements Engine,Runnable {
         if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
             int importance = NotificationManager. IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID , CHANNEL_NAME, importance) ;
-            channel.setDescription(CHANNEL_DESCRIPTION) ;
+            channel.setDescription(CHANNEL_DESCRIPTION);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.sView.getContext());

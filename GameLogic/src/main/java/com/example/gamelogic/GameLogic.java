@@ -1,6 +1,7 @@
 package com.example.gamelogic;
 
 import com.example.engine.Graphics;
+import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 import com.example.engine.Engine;
@@ -568,6 +569,11 @@ public class GameLogic implements State {
         for (int i = 0; i < this.torres.size(); i++) {
             this.torres.get(i).setAudio(this.audio);
         }
+    }
+
+    @Override
+    public void setMobile(Mobile mobile) {
+
     }
 
     /**

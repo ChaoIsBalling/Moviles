@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 //del motor de android y gameLogic
 import com.example.androidengine.AndroidEngine;
+import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.GameLogic;
 import com.example.gamelogic.Menu;
 
@@ -35,6 +36,9 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 public class MainActivity extends AppCompatActivity {
     private SurfaceView renderView;
     private AndroidEngine engine;
+
+    private AndroidMobile mobile;
+
     //anuncio banner y su contenedor
     private AdView adView;
     private FrameLayout adContainerView;
@@ -55,18 +59,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Obtenemos el surfaceView del xml
+        //Vistas principales
+        //Obtenemos el surfaceView del xml donde renderizamos el juego
         this.renderView = findViewById(R.id.game);
+        //Container de anuncios
+        this.adContainerView = findViewById(R.id.ad_view_container);
 
-        this.butn = findViewById(R.id.button);
-        //Inicializamos motor
-        this.engine = new AndroidEngine(this.renderView);
+        //Añadimos banner al container
+        this.adContainerView.removeAllViews();
+        this.adContainerView.addView(adView);
+
+        //Inicializamos motor e interfaz de mobile que accede a los metodos de main activity
+        this.mobile = new AndroidMobile(this,this.renderView,this.adView);
+        this.engine = new AndroidEngine(this.renderView,this.mobile);
         this.engine.setState(new Menu(engine));
 
-        //Container de anuncios
-        adContainerView = findViewById(R.id.ad_view_container);
 
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+
+        /*MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
                 //Cargamos anuncio recompensado
@@ -82,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showRewardedVideo();
             }
-        });
+        });*/
     }
 
     /**
