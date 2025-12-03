@@ -2,6 +2,7 @@ package com.example.gamelogic;
 
 import com.example.engine.Engine;
 import com.example.engine.Graphics;
+import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 import com.example.engine.Audio;
@@ -34,11 +35,12 @@ public class Menu implements State {
     private Text textoDiamantes;
 
 
-    //Referencias al Audio Manager, al motor y a Graphics
+    //Referencias al Audio Manager, al motor y a Graphics y a Mobile
     private Audio audio;
     Engine engine;
     Graphics gr;
 
+    Mobile mob;
 
     /**
      * Constructora del menú
@@ -129,5 +131,14 @@ public class Menu implements State {
     @Override
     public void setAudio(Audio audio) {
     this.audio=audio;
+    }
+
+    /**
+     * Inicializa Mobile
+     * @param mobile Interfaz Mobile
+     */
+    @Override
+    public void setMobile(Mobile mobile) {
+        this.mob = mobile;
     }
 }

@@ -3,6 +3,7 @@ package com.example.gamelogic;
 import com.example.engine.Audio;
 import com.example.engine.Engine;
 import com.example.engine.Graphics;
+import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 
@@ -62,6 +63,11 @@ public class Tienda implements State {
 
     @Override
     public void setAudio(Audio audio) {
+
+    }
+
+    @Override
+    public void setMobile(Mobile mobile) {
 
     }
 }
