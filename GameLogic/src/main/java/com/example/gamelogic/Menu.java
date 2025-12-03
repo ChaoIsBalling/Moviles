@@ -14,6 +14,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import org.json.JSONObject;
+import org.json.JSONArray;
+import java.util.ArrayList;
 
 /**
  * Clase que implementa el menú inicial
@@ -43,11 +46,13 @@ public class Menu implements State {
     public Menu(Engine engine){
         this.engine = engine;
 
-        this.botonInicial = new Button(150, 250, 200,50,true,20);
-        this.botonInicial.setColor(0xFF999999);
+        JSONObject botones=engine.readJsonFile("Menu/style.json");
+          JSONObject no= botones.getJSONObject("BotonInicial");
+        this.botonInicial = new Button(no);
         Text textoBoton = new Text("Inika-Regular.ttf","Jugar",0,0,30,true,true);
         textoBoton.setColor(0xff00ffff);
         this.botonInicial.setText(textoBoton);
+
         this.textoInicial = new Text("Inika-Regular.ttf","TowerDefense",300,150,40,true,true);
         this.textoInicial.setColor(0Xff000000);
 
@@ -106,25 +111,6 @@ public class Menu implements State {
                     if(this.botonInicial.contains(e.x,e.y)){
                         Dificultad dificultad = new Dificultad(this.engine);
                         this.engine.setState(dificultad);
-
-                        OutputStream os = this.engine.writeFile("hola.txt");
-                        String s = "dasdaw";
-                        try {
-                            os.write(s.getBytes());
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-
-                        InputStream is = this.engine.readFile2("hola.txt");
-                        InputStreamReader inputStreamReader= new InputStreamReader(is);
-                        BufferedReader bf = new BufferedReader(inputStreamReader);
-
-                        try{
-                            String content = bf.readLine();
-                            //menu.setText(this.e.getGraphics(), content,30);
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
                     }
                     else if(this.botonAventura.contains(e.x,e.y)){
                         Mundo mundo = new Mundo(this.engine);

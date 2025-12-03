@@ -5,7 +5,10 @@ package com.example.gamelogic;
 
 import com.example.engine.Graphics;
 import com.example.engine.IFont;
-
+import org.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONArray;
+import java.awt.Color;
 /**
  * Clase que representa un boton en la interfaz del juego
  */
@@ -25,7 +28,7 @@ public class Button {
     //Texto del boton
     Text text;
 
-    int color = 0xFF000000; //Color por defecto
+    int color; //Color por defecto
     Image imagen; //Imagen
     Figure figura; //Figura del botón
 
@@ -46,7 +49,18 @@ public class Button {
         this.w = w;
         this.h = h;
     }
-
+    //Constructora que te crea un boton a partir de un Json
+    public Button(JSONObject json)
+    {
+        this.x = json.getInt("x");
+        this.y= json.getInt("y");
+        this.w= json.getInt("w");
+        this.h=json.getInt("h");
+        this.isRound=json.getBoolean("isRound");
+        this.arcRadius=json.getInt("ar");
+//        String a=json.getString("color");
+//        Color.decode(a);
+    }
     /**
      * Setters de atributos del botón
      */

@@ -245,6 +245,12 @@ public class AndroidGraphics implements Graphics {
     public void setColor(int color) {
         this.paint.setColor(color);
     }
+
+    @Override
+    public void setColor(String color) {
+        this.paint.setColor(Color.parseColor(color));
+    }
+
     /**
      * creacion de una nueva pintura
      */

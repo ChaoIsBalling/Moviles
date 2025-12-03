@@ -53,6 +53,7 @@ public interface Graphics {
      * @param color color que queramos poner al motor
      */
     public void setColor(int color);
+    public void setColor(String color);
 
     /**
      * Metodos que crean un Font y devuelve su interfaz

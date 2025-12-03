@@ -273,8 +273,10 @@ public class AndroidEngine implements Engine,Runnable {
             }
         }
     }
+    //Metodo que se encarga de desde un json inicializar todos los parametros de un boton
 
-//Metodo que corre el bucle principal del motor
+
+    //Metodo que corre el bucle principal del motor
     @Override
     public void run() {
         if (renderThread != Thread.currentThread()) {

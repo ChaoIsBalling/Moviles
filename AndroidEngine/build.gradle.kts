@@ -39,6 +39,14 @@ android {
     }
 }
 
+ tasks.register<Copy>("Copy"){
+     from(rootDir.getAbsolutePath() + "/data")
+     into("src/main/assets")
+ }
+
+ tasks.preBuild(){
+     dependsOn("Copy")
+ }
 dependencies {
 
     implementation(libs.appcompat)

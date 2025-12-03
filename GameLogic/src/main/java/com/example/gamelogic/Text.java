@@ -2,7 +2,9 @@ package com.example.gamelogic;
 
 import com.example.engine.Graphics;
 import com.example.engine.IFont;
-
+import org.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONArray;
 /**
  * Clase que representa un texto
  */
@@ -60,7 +62,17 @@ public class Text {
         this.bold=bold;
         this.italic=false;
     }
-
+    public Text(JSONObject json)
+    {
+        this.text= json.getString("texto");
+        this.font=json.getString("font");
+        this.x=json.getInt("x");
+        this.y=json.getInt("y");
+        this.size=json.getInt("size");
+        this.bold= json.getBoolean("bold");
+        this.italic =json.getBoolean("italic");
+        this.color=json.getInt("color");
+    }
     /**
      * Setters
      */
