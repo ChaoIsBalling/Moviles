@@ -41,11 +41,11 @@ public class Mundo implements State {
         this.fondoTexto.setColor(0xff009900);
 
         this.siguienteMundo = new Button(110,50,50,50,true,30);
-        this.siguienteMundo.setColor("FF0000FF");
+        this.siguienteMundo.setColor("#FF0000FF");
         this.anteriorMundo = new Button(490,50,50,50,true,30);
         this.anteriorMundo.setColor("#FF0000FF");
         this.botonVolver = new Button(30,30,30,30,true,15);
-        this.botonVolver.setColor("FFFF0000");
+        this.botonVolver.setColor("#FFFF0000");
     }
 
     @Override
@@ -78,7 +78,7 @@ public class Mundo implements State {
                         this.engine.setState(menu);
                     }
                     else if (this.nivelMundo.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine,"mapa1.txt");
+                        GameLogic gameLogic = new GameLogic(this.engine,"mapa1.json");
                         this.engine.setState(gameLogic);
                     }
                     break;
