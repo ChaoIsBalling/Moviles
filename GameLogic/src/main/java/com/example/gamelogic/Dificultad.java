@@ -23,6 +23,8 @@ public class Dificultad implements State {
     private Engine engine;
     Graphics gr;
 
+    Mobile mob;
+
     /**
      * Constructora del menú de dificultad con los tres botones que representan los tres modos de juego
      * @param engine
@@ -106,7 +108,7 @@ public class Dificultad implements State {
 
     @Override
     public void setMobile(Mobile mobile) {
-
+        this.mob = mobile;
     }
 
 }

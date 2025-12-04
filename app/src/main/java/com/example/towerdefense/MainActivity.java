@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.GameLogic;
+import com.example.gamelogic.GameOver;
 import com.example.gamelogic.Menu;
 
 //Importaciones de gms

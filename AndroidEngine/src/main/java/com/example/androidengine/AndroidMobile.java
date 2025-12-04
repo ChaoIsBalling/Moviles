@@ -1,28 +1,12 @@
 package com.example.androidengine;
 
-import android.content.Context;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-import android.view.PixelCopy;
 import android.app.Activity;
 import android.util.Log;
 import android.view.SurfaceView;
-import android.content.Intent;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-import java.util.concurrent.TimeUnit;
 
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
@@ -41,6 +25,10 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
 import com.example.engine.Mobile;
 
+/**
+ * Clase que implementa los metodos para mostrar anuncios y gestionar las notificaciones
+ * Implementa la interfaz Mobile del motor
+ */
 public class AndroidMobile implements Mobile {
     //anuncio banner y su contenedor en el xml
     private AdView adView;
@@ -55,7 +43,7 @@ public class AndroidMobile implements Mobile {
     //ID`s de unidad de anuncios de prueba, tanto para banner como para reward
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741";
     private static final String AD_REWARD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
-    private static final String TAG = "MainActivity_TowerDefense";
+    private static final String TAG = "MainActivity";
     public AndroidMobile(Activity activity, SurfaceView surfaceView,FrameLayout adContainer){
         this.activity = activity;
         //this.adView = adView;
@@ -75,7 +63,7 @@ public class AndroidMobile implements Mobile {
     }
 
     /**
-     * Metodo para cargar un anuncio Banner
+     * Metodo para mostrar un anuncio Banner
      */
     private void loadBannerAd(){
         // cargamos el anuncio banner
@@ -94,7 +82,7 @@ public class AndroidMobile implements Mobile {
     }
 
     /**
-     * Metodo para cargar el anuncio recompensado con Admob
+     * Metodo para mostrar el anuncio recompensado con Admob
      */
     private void loadRewardedAd() {
         RewardedAd.load(
@@ -127,8 +115,7 @@ public class AndroidMobile implements Mobile {
                                         // Don't forget to set the ad reference to null so you
                                         // don't show the ad a second time.
                                         rewardedAd = null;
-                                        Toast.makeText(
-                                                        activity, "onAdFailedToShowFullScreenContent", Toast.LENGTH_SHORT)
+                                        Toast.makeText(activity, "onAdFailedToShowFullScreenContent", Toast.LENGTH_SHORT)
                                                 .show();
                                     }
 
@@ -166,33 +153,38 @@ public class AndroidMobile implements Mobile {
     /**
      * Metodo que muestra un anuncio recompensado una vez ya se ha cargado
      */
-    private void showRewardedVideo() {
-        if ( this.rewardedAd == null) {
-            Log.d("AdRecompensado", "The rewarded ad wasn't ready yet.");
-            return;
-        }
-        //showVideoButton.setVisibility(View.INVISIBLE);
+    public void showRewardedVideo() {
 
-        rewardedAd.show(
-                activity, new OnUserEarnedRewardListener() {
-                    /**
-                     * En este metodo se recompensa al jugador si ha visto el anuncio
-                     * @param rewardItem
-                     */
-                    @Override
-                    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                        Log.d(TAG, "User earned the reward.");
-                        // Handle the reward.
-                        // [START_EXCLUDE silent]
-                        //addCoins(coinCount);
-                        // [END_EXCLUDE]
-                    }
-                });
     }
     @Override
     public void makeNotification() {
 
     }
+
+    @Override
+    public void showRewardedAd() {
+        //Llamar al hilo principal para ver el anuncio
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (rewardedAd != null) {
+                    rewardedAd.show(activity, new OnUserEarnedRewardListener() {
+                        @Override
+                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                            // Handle the reward.
+                            Log.d(TAG, "The user earned the reward.");
+                            //int rewardAmount = rewardItem.getAmount();
+                            //String rewardType = rewardItem.getType();
+                        }
+                    });
+                } else {
+                    System.out.println("The rewarded ad wasn't ready yet.");
+                    Log.d(TAG, "The rewarded ad wasn't ready yet.");
+                }
+            }
+        });
+    }
+
 
     @Override
     public void scheduleNotificationWithWorkManager() {

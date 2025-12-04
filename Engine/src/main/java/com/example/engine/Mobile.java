@@ -15,11 +15,8 @@ public interface Mobile {
 
     /**
      * Muestra un anuncio recompensado.
-     *
-     * @param listener Callback que será notificado cuando el usuario
-     *                 complete la acción y gane la recompensa o cierre el anuncio.
      */
-    //public void showRewardedAd(RewardListener listener);
+    public void showRewardedAd();
 
     /**
      * Programa una notificación utilizando WorkManager.
