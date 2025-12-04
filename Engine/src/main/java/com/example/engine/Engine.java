@@ -66,9 +66,6 @@ public interface Engine {
     public String openAssetFile(String file);
     public OutputStream writeFile(String file);
 
-    public void SaveValueInt(String key, int value);
-    public int LoadValueInt(String key);
-
     public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText);
     public void showNotificacion(String title, String firstText);
     public void setNotificationIcon(int icono);

@@ -202,23 +202,6 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     @Override
-    public void SaveValueInt(String key, int value) {
-        Context context = this.sView.getContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(this.sharedPrefFile , Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(key, value);
-        editor.apply();
-    }
-
-    @Override
-    public int LoadValueInt(String key) {
-        Context context = this.sView.getContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(this.sharedPrefFile , Context.MODE_PRIVATE);
-        int value = sharedPref.getInt(key, 0);
-        return value;
-    }
-
-    @Override
     public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText) {
 //        WorkRequest request = new OneTimeWorkRequest.Builder(ReminderWorker.class)
 //                .setInitialDelay(time, timeunit)
