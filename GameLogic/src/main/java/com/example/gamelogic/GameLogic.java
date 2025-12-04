@@ -161,7 +161,6 @@ public class GameLogic implements State {
         this.dificultad = Dificultad.aventura;
         this.init();
         this.leerMapa(mapa);
-
     }
 
     private void init()
