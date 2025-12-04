@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.content.Intent;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,19 +42,25 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.example.engine.Mobile;
 
 public class AndroidMobile implements Mobile {
+    //anuncio banner y su contenedor en el xml
     private AdView adView;
+    private FrameLayout adContainer;
+    //El main Activity
     private Activity activity;
     private SurfaceView surfaceView;
+
+    //Anuncio recompensado
     private RewardedAd rewardedAd;
 
     //ID`s de unidad de anuncios de prueba, tanto para banner como para reward
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741";
     private static final String AD_REWARD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
     private static final String TAG = "MainActivity_TowerDefense";
-    public AndroidMobile(Activity activity, SurfaceView surfaceView,AdView adView){
+    public AndroidMobile(Activity activity, SurfaceView surfaceView,FrameLayout adContainer){
         this.activity = activity;
-        this.adView = adView;
+        //this.adView = adView;
         this.surfaceView = surfaceView;
+        this.adContainer = adContainer;
 
         MobileAds.initialize(activity, new OnInitializationCompleteListener() {
             @Override
@@ -64,24 +71,26 @@ public class AndroidMobile implements Mobile {
         //Cargamos anuncio recompensado
         loadRewardedAd();
         //Cargamos anuncio banner
-        if(this.adView == null){
-            // Crear un addView en el que meter el anuncio
-            this.adView = new AdView(activity);
-            this.adView.setAdUnitId(AD_UNIT_ID);
-            this.adView.setAdSize(AdSize.BANNER);
-            loadBannerAd();
-        }
+        loadBannerAd();
     }
 
     /**
      * Metodo para cargar un anuncio Banner
      */
     private void loadBannerAd(){
+        // cargamos el anuncio banner
+        // Crear un addView en el que meter el anuncio
+        adView = new AdView(activity);
+        adView.setAdUnitId(AD_UNIT_ID);
+        adView.setAdSize(AdSize.BANNER);
 
+        //Lo añadimos al container
+        adContainer.removeAllViews();
+        adContainer.addView(adView);
 
         // cargamos el anuncio banner
         AdRequest adRequest = new AdRequest.Builder().build();
-        this.adView.loadAd(adRequest);
+        adView.loadAd(adRequest);
     }
 
     /**
