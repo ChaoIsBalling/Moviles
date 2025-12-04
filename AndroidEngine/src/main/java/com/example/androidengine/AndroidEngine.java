@@ -36,6 +36,8 @@ import org.json.JSONException;
 import org.json.JSONArray;
 //import androidx.work.Worker;
 //import androidx.work.WorkerParameters;
+import android.content.Intent;
+import android.net.Uri;
 
 /**
  * Clase que implementa el motor principal del juego para Android.
@@ -144,6 +146,26 @@ public class AndroidEngine implements Engine,Runnable {
     public Graphics getGraphics(){
         return this.gr;
     }
+
+    //metodo que inicializa un intent implícito pasandole un string
+    @Override
+    public void launchIntent(String application) {
+        Intent intent = null;
+        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(application));
+        this.sView.getContext().startActivity(intent);
+    }
+    //metodo que inicializa un intent implícito pasandole un string y con mas parametros
+    //en su creación
+    @Override
+    public void launchIntent(String application, String text, String parameter)
+    {
+        Intent intent = null;
+        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(application).buildUpon()
+                .appendQueryParameter( text, parameter )
+                .build());
+        this.sView.getContext().startActivity(intent);
+    }
+
 
     //getter de mobile
     @Override

@@ -55,6 +55,15 @@ public interface Engine {
     public Graphics getGraphics();
 
     /**
+     * Este metodo lanza un Intent implicito simple
+     */
+    public void launchIntent(String application);
+    /**
+     * Este metodo lanza un Intent implicito pero con mas parametros a la hora de crearlo
+     */
+    public void launchIntent(String application, String text, String parameter);
+
+    /**
      * Este metodo devuelve el gestor de las funciones propias de Android
      * @return gestor Mobile
      */

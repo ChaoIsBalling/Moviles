@@ -80,8 +80,15 @@
         "bold":true,
         "italic":true,
         "color":"#FF00FFFF"
+    },
+    "BotonIntent":    
+    {   "x":400,
+        "y":350,
+        "w":50,
+        "h":50,
+        "isRound":true,
+        "ar":20,
+        "color":"#FF00FFFF"
     }
-    
-
         
 }
