@@ -129,8 +129,6 @@ public class GameLogic implements State {
     }
 
     private Dificultad dificultad;
-   
-   
        /**
      * Constructora del estado principal de juego
      * @param engine Motor

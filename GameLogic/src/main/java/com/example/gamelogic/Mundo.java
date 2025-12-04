@@ -83,7 +83,7 @@ public class Mundo implements State {
     public void setGraphics(Graphics gr) {
 
     }
-//manejo de los inputs 
+//manejo de los inputs
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
