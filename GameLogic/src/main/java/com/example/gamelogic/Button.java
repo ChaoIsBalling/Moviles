@@ -52,30 +52,35 @@ public class Button {
     //Constructora que te crea un boton a partir de un Json
     public Button(JSONObject json)
     {
+
         this.x = json.getInt("x");
         this.y= json.getInt("y");
         this.w= json.getInt("w");
         this.h=json.getInt("h");
         this.isRound=json.getBoolean("isRound");
-        this.arcRadius=json.getInt("ar");
+        if(isRound)
+            this.arcRadius=json.getInt("ar");
         this.color=json.getString("color");
     }
     /**
      * Setters de atributos del botón
      */
+    //setter de los parametros de posicion texto color imagen y figura
+    public void setX(float x){this.x=x;}
+    public void setY(float y){this.y=y;}
     public void setText(Text text) {
         this.text = text;
     }
-
     public void setColor(String color){
         this.color = color;
     }
-    public void setFigura(Figure fig){
-        this.figura = fig;
-    }
-
+    public void setFigura(Figure fig){this.figura = fig;}
     public void setImagen(Image img){this.imagen = img;}
-
+    //getter de los parametros de tamaño y posicion
+    public float getWidth(){return this.w;}
+    public float getHeight(){return this.h;}
+    public float getX(){return this.x;}
+    public float getY(){return this.y;}
     /**
      * Comprueba si la coordenada x,y está dentro del botón
      */
