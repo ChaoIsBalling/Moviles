@@ -31,14 +31,11 @@ public class Dificultad implements State {
         this.engine = engine;
         JSONObject botones=engine.readJsonFile("Dificultad/style.json");
         botonCorto = new Button(botones.getJSONObject("BotonCorto"));
-        Text textC = new Text(botones.getJSONObject("TextoC"));
-        botonCorto.setText(textC);
+        botonCorto.setText(new Text(botones.getJSONObject("TextoC")));
         botonLargo = new Button(botones.getJSONObject("BotonLargo"));
-        Text textL = new Text(botones.getJSONObject("TextoL"));
-        botonLargo.setText(textL);
+        botonLargo.setText(new Text(botones.getJSONObject("TextoL")));
         botonInfinito = new Button(botones.getJSONObject("BotonInfinito"));
-        Text textI = new Text(botones.getJSONObject("TextoI"));
-        botonInfinito.setText(textI);
+        botonInfinito.setText(new Text(botones.getJSONObject("TextoI")));
         this.botonVolver = new Button(botones.getJSONObject("BotonVolver"));
     }
     @Override

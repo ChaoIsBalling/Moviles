@@ -480,15 +480,17 @@ public class GameLogic implements State {
      * Metodo que inicializa todos los botones y otros elementos de la UI
      */
     public void inicializarUI() {
-        this.botonMejoraCuadrados = new Button(500, 360, 50, 50, true, 20);
-        this.botonMejoraTriangulos = new Button(440, 360, 50, 50, true, 20);
+
+        JSONObject botones=engine.readJsonFile("GameLogic/style.json");
+
+        this.botonMejoraCuadrados = new Button(botones.getJSONObject("BotonMejoraCuadrados"));
+        this.botonMejoraTriangulos = new Button(botones.getJSONObject("BotonMejoraTriangulos"));
         this.botonMejoraHexagonos = new Button(560, 360, 50, 50, true, 20);
 
         this.botonMejoraAtaque = new Button(440, 360, 50, 50, true, 20);
         this.botonMejoraRango = new Button(500, 360, 50, 50, true, 20);
         this.botonMejoraVelocidad = new Button(560, 360, 50, 50, true, 20);
 
-        this.botonMejoraCuadrados.setColor("#FFFFFFFF");
         this.botonMejoraTriangulos.setColor("#FFFFFFFF");
         this.botonMejoraHexagonos.setColor("#FFFFFFFF");
 

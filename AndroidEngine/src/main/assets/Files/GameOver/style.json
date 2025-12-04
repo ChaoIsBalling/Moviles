@@ -6,7 +6,7 @@
         "h":50,
         "isRound":true,
         "ar":20,
-        "color":"##FF999999"
+        "color":"#FF999999"
     },   
     "BotonReintentar":    
     {   "x":480,
@@ -15,7 +15,7 @@
         "h":50,
         "isRound":true,
         "ar":20,
-        "color":"##FF999999"
+        "color":"#FF999999"
     },
     "TextoBoton":
     {
@@ -39,7 +39,7 @@
         "italic":true,
         "color":"#FF00FFFF"
     },
-          "TextoWin":
+        "TextoWin":
     {
         "texto":"VICTORIA",
         "font":"Inika-Regular.ttf",
@@ -50,7 +50,7 @@
         "italic":true,
         "color":"#FF000000"
     },
-           "TextoLose":
+         "TextoLose":
     {
         "texto":"VICTORIA",
         "font":"Inika-Regular.ttf",

@@ -50,18 +50,15 @@ public class Menu implements State {
         JSONObject botones=engine.readJsonFile("Menu/style.json");
 
         this.botonInicial = new Button(botones.getJSONObject("BotonInicial"));
-        Text textoBoton = new Text(botones.getJSONObject("TextoBoton"));
-        this.botonInicial.setText(textoBoton);
+        this.botonInicial.setText(new Text(botones.getJSONObject("TextoBoton")));
 
         this.textoInicial = new Text(botones.getJSONObject("TextoInicial"));
 
         this.botonAventura = new Button(botones.getJSONObject("BotonAventura"));
-        Text textoAventura = new Text(botones.getJSONObject("TextoAventura"));
-        this.botonAventura.setText(textoAventura);
+        this.botonAventura.setText( new Text(botones.getJSONObject("TextoAventura")));
 
         this.botonTienda = new Button(botones.getJSONObject("BotonTienda"));
-        Text textoTienda = new Text(botones.getJSONObject("TextoTienda"));
-        this.botonTienda.setText(textoTienda);
+        this.botonTienda.setText( new Text(botones.getJSONObject("TextoTienda")));
 
         this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantes"));
     }
