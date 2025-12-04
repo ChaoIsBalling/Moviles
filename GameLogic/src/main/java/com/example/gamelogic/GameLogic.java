@@ -16,11 +16,11 @@ import java.lang.Integer;
  * Clase que representa la interfaz principal de juego, donde se desarrolla toda su lógica de gameplay
  */
 public class GameLogic implements State {
-
     //Botones
     private Button botonMejoraTriangulos;
     private Button botonMejoraCuadrados;
     private Button botonMejoraHexagonos;
+    private Button botonRecompensaAd;
 
     private Button botonMejoraAtaque;
     private Button botonMejoraRango;

@@ -22,6 +22,8 @@ public class GameOver implements State {
     private Button botonMenu;
     private Button botonReintentar;
 
+    private Button botonRecompensaAd;
+
     //Textos
     private Text textoInicial;
 
@@ -30,6 +32,8 @@ public class GameOver implements State {
     private Sound lose;
     private Audio audio;
     Engine engine;
+
+    Mobile mobile;
     //Determina si el jugador ha ganado
     boolean win;
     public GameOver(Engine engine, Audio audio,boolean win)
@@ -41,9 +45,11 @@ public class GameOver implements State {
 
         botonMenu = new Button(botones.getJSONObject("BotonMenu"));
         botonReintentar = new Button(botones.getJSONObject("BotonReintentar"));
+        botonRecompensaAd = new Button(botones.getJSONObject("BotonRecompensaAd"));
 
         botonMenu.setText(new Text(botones.getJSONObject("TextoBoton")));
         botonReintentar.setText(new Text(botones.getJSONObject("TextoReintentar")));
+        botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAd")));
         //Dependiendo del resultado reproducimos un sonido distinto
         if(win) {
             textoInicial = new Text(botones.getJSONObject("TextoWin"));
@@ -73,6 +79,7 @@ public class GameOver implements State {
         botonMenu.Render(gr);
         textoInicial.Render(gr);
         botonReintentar.Render(gr);
+        botonRecompensaAd.Render(gr);
     }
 
     @Override
@@ -99,6 +106,10 @@ public class GameOver implements State {
                         this.engine.setState(dificultad);
                     }
 
+                    if(this.botonRecompensaAd.contains(e.x,e.y)){
+                        this.mobile.showRewardedAd();
+                    }
+
                     break;
                 case TOUCH_UP:
 
@@ -120,7 +131,7 @@ public class GameOver implements State {
 
     @Override
     public void setMobile(Mobile mobile) {
-
+        this.mobile = mobile;
     }
 
 }
