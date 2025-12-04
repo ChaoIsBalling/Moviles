@@ -31,15 +31,6 @@ public class GameLogic implements State {
     private Triangle figuraBotonTriangulo;
     private Hexagon figuraBotonHexagono;
 
-    private Text costeMejoraTriangulos;
-    private Text costeMejoraCuadrados;
-    private Text costeMejoraHexagonos;
-
-    private Text costeMejoraAtaque;
-    private Text costeMejoraRango;
-    private Text costeMejoraVelocidad;
-
-
     //Imagenes de los botones en modo torre
     private Image imagenMejoraAtaque;
     private Image imagenMejoraRango;
@@ -482,21 +473,15 @@ public class GameLogic implements State {
     public void inicializarUI() {
 
         JSONObject botones=engine.readJsonFile("GameLogic/style.json");
-
         this.botonMejoraCuadrados = new Button(botones.getJSONObject("BotonMejoraCuadrados"));
         this.botonMejoraTriangulos = new Button(botones.getJSONObject("BotonMejoraTriangulos"));
-        this.botonMejoraHexagonos = new Button(560, 360, 50, 50, true, 20);
+        this.botonMejoraHexagonos = new Button(botones.getJSONObject("BotonMejoraHexagonos"));
 
-        this.botonMejoraAtaque = new Button(440, 360, 50, 50, true, 20);
-        this.botonMejoraRango = new Button(500, 360, 50, 50, true, 20);
-        this.botonMejoraVelocidad = new Button(560, 360, 50, 50, true, 20);
-
-        this.botonMejoraTriangulos.setColor("#FFFFFFFF");
-        this.botonMejoraHexagonos.setColor("#FFFFFFFF");
-
-        this.botonMejoraAtaque.setColor("#FFFFFFFF");
-        this.botonMejoraRango.setColor("#FFFFFFFF");
-        this.botonMejoraVelocidad.setColor("#FFFFFFFF");
+        //Los botones de cuadrado triangulos y hexagonos usan los mismos valores de apariencia
+        //que los botones de ataque rango y velocidad
+        this.botonMejoraAtaque = new Button(botones.getJSONObject("BotonMejoraTriangulos"));
+        this.botonMejoraRango = new Button(botones.getJSONObject("BotonMejoraCuadrados"));
+        this.botonMejoraVelocidad = new Button(botones.getJSONObject("BotonMejoraHexagonos"));
 
         this.figuraBotonCuadrado = new Square(1, -5, 30, 30, true);
         this.figuraBotonCuadrado.setColor(0xFFC8A2C8);
@@ -508,37 +493,22 @@ public class GameLogic implements State {
         this.botonMejoraTriangulos.setFigura(this.figuraBotonTriangulo);
         this.botonMejoraHexagonos.setFigura(this.figuraBotonHexagono);
 
-        this.costeMejoraCuadrados = new Text("Inika-Regular.ttf", "150", 0, 15, 15, true, true);
-        this.botonMejoraCuadrados.setText(this.costeMejoraCuadrados);
+        this.botonMejoraCuadrados.setText(new Text(botones.getJSONObject("CosteMejoraCuadrados")));
+        this.botonMejoraTriangulos.setText(new Text(botones.getJSONObject("CosteMejoraTriangulos")));
+        this.botonMejoraHexagonos.setText(new Text(botones.getJSONObject("CosteMejoraHexagonos")));
 
-        this.costeMejoraTriangulos = new Text("Inika-Regular.ttf", "100", 0, 15, 15, true, true);
-        this.botonMejoraTriangulos.setText(this.costeMejoraTriangulos);
+        this.botonMejoraAtaque.setText(new Text(botones.getJSONObject("CosteMejoraAtaques")));
+        this.botonMejoraRango.setText(new Text(botones.getJSONObject("CosteMejoraAtaques")));
+        this.botonMejoraVelocidad.setText(new Text(botones.getJSONObject("CosteMejoraTriangulos")));
 
-        this.costeMejoraHexagonos = new Text("Inika-Regular.ttf", "200", 0, 15, 15, true, true);
-        this.botonMejoraHexagonos.setText(this.costeMejoraHexagonos);
-
-        this.costeMejoraAtaque = new Text("Inika-Regular.ttf", "75", 0, 15, 15, true, true);
-        this.botonMejoraAtaque.setText(this.costeMejoraAtaque);
-
-        this.costeMejoraRango = new Text("Inika-Regular.ttf", "75", 0, 15, 15, true, true);
-        this.botonMejoraRango.setText(this.costeMejoraRango);
-
-        this.costeMejoraVelocidad = new Text("Inika-Regular.ttf", "100", 0, 15, 15, true, true);
-        this.botonMejoraVelocidad.setText(this.costeMejoraVelocidad);
-
-        this.imagenMejoraAtaque = new Image("Espada.png", -15, -20, 30, 30, this.gr);
-        this.botonMejoraAtaque.setImagen(this.imagenMejoraAtaque);
-
-        this.imagenMejoraRango = new Image("Arco.png", -15, -20, 30, 30, this.gr);
-        this.botonMejoraRango.setImagen(this.imagenMejoraRango);
-
-        this.imagenMejoraVelocidad = new Image("Reloj.png", -15, -20, 30, 30, this.gr);
-        this.botonMejoraVelocidad.setImagen(this.imagenMejoraVelocidad);
+        this.botonMejoraAtaque.setImagen(new Image(botones.getJSONObject("ImagenAtaque"),this.gr));
+        this.botonMejoraRango.setImagen(new Image(botones.getJSONObject("ImagenRango"),this.gr));
+        this.botonMejoraVelocidad.setImagen(new Image(botones.getJSONObject("ImagenVelocidad"),this.gr));
 
         this.textoV = new Text("Inika-Regular.ttf", String.valueOf(this.vida), 30, 340, 20);
         this.textoD = new Text("Inika-Regular.ttf", String.valueOf(this.dinero), 30, 370, 20);
-        this.imagenVida = new Image("Vida.png", 60, 330, 30, 30, this.gr);
-        this.imagenDinero = new Image("Dinero.png", 60, 360, 30, 30, this.gr);
+        this.imagenVida = new Image( botones.getJSONObject("ImagenVida"), this.gr);
+        this.imagenDinero = new Image(botones.getJSONObject("ImagenDinero"), this.gr);
     }
 
     /**
@@ -738,7 +708,6 @@ public class GameLogic implements State {
 
         }
     }
-
     /**
      * Parar los sonidos de la torre
      */

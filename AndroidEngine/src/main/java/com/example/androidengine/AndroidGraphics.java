@@ -236,7 +236,7 @@ public class AndroidGraphics implements Graphics {
         Paint.FontMetrics fm = this.paint.getFontMetrics();
         //calculo de posicion centrada del texto respecto a la x e y que tenemos
         float xPos = x - (paint.measureText(texto)/2);
-        float yPos =  (y + ((fm.ascent-fm.descent- fm.leading) / 2)) ;
+        float yPos =  (y - ((fm.ascent+fm.descent)/2- fm.leading));
         this.canvas.drawText(texto,xPos,yPos,this.paint);
     }
     /**
