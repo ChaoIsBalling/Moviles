@@ -3,9 +3,10 @@ package com.example.gamelogic;
 import com.example.engine.Audio;
 import com.example.engine.Engine;
 import com.example.engine.Graphics;
+import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
-
+import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
@@ -28,20 +29,14 @@ public class Dificultad implements State {
      */
     public Dificultad(Engine engine){
         this.engine = engine;
-        botonCorto = new Button(300,100,220,50,true,20);
-        Text textC = new Text("Inika-Regular.ttf","Partida corta",0,0,30,true,true);
-        botonCorto.setText(textC);
-        botonCorto.setColor(0xFF999999);
-        botonLargo = new Button(300,200,220,50,true,20);
-        Text textL = new Text("Inika-Regular.ttf","Partida larga",0,0,30,true,true);
-        botonLargo.setText(textL);
-        botonLargo.setColor(0xFF999999);
-        botonInfinito = new Button(300,300,220,50,true,20);
-        Text textI = new Text("Inika-Regular.ttf","Modo Infinito",0,0,30,true,true);
-        botonInfinito.setText(textI);
-        botonInfinito.setColor(0xFF999999);
-        this.botonVolver = new Button(30,30,30,30,true,15);
-        this.botonVolver.setColor(0xffff0000);
+        JSONObject botones=engine.readJsonFile("Dificultad/style.json");
+        botonCorto = new Button(botones.getJSONObject("BotonCorto"));
+        botonCorto.setText(new Text(botones.getJSONObject("TextoC")));
+        botonLargo = new Button(botones.getJSONObject("BotonLargo"));
+        botonLargo.setText(new Text(botones.getJSONObject("TextoL")));
+        botonInfinito = new Button(botones.getJSONObject("BotonInfinito"));
+        botonInfinito.setText(new Text(botones.getJSONObject("TextoI")));
+        this.botonVolver = new Button(botones.getJSONObject("BotonVolver"));
     }
     @Override
     public void update(double deltaTime) {
@@ -106,6 +101,11 @@ public class Dificultad implements State {
 
     @Override
     public void setAudio(Audio audio) {
+
+    }
+
+    @Override
+    public void setMobile(Mobile mobile) {
 
     }
 

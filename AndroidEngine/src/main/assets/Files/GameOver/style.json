@@ -1,0 +1,66 @@
+{
+    "BotonMenu":    
+    {   "x":120,
+        "y":250,
+        "w":200,
+        "h":50,
+        "isRound":true,
+        "ar":20,
+        "color":"#FF999999"
+    },   
+    "BotonReintentar":    
+    {   "x":480,
+        "y":250,
+        "w":200,
+        "h":50,
+        "isRound":true,
+        "ar":20,
+        "color":"#FF999999"
+    },
+    "TextoBoton":
+    {
+        "texto":"Menu",
+        "font":"Inika-Regular.ttf",
+        "x":0,
+        "y":0,
+        "size":30,
+        "bold":true,
+        "italic":true,
+        "color":"#FF00FFFF"
+    },
+      "TextoReintentar":
+    {
+        "texto":"Reintentar",
+        "font":"Inika-Regular.ttf",
+        "x":0,
+        "y":0,
+        "size":30,
+        "bold":true,
+        "italic":true,
+        "color":"#FF00FFFF"
+    },
+        "TextoWin":
+    {
+        "texto":"VICTORIA",
+        "font":"Inika-Regular.ttf",
+        "x":300,
+        "y":150,
+        "size":40,
+        "bold":true,
+        "italic":true,
+        "color":"#FF000000"
+    },
+         "TextoLose":
+    {
+        "texto":"VICTORIA",
+        "font":"Inika-Regular.ttf",
+        "x":300,
+        "y":150,
+        "size":40,
+        "bold":true,
+        "italic":true,
+        "color":"#FF000000"
+    }
+    
+
+}

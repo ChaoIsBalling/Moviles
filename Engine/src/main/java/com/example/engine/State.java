@@ -39,4 +39,9 @@ public interface State {
      */
     void setAudio(Audio audio);
 
+    /**
+     * Inicializa el sistema de mobile del motor de Android
+     * @param mobile Interfaz Mobile
+     */
+    void setMobile(Mobile mobile);
 }

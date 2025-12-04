@@ -1,0 +1,65 @@
+{
+    "nivelFilas":3,
+    "nivelColumnas":3, 
+    "colorCompleted": "#FF399847",
+    "colorLocked": "#FFA1BF37",
+    "NivelMundo":    
+    {   "x":200,
+        "y":150,
+        "w":70,
+        "h":70,
+        "isRound":false,
+        "ar":20,
+        "color":"#FFA1BF37"
+    },    
+    "TextoNivel":
+    {
+        "texto":"1",
+        "font":"Inika-Regular.ttf",
+        "x":0,
+        "y":0,
+        "size":40,
+        "bold":true,
+        "italic":true,
+        "color":"#FF000000"
+    }
+    ,    
+    "TextoMundo":
+    {
+        "texto":"Mundo 1",
+        "font":"Inika-Regular.ttf",
+        "x":300,
+        "y":50,
+        "size":40,
+        "bold":true,
+        "italic":true,
+        "color":"#FF000000"
+    },
+    "SiguienteMundo":    
+    {   "x":110,
+        "y":50,
+        "w":50,
+        "h":50,
+        "isRound":true,
+        "ar":30,
+        "color":"#FF0000FF"
+    },
+    "AnteriorMundo":    
+    {   "x":490,
+        "y":50,
+        "w":50,
+        "h":50,
+        "isRound":true,
+        "ar":30,
+        "color":"#FF0000FF"
+    },
+    "BotonVolver":    
+    {   "x":30,
+        "y":30,
+        "w":30,
+        "h":30,
+        "isRound":true,
+        "ar":15,
+        "color":"#FFFF0000"
+    }
+}

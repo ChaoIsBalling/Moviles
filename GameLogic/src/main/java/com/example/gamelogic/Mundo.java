@@ -3,8 +3,11 @@ package com.example.gamelogic;
 import com.example.engine.Audio;
 import com.example.engine.Engine;
 import com.example.engine.Graphics;
+import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
+
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +18,6 @@ import java.util.ArrayList;
 
 public class Mundo implements State {
 
-    private Button nivelMundo;
 
     private Text textoMundo;
     private Square fondoTexto;
@@ -23,39 +25,53 @@ public class Mundo implements State {
     private Button siguienteMundo;
     private Button anteriorMundo;
     private Button botonVolver;
-
+    private ArrayList<Button> niveles;
+    String ColorCompleted;
     private Engine engine;
 
+    //constructora del estado que crea e inicializa los botones de la escena
     public Mundo(Engine engine){
         this.engine=engine;
+        JSONObject botones=engine.readJsonFile("Mundo/style.json");
+        int fil =botones.getInt("nivelFilas");
+        int col=botones.getInt("nivelColumnas");
+        niveles=new ArrayList<Button>();
+        this.ColorCompleted=botones.getString("colorCompleted");
+        //inicialización de todos los botones de niveles
+        for(int i=0;i<fil;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                Button nivelMundo = new Button(botones.getJSONObject("NivelMundo"));
+                Text nivel = new Text(botones.getJSONObject("TextoNivel"));
+                nivel.setText(Integer.toString(j*fil+i+1));
+                nivelMundo.setText(nivel);
+                nivelMundo.setX(nivelMundo.getX()+nivelMundo.getWidth()*(float)i*1.5f);
+                nivelMundo.setY(nivelMundo.getY()+nivelMundo.getHeight()*(float)j*1.5f);
 
-        this.nivelMundo = new Button(75,150,100,100);
-        this.nivelMundo.setColor(0xff88ff00);
-        Text nivel1 = new Text("Inika-Regular.ttf","1",0,0,40,true,true);
-        nivel1.setColor(0xff000000);
-        this.nivelMundo.setText(nivel1);
+                niveles.add(nivelMundo);
 
-        this.textoMundo = new Text("Inika-Regular.ttf","Mundo1",300,50,40,true,true);
-        this.textoMundo.setColor(0xff000000);
+            }
+        }
+
+        this.textoMundo = new Text(botones.getJSONObject("TextoMundo"));
         this.fondoTexto = new Square(300,50,300,70,true);
         this.fondoTexto.setColor(0xff009900);
 
-        this.siguienteMundo = new Button(110,50,50,50,true,30);
-        this.siguienteMundo.setColor(0xff0000ff);
-        this.anteriorMundo = new Button(490,50,50,50,true,30);
-        this.anteriorMundo.setColor(0xff0000ff);
-        this.botonVolver = new Button(30,30,30,30,true,15);
-        this.botonVolver.setColor(0xffff0000);
+        this.siguienteMundo = new Button(botones.getJSONObject("SiguienteMundo"));
+        this.anteriorMundo = new Button(botones.getJSONObject("AnteriorMundo"));
+        this.botonVolver = new Button(botones.getJSONObject("BotonVolver"));
     }
 
     @Override
     public void update(double deltatime) {
 
     }
-
+    //renderización de todos los botones y texto
     @Override
     public void render(Graphics gr) {
-        this.nivelMundo.Render(gr);
+        for(int i=0;i<niveles.size();i++)
+            niveles.get(i).Render(gr);
         this.fondoTexto.Render(gr);
         this.textoMundo.Render(gr);
         this.siguienteMundo.Render(gr);
@@ -67,7 +83,7 @@ public class Mundo implements State {
     public void setGraphics(Graphics gr) {
 
     }
-
+//manejo de los inputs
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
@@ -77,9 +93,15 @@ public class Mundo implements State {
                         Menu menu = new Menu(this.engine);
                         this.engine.setState(menu);
                     }
-                    else if (this.nivelMundo.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine,"mapa1.txt");
-                        this.engine.setState(gameLogic);
+                    else{
+                     for(int i=0;i< niveles.size();i++)
+                     {
+                         if(niveles.get(i).contains(e.x,e.y))
+                         {
+                             GameLogic gameLogic = new GameLogic(this.engine,"mapa1.json");
+                             this.engine.setState(gameLogic);
+                         }
+                     }
                     }
                     break;
                 case TOUCH_UP:
@@ -93,6 +115,11 @@ public class Mundo implements State {
 
     @Override
     public void setAudio(Audio audio) {
+
+    }
+
+    @Override
+    public void setMobile(Mobile mobile) {
 
     }
 }

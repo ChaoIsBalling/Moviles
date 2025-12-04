@@ -30,13 +30,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-tasks.register<Copy>("Copy"){
-    from(rootDir.getAbsolutePath() + "/data")
-    into("src/main/assets")
-}
-tasks.preBuild(){
-    dependsOn("Copy")
-}
+
 dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -48,8 +42,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("com.google.android.gms:play-services-ads:24.7.0")
+    implementation("com.google.android.gms:play-services-ads:24.8.0")
 }
-tasks.preBuild(){
-    dependsOn("Copy")
-}
+

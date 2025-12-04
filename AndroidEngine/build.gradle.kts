@@ -39,13 +39,23 @@ android {
     }
 }
 
+ tasks.register<Copy>("Copy"){
+     from(rootDir.getAbsolutePath() + "/data")
+     into("src/main/assets")
+ }
+
+ tasks.preBuild(){
+     dependsOn("Copy")
+ }
 dependencies {
 
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(project(":Engine"))
     implementation(files("../app/libs/json-20250517.jar"))
+    implementation(libs.work.runtime)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("com.google.android.gms:play-services-ads:24.8.0")
 }

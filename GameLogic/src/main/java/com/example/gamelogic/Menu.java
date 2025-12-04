@@ -2,6 +2,7 @@ package com.example.gamelogic;
 
 import com.example.engine.Engine;
 import com.example.engine.Graphics;
+import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 import com.example.engine.Audio;
@@ -13,6 +14,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import org.json.JSONObject;
+import org.json.JSONArray;
 import java.util.ArrayList;
 
 /**
@@ -31,41 +35,32 @@ public class Menu implements State {
     private Text textoDiamantes;
 
 
-    //Referencias al Audio Manager, al motor y a Graphics
+    //Referencias al Audio Manager, al motor y a Graphics y a Mobile
     private Audio audio;
     Engine engine;
     Graphics gr;
 
+    Mobile mob;
 
     /**
      * Constructora del menú
      */
     public Menu(Engine engine){
         this.engine = engine;
+        JSONObject botones=engine.readJsonFile("Menu/style.json");
 
-        this.botonInicial = new Button(150, 250, 200,50,true,20);
-        this.botonInicial.setColor(0xFF999999);
-        Text textoBoton = new Text("Inika-Regular.ttf","Jugar",0,0,30,true,true);
-        textoBoton.setColor(0xff00ffff);
-        this.botonInicial.setText(textoBoton);
-        this.textoInicial = new Text("Inika-Regular.ttf","TowerDefense",300,150,40,true,true);
-        this.textoInicial.setColor(0Xff000000);
+        this.botonInicial = new Button(botones.getJSONObject("BotonInicial"));
+        this.botonInicial.setText(new Text(botones.getJSONObject("TextoBoton")));
 
-        this.botonAventura = new Button(450, 250, 200,50,true,20);
-        this.botonAventura.setColor(0xFF999999);
-        Text textoAventura = new Text("Inika-Regular.ttf","Aventura",0,0,30,true,true);
-        textoAventura.setColor(0xff00ffff);
-        this.botonAventura.setText(textoAventura);
+        this.textoInicial = new Text(botones.getJSONObject("TextoInicial"));
 
-        this.botonTienda = new Button(150, 350, 200,50,true,20);
-        this.botonTienda.setColor(0xFF00ffff);
-        Text textoTienda = new Text("Inika-Regular.ttf","Tienda",0,0,30,true,true);
-        textoTienda.setColor(0xff000000);
-        this.botonTienda.setText(textoTienda);
+        this.botonAventura = new Button(botones.getJSONObject("BotonAventura"));
+        this.botonAventura.setText( new Text(botones.getJSONObject("TextoAventura")));
 
-        this.textoDiamantes = new Text("Inika-Regular.ttf","0",450,350,40,true,true);
-        this.textoDiamantes.setColor(0Xff00ffff);
+        this.botonTienda = new Button(botones.getJSONObject("BotonTienda"));
+        this.botonTienda.setText( new Text(botones.getJSONObject("TextoTienda")));
 
+        this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantes"));
     }
     @Override
     public void update(double deltaTime) {
@@ -106,25 +101,6 @@ public class Menu implements State {
                     if(this.botonInicial.contains(e.x,e.y)){
                         Dificultad dificultad = new Dificultad(this.engine);
                         this.engine.setState(dificultad);
-
-                        OutputStream os = this.engine.writeFile("hola.txt");
-                        String s = "dasdaw";
-                        try {
-                            os.write(s.getBytes());
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-
-                        InputStream is = this.engine.readFile2("hola.txt");
-                        InputStreamReader inputStreamReader= new InputStreamReader(is);
-                        BufferedReader bf = new BufferedReader(inputStreamReader);
-
-                        try{
-                            String content = bf.readLine();
-                            //menu.setText(this.e.getGraphics(), content,30);
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
                     }
                     else if(this.botonAventura.contains(e.x,e.y)){
                         Mundo mundo = new Mundo(this.engine);
@@ -152,5 +128,14 @@ public class Menu implements State {
     @Override
     public void setAudio(Audio audio) {
     this.audio=audio;
+    }
+
+    /**
+     * Inicializa Mobile
+     * @param mobile Interfaz Mobile
+     */
+    @Override
+    public void setMobile(Mobile mobile) {
+        this.mob = mobile;
     }
 }

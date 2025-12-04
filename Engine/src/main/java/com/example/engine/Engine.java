@@ -22,11 +22,11 @@ public interface Engine {
      * Este metodo pausa el motor
      */
     public void pause();
-
     /**
      * Este metodo indica el estado de juego que debe renderizarse/ejecutarse
      * @param state Estado al que queremos transicionar
      */
+
     public void setState(State state);
 
     /**
@@ -53,6 +53,12 @@ public interface Engine {
      * @return gestor Graficos
      */
     public Graphics getGraphics();
+
+    /**
+     * Este metodo devuelve el gestor de las funciones propias de Android
+     * @return gestor Mobile
+     */
+    public Mobile getMobile();
 
     public InputStream readFile2(String file);
 

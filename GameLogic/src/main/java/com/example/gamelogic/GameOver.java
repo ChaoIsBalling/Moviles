@@ -2,11 +2,14 @@ package com.example.gamelogic;
 
 import com.example.engine.Engine;
 import com.example.engine.Graphics;
+import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 import com.example.engine.Audio;
 import com.example.engine.Sound;
 
+import org.json.JSONObject;
+import org.json.JSONArray;
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -20,8 +23,6 @@ public class GameOver implements State {
     private Button botonReintentar;
 
     //Textos
-    private Text textoBoton;
-    private Text textoReintentar;
     private Text textoInicial;
 
     //Sonidos de victoria y derrota
@@ -35,34 +36,27 @@ public class GameOver implements State {
     {
         //Inicializamos los botones y textos
         this.engine = engine;
+        JSONObject botones=engine.readJsonFile("GameOver/style.json");
         this.win=win;
 
-        botonMenu = new Button(120, 250, 200,50,true,20);
-        botonMenu.setColor(0xFF999999);
+        botonMenu = new Button(botones.getJSONObject("BotonMenu"));
+        botonReintentar = new Button(botones.getJSONObject("BotonReintentar"));
 
-        botonReintentar = new Button(480, 250, 200,50,true,20);
-        botonReintentar.setColor(0xFF999999);
-
-        textoBoton = new Text("Inika-Regular.ttf","Menu",0,0,30,true,true);
-        textoBoton.setColor(0xff00ffff);
-        textoReintentar = new Text("Inika-Regular.ttf","Reintentar",0,0,30,true,true);
-        textoReintentar.setColor(0xff00ffff);
-        botonMenu.setText(textoBoton);
-        botonReintentar.setText(textoReintentar);
+        botonMenu.setText(new Text(botones.getJSONObject("TextoBoton")));
+        botonReintentar.setText(new Text(botones.getJSONObject("TextoReintentar")));
         //Dependiendo del resultado reproducimos un sonido distinto
         if(win) {
-            textoInicial = new Text("Inika-Regular.ttf", "VICTORIA", 300, 150, 40, true, true);
+            textoInicial = new Text(botones.getJSONObject("TextoWin"));
             this.setAudio(audio);
             this.victory = this.audio.newSound("victory_trumpet.wav");
             this.audio.playSound(this.victory);
         }
         else {
-            textoInicial = new Text("Inika-Regular.ttf", "DERROTA", 300, 150, 40, true, true);
+            textoInicial = new Text(botones.getJSONObject("TextoLose"));
             this.setAudio(audio);
             this.lose = this.audio.newSound("death_sound.wav");
             this.audio.playSound(this.lose);
         }
-        textoInicial.setColor(0Xff000000);
     }
     @Override
     public void update(double deltaTime) {
@@ -122,6 +116,11 @@ public class GameOver implements State {
     @Override
     public void setAudio(Audio audio) {
         this.audio=audio;
+    }
+
+    @Override
+    public void setMobile(Mobile mobile) {
+
     }
 
 }

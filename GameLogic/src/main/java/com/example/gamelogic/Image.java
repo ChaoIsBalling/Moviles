@@ -2,8 +2,8 @@ package com.example.gamelogic;
 
 import com.example.engine.Graphics;
 import com.example.engine.IImage;
+import org.json.JSONObject;
 
-import java.awt.Graphics2D;
 
 /**
  * Clase que representa la clase Imagen
@@ -40,6 +40,16 @@ public class Image {
         this.y = y;
         this.gr = gr;
         this.im = this.gr.newImage(this.imagen);
+    }
+    public Image(JSONObject json,Graphics gr)
+    {
+        this.imagen= json.getString("imagen");
+        this.x = json.getInt("x");
+        this.y= json.getInt("y");
+        this.w= json.getInt("w");
+        this.h=json.getInt("h");
+        this.gr=gr;
+        this.im = this.gr.newImage(this.imagen,this.w,this.h);
     }
 
     /**
