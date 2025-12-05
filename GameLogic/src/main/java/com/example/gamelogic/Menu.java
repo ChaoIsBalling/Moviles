@@ -32,7 +32,6 @@ public class Menu implements State {
 
     private Button botonTienda;
 
-    private Button botonIntent;
     private Text textoDiamantes;
 
 
@@ -61,8 +60,6 @@ public class Menu implements State {
         this.botonTienda = new Button(botones.getJSONObject("BotonTienda"));
         this.botonTienda.setText( new Text(botones.getJSONObject("TextoTienda")));
 
-        this.botonIntent=new Button(botones.getJSONObject("BotonIntent"));
-
         this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantes"));
     }
     @Override
@@ -80,7 +77,6 @@ public class Menu implements State {
         botonAventura.Render(gr);
         botonTienda.Render(gr);
         textoDiamantes.Render(gr);
-        botonIntent.Render(gr);
     }
 
     /**
@@ -113,11 +109,6 @@ public class Menu implements State {
                     else if(this.botonTienda.contains(e.x,e.y)){
                         Tienda tienda = new Tienda(this.engine);
                         this.engine.setState(tienda);
-                    }
-                    else if(this.botonIntent.contains(e.x,e.y))
-                    {
-                        this.engine.launchIntent(
-                                "https://twitter.com/intent/tweet","text","Tweeteo");
                     }
                     break;
                 case TOUCH_UP:

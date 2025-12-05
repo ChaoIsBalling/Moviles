@@ -62,7 +62,10 @@ public interface Engine {
      * Este metodo lanza un Intent implicito pero con mas parametros a la hora de crearlo
      */
     public void launchIntent(String application, String text, String parameter);
-
+    /**
+     * Este metodo lanza un Intent implicito de tipo share
+     */
+    public void luanchShareIntent(String message);
     /**
      * Este metodo devuelve el gestor de las funciones propias de Android
      * @return gestor Mobile

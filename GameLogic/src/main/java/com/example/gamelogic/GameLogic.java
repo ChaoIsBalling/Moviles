@@ -146,7 +146,7 @@ public class GameLogic implements State {
     public GameLogic(Engine engine, String mapa){
         this.engine=engine;
         this.dificultad = Dificultad.aventura;
-        this.oleadasRestantes=3;
+        this.oleadasRestantes=0;
         this.init();
         this.leerMapa(mapa);
     }

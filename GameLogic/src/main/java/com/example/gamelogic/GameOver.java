@@ -24,6 +24,8 @@ public class GameOver implements State {
 
     private Button botonRecompensaAd;
 
+    private Button botonIntent;
+
     //Textos
     private Text textoInicial;
 
@@ -50,6 +52,7 @@ public class GameOver implements State {
         botonMenu.setText(new Text(botones.getJSONObject("TextoBoton")));
         botonReintentar.setText(new Text(botones.getJSONObject("TextoReintentar")));
         botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAd")));
+        this.botonIntent=new Button(botones.getJSONObject("BotonIntent"));
         //Dependiendo del resultado reproducimos un sonido distinto
         if(win) {
             textoInicial = new Text(botones.getJSONObject("TextoWin"));
@@ -80,6 +83,7 @@ public class GameOver implements State {
         textoInicial.Render(gr);
         botonReintentar.Render(gr);
         botonRecompensaAd.Render(gr);
+        botonIntent.Render(gr);
     }
 
     @Override
@@ -105,9 +109,21 @@ public class GameOver implements State {
                         Dificultad dificultad = new Dificultad(this.engine);
                         this.engine.setState(dificultad);
                     }
-
                     if(this.botonRecompensaAd.contains(e.x,e.y)){
                         this.mobile.showRewardedAd();
+                    }
+                    if(this.botonIntent.contains(e.x,e.y))
+                    {
+                        String message;
+                        if(this.win)
+                        {
+                            message="Mira lo bueno que soy en este juego";
+                        }
+                        else
+                        {
+                            message="Soy una desgracia >:(";
+                        }
+                        this.engine.luanchShareIntent(message);
                     }
 
                     break;

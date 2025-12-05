@@ -38,6 +38,8 @@ import org.json.JSONArray;
 //import androidx.work.WorkerParameters;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.MediaStore;
+import android.graphics.Bitmap;
 
 /**
  * Clase que implementa el motor principal del juego para Android.
@@ -164,6 +166,16 @@ public class AndroidEngine implements Engine,Runnable {
                 .appendQueryParameter( text, parameter )
                 .build());
         this.sView.getContext().startActivity(intent);
+    }
+    //metodo que lanza un intent que comparte un mensaje de texto
+    @Override
+    public void luanchShareIntent(String message)
+    {
+
+        Intent shareIntent = new Intent(Intent. ACTION_SEND);
+        shareIntent.setType("plain/text");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, message );
+        this.sView.getContext().startActivity(Intent. createChooser(shareIntent , "Share Text" ));
     }
 
 
