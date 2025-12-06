@@ -142,7 +142,6 @@ public class GameLogic implements State {
         this.leerMapa("mapa1.json");
 
     }
-
     public GameLogic(Engine engine, String mapa){
         this.engine=engine;
         this.dificultad = Dificultad.aventura;
@@ -150,7 +149,6 @@ public class GameLogic implements State {
         this.init();
         this.leerMapa(mapa);
     }
-
     private void init()
     {
     this.vida=10;
@@ -179,22 +177,20 @@ public class GameLogic implements State {
     private void leerMapa(String mapa)
     {
         JSONObject obj=engine.readJsonFile(mapa);
-        this.fil=obj.getInt("fila");
-        this.col=obj.getInt("columna");
         JSONArray arr= obj.getJSONArray("mapa");
+        this.fil=arr.length();
+        this.col=arr.get(0).toString().length();
+
         for (int i =0; i<this.fil;i++){
             ArrayList<Casilla> fila = new ArrayList<Casilla>();
             for(int j =0; j<this.col;j++){
+                Casilla casilla;
                 if(arr.get(i).toString().charAt(j) == 'h'){
-                    Casilla casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,false,false);
-                                 casilla.setColor(0xff000000);
-                    casilla.setCoor(new Vector2D(i, j));
-                    fila.add(casilla);
+                     casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,false,false);
+                     casilla.setColor(0xff000000);
                 } else {
-                    Casilla casilla = new Casilla((float) (j * 35 + 30), (float) (i * 35 + 50), this.anchoCasilla, this.altoCasilla, true, true);
+                    casilla = new Casilla((float) (j * 35 + 30), (float) (i * 35 + 50), this.anchoCasilla, this.altoCasilla, true, true);
                     casilla.setColor(0xff944d03);
-                    casilla.setCoor(new Vector2D(i, j));
-                    fila.add(casilla);
                     if (j == 0) {
                         this.IniX = j * 35 + 30;
                         this.IniY = i * 35 + 50;
@@ -204,7 +200,8 @@ public class GameLogic implements State {
                         this.FinY = i * 35 + 50;
                     }
                 }
-
+                casilla.setCoor(new Vector2D(i, j));
+                fila.add(casilla);
             }
             this.casillas.add(fila);
         }

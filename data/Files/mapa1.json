@@ -1,5 +1,18 @@
 {
-  "fila": 8,
-  "columna": 14,
+  "waves": [
+    {
+     "enemy": "goblin",
+     "amount":3        
+    }, 
+    {
+      "enemy":"orc",
+      "amount": 2
+    }, 
+    { 
+     "enemy": "imp",
+     "amount":3   
+    }
+  ],
+  "reward": 10,
   "mapa":["hhhhhhhhhhhhhh", "cccccccchhhhhh", "hhhhhhhchhhhhh","hhhhhhhchhhhhh","hhhhhhhchhhhhh","hhhhhhhchhhhhh","hhhhhhhccccccc","hhhhhhhhhhhhhh"]
 }
