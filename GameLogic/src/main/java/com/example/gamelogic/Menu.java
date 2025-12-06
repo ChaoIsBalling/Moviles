@@ -39,7 +39,6 @@ public class Menu implements State {
     private Audio audio;
     Engine engine;
     Graphics gr;
-
     Mobile mob;
 
     /**
@@ -107,8 +106,9 @@ public class Menu implements State {
                         this.engine.setState(mundo);
                     }
                     else if(this.botonTienda.contains(e.x,e.y)){
-                        Tienda tienda = new Tienda(this.engine);
-                        this.engine.setState(tienda);
+                        //Tienda tienda = new Tienda(this.engine);
+                        //this.engine.setState(tienda);
+                        this.engine.showNotificacion("Hola","TOnto");
                     }
                     break;
                 case TOUCH_UP:

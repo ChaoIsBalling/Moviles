@@ -1,19 +1,26 @@
 package com.example.androidengine;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.view.SurfaceView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import com.example.engine.Audio;
 import com.example.engine.Engine;
@@ -82,7 +89,8 @@ public class AndroidEngine implements Engine,Runnable {
 
     private int iconNotification;
 
-    private final String CHANNEL_NAME = "chanel";
+    //Strings para mostrar notificaciones en el juego
+    private final String CHANNEL_NAME = "channel";
     private final String CHANNEL_DESCRIPTION = "description";
     private final String CHANNEL_ID = "id";
 
@@ -94,6 +102,10 @@ public class AndroidEngine implements Engine,Runnable {
         this.gr = new AndroidGraphics(view);
         this.audio=new AndroidAudio(sView.getContext().getAssets());
         this.mobile = androidMobile;
+
+
+        //Crea el canal para mostrar las notificaciones del juego
+        createNotificationChannel();
 
         System.loadLibrary("AndroidEngine");
     }
@@ -237,33 +249,70 @@ public class AndroidEngine implements Engine,Runnable {
 
     @Override
     public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText) {
-//        WorkRequest request = new OneTimeWorkRequest.Builder(ReminderWorker.class)
-//                .setInitialDelay(time, timeunit)
-//                .setImputData(new Data.Builder()
-//                        .putString("title",title)
-//                        .putString(firstText,firstText)
-//                        .putInt(iconNotification,icon)
-//                );
+        WorkRequest request = new OneTimeWorkRequest.Builder(ReminderWorker.class)
+                .setInitialDelay(time, timeunit) //Tiempo que tiene que pasar para que se envie la notificacion
+                .setInputData(new Data.Builder() //datos que le pasamos a la constructora del worker
+                        .putString("title",title)
+                        .putString("text",firstText)
+                        .putInt("icon",this.iconNotification)
+                        .build())
+                .build();
+
+        //En el WorkManager ponemos en la cola de workers pendientes a la notifiacion programada que acabamos de crear
+        WorkManager.getInstance(this.sView.getContext()).enqueue(request);
+
     }
 
     @Override
     public void showNotificacion(String title, String firstText) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder( this.sView.getContext(), CHANNEL_ID)
                 .setSmallIcon(this.iconNotification)
-                .setContentTitle( title )
-                .setContentText( firstText )
-                .setStyle( new NotificationCompat.BigTextStyle()
-                        .bigText( firstText ))
+                .setContentTitle(title)
+                .setContentText(firstText)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(firstText))
                 .setPriority(NotificationCompat. PRIORITY_DEFAULT);
+        //Llamamos al manager de notifiaciones
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.sView.getContext());
-// notificationId is a unique int for each notification that you must define.
-        //notificationManager.notify(notificationId, builder.build());
-        //if(Activity.Com)
+        //Comprobamos que la app tenga permisos de postear una notificación
+        Activity activity = (Activity) sView.getContext();
+        if (ActivityCompat.checkSelfPermission(activity,
+                android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            // ActivityCompat#requestPermissions
+            //si no los tiene, los solicitamos
+            ActivityCompat.requestPermissions((Activity) this.sView.getContext(),new String[]{Manifest.permission.POST_NOTIFICATIONS},101);
+            // here to request the missing permissions, and then overriding
+            // public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                        int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            //return;
+        }
+        // notificationId is a unique int for each notification that you must define.
+        int NOTIFICATION_ID = (int) System.currentTimeMillis();  // ID único
+        notificationManager.notify(NOTIFICATION_ID, builder.build()); //Invocamos la notificación
+    }
+
+    /**
+     * Metodo para crear un canal por el que transmitir notificaciones
+     */
+    private void createNotificationChannel(){
+        // Verifica si es necesario crear un canal de notificaciones (a partir de Android 8.0)
+        if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
+            int importance = NotificationManager. IMPORTANCE_DEFAULT; //Importancia
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID , CHANNEL_NAME, importance); //Creación del canal
+            channel.setDescription(CHANNEL_DESCRIPTION); //Descripción del canal
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.sView.getContext());
+            notificationManager.createNotificationChannel(channel) ; //Crea el canal en el sistema
+        }
     }
 
     @Override
-    public void setNotificationIcon(int icono) {
-        this.iconNotification=icono;
+    public void setNotificationIcon(int icon) {
+        this.iconNotification=icon;
     }
 
     @Override
@@ -272,19 +321,6 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     private native String nativeHash(String s);
-
-    private void createNotificationChannel(){
-        if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
-            int importance = NotificationManager. IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID , CHANNEL_NAME, importance) ;
-            channel.setDescription(CHANNEL_DESCRIPTION);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.sView.getContext());
-            notificationManager.createNotificationChannel(channel) ;
-        }
-
-    }
 
     @Override
     public void pause(){
@@ -349,9 +385,5 @@ public class AndroidEngine implements Engine,Runnable {
             this.state.render(this.gr);
             this.gr.endFrame();
         }
-
     }
-
-
-
 }

@@ -42,10 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FrameLayout adContainerView;
 
-
-    private Button butn;
-
-
     //ID`s de unidad de anuncios de prueba, tanto para banner como para reward
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741";
     private static final String AD_REWARD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
@@ -62,12 +58,14 @@ public class MainActivity extends AppCompatActivity {
         //Container de anuncios
         this.adContainerView = findViewById(R.id.ad_view_container);
 
-
-
         //Inicializamos motor e interfaz de mobile que accede a los metodos de main activity
         this.mobile = new AndroidMobile(this,this.renderView,this.adContainerView);
         this.engine = new AndroidEngine(this.renderView,this.mobile);
+        this.engine.setNotificationIcon(R.drawable.ic_tower_defense_noti);
         this.engine.setState(new Menu(engine));
+
+
+
 
         //Metodo auxiliar para probar los anuncios
         /*butn.setOnClickListener(new View.OnClickListener() {
