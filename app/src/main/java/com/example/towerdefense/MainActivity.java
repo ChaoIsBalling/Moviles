@@ -1,6 +1,7 @@
 package com.example.towerdefense;
 
 //de Android
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -67,15 +68,14 @@ public class MainActivity extends AppCompatActivity {
         this.engine.setState(new Menu(engine));
 
 
+        //Recogemos el intent
+        Intent intent = getIntent();
 
-
-        //Metodo auxiliar para probar los anuncios
-        /*butn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showRewardedVideo();
-            }
-        });*/
+        //Si es por hacer click a la notifiación por bonificación, regalamos diamantes al jugador
+        if(intent != null && intent.getBooleanExtra("REWARD_NOTIFICATION",false)){
+            //this.engine.giveReward();
+            System.out.println("Diamantes recibidos");
+        }
     }
 
     @Override
@@ -88,11 +88,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         this.engine.pause();
+
+        //Enviamos notifiación programada
         this.engine.programNotificacion(
                 5,                    // Tiempo
                 TimeUnit.SECONDS,          // Después x unidad de tiempo
                 R.drawable.ic_tower_defense_noti,    // Icono
-                "¡Te echamos de menos!",
+                "¡Te echamos de menos :(!",
                 "Vuelve ahora y gana 3 diamantes gratis."
         );
 
