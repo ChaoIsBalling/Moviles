@@ -10,7 +10,6 @@ import com.example.engine.Audio;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import java.util.ArrayList;
-import java.lang.Integer;
 
 /**
  * Clase que representa la interfaz principal de juego, donde se desarrolla toda su lógica de gameplay
@@ -105,7 +104,7 @@ public class GameLogic implements State {
     int numE = 0;//enemigos generados
     float tiempoEnGrupo;//tiempo de espera entre enemigos de un grupo
     float tiempEnG;//tiempo que falta para generar un nuevo enemigo en el grupo
-    int numOl;
+    int recompensas;//cantidad de gemas que consigues al terminar un nivel
     Text textoOleadas;//Numero de oleadas en texto
       //Enumaerado que determina en que estado de juego estamos
     private enum Estado {
@@ -120,6 +119,8 @@ public class GameLogic implements State {
     }
 
     private Dificultad dificultad;
+    //JSONArray que gestiona las oleadas en el juego
+    JSONArray oleadasDatos;
        /**
      * Constructora del estado principal de juego
      * @param engine Motor
@@ -139,7 +140,7 @@ public class GameLogic implements State {
         this.engine=engine;
         this.init();
         this.dificultad = dificultad;
-        this.leerMapa("mapa1.json");
+        this.inicializarNivel("mapa1.json");
 
     }
     public GameLogic(Engine engine, String mapa){
@@ -147,7 +148,7 @@ public class GameLogic implements State {
         this.dificultad = Dificultad.aventura;
         this.oleadasRestantes=0;
         this.init();
-        this.leerMapa(mapa);
+        this.inicializarNivel(mapa);
     }
     private void init()
     {
@@ -155,7 +156,6 @@ public class GameLogic implements State {
     this.dinero = 300;
     this.oleada =1;
     this.grupos = 2;
-    this.enemigosGrupo = 1;
     this.tiempoGrupos = 5;
     this.tiempGr = this.tiempoGrupos;
     this.tiempoOleada = this.tiempoGrupos*this.grupos + 5;
@@ -174,13 +174,16 @@ public class GameLogic implements State {
      * Metodo que lee mapa de un archivo txt
      * @param mapa ruta del archivo
      */
-    private void leerMapa(String mapa)
+    private void inicializarNivel(String mapa)
     {
         JSONObject obj=engine.readJsonFile(mapa);
         JSONArray arr= obj.getJSONArray("mapa");
+        this.oleadasDatos =obj.getJSONArray("waves");
+        this.oleadasRestantes=this.oleadasDatos.length();
+        this.enemigosGrupo = this.oleadasDatos.getJSONObject(this.oleada-1).getInt("amount");
         this.fil=arr.length();
         this.col=arr.get(0).toString().length();
-
+        this.recompensas=obj.getInt("reward");
         for (int i =0; i<this.fil;i++){
             ArrayList<Casilla> fila = new ArrayList<Casilla>();
             for(int j =0; j<this.col;j++){
@@ -206,7 +209,6 @@ public class GameLogic implements State {
             this.casillas.add(fila);
         }
     }
-
 
     /**
      * Actualiza los contadores de tiempo de acuerdo al deltatime
@@ -308,7 +310,9 @@ public class GameLogic implements State {
 
             //aumentamos grupos y enemigos por grupo y mas tiempo entre grupos
             this.grupos++;
-            this.enemigosGrupo++;
+            //para evitar que esto pete
+            if(this.oleadasRestantes!=0)
+             this.enemigosGrupo = this.oleadasDatos.getJSONObject(this.oleada-1).getInt("amount");
             this.tiempoGrupos = 5 + (this.oleada - 1);
 
             //Resetear numero de grupos generados y numero de enemigos generados
@@ -347,13 +351,22 @@ public class GameLogic implements State {
 
         //si el numero de enemigos generados es menor al numero de enemigos en su grupo
         if (this.numE < this.enemigosGrupo) {
+            Tipo tipo;
+            //dependiendo del tipo de enemigo tiene un tipo distinto
+            String enemy =this.oleadasDatos.getJSONObject(this.oleada-1).getString("enemy");
+            if(enemy=="goblin")
+                tipo=Tipo.rayo;
+            else if(enemy=="imp")
+                tipo=Tipo.fuego;
+            else
+                tipo=Tipo.hielo;
             //Generamos enemigo
             this.enemigos.add(new Enemy(this.IniX, this.IniY,
                     8 + (this.mejVidaEn * (this.oleada - 1)),
                     30 + (this.mejVelEn * (this.oleada - 1)),
                     0 + (this.mejDefEn * (this.oleada - 1)),
                     0 + (this.mejResEn * (this.oleada - 1)),
-                    Tipo.getRandomType(),
+                    tipo,
                     this));
 
             //Incrementamos número de grupo
