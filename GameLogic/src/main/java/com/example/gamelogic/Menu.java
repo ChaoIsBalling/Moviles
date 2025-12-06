@@ -95,7 +95,10 @@ public class Menu implements State {
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
-                switch (e.type){
+            if(e == null){
+                return;
+            }
+            switch (e.type){
                     case TOUCH_DOWN:
                         if(this.botonInicial.contains(e.x,e.y)){
                             Dificultad dificultad = new Dificultad(this.engine);
