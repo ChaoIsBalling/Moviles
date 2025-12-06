@@ -72,11 +72,11 @@ public interface Engine {
      */
     public Mobile getMobile();
 
-    public InputStream readFile2(String file);
+    public JSONObject readJsonFile2(String file);
 
     public JSONObject readJsonFile(String file);
     public String openAssetFile(String file);
-    public OutputStream writeFile(String file);
+    public OutputStream writeFile(String file,String output);
 
     public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText);
     public void showNotificacion(String title, String firstText);

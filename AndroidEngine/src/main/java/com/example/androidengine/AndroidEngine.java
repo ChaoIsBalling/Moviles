@@ -36,11 +36,13 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.FileInputStream;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 import org.json.JSONException;
 import org.json.JSONArray;
+
 //import androidx.work.Worker;
 //import androidx.work.WorkerParameters;
 import android.content.Intent;
@@ -194,16 +196,26 @@ public class AndroidEngine implements Engine,Runnable {
     @Override
     public Mobile getMobile() { return this.mobile; }
 
-    //la pausa del juego
+    //lector que coje un archivo interno y lo convierte a Json
     @Override
-    public InputStream readFile2(String file) {
-        InputStream is = null;
+    public JSONObject readJsonFile2(String file) {
+        JSONObject obj = null;
         try {
-           is = this.sView.getContext().openFileInput(file);
-        } catch (FileNotFoundException e) {
+            FileInputStream fis = this.sView.getContext().openFileInput(file);
+            InputStreamReader inputStreamReader = new InputStreamReader(fis);
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            String a="";
+            String line;
+            while ((line = reader.readLine()) != null) {
+                a += line;
+            }
+             obj= new JSONObject(a);
+            System.out.print(a);
+
+        } catch (IOException | JSONException e) {
             throw new RuntimeException(e);
         }
-        return is;
+        return obj;
     }
 
     @Override
@@ -236,12 +248,16 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     @Override
-    public OutputStream writeFile(String file) {
+    public OutputStream writeFile(String file,String output) {
         OutputStream os = null;
         try {
            os=  this.sView.getContext().openFileOutput(file, this.sView.getContext().MODE_PRIVATE);
+           os.write(output.getBytes());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
+        }
+        catch (IOException e) {
+        throw new RuntimeException(e);
         }
         return os;
     }

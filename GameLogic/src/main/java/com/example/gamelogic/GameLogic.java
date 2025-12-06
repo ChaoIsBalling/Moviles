@@ -180,7 +180,8 @@ public class GameLogic implements State {
         JSONArray arr= obj.getJSONArray("mapa");
         this.oleadasDatos =obj.getJSONArray("waves");
         this.oleadasRestantes=this.oleadasDatos.length();
-        this.enemigosGrupo = this.oleadasDatos.getJSONObject(this.oleada-1).getInt("amount");
+        if(this.oleadasRestantes!=0)
+            this.enemigosGrupo = this.oleadasDatos.getJSONObject(this.oleada-1).getInt("amount");
         this.fil=arr.length();
         this.col=arr.get(0).toString().length();
         this.recompensas=obj.getInt("reward");

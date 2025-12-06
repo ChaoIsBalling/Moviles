@@ -63,6 +63,8 @@ public class Menu implements State {
         //cambiamos el numero de gemas dependiendo de cuanto dinero hemos ganado
         this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantes"));
         this.textoDiamantes.setText(String.valueOf(partidaGuardada.getInt("gems")));
+
+        JSONObject a=this.engine.readJsonFile2("save");
     }
     @Override
     public void update(double deltaTime) {
