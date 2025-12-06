@@ -1,17 +1,5 @@
 {
   "waves": [
-    {
-     "enemy": "goblin",
-     "amount":3        
-    }, 
-    {
-      "enemy":"orc",
-      "amount": 2
-    }, 
-    { 
-     "enemy": "imp",
-     "amount":3   
-    }
   ],
   "reward": 10,
   "mapa":["hhhhhhhhhhhhhh", 

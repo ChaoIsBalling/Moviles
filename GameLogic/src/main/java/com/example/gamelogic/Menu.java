@@ -47,7 +47,8 @@ public class Menu implements State {
     public Menu(Engine engine){
         this.engine = engine;
         JSONObject botones=engine.readJsonFile("Menu/style.json");
-
+        //cargamos el archivo con los datos guardados
+        JSONObject partidaGuardada=engine.readJsonFile("save.json");
         this.botonInicial = new Button(botones.getJSONObject("BotonInicial"));
         this.botonInicial.setText(new Text(botones.getJSONObject("TextoBoton")));
 
@@ -59,7 +60,9 @@ public class Menu implements State {
         this.botonTienda = new Button(botones.getJSONObject("BotonTienda"));
         this.botonTienda.setText( new Text(botones.getJSONObject("TextoTienda")));
 
+        //cambiamos el numero de gemas dependiendo de cuanto dinero hemos ganado
         this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantes"));
+        this.textoDiamantes.setText(String.valueOf(partidaGuardada.getInt("gems")));
     }
     @Override
     public void update(double deltaTime) {
