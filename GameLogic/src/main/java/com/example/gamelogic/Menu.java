@@ -64,7 +64,7 @@ public class Menu implements State {
         this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantes"));
         this.textoDiamantes.setText(String.valueOf(partidaGuardada.getInt("gems")));
 
-        JSONObject a=this.engine.readJsonFile2("save");
+        //JSONObject a=this.engine.readJsonFile2("save");
     }
     @Override
     public void update(double deltaTime) {
