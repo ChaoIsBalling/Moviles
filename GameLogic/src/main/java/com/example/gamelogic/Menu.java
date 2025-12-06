@@ -95,30 +95,30 @@ public class Menu implements State {
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
-            switch (e.type){
-                case TOUCH_DOWN:
-                    if(this.botonInicial.contains(e.x,e.y)){
-                        Dificultad dificultad = new Dificultad(this.engine);
-                        this.engine.setState(dificultad);
-                    }
-                    else if(this.botonAventura.contains(e.x,e.y)){
-                        Mundo mundo = new Mundo(this.engine);
-                        this.engine.setState(mundo);
-                    }
-                    else if(this.botonTienda.contains(e.x,e.y)){
-                        //Tienda tienda = new Tienda(this.engine);
-                        //this.engine.setState(tienda);
-                        this.engine.showNotificacion("Hola","TOnto");
-                    }
-                    break;
-                case TOUCH_UP:
+                switch (e.type){
+                    case TOUCH_DOWN:
+                        if(this.botonInicial.contains(e.x,e.y)){
+                            Dificultad dificultad = new Dificultad(this.engine);
+                            this.engine.setState(dificultad);
+                        }
+                        else if(this.botonAventura.contains(e.x,e.y)){
+                            Mundo mundo = new Mundo(this.engine);
+                            this.engine.setState(mundo);
+                        }
+                        else if(this.botonTienda.contains(e.x,e.y)){
+                            Tienda tienda = new Tienda(this.engine);
+                            this.engine.setState(tienda);
+                            //this.engine.showNotificacion("Hola","TOnto");
+                        }
+                        break;
+                    case TOUCH_UP:
 
-                    break;
-                case TOUCH_MOVE:
-                    break;
-            }
+                        break;
+                    case TOUCH_MOVE:
+                        break;
+                }
+
         }
-
     }
 
     /**

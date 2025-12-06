@@ -34,6 +34,8 @@ import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
+import java.util.concurrent.TimeUnit;
+
 public class MainActivity extends AppCompatActivity {
     private SurfaceView renderView;
     private AndroidEngine engine;
@@ -86,6 +88,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         this.engine.pause();
+        this.engine.programNotificacion(
+                5,                    // Tiempo
+                TimeUnit.SECONDS,          // Después x unidad de tiempo
+                R.drawable.ic_tower_defense_noti,    // Icono
+                "¡Te echamos de menos!",
+                "Vuelve ahora y gana 3 diamantes gratis."
+        );
+
+
     }
 }
 

@@ -127,12 +127,11 @@ public class AndroidEngine implements Engine,Runnable {
         }
         return file;
     }
-    //quita el paua
+    //quita el pause
     @Override
     public void resume(){
         if(!this.running){
             this.running = true;
-
             this.renderThread = new Thread(this);
             this.renderThread.start();
         }
@@ -368,9 +367,12 @@ public class AndroidEngine implements Engine,Runnable {
                 e.y = this.gr.real2LogicY(e.y);
             }
 
-            state.handleInput(this.input.getTouchEvents(), elapsedTime);
-            this.state.update(elapsedTime);
+            if (this.state != null) {
+                state.handleInput(this.input.getTouchEvents(), elapsedTime);
+                this.state.update(elapsedTime);
+            }
             this.input.events.clear();
+
 
             if (currentTime - prevTime > 1000000000L) {
                 long fps = frames * 1000000000L / (currentTime - prevTime);

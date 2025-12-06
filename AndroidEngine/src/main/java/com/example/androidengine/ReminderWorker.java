@@ -1,13 +1,16 @@
 package com.example.androidengine;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Data;
@@ -49,9 +52,20 @@ public class ReminderWorker extends Worker {
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT) //prioridad
                         .setAutoCancel(true); //Se desecha la notifiacion cuando el usuario la toca
 
+
         // Mostramos la notifiación
         NotificationManagerCompat manager = NotificationManagerCompat.from(this.context);
-        manager.notify((int) System.currentTimeMillis(),builder.build());
+
+        //Comprobamos que la app tenga permisos de postear una notificación
+        if (ActivityCompat.checkSelfPermission(this.context,
+                android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            //si no los tiene, los solicitamos
+            ActivityCompat.requestPermissions((Activity) this.context,new String[]{Manifest.permission.POST_NOTIFICATIONS},101);
+        }
+
+        // notificationId is a unique int for each notification that you must define.
+        int NOTIFICATION_ID = (int) System.currentTimeMillis();  // ID único
+        manager.notify(NOTIFICATION_ID, builder.build()); //Invocamos la notificación
 
         return Result.success();
     }
