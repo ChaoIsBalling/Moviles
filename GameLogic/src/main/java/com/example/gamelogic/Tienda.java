@@ -45,6 +45,10 @@ public class Tienda implements State {
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
+            //Si es nulo no se procesa
+            if (e == null || e.type == null) {
+                continue;
+            }
             switch (e.type){
                 case TOUCH_DOWN:
                     if(this.botonVolver.contains(e.x,e.y)){

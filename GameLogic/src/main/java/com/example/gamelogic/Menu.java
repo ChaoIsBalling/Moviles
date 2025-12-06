@@ -48,7 +48,7 @@ public class Menu implements State {
         this.engine = engine;
         JSONObject botones=engine.readJsonFile("Menu/style.json");
         //cargamos el archivo con los datos guardados
-        JSONObject partidaGuardada=engine.readJsonFile("save.json");
+        JSONObject partidaGuardada = engine.readJsonFile("save.json");
         this.botonInicial = new Button(botones.getJSONObject("BotonInicial"));
         this.botonInicial.setText(new Text(botones.getJSONObject("TextoBoton")));
 
@@ -98,8 +98,9 @@ public class Menu implements State {
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
-            if(e == null){
-                return;
+            //Si es nulo no se procesa
+            if (e == null || e.type == null) {
+                continue;
             }
             switch (e.type){
                     case TOUCH_DOWN:
