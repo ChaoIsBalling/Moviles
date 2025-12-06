@@ -212,7 +212,7 @@ public class AndroidEngine implements Engine,Runnable {
                 a += line;
             }
              obj= new JSONObject(a);
-            System.out.print(a);
+            fis.close();
 
         } catch (IOException | JSONException e) {
             throw new RuntimeException(e);
@@ -334,8 +334,8 @@ public class AndroidEngine implements Engine,Runnable {
     //Metodo que comprueba si un archivo existe o si ya esta creado
     @Override
     public boolean checkFileExists(String file) {
-        File f = new File("file");
-        return f.isFile();
+        File f = new File(this.sView.getContext().getFilesDir(),file);
+        return f.exists();
     }
 
     @Override
