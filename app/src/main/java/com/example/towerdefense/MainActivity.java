@@ -1,7 +1,9 @@
 package com.example.towerdefense;
 
 //de Android
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -82,6 +84,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         this.engine.resume();
+        if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(
+                    new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                    101
+            );
+        }
     }
 
     @Override
