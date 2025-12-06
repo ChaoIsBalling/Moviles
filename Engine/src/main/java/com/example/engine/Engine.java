@@ -76,11 +76,14 @@ public interface Engine {
 
     public JSONObject readJsonFile(String file);
     public String openAssetFile(String file);
-    public OutputStream writeFile(String file,String output);
+    public void writeFile(String file,String output);
 
     public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText);
     public void showNotificacion(String title, String firstText);
     public void setNotificationIcon(int icono);
+
+
+    public boolean checkFileExists(String file);
 
     public String hashSHA256(String string);
 

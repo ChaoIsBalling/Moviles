@@ -30,6 +30,7 @@ import com.example.engine.Graphics;
 import com.example.engine.TouchEvent;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.util.concurrent.TimeUnit;
+import java.io.File;
 
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -248,8 +250,8 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     @Override
-    public OutputStream writeFile(String file,String output) {
-        OutputStream os = null;
+    public void writeFile(String file,String output) {
+        FileOutputStream os = null;
         try {
            os=  this.sView.getContext().openFileOutput(file, this.sView.getContext().MODE_PRIVATE);
            os.write(output.getBytes());
@@ -259,7 +261,6 @@ public class AndroidEngine implements Engine,Runnable {
         catch (IOException e) {
         throw new RuntimeException(e);
         }
-        return os;
     }
 
     @Override
@@ -328,6 +329,13 @@ public class AndroidEngine implements Engine,Runnable {
     @Override
     public void setNotificationIcon(int icon) {
         this.iconNotification=icon;
+    }
+
+    //Metodo que comprueba si un archivo existe o si ya esta creado
+    @Override
+    public boolean checkFileExists(String file) {
+        File f = new File("file");
+        return f.isFile();
     }
 
     @Override

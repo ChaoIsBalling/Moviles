@@ -285,6 +285,9 @@ public class GameLogic implements State {
         if (this.oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()) {
             this.stopSoundTorres();
             GameOver gameOver = new GameOver(this.engine, this.audio, true);
+            JSONObject obj=this.engine.readJsonFile2("save");
+            obj.put("gems",obj.getInt("gems")+this.recompensas);
+            this.engine.writeFile("save",obj.toString());
             this.engine.setState(gameOver);
         }
 
