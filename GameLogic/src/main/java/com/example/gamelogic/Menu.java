@@ -47,7 +47,6 @@ public class Menu implements State {
     public Menu(Engine engine){
         this.engine = engine;
         JSONObject botones=engine.readJsonFile("Menu/style.json");
-
         this.botonInicial = new Button(botones.getJSONObject("BotonInicial"));
         this.botonInicial.setText(new Text(botones.getJSONObject("TextoBoton")));
 
@@ -59,7 +58,20 @@ public class Menu implements State {
         this.botonTienda = new Button(botones.getJSONObject("BotonTienda"));
         this.botonTienda.setText( new Text(botones.getJSONObject("TextoTienda")));
 
+        //cambiamos el numero de gemas dependiendo de cuanto dinero hemos ganado
         this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantes"));
+
+        if(this.engine.checkFileExists("save"))
+        {
+            JSONObject obj=this.engine.readJsonFile2("save");
+            this.textoDiamantes.setText(String.valueOf(obj.getInt("gems")));
+        }
+        else {
+            //un archivo de JSON de guardado base que tiene los parametros iniciales
+            JSONObject obj=engine.readJsonFile("saveBase.json");
+            this.engine.writeFile("save",obj.toString());
+
+        }
     }
     @Override
     public void update(double deltaTime) {
@@ -95,8 +107,9 @@ public class Menu implements State {
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
-            if(e == null){
-                return;
+            //Si es nulo no se procesa
+            if (e == null || e.type == null) {
+                continue;
             }
             switch (e.type){
                     case TOUCH_DOWN:
