@@ -84,11 +84,12 @@ public class AndroidMobile implements Mobile {
     /**
      * Metodo para mostrar el anuncio recompensado con Admob
      */
-    private void loadRewardedAd() {
+    public void loadRewardedAd() {
+        AdRequest adRequest =  new AdRequest.Builder().build();
         RewardedAd.load(
                 activity,
                 AD_REWARD_UNIT_ID,
-                new AdRequest.Builder().build(),
+                adRequest,
                 new RewardedAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull RewardedAd rAd) {
@@ -103,9 +104,10 @@ public class AndroidMobile implements Mobile {
                                         Log.d(TAG, "Ad was dismissed.");
                                         // Don't forget to set the ad reference to null so you
                                         // don't show the ad a second time.
-                                        rewardedAd = null;
-                                        Toast.makeText(activity, "onAdDismissedFullScreenContent", Toast.LENGTH_SHORT)
-                                                .show();
+                                        //rewardedAd = null;
+                                        //Toast.makeText(activity, "onAdDismissedFullScreenContent", Toast.LENGTH_SHORT).show();
+
+                                        loadRewardedAd(); //volvemos a recargar anunciop, una vez ha sido consumido el anterior
                                     }
 
                                     @Override

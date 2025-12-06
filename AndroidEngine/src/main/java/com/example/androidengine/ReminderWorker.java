@@ -90,17 +90,15 @@ public class ReminderWorker extends Worker {
         NotificationManagerCompat manager = NotificationManagerCompat.from(this.context);
 
         //Comprobamos que la app tenga permisos de postear una notificación
-        if (ActivityCompat.checkSelfPermission(this.context,
-                android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            //si no los tiene, los solicitamos
-            ActivityCompat.requestPermissions((Activity) this.context,new String[]{Manifest.permission.POST_NOTIFICATIONS},101);
+        if (ActivityCompat.checkSelfPermission(this.context, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            // notificationId is a unique int for each notification that you must define.
+            int NOTIFICATION_ID = (int) System.currentTimeMillis();  // ID único
+            manager.notify(NOTIFICATION_ID, builder.build()); //Invocamos la notificación
+            return Result.success(); //la notifiacion se envia con exito
         }
 
-        // notificationId is a unique int for each notification that you must define.
-        int NOTIFICATION_ID = (int) System.currentTimeMillis();  // ID único
-        manager.notify(NOTIFICATION_ID, builder.build()); //Invocamos la notificación
+        return Result.failure(); //Ha habido un fallo
 
-        return Result.success();
     }
 
     /**

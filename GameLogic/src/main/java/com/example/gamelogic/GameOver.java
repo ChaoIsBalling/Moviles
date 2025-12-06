@@ -9,8 +9,7 @@ import com.example.engine.Audio;
 import com.example.engine.Sound;
 
 import org.json.JSONObject;
-import org.json.JSONArray;
-import java.awt.Color;
+
 import java.util.ArrayList;
 
 /**
@@ -24,7 +23,7 @@ public class GameOver implements State {
 
     private Button botonRecompensaAd;
 
-    private Button botonIntent;
+    private Button botonCompartir;
 
     //Textos
     private Text textoInicial;
@@ -44,27 +43,28 @@ public class GameOver implements State {
         this.engine = engine;
         JSONObject botones=engine.readJsonFile("GameOver/style.json");
         this.win=win;
+        //this.setAudio(audio);
 
         botonMenu = new Button(botones.getJSONObject("BotonMenu"));
         botonReintentar = new Button(botones.getJSONObject("BotonReintentar"));
         botonRecompensaAd = new Button(botones.getJSONObject("BotonRecompensaAd"));
+        this.botonCompartir =new Button(botones.getJSONObject("BotonIntent"));
 
         botonMenu.setText(new Text(botones.getJSONObject("TextoBoton")));
         botonReintentar.setText(new Text(botones.getJSONObject("TextoReintentar")));
         botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAd")));
-        this.botonIntent=new Button(botones.getJSONObject("BotonIntent"));
         //Dependiendo del resultado reproducimos un sonido distinto
         if(win) {
             textoInicial = new Text(botones.getJSONObject("TextoWin"));
-            this.setAudio(audio);
-            this.victory = this.audio.newSound("victory_trumpet.wav");
-            this.audio.playSound(this.victory);
+
+            //this.victory = this.audio.newSound("victory_trumpet.wav");
+            //this.audio.playSound(this.victory);
         }
         else {
             textoInicial = new Text(botones.getJSONObject("TextoLose"));
-            this.setAudio(audio);
-            this.lose = this.audio.newSound("death_sound.wav");
-            this.audio.playSound(this.lose);
+
+            //this.lose = this.audio.newSound("death_sound.wav");
+            //this.audio.playSound(this.lose);
         }
     }
     @Override
@@ -83,7 +83,7 @@ public class GameOver implements State {
         textoInicial.Render(gr);
         botonReintentar.Render(gr);
         botonRecompensaAd.Render(gr);
-        botonIntent.Render(gr);
+        botonCompartir.Render(gr);
     }
 
     @Override
@@ -99,6 +99,10 @@ public class GameOver implements State {
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
+            //Si es nulo no se procesa
+            if (e == null || e.type == null) {
+                continue;
+            }
             switch (e.type){
                 case TOUCH_DOWN:
                     if(this.botonMenu.contains(e.x,e.y)){
@@ -109,10 +113,12 @@ public class GameOver implements State {
                         Dificultad dificultad = new Dificultad(this.engine);
                         this.engine.setState(dificultad);
                     }
-                    if(this.botonRecompensaAd.contains(e.x,e.y)){
+                    if(this.botonRecompensaAd.contains(e.x,e.y) && this.botonRecompensaAd.isEnable()){
                         this.mobile.showRewardedAd();
+                        this.botonRecompensaAd.setEnabled(false);
+                        this.botonRecompensaAd.setVisible(false);
                     }
-                    if(this.botonIntent.contains(e.x,e.y))
+                    if(this.botonCompartir.contains(e.x,e.y))
                     {
                         String message;
                         if(this.win)

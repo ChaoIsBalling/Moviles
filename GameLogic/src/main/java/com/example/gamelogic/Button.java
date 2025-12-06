@@ -25,6 +25,12 @@ public class Button {
     //Radio del arco bordeado
     private float arcRadius;
 
+    //Determina si el boton esta activado
+    private boolean isEnable = true;
+
+    //Determina si el boton esta visible
+    private boolean isVisible = true;
+
 
     //Texto del boton
     Text text;
@@ -53,7 +59,6 @@ public class Button {
     //Constructora que te crea un boton a partir de un Json
     public Button(JSONObject json)
     {
-
         this.x = json.getInt("x");
         this.y= json.getInt("y");
         this.w= json.getInt("w");
@@ -77,11 +82,15 @@ public class Button {
     }
     public void setFigura(Figure fig){this.figura = fig;}
     public void setImagen(Image img){this.imagen = img;}
+    public void setEnabled(boolean enabled){this.isEnable = enabled;}
+    public void setVisible(boolean visible){this.isVisible = visible;}
     //getter de los parametros de tamaño y posicion
     public float getWidth(){return this.w;}
     public float getHeight(){return this.h;}
     public float getX(){return this.x;}
     public float getY(){return this.y;}
+    public boolean isEnable(){return this.isEnable;}
+    public  boolean isVisible(){return  this.isVisible;}
     /**
      * Comprueba si la coordenada x,y está dentro del botón
      */
@@ -96,29 +105,33 @@ public class Button {
      * @param gr
      */
     public void Render(Graphics gr) {
-        //Renderizamos el cuadrado que representa el botón
-        gr.setColor(this.color);
+        if(this.isVisible){
+            //Renderizamos el cuadrado que representa el botón
+            gr.setColor(this.color);
 
-        //Vemos si es redondeado o no
-        if(isRound)
-            gr.rellenarCuadradoRedondeado(this.x,this.y,this.w,this.h,this.arcRadius);
-        else
-            gr.rellenarCuadrado(this.x,this.y,this.w,this.h);
+            //Vemos si es redondeado o no
+            if(isRound)
+                gr.rellenarCuadradoRedondeado(this.x,this.y,this.w,this.h,this.arcRadius);
+            else
+                gr.rellenarCuadrado(this.x,this.y,this.w,this.h);
 
-        //Renderizamos imagen si la tiene
-        if(this.imagen != null){
-            this.imagen.RenderCentrado((int)this.x,(int)this.y);
+            //Renderizamos imagen si la tiene
+            if(this.imagen != null){
+                this.imagen.RenderCentrado((int)this.x,(int)this.y);
+            }
+
+            //Renderizamos figura centrada
+            if(this.figura != null){
+                this.figura.RenderCentrado(gr,this.x,this.y);
+            }
+
+            //Renderizamos texto centrado
+            if(this.text != null){
+                this.text.RenderCentrado(gr,this.x,this.y);
+            }
+
         }
 
-        //Renderizamos figura centrada
-        if(this.figura != null){
-            this.figura.RenderCentrado(gr,this.x,this.y);
-        }
-
-        //Renderizamos texto centrado
-        if(this.text != null){
-            this.text.RenderCentrado(gr,this.x,this.y);
-        }
     }
 
 }
