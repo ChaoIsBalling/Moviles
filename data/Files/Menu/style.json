@@ -21,10 +21,10 @@
     },
     "TextoInicial":
     {
-        "texto":"TowerDefense",
+        "texto":"Tower Defense",
         "font":"Inika-Regular.ttf",
         "x":300,
-        "y":150,
+        "y":100,
         "size":40,
         "bold":true,
         "italic":true,

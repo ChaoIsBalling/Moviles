@@ -21,11 +21,14 @@ public class GameOver implements State {
     private Button botonMenu;
     private Button botonReintentar;
 
-    private Button botonRecompensaAd;
+    //Boton de retorno al mapa de mundos del modo aventura
+    private Button botonVolverMundo;
 
+    //Botones de ver anuncio recompensado y compartir en redes sociales
+    private Button botonRecompensaAd;
     private Button botonCompartir;
 
-    //Textos
+    //Texto de resultado
     private Text textoInicial;
 
     //Sonidos de victoria y derrota
@@ -37,34 +40,49 @@ public class GameOver implements State {
     Mobile mobile;
     //Determina si el jugador ha ganado
     boolean win;
-    public GameOver(Engine engine, Audio audio,boolean win)
+
+    //Dificultad con la que se ha superado el nivel (Para saber el modo de juego)
+    GameLogic.Dificultad dificultad;
+    public GameOver(Engine engine, Audio audio, GameLogic.Dificultad dificultad ,boolean win)
     {
         //Inicializamos los botones y textos
         this.engine = engine;
         JSONObject botones=engine.readJsonFile("GameOver/style.json");
         this.win=win;
-        //this.setAudio(audio);
+        this.dificultad = dificultad;
+        this.setAudio(audio);
 
+        //Botones comunes de ambos modos
         botonMenu = new Button(botones.getJSONObject("BotonMenu"));
-        botonReintentar = new Button(botones.getJSONObject("BotonReintentar"));
-        botonRecompensaAd = new Button(botones.getJSONObject("BotonRecompensaAd"));
-        this.botonCompartir =new Button(botones.getJSONObject("BotonIntent"));
-
+        botonCompartir =new Button(botones.getJSONObject("BotonIntent"));
         botonMenu.setText(new Text(botones.getJSONObject("TextoBoton")));
-        botonReintentar.setText(new Text(botones.getJSONObject("TextoReintentar")));
-        botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAd")));
-        //Dependiendo del resultado reproducimos un sonido distinto
+
+
+        //botones exclusivos del modo normal y del modo aventura
+        if(dificultad != GameLogic.Dificultad.aventura) {
+            botonReintentar = new Button(botones.getJSONObject("BotonReintentar"));
+            botonReintentar.setText(new Text(botones.getJSONObject("TextoReintentar")));
+        }
+        else{
+            botonVolverMundo = new Button(botones.getJSONObject("BotonVolverMundo"));
+            botonVolverMundo.setText(new Text(botones.getJSONObject("TextoVolverMundo")));
+
+            botonRecompensaAd = new Button(botones.getJSONObject("BotonRecompensaAd"));
+            botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAd")));
+        }
+
+        //Dependiendo del resultado de la partida reproducimos un sonido distinto
         if(win) {
             textoInicial = new Text(botones.getJSONObject("TextoWin"));
 
-            //this.victory = this.audio.newSound("victory_trumpet.wav");
-            //this.audio.playSound(this.victory);
+            this.victory = this.audio.newSound("victory_trumpet.wav");
+            this.audio.playSound(this.victory);
         }
         else {
             textoInicial = new Text(botones.getJSONObject("TextoLose"));
 
-            //this.lose = this.audio.newSound("death_sound.wav");
-            //this.audio.playSound(this.lose);
+            this.lose = this.audio.newSound("death_sound.wav");
+            this.audio.playSound(this.lose);
         }
     }
     @Override
@@ -79,11 +97,19 @@ public class GameOver implements State {
     @Override
     public void render(Graphics gr) {
         gr.setColor(0x00000000);
-        botonMenu.Render(gr);
+
+        //botones y texto coumunes de ambos modos de juego
         textoInicial.Render(gr);
-        botonReintentar.Render(gr);
-        botonRecompensaAd.Render(gr);
         botonCompartir.Render(gr);
+
+        if(this.dificultad!= GameLogic.Dificultad.aventura){
+            botonMenu.Render(gr);
+            botonReintentar.Render(gr);
+        }else{
+            botonMenu.Render(gr);
+            botonRecompensaAd.Render(gr);
+            botonVolverMundo.Render(gr);
+        }
     }
 
     @Override
@@ -105,20 +131,20 @@ public class GameOver implements State {
             }
             switch (e.type){
                 case TOUCH_DOWN:
-                    if(this.botonMenu.contains(e.x,e.y)){
+                    if(canClickButton(botonMenu,e.x,e.y)){
                         Menu menu= new Menu(this.engine);
                         this.engine.setState(menu);
                     }
-                    if(this.botonReintentar.contains(e.x,e.y)){
+                    if(canClickButton(botonReintentar,e.x,e.y)){
                         Dificultad dificultad = new Dificultad(this.engine);
                         this.engine.setState(dificultad);
                     }
-                    if(this.botonRecompensaAd.contains(e.x,e.y) && this.botonRecompensaAd.isEnable()){
+                    if(canClickButton(botonRecompensaAd,e.x,e.y) && this.botonRecompensaAd.isEnable()){
                         this.mobile.showRewardedAd();
                         this.botonRecompensaAd.setEnabled(false);
                         this.botonRecompensaAd.setVisible(false);
                     }
-                    if(this.botonCompartir.contains(e.x,e.y))
+                    if(canClickButton(botonCompartir,e.x,e.y))
                     {
                         String message;
                         if(this.win)
@@ -130,6 +156,10 @@ public class GameOver implements State {
                             message="Soy una desgracia >:(";
                         }
                         this.engine.luanchShareIntent(message);
+                    }
+                    if(canClickButton(botonVolverMundo,e.x,e.y)){
+                        Mundo mundo = new Mundo(this.engine);
+                        this.engine.setState(mundo);
                     }
 
                     break;
@@ -154,6 +184,14 @@ public class GameOver implements State {
     @Override
     public void setMobile(Mobile mobile) {
         this.mobile = mobile;
+    }
+
+    private boolean canClickButton(Button boton,float x, float y){
+        if(boton != null && boton.contains(x,y)){
+            return true;
+        }
+        return false;
+
     }
 
 }

@@ -122,7 +122,7 @@ public class GameLogic implements State {
     //JSONArray que gestiona las oleadas en el juego
     JSONArray oleadasDatos;
        /**
-     * Constructora del estado principal de juego
+     * Constructora del estado principal de juego en el modo normal
      * @param engine Motor
      */
     public GameLogic(Engine engine, Dificultad dificultad){
@@ -143,6 +143,10 @@ public class GameLogic implements State {
         this.inicializarNivel("mapa1.json");
 
     }
+    /**
+     * Constructora del estado principal de juego en el modo aventura a partir de la lectura del mapa del nivel
+     * @param engine Motor
+     */
     public GameLogic(Engine engine, String mapa){
         this.engine=engine;
         this.dificultad = Dificultad.aventura;
@@ -284,9 +288,9 @@ public class GameLogic implements State {
         //En caso de que haya ganado, no habrá oleadas, enemigos y la vida es mayor a 0
         if (this.oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()) {
             this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, true);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.dificultad,true);
             JSONObject obj=this.engine.readJsonFile2("save");
-            obj.put("gems",obj.getInt("gems")+this.recompensas);
+            obj.put("gems",obj.getInt("gems") + this.recompensas);
             this.engine.writeFile("save",obj.toString());
             this.engine.setState(gameOver);
         }
@@ -294,7 +298,7 @@ public class GameLogic implements State {
         //En caso de que haya perdido
         if (this.vida <= 0) {
             this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, false);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.dificultad,false);
             this.engine.setState(gameOver);
         }
     }

@@ -69,29 +69,18 @@ public class MainActivity extends AppCompatActivity {
         this.engine.setNotificationIcon(R.drawable.ic_tower_defense_noti);
         this.engine.setState(new Menu(engine));
 
+        //Comprobamos si el jugador ha vuelto a entrar al juego por la notificacion recompensada
+        checkRewardNotifiactionIntent();
 
-        //Recogemos el intent
-        Intent intent = getIntent();
 
-        //Si es por hacer click a la notifiación por bonificación, regalamos diamantes al jugador
-        if(intent != null && intent.getBooleanExtra("REWARD_NOTIFICATION",false)){
-            //this.engine.giveReward();
-            System.out.println("Diamantes recibidos");
-        }
+
     }
 
     @Override
     protected void onResume(){
         super.onResume();
         this.engine.resume();
-        if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            requestPermissions(
-                    new String[]{Manifest.permission.POST_NOTIFICATIONS},
-                    101
-            );
-        }
+        requestPermissionNotifiactions();
     }
 
     @Override
@@ -107,8 +96,30 @@ public class MainActivity extends AppCompatActivity {
                 "¡Te echamos de menos :(!",
                 "Vuelve ahora y gana 3 diamantes gratis."
         );
+    }
 
+    private void requestPermissionNotifiactions(){
+        //La aplicacion solicita los permisos de notifiacion al usuario si accede al
+        //juego por primera vez
+        if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
 
+            requestPermissions(
+                    new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                    101
+            );
+        }
+    }
+
+    private void checkRewardNotifiactionIntent(){
+        //Recogemos el intent
+        Intent intent = getIntent();
+
+        //Si es por hacer click a la notifiación por bonificación, regalamos diamantes al jugador
+        if(intent != null && intent.getBooleanExtra("REWARD_NOTIFICATION",false)){
+            //this.engine.giveReward();
+            System.out.println("Diamantes recibidos");
+        }
     }
 }
 
