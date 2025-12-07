@@ -70,13 +70,12 @@ public class Tienda implements State {
     }
 
     private void cargarDatos(){
+
         if(this.engine.checkFileExists("save"))
         {
             JSONObject obj=this.engine.readJsonFile2("save");
-            String contrasena = "contraseña";
-            String paraHash = contrasena+obj.toString();
-            String hash = this.engine.hashSHA256(paraHash);
-            if(hash=="hash guardado"){
+            String hash = this.engine.createHash(obj.toString());
+            if(this.engine.checkHash(hash)) {
                 this.rayo = obj.getBoolean("rayo");
                 this.fuego = obj.getBoolean("fuego");
                 this.hielo = obj.getBoolean("hielo");
@@ -86,44 +85,31 @@ public class Tienda implements State {
             }
             else{
                 //resetea el progreso
-                obj=new JSONObject();
-                obj.put("gems",0);
-                obj.put("completed",0);
-                obj.put("rayo",false);
-                obj.put("fuego",false);
-                obj.put("hielo",false);
-                contrasena = "contraseña";
-                paraHash = contrasena+obj.toString();
-                hash = this.engine.hashSHA256(paraHash);
-                this.engine.writeFile("save",obj.toString());
-                this.rayo = false;
-                this.fuego = false;
-                this.hielo = false;
-                this.diamantes = 0;
-                this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
-                this.textoDiamantes.setText("Tienes " + this.diamantes);
+                this.reset();
             }
 
         }
         else {
             //Si no tenemos creamos un nuevo objeto JSON
-            JSONObject obj=new JSONObject();
-            obj.put("gems",0);
-            obj.put("completed",0);
-            obj.put("rayo",false);
-            obj.put("fuego",false);
-            obj.put("hielo",false);
-            String contrasena = "contraseña";
-            String paraHash = contrasena+obj.toString();
-            String hash = this.engine.hashSHA256(paraHash);
-            this.engine.writeFile("save",obj.toString());
-            this.rayo = false;
-            this.fuego = false;
-            this.hielo = false;
-            this.diamantes = 0;
-            this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
-            this.textoDiamantes.setText("Tienes " + this.diamantes);
+            this.reset();
         }
+    }
+
+    private void reset(){
+        JSONObject obj=new JSONObject();
+        obj.put("gems",0);
+        obj.put("completed",0);
+        obj.put("rayo",false);
+        obj.put("fuego",false);
+        obj.put("hielo",false);
+        this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
+        this.engine.writeFile("save",obj.toString());
+        this.rayo = false;
+        this.fuego = false;
+        this.hielo = false;
+        this.diamantes = 0;
+        this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
+        this.textoDiamantes.setText("Tienes " + this.diamantes);
     }
 
     @Override
