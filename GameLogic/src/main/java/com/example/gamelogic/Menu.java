@@ -64,12 +64,26 @@ public class Menu implements State {
         if(this.engine.checkFileExists("save"))
         {
             JSONObject obj=this.engine.readJsonFile2("save");
-            this.textoDiamantes.setText(String.valueOf(obj.getInt("gems")));
+            String contrasena = "contraseña";
+            String paraHash = contrasena+obj.toString();
+            String hash = this.engine.hashSHA256(paraHash);
+            if(hash=="hash guardado"){
+                this.textoDiamantes.setText(String.valueOf(obj.getInt("gems")));
+            }
+            else{
+                //resetea el progreso
+            }
+
         }
         else {
             //un archivo de JSON de guardado base que tiene los parametros iniciales
             JSONObject obj=engine.readJsonFile("saveBase.json");
-            this.engine.writeFile("save",obj.toString());
+            JSONObject base = new JSONObject();
+            base.accumulate("gems",0);
+            String contrasena = "contraseña";
+            String paraHash = contrasena+base.toString();
+            String hash = this.engine.hashSHA256(paraHash);
+            this.engine.writeFile("save",base.toString());
 
         }
     }
