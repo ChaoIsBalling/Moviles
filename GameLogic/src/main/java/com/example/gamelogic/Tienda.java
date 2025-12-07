@@ -29,6 +29,10 @@ public class Tienda implements State {
 
     private Square fondoDes;
 
+    private boolean rayo;
+    private boolean fuego;
+    private boolean hielo;
+
     private enum Estado{
         normal, botonRayo, botonFuego, botonHielo
     }
@@ -39,19 +43,87 @@ public class Tienda implements State {
         this.engine=engine;
         this.datos =engine.readJsonFile("Tienda/style.json");
         this.botonVolver = new Button(this.datos.getJSONObject("BotonVolver"));
-
-        this.diamantes=0;
-        this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
+        this.cargarDatos();
 
         this.botonRayo = new Button(this.datos.getJSONObject("BotonRayo"));
         this.botonFuego = new Button(this.datos.getJSONObject("BotonFuego"));
         this.botonHielo = new Button(this.datos.getJSONObject("BotonHielo"));
+
+        if(this.rayo){
+            this.botonRayo.setColor("0xff00ff00");
+        }
+        if(this.fuego){
+            this.botonFuego .setColor("0xff00ff00");
+        }
+        if(this.hielo){
+            this.botonHielo.setColor("0xff00ff00");
+        }
+
         this.fondoDes = new Square(500,300,300,400,true);
         this.fondoDes.setColor(0xff00ffff);
         this.coste = new Text(this.datos.getJSONObject("TextoCoste"));
         this.botonComprar = new Button(this.datos.getJSONObject("BotonComprar"));
         this.botonComprar.setText(new Text(this.datos.getJSONObject("TextoComprar")));
         this.estado = Estado.normal;
+
+
+    }
+
+    private void cargarDatos(){
+        if(this.engine.checkFileExists("save"))
+        {
+            JSONObject obj=this.engine.readJsonFile2("save");
+            String contrasena = "contraseña";
+            String paraHash = contrasena+obj.toString();
+            String hash = this.engine.hashSHA256(paraHash);
+            if(hash=="hash guardado"){
+                this.rayo = obj.getBoolean("rayo");
+                this.fuego = obj.getBoolean("fuego");
+                this.hielo = obj.getBoolean("hielo");
+                this.diamantes = obj.getInt("gems");
+                this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
+                this.textoDiamantes.setText("Tienes " + this.diamantes);
+            }
+            else{
+                //resetea el progreso
+                obj=new JSONObject();
+                obj.put("gems",0);
+                obj.put("completed",0);
+                obj.put("rayo",false);
+                obj.put("fuego",false);
+                obj.put("hielo",false);
+                contrasena = "contraseña";
+                paraHash = contrasena+obj.toString();
+                hash = this.engine.hashSHA256(paraHash);
+                this.engine.writeFile("save",obj.toString());
+                this.rayo = false;
+                this.fuego = false;
+                this.hielo = false;
+                this.diamantes = 0;
+                this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
+                this.textoDiamantes.setText("Tienes " + this.diamantes);
+            }
+
+        }
+        else {
+            //Si no tenemos creamos un nuevo objeto JSON
+            JSONObject obj=new JSONObject();
+            obj.put("gems",0);
+            obj.put("completed",0);
+            obj.put("rayo",false);
+            obj.put("fuego",false);
+            obj.put("hielo",false);
+            String contrasena = "contraseña";
+            String paraHash = contrasena+obj.toString();
+            String hash = this.engine.hashSHA256(paraHash);
+            this.engine.writeFile("save",obj.toString());
+            this.rayo = false;
+            this.fuego = false;
+            this.hielo = false;
+            this.diamantes = 0;
+            this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
+            this.textoDiamantes.setText("Tienes " + this.diamantes);
+        }
     }
 
     @Override
@@ -87,7 +159,7 @@ public class Tienda implements State {
             }
             switch (e.type){
                 case TOUCH_DOWN:
-                    this.gestiónBotones(e);
+                    this.gestionBotones(e);
                     break;
                 case TOUCH_UP:
                     break;
@@ -100,7 +172,7 @@ public class Tienda implements State {
     /**
      * Metodo que gestiona los estados del juego
      */
-    private void gestiónBotones(TouchEvent e) //maneja los estados del juego cuando pulsas botones o las torres
+    private void gestionBotones(TouchEvent e) //maneja los estados del juego cuando pulsas botones o las torres
     {
         if(this.botonVolver.contains(e.x,e.y)){
             Menu menu = new Menu(this.engine);
@@ -109,11 +181,11 @@ public class Tienda implements State {
         else {
             switch (this.estado) {
                 case normal://cuando ningun elemento esta seleccionado
-                    if (this.botonRayo.contains(e.x, e.y)) {
+                    if (this.botonRayo.contains(e.x, e.y) && !this.rayo) {
                         this.cambiarEstado(Estado.botonRayo);
-                    } else if (this.botonFuego.contains(e.x, e.y)) {
+                    } else if (this.botonFuego.contains(e.x, e.y) && !this.fuego) {
                         this.cambiarEstado(Estado.botonFuego);
-                    } else if (this.botonFuego.contains(e.x, e.y)) {
+                    } else if (this.botonHielo.contains(e.x, e.y) && !this.hielo) {
                         this.cambiarEstado(Estado.botonHielo);
                     }
                     break;
@@ -152,14 +224,17 @@ public class Tienda implements State {
         switch (this.estado) {
             case botonRayo://has tocado el boton para comprar la skin de la torre de rayo
                 this.diamantes-=precio;
+                this.rayo = true;
                 this.textoDiamantes.setText("Tienes " + this.diamantes);
                 break;
             case botonFuego://has tocado el boton para comprar la skin de la una torre de fuego
                 this.diamantes-=precio;
+                this.fuego=true;
                 this.textoDiamantes.setText("Tienes " + this.diamantes);
                 break;
             case botonHielo://has tocado el boton para comprar la skin de la una torre de hielo
                 this.diamantes-=precio;
+                this.hielo = true;
                 this.textoDiamantes.setText("Tienes " + this.diamantes);
                 break;
         }
