@@ -7,7 +7,6 @@ import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 
-import org.gradle.internal.impldep.com.google.api.client.json.Json;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -27,8 +26,13 @@ public class Mundo implements State {
     private Button anteriorMundo;
     private Button botonVolver;
     private ArrayList<Button> niveles;
-    String ColorCompleted;
     private Engine engine;
+
+    int fil;
+    int col;
+    //booleanos que determinan si el mundo actual tiene un mundo anterior o posterior
+    private boolean next;
+    private boolean previous;
 
     private int mundo;
 
@@ -40,14 +44,23 @@ public class Mundo implements State {
     public Mundo(Engine engine,int mundo){
         this.engine=engine;
         this.mundo=mundo;
+
         JSONObject save=this.engine.readJsonFile2("save");
         this.completed= save.getInt("completed");
+
         JSONObject botones=engine.readJsonFile("Mundo/style.json");
-        JSONObject mundoInfo=engine.readJsonFile("Mundo/World"+this.mundo+"World"+this.mundo+".json");
-        int fil =botones.getInt("nivelFilas");
-        int col=botones.getInt("nivelColumnas");
+        JSONObject mundoInfo=engine.readJsonFile("Mundo/World"+this.mundo+"/World"+this.mundo+".json");
+
+        this.fil =mundoInfo.getInt("nivelFilas");
+        this.col=mundoInfo.getInt("nivelColumnas");
+
+        this.next=mundoInfo.getBoolean("next");
+        this.previous=mundoInfo.getBoolean("previous");
+
         niveles=new ArrayList<Button>();
-        this.ColorCompleted=botones.getString("colorCompleted");
+
+        String colorCompleted=mundoInfo.getString("colorCompleted");
+        String colorLocked=mundoInfo.getString("colorLocked");
         //inicialización de todos los botones de niveles
         for(int i=0;i<fil;i++)
         {
@@ -59,24 +72,30 @@ public class Mundo implements State {
                 nivelMundo.setText(nivel);
                 nivelMundo.setX(nivelMundo.getX()+nivelMundo.getWidth()*(float)j*1.5f);
                 nivelMundo.setY(nivelMundo.getY()+nivelMundo.getHeight()*(float)i*1.5f);
-
+                nivelMundo.setColor(colorLocked);
                 niveles.add(nivelMundo);
 
             }
         }
-        for(int i=0;i<=Math.min(completed,this.niveles.size()-1);i++)
+        for(int i=0;i<=Math.min(this.completed-((this.mundo-1)*(fil*col)),this.niveles.size()-1);i++)
         {
-            niveles.get(i).setColor(this.ColorCompleted);
+            niveles.get(i).setColor(colorCompleted);
             niveles.get(i).changeText(String.valueOf(i+1));
 
         }
 
         this.textoMundo = new Text(botones.getJSONObject("TextoMundo"));
+        this.textoMundo.setText("Mundo "+this.mundo);
         this.fondoTexto = new Square(300,50,300,70,true);
-        this.fondoTexto.setColor(0xff009900);
+        this.fondoTexto.setColor(0xffDAB628);
 
-        this.siguienteMundo = new Button(botones.getJSONObject("SiguienteMundo"));
-        this.anteriorMundo = new Button(botones.getJSONObject("AnteriorMundo"));
+        //en caso de que hava un siguiente o anterior mundo inicializamos los botones correspondientes
+        if(this.next) {
+            this.siguienteMundo = new Button(botones.getJSONObject("SiguienteMundo"));
+        }
+        if(this.previous) {
+            this.anteriorMundo = new Button(botones.getJSONObject("AnteriorMundo"));
+        }
         this.botonVolver = new Button(botones.getJSONObject("BotonVolver"));
     }
 
@@ -91,8 +110,10 @@ public class Mundo implements State {
             niveles.get(i).Render(gr);
         this.fondoTexto.Render(gr);
         this.textoMundo.Render(gr);
-        this.siguienteMundo.Render(gr);
-        this.anteriorMundo.Render(gr);
+        if(this.next)
+            this.siguienteMundo.Render(gr);
+        if(this.previous)
+            this.anteriorMundo.Render(gr);
         this.botonVolver.Render(gr);
     }
 
@@ -117,12 +138,29 @@ public class Mundo implements State {
                     else{
                      for(int i=0;i< niveles.size();i++)
                      {
-                         if(niveles.get(i).contains(e.x,e.y)&&i<=this.completed)
+                         if(niveles.get(i).contains(e.x,e.y)&&i<=this.completed-((this.mundo-1)*(fil*col)))
                          {
-                             GameLogic gameLogic = new GameLogic(this.engine,"Mundo/World1/Level"+(i+1)+".json");
+                             GameLogic gameLogic = new GameLogic(this.engine,"Mundo/World"+this.mundo+"/Level"+(i+1)+".json");
                              this.engine.setState(gameLogic);
                          }
                      }
+                     if(this.previous)
+                     {
+                        if(this.anteriorMundo.contains(e.x,e.y))
+                        {
+                            Mundo mundoAnterior= new Mundo(this.engine,this.mundo-1);
+                            this.engine.setState(mundoAnterior);
+                        }
+                     }
+                     if(this.next)
+                     {
+                         if(siguienteMundo.contains(e.x,e.y))
+                         {
+                             Mundo mundoNext= new Mundo(this.engine,this.mundo+1);
+                             this.engine.setState(mundoNext);
+                         }
+                     }
+
                     }
                     break;
                 case TOUCH_UP:
