@@ -59,7 +59,7 @@ public class Mundo implements State {
 
             }
         }
-        for(int i=0;i<=completed;i++)
+        for(int i=0;i<=Math.min(completed,this.niveles.size()-1);i++)
         {
             niveles.get(i).setColor(this.ColorCompleted);
             niveles.get(i).changeText(String.valueOf(i+1));
