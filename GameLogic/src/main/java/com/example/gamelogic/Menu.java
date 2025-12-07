@@ -67,8 +67,10 @@ public class Menu implements State {
             this.textoDiamantes.setText(String.valueOf(obj.getInt("gems")));
         }
         else {
-            //un archivo de JSON de guardado base que tiene los parametros iniciales
-            JSONObject obj=engine.readJsonFile("saveBase.json");
+            //Si no tenemos creamos un nuevo objeto JSON
+            JSONObject obj=new JSONObject();
+            obj.put("gems",0);
+            obj.put("completed",0);
             this.engine.writeFile("save",obj.toString());
 
         }

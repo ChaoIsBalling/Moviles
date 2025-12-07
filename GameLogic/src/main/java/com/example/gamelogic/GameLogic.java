@@ -59,6 +59,8 @@ public class GameLogic implements State {
     float anchoCasilla = 35;
     float altoCasilla = 35;
 
+    //Variable que indica en que nivel estamos
+    int levelNumber;
 
     //Arrays de casillas, torres y enemigos
     ArrayList<ArrayList<Casilla>> casillas;
@@ -182,6 +184,7 @@ public class GameLogic implements State {
     {
         JSONObject obj=engine.readJsonFile(mapa);
         JSONArray arr= obj.getJSONArray("mapa");
+        this.levelNumber=obj.getInt("level");
         this.oleadasDatos =obj.getJSONArray("waves");
         this.oleadasRestantes=this.oleadasDatos.length();
         if(this.oleadasRestantes!=0)
@@ -291,6 +294,11 @@ public class GameLogic implements State {
             GameOver gameOver = new GameOver(this.engine, this.audio, this.dificultad,true);
             JSONObject obj=this.engine.readJsonFile2("save");
             obj.put("gems",obj.getInt("gems") + this.recompensas);
+            //comprobamos si el nivel que hemos derrotado es un nivel nuevo
+            if(this.levelNumber>obj.getInt("completed"))
+            {
+                obj.put("completed",this.levelNumber);
+            }
             this.engine.writeFile("save",obj.toString());
             this.engine.setState(gameOver);
         }
