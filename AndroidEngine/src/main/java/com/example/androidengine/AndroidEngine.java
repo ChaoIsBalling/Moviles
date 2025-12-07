@@ -339,8 +339,11 @@ public class AndroidEngine implements Engine,Runnable {
     public Boolean checkHash(String hash) {
         if(!checkFileExists("hash"))
             return false;
-        else if (hash.equals(readFile2("hash")))
+        else{
+        String a=readFile2("hash");
+        if (!hash.equals(a))
             return false;
+        }
         return true;
     }
 
