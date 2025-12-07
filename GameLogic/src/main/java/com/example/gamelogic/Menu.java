@@ -6,18 +6,9 @@ import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 import com.example.engine.Audio;
-import com.example.engine.Sound;
 
-import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import org.json.JSONObject;
-import org.json.JSONArray;
-import java.util.ArrayList;
 
 /**
  * Clase que implementa el menú inicial
@@ -39,13 +30,14 @@ public class Menu implements State {
     private Audio audio;
     Engine engine;
     Graphics gr;
-    Mobile mob;
+    Mobile mobile;
 
     /**
      * Constructora del menú
      */
-    public Menu(Engine engine){
+    public Menu(Engine engine, Mobile mobile){
         this.engine = engine;
+        this.mobile = mobile;
         JSONObject botones=engine.readJsonFile("Menu/style.json");
         this.botonInicial = new Button(botones.getJSONObject("BotonInicial"));
         this.botonInicial.setText(new Text(botones.getJSONObject("TextoBoton")));
@@ -77,6 +69,8 @@ public class Menu implements State {
             //Si no tenemos creamos un nuevo objeto JSON
            this.newGame();
         }
+
+        this.mobile.setVisibleAdBanner(true);
     }
     //Creacion de una nueva partida
     void newGame()
@@ -131,15 +125,15 @@ public class Menu implements State {
             switch (e.type){
                     case TOUCH_DOWN:
                         if(this.botonInicial.contains(e.x,e.y)){
-                            Dificultad dificultad = new Dificultad(this.engine);
+                            Dificultad dificultad = new Dificultad(this.engine,this.mobile);
                             this.engine.setState(dificultad);
                         }
                         else if(this.botonAventura.contains(e.x,e.y)){
-                            Mundo mundo = new Mundo(this.engine,1);
+                            Mundo mundo = new Mundo(this.engine,this.mobile,1);
                             this.engine.setState(mundo);
                         }
                         else if(this.botonTienda.contains(e.x,e.y)){
-                            Tienda tienda = new Tienda(this.engine);
+                            Tienda tienda = new Tienda(this.engine,this.mobile);
                             this.engine.setState(tienda);
                             //this.engine.showNotificacion("Hola","TOnto");
                         }
@@ -169,6 +163,6 @@ public class Menu implements State {
      */
     @Override
     public void setMobile(Mobile mobile) {
-        this.mob = mobile;
+        this.mobile = mobile;
     }
 }

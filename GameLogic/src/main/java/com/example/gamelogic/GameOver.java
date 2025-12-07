@@ -43,7 +43,7 @@ public class GameOver implements State {
 
     //Dificultad con la que se ha superado el nivel (Para saber el modo de juego)
     GameLogic.Dificultad dificultad;
-    public GameOver(Engine engine, Audio audio, GameLogic.Dificultad dificultad ,boolean win)
+    public GameOver(Engine engine, Audio audio, Mobile mobile, GameLogic.Dificultad dificultad ,boolean win)
     {
         //Inicializamos los botones y textos
         this.engine = engine;
@@ -51,6 +51,8 @@ public class GameOver implements State {
         this.win=win;
         this.dificultad = dificultad;
         this.setAudio(audio);
+        this.audio = audio;
+        this.mobile = mobile;
 
         //Botones comunes de ambos modos
         botonMenu = new Button(botones.getJSONObject("BotonMenu"));
@@ -84,6 +86,9 @@ public class GameOver implements State {
             this.lose = this.audio.newSound("death_sound.wav");
             this.audio.playSound(this.lose);
         }
+
+        mobile.setVisibleAdBanner(true);
+
     }
     @Override
     public void update(double deltaTime) {
@@ -132,11 +137,11 @@ public class GameOver implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     if(canClickButton(botonMenu,e.x,e.y)){
-                        Menu menu= new Menu(this.engine);
+                        Menu menu= new Menu(this.engine,this.mobile);
                         this.engine.setState(menu);
                     }
                     if(canClickButton(botonReintentar,e.x,e.y)){
-                        Dificultad dificultad = new Dificultad(this.engine);
+                        Dificultad dificultad = new Dificultad(this.engine,this.mobile);
                         this.engine.setState(dificultad);
                     }
                     if(canClickButton(botonRecompensaAd,e.x,e.y) && this.botonRecompensaAd.isEnable()){
@@ -158,7 +163,7 @@ public class GameOver implements State {
                         this.engine.luanchShareIntent(message);
                     }
                     if(canClickButton(botonVolverMundo,e.x,e.y)){
-                        Mundo mundo = new Mundo(this.engine,1);
+                        Mundo mundo = new Mundo(this.engine,this.mobile,1);
                         this.engine.setState(mundo);
                     }
 

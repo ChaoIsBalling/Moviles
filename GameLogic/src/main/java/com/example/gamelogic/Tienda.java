@@ -39,8 +39,11 @@ public class Tienda implements State {
 
     JSONObject datos;
     private Estado estado;
-    public Tienda(Engine engine){
+
+    Mobile mobile;
+    public Tienda(Engine engine,Mobile mobile){
         this.engine=engine;
+        this.mobile = mobile;
         this.datos =engine.readJsonFile("Tienda/style.json");
         this.botonVolver = new Button(this.datos.getJSONObject("BotonVolver"));
         this.cargarDatos();
@@ -171,7 +174,7 @@ public class Tienda implements State {
     private void gestionBotones(TouchEvent e) //maneja los estados del juego cuando pulsas botones o las torres
     {
         if(this.botonVolver.contains(e.x,e.y)){
-            Menu menu = new Menu(this.engine);
+            Menu menu = new Menu(this.engine,this.mobile);
             this.engine.setState(menu);
         }
         else {

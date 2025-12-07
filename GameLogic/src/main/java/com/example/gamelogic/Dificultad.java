@@ -23,14 +23,15 @@ public class Dificultad implements State {
     private Engine engine;
     Graphics gr;
 
-    Mobile mob;
+    Mobile mobile;
 
     /**
      * Constructora del menú de dificultad con los tres botones que representan los tres modos de juego
      * @param engine
      */
-    public Dificultad(Engine engine){
+    public Dificultad(Engine engine, Mobile mobile){
         this.engine = engine;
+        this.mobile = mobile;
         JSONObject botones=engine.readJsonFile("Dificultad/style.json");
         botonCorto = new Button(botones.getJSONObject("BotonCorto"));
         botonCorto.setText(new Text(botones.getJSONObject("TextoC")));
@@ -39,6 +40,8 @@ public class Dificultad implements State {
         botonInfinito = new Button(botones.getJSONObject("BotonInfinito"));
         botonInfinito.setText(new Text(botones.getJSONObject("TextoI")));
         this.botonVolver = new Button(botones.getJSONObject("BotonVolver"));
+
+        this.mobile.setVisibleAdBanner(false);
     }
     @Override
     public void update(double deltaTime) {
@@ -80,19 +83,19 @@ public class Dificultad implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     if(this.botonCorto.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.corto);
+                        GameLogic gameLogic = new GameLogic(this.engine,this.mobile, GameLogic.Dificultad.corto);
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonLargo.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.largo);
+                        GameLogic gameLogic = new GameLogic(this.engine,this.mobile, GameLogic.Dificultad.largo);
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonInfinito.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine, GameLogic.Dificultad.infinito);//el -1 es para indicar que es infinito
+                        GameLogic gameLogic = new GameLogic(this.engine,this.mobile,GameLogic.Dificultad.infinito);//el -1 es para indicar que es infinito
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonVolver.contains(e.x,e.y)){
-                        Menu menu = new Menu(this.engine);
+                        Menu menu = new Menu(this.engine,this.mobile);
                         this.engine.setState(menu);
                     }
                     break;
@@ -112,7 +115,6 @@ public class Dificultad implements State {
 
     @Override
     public void setMobile(Mobile mobile) {
-        this.mob = mobile;
     }
 
 }

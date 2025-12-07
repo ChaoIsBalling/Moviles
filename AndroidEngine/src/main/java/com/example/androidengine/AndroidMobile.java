@@ -3,6 +3,7 @@ package com.example.androidengine;
 import android.app.Activity;
 import android.util.Log;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ import com.example.engine.Mobile;
 
 /**
  * Clase que implementa los metodos para mostrar anuncios y gestionar las notificaciones
- * Implementa la interfaz Mobile del motor
+ * Implementa la interfaz Mobile del motor exclusivamente para Android
  */
 public class AndroidMobile implements Mobile {
     //anuncio banner y su contenedor en el xml
@@ -44,6 +45,9 @@ public class AndroidMobile implements Mobile {
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741";
     private static final String AD_REWARD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
     private static final String TAG = "MainActivity";
+
+    //Indica si el banner debe verse o no
+    boolean isBannerVisible = true;
     public AndroidMobile(Activity activity, SurfaceView surfaceView,FrameLayout adContainer){
         this.activity = activity;
         //this.adView = adView;
@@ -152,17 +156,14 @@ public class AndroidMobile implements Mobile {
                     }
                 });
     }
-    /**
-     * Metodo que muestra un anuncio recompensado una vez ya se ha cargado
-     */
-    public void showRewardedVideo() {
-
-    }
     @Override
     public void makeNotification() {
 
     }
 
+    /**
+     * Metodo que muestra un anuncio recompensado una vez ya se ha cargado
+     */
     @Override
     public void showRewardedAd() {
         //Llamar al hilo principal para ver el anuncio
@@ -191,5 +192,18 @@ public class AndroidMobile implements Mobile {
     @Override
     public void scheduleNotificationWithWorkManager() {
 
+    }
+
+
+    public void setVisibleAdBanner(boolean cond){
+        //Evitamos llamadas inecesarias al banner en cada update
+        if(cond == isBannerVisible)
+            return;
+        isBannerVisible = cond; //actualizamos booleano
+
+        //las views de nuestra UI solo se pueden modificar en el hilo principal
+        activity.runOnUiThread(() -> {
+            adContainer.setVisibility(isBannerVisible ? View.VISIBLE : View.GONE);
+        });
     }
 }

@@ -67,13 +67,10 @@ public class MainActivity extends AppCompatActivity {
         this.mobile = new AndroidMobile(this,this.renderView,this.adContainerView);
         this.engine = new AndroidEngine(this.renderView,this.mobile);
         this.engine.setNotificationIcon(R.drawable.ic_tower_defense_noti);
-        this.engine.setState(new Menu(engine));
+        this.engine.setState(new Menu(engine,this.mobile));
 
         //Comprobamos si el jugador ha vuelto a entrar al juego por la notificacion recompensada
         checkRewardNotifiactionIntent();
-
-
-
     }
 
     @Override
@@ -86,9 +83,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
-        this.engine.pause();
-
-        //Enviamos notifiación programada
         this.engine.programNotificacion(
                 5,                    // Tiempo
                 TimeUnit.SECONDS,          // Después x unidad de tiempo
@@ -96,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 "¡Te echamos de menos :(!",
                 "Vuelve ahora y gana 3 diamantes gratis."
         );
+        this.engine.pause();
     }
 
     private void requestPermissionNotifiactions(){

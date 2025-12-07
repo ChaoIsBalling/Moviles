@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class AndroidInput implements Input,View.OnTouchListener{
-
     ArrayList<TouchEvent> events;
     ArrayList<TouchEvent> pendingEvents;
     //inicializa las listas de la clase

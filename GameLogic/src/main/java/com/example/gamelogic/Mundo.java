@@ -7,14 +7,8 @@ import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 
-import org.gradle.internal.impldep.com.google.api.client.json.Json;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class Mundo implements State {
@@ -30,6 +24,7 @@ public class Mundo implements State {
     String ColorCompleted;
     private Engine engine;
 
+    private Mobile mobile;
     private int mundo;
 
     //variable que inspecciona cuantos niveles hemos derrotado
@@ -37,9 +32,10 @@ public class Mundo implements State {
 
 
     //constructora del estado que crea e inicializa los botones de la escena
-    public Mundo(Engine engine,int mundo){
+    public Mundo(Engine engine,Mobile mobile, int mundo){
         this.engine=engine;
         this.mundo=mundo;
+        this.mobile = mobile;
         JSONObject save=this.engine.readJsonFile2("save");
         this.completed= save.getInt("completed");
         JSONObject botones=engine.readJsonFile("Mundo/style.json");
@@ -78,6 +74,8 @@ public class Mundo implements State {
         this.siguienteMundo = new Button(botones.getJSONObject("SiguienteMundo"));
         this.anteriorMundo = new Button(botones.getJSONObject("AnteriorMundo"));
         this.botonVolver = new Button(botones.getJSONObject("BotonVolver"));
+
+        this.mobile.setVisibleAdBanner(false);
     }
 
     @Override
@@ -111,7 +109,7 @@ public class Mundo implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     if(this.botonVolver.contains(e.x,e.y)){
-                        Menu menu = new Menu(this.engine);
+                        Menu menu = new Menu(this.engine,this.mobile);
                         this.engine.setState(menu);
                     }
                     else{
@@ -119,7 +117,7 @@ public class Mundo implements State {
                      {
                          if(niveles.get(i).contains(e.x,e.y)&&i<=this.completed)
                          {
-                             GameLogic gameLogic = new GameLogic(this.engine,"Mundo/World1/Level"+(i+1)+".json");
+                             GameLogic gameLogic = new GameLogic(this.engine,this.mobile,"Mundo/World1/Level"+(i+1)+".json");
                              this.engine.setState(gameLogic);
                          }
                      }
@@ -135,11 +133,9 @@ public class Mundo implements State {
 
     @Override
     public void setAudio(Audio audio) {
-
     }
 
     @Override
     public void setMobile(Mobile mobile) {
-
     }
 }

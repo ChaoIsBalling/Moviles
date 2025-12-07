@@ -23,4 +23,9 @@ public interface Mobile {
      * Permite ejecutar tareas incluso si el dispositivo móvil se cierra
      */
     void scheduleNotificationWithWorkManager();
+
+    /**
+     * Controla la visibilidad del banner
+     */
+    public void setVisibleAdBanner(boolean cond);
 }

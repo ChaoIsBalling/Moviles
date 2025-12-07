@@ -19,7 +19,6 @@ public class GameLogic implements State {
     private Button botonMejoraTriangulos;
     private Button botonMejoraCuadrados;
     private Button botonMejoraHexagonos;
-    private Button botonRecompensaAd;
 
     private Button botonMejoraAtaque;
     private Button botonMejoraRango;
@@ -116,6 +115,8 @@ public class GameLogic implements State {
     //Estado actual de juego
     private Estado estado = Estado.normal;
 
+    private Mobile mobile;
+
     public enum Dificultad {
         corto, largo, infinito, aventura
     }
@@ -127,7 +128,7 @@ public class GameLogic implements State {
      * Constructora del estado principal de juego en el modo normal
      * @param engine Motor
      */
-    public GameLogic(Engine engine, Dificultad dificultad){
+    public GameLogic(Engine engine, Mobile mobile, Dificultad dificultad){
         switch(dificultad) {
             case corto:
                 this.oleadasRestantes = 3;
@@ -143,18 +144,21 @@ public class GameLogic implements State {
         this.init();
         this.dificultad = dificultad;
         this.inicializarNivel("mapa1.json");
-
+        this.mobile = mobile;
+        this.mobile.setVisibleAdBanner(false);
     }
     /**
      * Constructora del estado principal de juego en el modo aventura a partir de la lectura del mapa del nivel
      * @param engine Motor
      */
-    public GameLogic(Engine engine, String mapa){
+    public GameLogic(Engine engine, Mobile mobile, String mapa){
         this.engine=engine;
         this.dificultad = Dificultad.aventura;
         this.oleadasRestantes=0;
         this.init();
         this.inicializarNivel(mapa);
+        this.mobile = mobile;
+        this.mobile.setVisibleAdBanner(false);
     }
     private void init()
     {
@@ -291,7 +295,7 @@ public class GameLogic implements State {
         //En caso de que haya ganado, no habrá oleadas, enemigos y la vida es mayor a 0
         if (this.oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()) {
             this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.dificultad,true);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true);
             JSONObject obj=this.engine.readJsonFile2("save");
             obj.put("gems",obj.getInt("gems") + this.recompensas);
             //comprobamos si el nivel que hemos derrotado es un nivel nuevo
@@ -307,7 +311,7 @@ public class GameLogic implements State {
         //En caso de que haya perdido
         if (this.vida <= 0) {
             this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.dificultad,false);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false);
             this.engine.setState(gameOver);
         }
     }
@@ -418,7 +422,7 @@ public class GameLogic implements State {
         comprobarFinal();
     }
 
-       
+
 
     /**
      * Dada una posición (x,y) se determina en que casilla está a partir
@@ -573,7 +577,7 @@ public class GameLogic implements State {
 
     @Override
     public void setMobile(Mobile mobile) {
-
+            this.mobile = mobile;
     }
 
     /**
