@@ -93,6 +93,10 @@ public class AndroidEngine implements Engine,Runnable {
 
     private int iconNotification;
 
+    //contrasena para el hash
+    private String password="Mahjong";
+
+
     //Strings para mostrar notificaciones en el juego
     private final String CHANNEL_NAME = "channel";
     private final String CHANNEL_DESCRIPTION = "description";
@@ -331,6 +335,32 @@ public class AndroidEngine implements Engine,Runnable {
         this.iconNotification=icon;
     }
 
+    @Override
+    public void checkHash(String hash) {
+
+    }
+
+    //lectura de archivo que se enfoca en obtener un String con los datos del fichero
+    @Override
+    public String readFile2(String file) {
+        String obj ="";
+        try {
+            FileInputStream fis = this.sView.getContext().openFileInput(file);
+            InputStreamReader inputStreamReader = new InputStreamReader(fis);
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = reader.readLine()) != null) {
+                obj += line;
+            }
+
+            fis.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return obj;
+    }
+
     //Metodo que comprueba si un archivo existe o si ya esta creado
     @Override
     public boolean checkFileExists(String file) {
@@ -395,8 +425,6 @@ public class AndroidEngine implements Engine,Runnable {
                 this.state.update(elapsedTime);
                 this.input.events.clear();
             }
-
-
             if (currentTime - prevTime > 1000000000L) {
                 long fps = frames * 1000000000L / (currentTime - prevTime);
                 System.out.println("" + fps + " fps");

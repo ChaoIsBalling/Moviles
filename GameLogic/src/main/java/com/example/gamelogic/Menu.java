@@ -72,26 +72,25 @@ public class Menu implements State {
             }
             else{
                 //resetea el progreso
-                JSONObject obj=new JSONObject();
-                obj.put("gems",0);
-                obj.put("completed",0);
-                String contrasena = "contraseña";
-                String paraHash = contrasena+obj.toString();
-                String hash = this.engine.hashSHA256(paraHash);
-                this.engine.writeFile("save",obj.toString());
+                this.newGame();
             }
 
         }
         else {
             //Si no tenemos creamos un nuevo objeto JSON
-            JSONObject obj=new JSONObject();
-            obj.put("gems",0);
-            obj.put("completed",0);
-            String contrasena = "contraseña";
-            String paraHash = contrasena+obj.toString();
-            String hash = this.engine.hashSHA256(paraHash);
-            this.engine.writeFile("save",obj.toString());
+           this.newGame();
         }
+    }
+    //Creacion de una nueva partida
+    void newGame()
+    {
+        JSONObject obj=new JSONObject();
+        obj.put("gems",0);
+        obj.put("completed",0);
+        String contrasena = "contraseña";
+        String paraHash = contrasena+obj.toString();
+        String hash = this.engine.hashSHA256(paraHash);
+        this.engine.writeFile("save",obj.toString());
     }
     @Override
     public void update(double deltaTime) {

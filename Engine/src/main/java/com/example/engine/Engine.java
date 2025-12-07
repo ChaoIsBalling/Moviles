@@ -81,7 +81,8 @@ public interface Engine {
     public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText);
     public void showNotificacion(String title, String firstText);
     public void setNotificationIcon(int icono);
-
+    public void checkHash(String hash);
+    public String readFile2(String file);
 
     public boolean checkFileExists(String file);
 
