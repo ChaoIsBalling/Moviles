@@ -7,6 +7,7 @@ import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 
+import org.gradle.internal.impldep.com.google.api.client.json.Json;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -29,17 +30,23 @@ public class Mundo implements State {
     String ColorCompleted;
     private Engine engine;
 
+    private int mundo;
+
     //variable que inspecciona cuantos niveles hemos derrotado
     int completed;
 
     JSONObject botones;
 
     //constructora del estado que crea e inicializa los botones de la escena
-    public Mundo(Engine engine){
+    public Mundo(Engine engine,int mundo){
         this.engine=engine;
+        this.mundo=mundo;
         JSONObject save=this.engine.readJsonFile2("save");
         this.completed= save.getInt("completed");
+
         botones=engine.readJsonFile("Mundo/style.json");
+        JSONObject mundoInfo=engine.readJsonFile("Mundo/World"+this.mundo+"World"+this.mundo+".json");
+
         int fil =botones.getInt("nivelFilas");
         int col=botones.getInt("nivelColumnas");
         niveles=new ArrayList<Button>();
@@ -115,7 +122,7 @@ public class Mundo implements State {
                      {
                          if(niveles.get(i).contains(e.x,e.y)&&i<=this.completed)
                          {
-                             GameLogic gameLogic = new GameLogic(this.engine,"Mundo/World1/Level1.json");
+                             GameLogic gameLogic = new GameLogic(this.engine,"Mundo/World1/Level"+(i+1)+".json");
                              this.engine.setState(gameLogic);
                          }
                      }

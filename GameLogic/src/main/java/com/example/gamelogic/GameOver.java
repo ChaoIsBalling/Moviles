@@ -158,7 +158,7 @@ public class GameOver implements State {
                         this.engine.luanchShareIntent(message);
                     }
                     if(canClickButton(botonVolverMundo,e.x,e.y)){
-                        Mundo mundo = new Mundo(this.engine);
+                        Mundo mundo = new Mundo(this.engine,1);
                         this.engine.setState(mundo);
                     }
 

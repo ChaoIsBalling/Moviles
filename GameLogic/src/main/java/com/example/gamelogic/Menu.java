@@ -135,7 +135,7 @@ public class Menu implements State {
                             this.engine.setState(dificultad);
                         }
                         else if(this.botonAventura.contains(e.x,e.y)){
-                            Mundo mundo = new Mundo(this.engine);
+                            Mundo mundo = new Mundo(this.engine,1);
                             this.engine.setState(mundo);
                         }
                         else if(this.botonTienda.contains(e.x,e.y)){
