@@ -46,7 +46,7 @@ public class Mundo implements State {
         JSONObject save=this.engine.readJsonFile2("save");
         this.completed= save.getInt("completed");
 
-        JSONObject botones=engine.readJsonFile("Mundo/style.json");
+        botones=engine.readJsonFile("Mundo/style.json");
         JSONObject mundoInfo=engine.readJsonFile("Mundo/World"+this.mundo+"/World"+this.mundo+".json");
 
         this.fil =mundoInfo.getInt("nivelFilas");
@@ -148,7 +148,7 @@ public class Mundo implements State {
                      {
                         if(this.anteriorMundo.contains(e.x,e.y))
                         {
-                            Mundo mundoAnterior= new Mundo(this.engine,this.mundo-1);
+                            Mundo mundoAnterior= new Mundo(this.engine,this.mobile,this.mundo-1);
                             this.engine.setState(mundoAnterior);
                         }
                      }
@@ -156,7 +156,7 @@ public class Mundo implements State {
                      {
                          if(siguienteMundo.contains(e.x,e.y))
                          {
-                             Mundo mundoNext= new Mundo(this.engine,this.mundo+1);
+                             Mundo mundoNext= new Mundo(this.engine,this.mobile,this.mundo+1);
                              this.engine.setState(mundoNext);
                          }
                      }

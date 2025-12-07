@@ -149,7 +149,7 @@ public class AndroidEngine implements Engine,Runnable {
     public void setState(State state){
         this.state = state;
         this.state.setGraphics(this.gr);
-        this.state.setMobile(this.mobile);
+        this.state.setAudio(this.audio);
     }
     //getter del audio
     @Override

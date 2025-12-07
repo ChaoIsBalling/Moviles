@@ -34,7 +34,7 @@ public class Dificultad implements State {
     public Dificultad(Engine engine, Mobile mobile){
         this.engine = engine;
         this.mobile = mobile;
-        JSONObject botones=engine.readJsonFile("Dificultad/style.json");
+        botones=engine.readJsonFile("Dificultad/style.json");
         botonCorto = new Button(botones.getJSONObject("BotonCorto"));
         botonCorto.setText(new Text(botones.getJSONObject("TextoC")));
         botonLargo = new Button(botones.getJSONObject("BotonLargo"));

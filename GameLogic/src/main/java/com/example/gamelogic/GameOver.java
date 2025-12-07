@@ -87,7 +87,7 @@ public class GameOver implements State {
             this.audio.playSound(this.lose);
         }
 
-        mobile.setVisibleAdBanner(true);
+        this.mobile.setVisibleAdBanner(true);
 
     }
     @Override
