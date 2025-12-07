@@ -112,6 +112,16 @@ public class Tienda implements State {
         this.textoDiamantes.setText("Tienes " + this.diamantes);
     }
 
+    private void guardar(){
+        JSONObject obj=this.engine.readJsonFile2("save");
+        obj.put("gems",this.diamantes);
+        obj.put("rayo",this.rayo);
+        obj.put("fuego",this.fuego);
+        obj.put("hielo",this.hielo);
+        this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
+        this.engine.writeFile("save",obj.toString());
+    }
+
     @Override
     public void update(double deltatime) {
 
@@ -212,16 +222,19 @@ public class Tienda implements State {
                 this.diamantes-=precio;
                 this.rayo = true;
                 this.textoDiamantes.setText("Tienes " + this.diamantes);
+                this.guardar();
                 break;
             case botonFuego://has tocado el boton para comprar la skin de la una torre de fuego
                 this.diamantes-=precio;
                 this.fuego=true;
                 this.textoDiamantes.setText("Tienes " + this.diamantes);
+                this.guardar();
                 break;
             case botonHielo://has tocado el boton para comprar la skin de la una torre de hielo
                 this.diamantes-=precio;
                 this.hielo = true;
                 this.textoDiamantes.setText("Tienes " + this.diamantes);
+                this.guardar();
                 break;
         }
     }
