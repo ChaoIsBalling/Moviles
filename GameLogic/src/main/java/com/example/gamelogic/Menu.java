@@ -84,13 +84,16 @@ public class Menu implements State {
     //Creacion de una nueva partida
     void newGame()
     {
-        JSONObject obj=new JSONObject();
-        obj.put("gems",0);
-        obj.put("completed",0);
-        String contrasena = "contraseña";
-        String paraHash = contrasena+obj.toString();
-        String hash = this.engine.hashSHA256(paraHash);
-        this.engine.writeFile("save",obj.toString());
+            obj=new JSONObject();
+            obj.put("gems",0);
+            obj.put("completed",0);
+            obj.put("rayo",false);
+            obj.put("fuego",false);
+            obj.put("hielo",false);
+            contrasena = "contraseña";
+            paraHash = contrasena+obj.toString();
+            hash = this.engine.hashSHA256(paraHash);
+            this.engine.writeFile("save",obj.toString());
     }
     @Override
     public void update(double deltaTime) {
