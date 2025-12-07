@@ -336,8 +336,18 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     @Override
-    public void checkHash(String hash) {
+    public Boolean checkHash(String hash) {
+        if(!checkFileExists("hash"))
+            return false;
+        else if (hash.equals(readFile2("hash")))
+            return false;
+        return true;
+    }
 
+    //metodo que te crea un hash para el encriptado
+    @Override
+    public String createHash(String file) {
+        return hashSHA256(this.password+file);
     }
 
     //lectura de archivo que se enfoca en obtener un String con los datos del fichero
@@ -352,9 +362,7 @@ public class AndroidEngine implements Engine,Runnable {
             while ((line = reader.readLine()) != null) {
                 obj += line;
             }
-
             fis.close();
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

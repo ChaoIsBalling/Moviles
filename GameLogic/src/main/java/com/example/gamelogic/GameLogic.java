@@ -299,6 +299,7 @@ public class GameLogic implements State {
             {
                 obj.put("completed",this.levelNumber);
             }
+            this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
             this.engine.writeFile("save",obj.toString());
             this.engine.setState(gameOver);
         }

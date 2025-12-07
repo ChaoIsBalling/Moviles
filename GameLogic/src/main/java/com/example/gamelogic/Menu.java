@@ -64,17 +64,14 @@ public class Menu implements State {
         if(this.engine.checkFileExists("save"))
         {
             JSONObject obj=this.engine.readJsonFile2("save");
-            String contrasena = "contraseña";
-            String paraHash = contrasena+obj.toString();
-            String hash = this.engine.hashSHA256(paraHash);
-            if(hash=="hash guardado"){
+            String hash = this.engine.createHash(obj.toString());
+            if(this.engine.checkHash(hash)){
                 this.textoDiamantes.setText(String.valueOf(obj.getInt("gems")));
             }
             else{
                 //resetea el progreso
                 this.newGame();
             }
-
         }
         else {
             //Si no tenemos creamos un nuevo objeto JSON
@@ -84,15 +81,13 @@ public class Menu implements State {
     //Creacion de una nueva partida
     void newGame()
     {
-            obj=new JSONObject();
+            JSONObject obj=new JSONObject();
             obj.put("gems",0);
             obj.put("completed",0);
             obj.put("rayo",false);
             obj.put("fuego",false);
             obj.put("hielo",false);
-            contrasena = "contraseña";
-            paraHash = contrasena+obj.toString();
-            hash = this.engine.hashSHA256(paraHash);
+            this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
             this.engine.writeFile("save",obj.toString());
     }
     @Override
