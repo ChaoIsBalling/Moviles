@@ -29,9 +29,15 @@ public class Mundo implements State {
     String ColorCompleted;
     private Engine engine;
 
+    //variable que inspecciona cuantos niveles hemos derrotado
+    int completed;
+
+
     //constructora del estado que crea e inicializa los botones de la escena
     public Mundo(Engine engine){
         this.engine=engine;
+        JSONObject save=this.engine.readJsonFile2("save");
+        this.completed= save.getInt("completed");
         JSONObject botones=engine.readJsonFile("Mundo/style.json");
         int fil =botones.getInt("nivelFilas");
         int col=botones.getInt("nivelColumnas");
@@ -44,14 +50,20 @@ public class Mundo implements State {
             {
                 Button nivelMundo = new Button(botones.getJSONObject("NivelMundo"));
                 Text nivel = new Text(botones.getJSONObject("TextoNivel"));
-                nivel.setText(Integer.toString(j*fil+i+1));
+                nivel.setText("X");
                 nivelMundo.setText(nivel);
-                nivelMundo.setX(nivelMundo.getX()+nivelMundo.getWidth()*(float)i*1.5f);
-                nivelMundo.setY(nivelMundo.getY()+nivelMundo.getHeight()*(float)j*1.5f);
+                nivelMundo.setX(nivelMundo.getX()+nivelMundo.getWidth()*(float)j*1.5f);
+                nivelMundo.setY(nivelMundo.getY()+nivelMundo.getHeight()*(float)i*1.5f);
 
                 niveles.add(nivelMundo);
 
             }
+        }
+        for(int i=0;i<=Math.min(completed,this.niveles.size()-1);i++)
+        {
+            niveles.get(i).setColor(this.ColorCompleted);
+            niveles.get(i).changeText(String.valueOf(i+1));
+
         }
 
         this.textoMundo = new Text(botones.getJSONObject("TextoMundo"));
@@ -100,9 +112,9 @@ public class Mundo implements State {
                     else{
                      for(int i=0;i< niveles.size();i++)
                      {
-                         if(niveles.get(i).contains(e.x,e.y))
+                         if(niveles.get(i).contains(e.x,e.y)&&i<=this.completed)
                          {
-                             GameLogic gameLogic = new GameLogic(this.engine,"mapa1.json");
+                             GameLogic gameLogic = new GameLogic(this.engine,"Mundo/World1/Level1.json");
                              this.engine.setState(gameLogic);
                          }
                      }

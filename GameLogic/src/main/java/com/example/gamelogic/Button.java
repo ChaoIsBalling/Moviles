@@ -77,6 +77,11 @@ public class Button {
     public void setText(Text text) {
         this.text = text;
     }
+    //metodo que cambia el string del textp
+    public void changeText(String message)
+    {
+        this.text.setText(message);
+    }
     public void setColor(String color){
         this.color = color;
     }

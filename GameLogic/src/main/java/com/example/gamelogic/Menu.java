@@ -72,19 +72,25 @@ public class Menu implements State {
             }
             else{
                 //resetea el progreso
+                JSONObject obj=new JSONObject();
+                obj.put("gems",0);
+                obj.put("completed",0);
+                String contrasena = "contraseña";
+                String paraHash = contrasena+obj.toString();
+                String hash = this.engine.hashSHA256(paraHash);
+                this.engine.writeFile("save",obj.toString());
             }
 
         }
         else {
-            //un archivo de JSON de guardado base que tiene los parametros iniciales
-            JSONObject obj=engine.readJsonFile("saveBase.json");
-            JSONObject base = new JSONObject();
-            base.accumulate("gems",0);
+            //Si no tenemos creamos un nuevo objeto JSON
+            JSONObject obj=new JSONObject();
+            obj.put("gems",0);
+            obj.put("completed",0);
             String contrasena = "contraseña";
-            String paraHash = contrasena+base.toString();
+            String paraHash = contrasena+obj.toString();
             String hash = this.engine.hashSHA256(paraHash);
-            this.engine.writeFile("save",base.toString());
-
+            this.engine.writeFile("save",obj.toString());
         }
     }
     @Override
