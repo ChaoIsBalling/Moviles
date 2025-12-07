@@ -36,7 +36,7 @@
         "color":"#FF000000"
     },
     "SiguienteMundo":    
-    {   "x":110,
+    {   "x":490,
         "y":50,
         "w":50,
         "h":50,
@@ -45,7 +45,7 @@
         "color":"#FF0000FF"
     },
     "AnteriorMundo":    
-    {   "x":490,
+    {   "x":110,
         "y":50,
         "w":50,
         "h":50,
@@ -60,6 +60,14 @@
         "h":30,
         "isRound":true,
         "ar":15,
-        "color":"#FFFF0000"
+        "color":"#FFFFffff"
+    },
+    "ImagenVolver":
+    {
+        "imagen":"Volver.png",
+        "x":-15,
+        "y":-15,
+        "w":-30,
+        "h":30
     }
 }

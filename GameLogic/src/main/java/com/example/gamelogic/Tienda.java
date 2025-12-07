@@ -93,11 +93,11 @@ public class Tienda implements State {
 
         }
         else {
-            //Si no tenemos creamos un nuevo objeto JSON
             this.reset();
         }
     }
 
+    //resetea el progreso
     private void reset(){
         JSONObject obj=new JSONObject();
         obj.put("gems",0);
@@ -115,6 +115,7 @@ public class Tienda implements State {
         this.textoDiamantes.setText("Tienes " + this.diamantes);
     }
 
+    //guardar progreso
     private void guardar(){
         JSONObject obj=this.engine.readJsonFile2("save");
         obj.put("gems",this.diamantes);
@@ -146,7 +147,7 @@ public class Tienda implements State {
 
     @Override
     public void setGraphics(Graphics gr) {
-
+        this.botonVolver.setImagen(new Image(datos.getJSONObject("ImagenVolver"),gr));
     }
 
     @Override
@@ -219,6 +220,7 @@ public class Tienda implements State {
         }
     }
 
+    //metodo que gestiona la compra
     private void comprar(float precio){
         switch (this.estado) {
             case botonRayo://has tocado el boton para comprar la skin de la torre de rayo

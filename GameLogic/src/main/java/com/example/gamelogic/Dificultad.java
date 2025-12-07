@@ -25,6 +25,8 @@ public class Dificultad implements State {
 
     Mobile mobile;
 
+    JSONObject botones;
+
     /**
      * Constructora del menú de dificultad con los tres botones que representan los tres modos de juego
      * @param engine
@@ -66,6 +68,7 @@ public class Dificultad implements State {
     @Override
     public void setGraphics(Graphics gr) {
         this.gr=gr;
+        this.botonVolver.setImagen(new Image(botones.getJSONObject("ImagenVolver"),gr));
     }
 
     /**

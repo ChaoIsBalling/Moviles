@@ -1,0 +1,8 @@
+{
+    "nivelFilas":2,
+    "nivelColumnas":3, 
+    "colorCompleted": "#FFFF4388",
+    "colorLocked": "#FFA20328",
+    "previous":true,
+    "next":false
+}
