@@ -60,6 +60,14 @@
         "h":30,
         "isRound":true,
         "ar":15,
-        "color":"#FFFF0000"
+        "color":"#FFFFffff"
+    },
+    "ImagenVolver":
+    {
+        "imagen":"Volver.png",
+        "x":-15,
+        "y":-15,
+        "w":-30,
+        "h":30
     }
 }

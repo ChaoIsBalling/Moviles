@@ -143,7 +143,7 @@ public class Tienda implements State {
 
     @Override
     public void setGraphics(Graphics gr) {
-
+        this.botonVolver.setImagen(new Image(datos.getJSONObject("ImagenVolver"),gr));
     }
 
     @Override

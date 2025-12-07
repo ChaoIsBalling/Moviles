@@ -39,6 +39,7 @@ public class Mundo implements State {
     //variable que inspecciona cuantos niveles hemos derrotado
     int completed;
 
+    JSONObject botones;
 
     //constructora del estado que crea e inicializa los botones de la escena
     public Mundo(Engine engine,int mundo){
@@ -119,7 +120,7 @@ public class Mundo implements State {
 
     @Override
     public void setGraphics(Graphics gr) {
-
+        this.botonVolver.setImagen(new Image(botones.getJSONObject("ImagenVolver"),gr));
     }
 //manejo de los inputs
     @Override

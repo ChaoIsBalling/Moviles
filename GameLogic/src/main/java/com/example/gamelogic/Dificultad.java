@@ -25,13 +25,15 @@ public class Dificultad implements State {
 
     Mobile mob;
 
+    JSONObject botones;
+
     /**
      * Constructora del menú de dificultad con los tres botones que representan los tres modos de juego
      * @param engine
      */
     public Dificultad(Engine engine){
         this.engine = engine;
-        JSONObject botones=engine.readJsonFile("Dificultad/style.json");
+        botones=engine.readJsonFile("Dificultad/style.json");
         botonCorto = new Button(botones.getJSONObject("BotonCorto"));
         botonCorto.setText(new Text(botones.getJSONObject("TextoC")));
         botonLargo = new Button(botones.getJSONObject("BotonLargo"));
@@ -63,6 +65,7 @@ public class Dificultad implements State {
     @Override
     public void setGraphics(Graphics gr) {
         this.gr=gr;
+        this.botonVolver.setImagen(new Image(botones.getJSONObject("ImagenVolver"),gr));
     }
 
     /**
