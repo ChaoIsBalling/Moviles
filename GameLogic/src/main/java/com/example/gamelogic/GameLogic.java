@@ -24,11 +24,6 @@ public class GameLogic implements State {
     private Button botonMejoraRango;
     private Button botonMejoraVelocidad;
 
-    //Figuras que tenrán los botones
-    private Square figuraBotonCuadrado;
-    private Triangle figuraBotonTriangulo;
-    private Hexagon figuraBotonHexagono;
-
     //Imagen de los stats
     private Image imagenVida;
     private Image imagenDinero;
@@ -520,15 +515,10 @@ public class GameLogic implements State {
         this.botonMejoraRango = new Button(style.getJSONObject("BotonMejoraCuadrados"));
         this.botonMejoraVelocidad = new Button(style.getJSONObject("BotonMejoraHexagonos"));
 
-        this.figuraBotonCuadrado = new Square(1, -5, 30, 30, true);
-        this.figuraBotonCuadrado.setColor(0xFFC8A2C8);
-        this.figuraBotonTriangulo = new Triangle(1, 1, 15, true);
-        this.figuraBotonHexagono = new Hexagon(1, -5, 15, true);
-        this.figuraBotonHexagono.setColor(0xFFFF0000);
 
-        this.botonMejoraCuadrados.setFigura(this.figuraBotonCuadrado);
-        this.botonMejoraTriangulos.setFigura(this.figuraBotonTriangulo);
-        this.botonMejoraHexagonos.setFigura(this.figuraBotonHexagono);
+        this.botonMejoraCuadrados.setImagen(new Image(style.getJSONObject("ImagenHielo"),this.gr));
+        this.botonMejoraTriangulos.setImagen(new Image(style.getJSONObject("ImagenRayo"),this.gr));
+        this.botonMejoraHexagonos.setImagen(new Image(style.getJSONObject("ImagenFuego"),this.gr));
 
         this.botonMejoraCuadrados.setText(new Text(style.getJSONObject("CosteMejoraCuadrados")));
         this.botonMejoraTriangulos.setText(new Text(style.getJSONObject("CosteMejoraTriangulos")));

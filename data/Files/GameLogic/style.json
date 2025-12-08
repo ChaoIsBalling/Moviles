@@ -136,5 +136,33 @@
         "w":35,
         "h":35
     }
+    ,
+        "ImagenHielo":
+    {
+        "imagen":"Hielo.png",
+        "x":-15,
+        "y":-20,
+        "w":35,
+        "h":35
+    }
+     ,
+        "ImagenFuego":
+    {
+        "imagen":"Fuego.png",
+        "x":-15,
+        "y":-20,
+        "w":35,
+        "h":35
+    }
+    ,
+        "ImagenRayo":
+    {
+        "imagen":"Rayo.png",
+        "x":-15,
+        "y":-20,
+        "w":35,
+        "h":35
+    }
+    
 
 }
