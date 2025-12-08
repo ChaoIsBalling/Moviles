@@ -142,8 +142,8 @@
         "imagen":"Hielo.png",
         "x":-15,
         "y":-20,
-        "w":50,
-        "h":50
+        "w":35,
+        "h":35
     }
      ,
         "ImagenFuego":

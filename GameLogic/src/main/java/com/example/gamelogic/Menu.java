@@ -25,6 +25,8 @@ public class Menu implements State {
 
     private Text textoDiamantes;
 
+    private Image imagenDiamante;
+
 
     //Referencias al Audio Manager, al motor y a Graphics y a Mobile
     private Audio audio;
@@ -32,13 +34,15 @@ public class Menu implements State {
     Graphics gr;
     Mobile mobile;
 
+    JSONObject botones;
+
     /**
      * Constructora del menú
      */
     public Menu(Engine engine, Mobile mobile){
         this.engine = engine;
         this.mobile = mobile;
-        JSONObject botones=engine.readJsonFile("Menu/style.json");
+        botones=engine.readJsonFile("Menu/style.json");
         this.botonInicial = new Button(botones.getJSONObject("BotonInicial"));
         this.botonInicial.setText(new Text(botones.getJSONObject("TextoBoton")));
 
@@ -99,6 +103,7 @@ public class Menu implements State {
         botonAventura.Render(gr);
         botonTienda.Render(gr);
         textoDiamantes.Render(gr);
+        this.imagenDiamante.Render();
     }
 
     /**
@@ -108,6 +113,7 @@ public class Menu implements State {
     @Override
     public void setGraphics(Graphics gr) {
         this.gr=gr;
+        this.imagenDiamante = new Image(botones.getJSONObject("ImagenDiamante"),gr);
     }
 
     /**
