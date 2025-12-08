@@ -194,7 +194,7 @@ public class GameLogic implements State {
             for(int j =0; j<this.col;j++){
                 Casilla casilla;
                 if(arr.get(i).toString().charAt(j) == 'h'){
-                     casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,true,false);
+                     casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,false,false);
                      casilla.setColor(0xff000000);
                 } else {
                     casilla = new Casilla((float) (j * 35 + 30), (float) (i * 35 + 50), this.anchoCasilla, this.altoCasilla, true, true);
