@@ -69,5 +69,21 @@
         "y":-15,
         "w":-30,
         "h":30
+    },
+    "ImagenSiguiente":
+    {
+        "imagen":"Flecha.png",
+        "x":-25,
+        "y":-25,
+        "w":50,
+        "h":50
+    },
+    "ImagenAnterior":
+    {
+        "imagen":"Flecha.png",
+        "x":-25,
+        "y":-25,
+        "w":-50,
+        "h":50
     }
 }
