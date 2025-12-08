@@ -194,7 +194,7 @@ public class GameLogic implements State {
             for(int j =0; j<this.col;j++){
                 Casilla casilla;
                 if(arr.get(i).toString().charAt(j) == 'h'){
-                     casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,false,false);
+                     casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,true,false);
                      casilla.setColor(0xff000000);
                 } else {
                     casilla = new Casilla((float) (j * 35 + 30), (float) (i * 35 + 50), this.anchoCasilla, this.altoCasilla, true, true);
@@ -681,13 +681,21 @@ public class GameLogic implements State {
             Tower torreR;
             switch (this.estado) {
                     case botonRayo:
-                        torreR = new ThunderTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(), this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY());
+                        torreR = new ThunderTower
+                                (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
+                                        this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
+                                        new Image(this.style.getJSONObject("TorreRayo"),this.gr));
                         break;
                     case botonFuego:
-                        torreR = new FireTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(), this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY());
+                        torreR = new FireTower
+                                (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
+                                        this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
+                                        new Image(this.style.getJSONObject("TorreFuego"),this.gr));
                         break;
                     default:
-                        torreR = new IceTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(), this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY());
+                        torreR = new IceTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
+                                this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
+                                new Image(this.style.getJSONObject("TorreHielo"),this.gr));
                         break;
                 }
                 torreR.setListaEnemigos(this.enemigos);

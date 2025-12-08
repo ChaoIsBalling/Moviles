@@ -10,8 +10,7 @@ import java.util.ArrayList;
  *  Clase que representa la torre de Hielo e implementa la interfaz Tower
  */
 public class IceTower implements Tower{
-    //Forma que representa la torre
-    Square cuadrado;
+
     //stats de la torre de Hielo
     float ataque=10;
     float rango= 70;
@@ -20,6 +19,9 @@ public class IceTower implements Tower{
     //Referencia al audio manager y el sonido de ataque
     Audio audio;
     Sound attack;
+    float x;
+    float y;
+    Image image;
 
     //Tipo de la torre
     Tipo tipo = Tipo.hielo;
@@ -32,9 +34,10 @@ public class IceTower implements Tower{
     /**
      * Constructora de la torre de hielo con su coordenada x,y
      */
-    public IceTower(float x, float y){
-        this.cuadrado = new Square(x,y,20,20,true);
-        this.cuadrado.setColor(0xFFC8A2C8);
+    public IceTower(float x, float y,Image im){
+        this.x=x;
+        this.y=y;
+        this.image=im;
     }
 
     /**
@@ -65,11 +68,11 @@ public class IceTower implements Tower{
     }
     @Override
     public float getX() {
-        return this.cuadrado.getX();
+        return this.x;
     }
     @Override
     public float getY() {
-        return this.cuadrado.getY();
+        return this.y;
     }
 
     /**
@@ -94,8 +97,8 @@ public class IceTower implements Tower{
         for (int i = 0; i < this.enemigos.size(); i++) {
             float x = this.enemigos.get(i).getX();
             float y = this.enemigos.get(i).getY();
-            double a = x - this.cuadrado.getX();
-            double b = y - this.cuadrado.getY();
+            double a = x - this.x;
+            double b = y - this.y;
             a = Math.pow(a, 2);
             b = Math.pow(b, 2);
             double distancia = Math.sqrt(a + b);
@@ -120,7 +123,7 @@ public class IceTower implements Tower{
      */
     @Override
     public void Render(Graphics gr) {
-        this.cuadrado.Render(gr);
+        this.image.RenderCentrado((int)this.x,(int)this.y);
     }
 
     /**

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class FireTower implements Tower {
 
     //Figura que represeta la torre de fuego
-    Hexagon hexagono;
+
     //Stats de torre de fuego
     float ataque=2;
     float rango= 70;
@@ -30,16 +30,21 @@ public class FireTower implements Tower {
     //Tipo de la torre
     Tipo tipo = Tipo.fuego;
 
+    float x;
+    float y;
+
     //Lista de enemigos que detecta la torre
     ArrayList<Enemy> enemigos;
     Enemy enemigo;
+    Image image;
 
     /**
      * Constructora de la torre de fuego
      */
-    public FireTower(float x, float y){
-        this.hexagono = new Hexagon(x,y,15,true);
-        this.hexagono.setColor(0xffff0000);
+    public FireTower(float x, float y,Image im){
+        this.x=x;
+        this.y=y;
+        this.image=im;
         this.attack=attack;
     }
 
@@ -95,8 +100,8 @@ public class FireTower implements Tower {
             for (int i = 0; i < this.enemigos.size(); i++){
                 float x = this.enemigos.get(i).getX();
                 float y = this.enemigos.get(i).getY();
-                double a = x-this.hexagono.getX();
-                double b = y-this.hexagono.getY();
+                double a = x-this.x;
+                double b = y-this.y;
                 a = Math.pow(a,2);
                 b = Math.pow(b,2);
                 double distancia = Math.sqrt(a+b);
@@ -150,7 +155,7 @@ public class FireTower implements Tower {
      */
     @Override
     public void Render(Graphics gr) {
-        this.hexagono.Render(gr);
+        this.image.RenderCentrado((int)this.x,(int)this.y);
         if(this.disparo && this.fuego > 0){
             gr.setColor(0xffff0000);
             gr.rellenarCirculo(this.enemigo.getX(),this.enemigo.getY(),15);
@@ -168,12 +173,12 @@ public class FireTower implements Tower {
 
     @Override
     public float getX() {
-        return this.hexagono.getX();
+        return this.x;
     }
 
     @Override
     public float getY() {
-        return this.hexagono.getY();
+        return this.y;
     }
 
     /**

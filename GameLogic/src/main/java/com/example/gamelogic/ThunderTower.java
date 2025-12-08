@@ -10,20 +10,22 @@ import java.util.ArrayList;
  * Clase que representa la torre de Rayo e implementa la interfaz Tower
  */
 public class ThunderTower implements Tower{
-    //Figura que representa la torre
-    Triangle triangulo;
+
     //stats de la torre de Rayo
     float ataque=4;
     float rango= 70;
     float velocidad = (float )1.6;
     float enfriamiento = 0;
     float rayo =1;
+    float x;
+    float y;
     //Referencia al audio manager y el sonido de ataque
     Audio audio;
     Sound attack;
 
     //Determina si está disparando
     boolean disparo = false;
+    Image imagen;
 
     Tipo tipo = Tipo.rayo;
 
@@ -35,9 +37,10 @@ public class ThunderTower implements Tower{
     /**
      * Constructora de la torre de rayo con sus coordenadas
      */
-    public ThunderTower(float x, float y){
-        this.triangulo = new Triangle(x,y,15,true);
-        this.triangulo.setColor(0xFF000000);
+    public ThunderTower(float x, float y, Image im){
+        this.imagen=im;
+        this.x=x;
+        this.y=y;
     }
 
     /**
@@ -86,8 +89,8 @@ public class ThunderTower implements Tower{
                 float x = this.enemigos.get(i).getX();
                 float y = this.enemigos.get(i).getY();
                 //Distancia hasta el enemigo
-                double a = x-this.triangulo.getX();
-                double b = y-this.triangulo.getY();
+                double a = x-this.x;
+                double b = y-this.y;
                 a = Math.pow(a,2);
                 b = Math.pow(b,2);
                 double distancia = Math.sqrt(a+b);
@@ -128,10 +131,10 @@ public class ThunderTower implements Tower{
      */
     @Override
     public void Render(Graphics gr) {
-        this.triangulo.Render(gr);
+        this.imagen.RenderCentrado((int)this.x,(int)this.y);
         if(this.disparo && this.rayo > 0){
             gr.setColor(0xff00ffff);
-            gr.pintarLinea(this.triangulo.getX(),this.triangulo.getY(),this.enemigo.getX(),this.enemigo.getY(),5);
+            gr.pintarLinea(this.x,this.y,this.enemigo.getX(),this.enemigo.getY(),5);
         }
     }
 
@@ -145,12 +148,12 @@ public class ThunderTower implements Tower{
 
     @Override
     public float getX() {
-        return this.triangulo.getX();
+        return this.x;
     }
 
     @Override
     public float getY() {
-        return this.triangulo.getY();
+        return this.y;
     }
 
     /**

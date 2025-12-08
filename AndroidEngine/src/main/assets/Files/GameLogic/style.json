@@ -142,8 +142,8 @@
         "imagen":"Hielo.png",
         "x":-15,
         "y":-20,
-        "w":50,
-        "h":50
+        "w":35,
+        "h":35
     }
      ,
         "ImagenFuego":
@@ -158,6 +158,31 @@
         "ImagenRayo":
     {
         "imagen":"Rayo.png",
+        "x":-15,
+        "y":-20,
+        "w":35,
+        "h":35
+    } ,
+        "TorreRayo":
+    {
+        "imagen":"TorreRayo.png",
+        "x":-15,
+        "y":-20,
+        "w":35,
+        "h":35
+    }
+     ,
+        "TorreHielo":
+    {
+        "imagen":"TorreHielo.png",
+        "x":-15,
+        "y":-20,
+        "w":35,
+        "h":35
+    } ,
+        "TorreFuego":
+    {
+        "imagen":"TorreFuego.png",
         "x":-15,
         "y":-20,
         "w":35,
