@@ -80,6 +80,14 @@
         "bold":true,
         "italic":true,
         "color":"#FF00FFFF"
+    },
+     "ImagenDiamante":
+    {
+        "imagen":"Diamante.png",
+        "x":375,
+        "y":325,
+        "w":50,
+        "h":50
     }
         
 }

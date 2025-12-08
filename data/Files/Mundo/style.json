@@ -42,7 +42,7 @@
         "h":50,
         "isRound":true,
         "ar":30,
-        "color":"#FF0000FF"
+        "color":"#FFFFFFFF"
     },
     "AnteriorMundo":    
     {   "x":110,
@@ -51,7 +51,7 @@
         "h":50,
         "isRound":true,
         "ar":30,
-        "color":"#FF0000FF"
+        "color":"#FFFFFFFF"
     },
     "BotonVolver":    
     {   "x":30,
@@ -60,7 +60,7 @@
         "h":30,
         "isRound":true,
         "ar":15,
-        "color":"#FFFFffff"
+        "color":"#FFFFFFFF"
     },
     "ImagenVolver":
     {
@@ -69,5 +69,21 @@
         "y":-15,
         "w":-30,
         "h":30
+    },
+    "ImagenSiguiente":
+    {
+        "imagen":"Flecha.png",
+        "x":-25,
+        "y":-25,
+        "w":50,
+        "h":50
+    },
+    "ImagenAnterior":
+    {
+        "imagen":"Flecha.png",
+        "x":-25,
+        "y":-25,
+        "w":-50,
+        "h":50
     }
 }

@@ -120,6 +120,12 @@ public class Mundo implements State {
     @Override
     public void setGraphics(Graphics gr) {
         this.botonVolver.setImagen(new Image(botones.getJSONObject("ImagenVolver"),gr));
+        if(this.next) {
+            this.siguienteMundo.setImagen(new Image(botones.getJSONObject("ImagenSiguiente"),gr));
+        }
+        if(this.previous) {
+            this.anteriorMundo.setImagen(new Image(botones.getJSONObject("ImagenAnterior"),gr));
+        }
     }
 //manejo de los inputs
     @Override
