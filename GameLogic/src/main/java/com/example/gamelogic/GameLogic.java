@@ -29,11 +29,6 @@ public class GameLogic implements State {
     private Triangle figuraBotonTriangulo;
     private Hexagon figuraBotonHexagono;
 
-    //Imagenes de los botones en modo torre
-    private Image imagenMejoraAtaque;
-    private Image imagenMejoraRango;
-    private Image imagenMejoraVelocidad;
-
     //Imagen de los stats
     private Image imagenVida;
     private Image imagenDinero;
@@ -60,6 +55,9 @@ public class GameLogic implements State {
 
     //Variable que indica en que nivel estamos
     int levelNumber;
+
+    //Json que maneja el estilo del nivel
+    JSONObject style;
 
     //Arrays de casillas, torres y enemigos
     ArrayList<ArrayList<Casilla>> casillas;
@@ -375,12 +373,19 @@ public class GameLogic implements State {
             Tipo tipo;
             //dependiendo del tipo de enemigo tiene un tipo distinto
             String enemy =this.oleadasDatos.getJSONObject(this.oleada-1).getString("enemy");
-            if(enemy=="goblin")
-                tipo=Tipo.rayo;
-            else if(enemy=="imp")
-                tipo=Tipo.fuego;
-            else
-                tipo=Tipo.hielo;
+            Image im;
+            if(enemy=="goblin") {
+                tipo = Tipo.rayo;
+                im=new Image(this.style.getJSONObject("ImagenGoblin"),this.gr);
+            }
+            else if(enemy=="imp") {
+                tipo = Tipo.fuego;
+                im=new Image(this.style.getJSONObject("ImagenImp"),this.gr);
+            }
+            else {
+                tipo = Tipo.hielo;
+                im=new Image(this.style.getJSONObject("ImagenOgre"),this.gr);
+            }
             //Generamos enemigo
             this.enemigos.add(new Enemy(this.IniX, this.IniY,
                     8 + (this.mejVidaEn * (this.oleada - 1)),
@@ -389,6 +394,7 @@ public class GameLogic implements State {
                     0 + (this.mejResEn * (this.oleada - 1)),
                     tipo,
                     this));
+            this.enemigos.get(this.enemigos.size()-1).setImagen(im);
 
             //Incrementamos número de grupo
             this.numE++;
@@ -503,16 +509,16 @@ public class GameLogic implements State {
      */
     public void inicializarUI() {
 
-        JSONObject botones=engine.readJsonFile("GameLogic/style.json");
-        this.botonMejoraCuadrados = new Button(botones.getJSONObject("BotonMejoraCuadrados"));
-        this.botonMejoraTriangulos = new Button(botones.getJSONObject("BotonMejoraTriangulos"));
-        this.botonMejoraHexagonos = new Button(botones.getJSONObject("BotonMejoraHexagonos"));
+        this.style =engine.readJsonFile("GameLogic/style.json");
+        this.botonMejoraCuadrados = new Button(style.getJSONObject("BotonMejoraCuadrados"));
+        this.botonMejoraTriangulos = new Button(style.getJSONObject("BotonMejoraTriangulos"));
+        this.botonMejoraHexagonos = new Button(style.getJSONObject("BotonMejoraHexagonos"));
 
         //Los botones de cuadrado triangulos y hexagonos usan los mismos valores de apariencia
         //que los botones de ataque rango y velocidad
-        this.botonMejoraAtaque = new Button(botones.getJSONObject("BotonMejoraTriangulos"));
-        this.botonMejoraRango = new Button(botones.getJSONObject("BotonMejoraCuadrados"));
-        this.botonMejoraVelocidad = new Button(botones.getJSONObject("BotonMejoraHexagonos"));
+        this.botonMejoraAtaque = new Button(style.getJSONObject("BotonMejoraTriangulos"));
+        this.botonMejoraRango = new Button(style.getJSONObject("BotonMejoraCuadrados"));
+        this.botonMejoraVelocidad = new Button(style.getJSONObject("BotonMejoraHexagonos"));
 
         this.figuraBotonCuadrado = new Square(1, -5, 30, 30, true);
         this.figuraBotonCuadrado.setColor(0xFFC8A2C8);
@@ -524,22 +530,22 @@ public class GameLogic implements State {
         this.botonMejoraTriangulos.setFigura(this.figuraBotonTriangulo);
         this.botonMejoraHexagonos.setFigura(this.figuraBotonHexagono);
 
-        this.botonMejoraCuadrados.setText(new Text(botones.getJSONObject("CosteMejoraCuadrados")));
-        this.botonMejoraTriangulos.setText(new Text(botones.getJSONObject("CosteMejoraTriangulos")));
-        this.botonMejoraHexagonos.setText(new Text(botones.getJSONObject("CosteMejoraHexagonos")));
+        this.botonMejoraCuadrados.setText(new Text(style.getJSONObject("CosteMejoraCuadrados")));
+        this.botonMejoraTriangulos.setText(new Text(style.getJSONObject("CosteMejoraTriangulos")));
+        this.botonMejoraHexagonos.setText(new Text(style.getJSONObject("CosteMejoraHexagonos")));
 
-        this.botonMejoraAtaque.setText(new Text(botones.getJSONObject("CosteMejoraAtaques")));
-        this.botonMejoraRango.setText(new Text(botones.getJSONObject("CosteMejoraAtaques")));
-        this.botonMejoraVelocidad.setText(new Text(botones.getJSONObject("CosteMejoraTriangulos")));
+        this.botonMejoraAtaque.setText(new Text(style.getJSONObject("CosteMejoraAtaques")));
+        this.botonMejoraRango.setText(new Text(style.getJSONObject("CosteMejoraAtaques")));
+        this.botonMejoraVelocidad.setText(new Text(style.getJSONObject("CosteMejoraTriangulos")));
 
-        this.botonMejoraAtaque.setImagen(new Image(botones.getJSONObject("ImagenAtaque"),this.gr));
-        this.botonMejoraRango.setImagen(new Image(botones.getJSONObject("ImagenRango"),this.gr));
-        this.botonMejoraVelocidad.setImagen(new Image(botones.getJSONObject("ImagenVelocidad"),this.gr));
+        this.botonMejoraAtaque.setImagen(new Image(style.getJSONObject("ImagenAtaque"),this.gr));
+        this.botonMejoraRango.setImagen(new Image(style.getJSONObject("ImagenRango"),this.gr));
+        this.botonMejoraVelocidad.setImagen(new Image(style.getJSONObject("ImagenVelocidad"),this.gr));
 
         this.textoV = new Text("Inika-Regular.ttf", String.valueOf(this.vida), 30, 340, 20);
         this.textoD = new Text("Inika-Regular.ttf", String.valueOf(this.dinero), 30, 370, 20);
-        this.imagenVida = new Image( botones.getJSONObject("ImagenVida"), this.gr);
-        this.imagenDinero = new Image(botones.getJSONObject("ImagenDinero"), this.gr);
+        this.imagenVida = new Image( style.getJSONObject("ImagenVida"), this.gr);
+        this.imagenDinero = new Image(style.getJSONObject("ImagenDinero"), this.gr);
     }
 
     /**

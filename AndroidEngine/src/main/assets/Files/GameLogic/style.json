@@ -111,5 +111,30 @@
         "y":360,
         "w":30,
         "h":30
+    },
+        "ImagenImp":
+    {
+        "imagen":"Imp.png",
+        "x":-15,
+        "y":-20,
+        "w":35,
+        "h":35
+    },
+        "ImagenGoblin":
+    {
+        "imagen":"Goblin.png",
+        "x":-15,
+        "y":-20,
+        "w":35,
+        "h":35
+    },
+        "ImagenOgre":
+    {
+        "imagen":"Ogre.png",
+        "x":-15,
+        "y":-20,
+        "w":35,
+        "h":35
     }
+
 }

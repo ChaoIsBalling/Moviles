@@ -6,8 +6,7 @@ import com.example.engine.Graphics;
  * Clase que representa un enemigo en el juego
  */
 public class Enemy {
-    //Figura que representa el enemigo
-    Circle circulo;
+
     //vida del enemigo
     float vida;
     //Determina si ha llegado al final del camino sin morir
@@ -18,6 +17,9 @@ public class Enemy {
     float velocidad = 100;
     float defensa;
     float resistencia;
+    float x;
+    float y;
+    Image imagen;
     //Tipo al que es resistente
     Tipo tipo;
 
@@ -40,8 +42,8 @@ public class Enemy {
      */
     public Enemy(float x, float y, float vida, float velocidad, float defensa, float resistencia, Tipo tipoRes, GameLogic gl){
         //El enmeigo se representa mediante un círculo
-        this.circulo = new Circle(x,y,5,true);
-        this.circulo.setColor(0xff00ff00);
+        this.x=x;
+        this.y=y;
         this.vida=vida; //Vida
         this.direccion = new Vector2D(1,0); //Direccion representado por un Vector2D
         this.velocidad = velocidad; //Velocidad con la que se mueve
@@ -50,7 +52,7 @@ public class Enemy {
         this.tipo = tipoRes; //El tipo del ataque al que resiste
         this.gl = gl; //Instancia del gameLogic
         //Obtenemos casilla actual a partir de sus coordenadas
-        this.coor = gl.determinaCasilla(this.circulo.getY(), this.circulo.getX());
+        this.coor = gl.determinaCasilla(this.y, this.x);
         this.casillaInicial = this.gl.casillas.get(this.coor.getX()).get(this.coor.getY());
     }
 
@@ -58,10 +60,10 @@ public class Enemy {
      * Getter de las coordenadas x e y
      */
     public float getX(){
-        return this.circulo.getX();
+        return this.x;
     }
     public float getY(){
-        return this.circulo.getY();
+        return this.y;
     }
 
     /**
@@ -94,6 +96,7 @@ public class Enemy {
         //System.out.println(this.vida);
     }
 
+    public void setImagen(Image img){this.imagen = img;}
     /**
      * Para comprobar si no se sale del tablero
      */
@@ -109,7 +112,7 @@ public class Enemy {
     public void Update(double deltaTime){
 
         //A partir de la coordenada del enemigo, determinamos la casilla en la que está
-        this.coor = this.gl.determinaCasilla(this.circulo.getX(), this.circulo.getY());
+        this.coor = this.gl.determinaCasilla(this.x, this.y);
         this.casillaActual = this.gl.casillas.get(this.coor.getX()).get(this.coor.getY());
 
         //Determinamos la casilla siguiente
@@ -156,8 +159,8 @@ public class Enemy {
 
 
         //Posicion con deltatime aplicado
-        float compX = (float)(this.circulo.getX() + (this.direccion.getX() * movimiento * deltaTime));
-        float compY = (float)(this.circulo.getY() + (this.direccion.getY() * movimiento * deltaTime));
+        float compX = (float)(this.x + (this.direccion.getX() * movimiento * deltaTime));
+        float compY = (float)(this.y + (this.direccion.getY() * movimiento * deltaTime));
 
         //Casilla si le aplico el deltatime
         Vector2D compCoor = this.gl.determinaCasilla(compX,compY);
@@ -173,13 +176,10 @@ public class Enemy {
         //Si por alguna razón (por un deltatime elevado al principio) el enemigo se sale del camino,
         //lo devolvemos a la casilla valida
         if(casillaComp.esCamino()){
-            this.circulo.setX(compX);
-            this.circulo.setY(compY);
-        }else{
-            this.circulo.setX(this.circulo.getX());
-            this.circulo.setY(this.circulo.getY());
-        }
+            this.x=compX;
+            this.y=compY;
 
+        }
         this.ralentizar = 0;
     }
 
@@ -188,7 +188,7 @@ public class Enemy {
      * @param gr Graphics
      */
     public void Render(Graphics gr){
-        this.circulo.Render(gr);
+        this.imagen.RenderCentrado((int)this.x,(int)this.y);
     }
 
     /**
