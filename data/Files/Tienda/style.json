@@ -34,7 +34,15 @@
         "h":100,
         "isRound":true,
         "ar":15,
-        "color":"#FFFF0000"
+        "color":"#FFFFFFFF"
+    },
+    "ImagenRayo":
+    {
+        "imagen":"TorreRayo.png",
+        "x":-50,
+        "y":-50,
+        "w":100,
+        "h":100
     },
     "BotonFuego":    
     {   "x":250,
@@ -43,7 +51,15 @@
         "h":100,
         "isRound":true,
         "ar":15,
-        "color":"#FFFF0000"
+        "color":"#FFFFFFFF"
+    },
+    "ImagenFuego":
+    {
+        "imagen":"TorreFuego.png",
+        "x":-50,
+        "y":-50,
+        "w":100,
+        "h":100
     },
     "BotonHielo":    
     {   "x":100,
@@ -52,7 +68,15 @@
         "h":100,
         "isRound":true,
         "ar":15,
-        "color":"#FFFF0000"
+        "color":"#FFFFFFFF"
+    },
+    "ImagenHielo":
+    {
+        "imagen":"TorreHielo.png",
+        "x":-50,
+        "y":-50,
+        "w":100,
+        "h":100
     },
     "TextoCoste":
     {

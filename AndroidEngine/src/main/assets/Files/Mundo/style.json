@@ -42,7 +42,7 @@
         "h":50,
         "isRound":true,
         "ar":30,
-        "color":"#FF0000FF"
+        "color":"#FFFFFFFF"
     },
     "AnteriorMundo":    
     {   "x":110,
@@ -51,7 +51,7 @@
         "h":50,
         "isRound":true,
         "ar":30,
-        "color":"#FF0000FF"
+        "color":"#FFFFFFFF"
     },
     "BotonVolver":    
     {   "x":30,
@@ -60,7 +60,7 @@
         "h":30,
         "isRound":true,
         "ar":15,
-        "color":"#FFFFffff"
+        "color":"#FFFFFFFF"
     },
     "ImagenVolver":
     {

@@ -148,6 +148,9 @@ public class Tienda implements State {
     @Override
     public void setGraphics(Graphics gr) {
         this.botonVolver.setImagen(new Image(datos.getJSONObject("ImagenVolver"),gr));
+        this.botonRayo.setImagen(new Image(datos.getJSONObject("ImagenRayo"),gr));
+        this.botonFuego.setImagen(new Image(datos.getJSONObject("ImagenFuego"),gr));
+        this.botonHielo.setImagen(new Image(datos.getJSONObject("ImagenHielo"),gr));
     }
 
     @Override
