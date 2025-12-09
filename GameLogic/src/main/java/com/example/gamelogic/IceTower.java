@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *  Clase que representa la torre de Hielo e implementa la interfaz Tower
  */
 public class IceTower implements Tower{
-
+    Square cuadrado;
     //stats de la torre de Hielo
     float ataque=10;
     float rango= 70;
@@ -34,6 +34,12 @@ public class IceTower implements Tower{
     /**
      * Constructora de la torre de hielo con su coordenada x,y
      */
+    public IceTower(float x, float y){
+        this.x=x;
+        this.y=y;
+        this.cuadrado = new Square(x,y,20,20,true);
+        this.cuadrado.setColor("#FFC8A2C8");
+    }
     public IceTower(float x, float y,Image im){
         this.x=x;
         this.y=y;
@@ -123,7 +129,10 @@ public class IceTower implements Tower{
      */
     @Override
     public void Render(Graphics gr) {
+        if(this.image!=null)
         this.image.RenderCentrado((int)this.x,(int)this.y);
+        else
+            cuadrado.Render(gr);
     }
 
     /**

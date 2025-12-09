@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class FireTower implements Tower {
 
     //Figura que represeta la torre de fuego
-
+    Hexagon hexagono;
     //Stats de torre de fuego
     float ataque=2;
     float rango= 70;
@@ -36,11 +36,15 @@ public class FireTower implements Tower {
     //Lista de enemigos que detecta la torre
     ArrayList<Enemy> enemigos;
     Enemy enemigo;
-    Image image;
+    Image image =null;
 
     /**
      * Constructora de la torre de fuego
      */
+    public FireTower(float x, float y) {
+        this.hexagono = new Hexagon(x, y, 15, true);
+        this.hexagono.setColor("#ffff0000");
+    }
     public FireTower(float x, float y,Image im){
         this.x=x;
         this.y=y;
@@ -155,7 +159,10 @@ public class FireTower implements Tower {
      */
     @Override
     public void Render(Graphics gr) {
-        this.image.RenderCentrado((int)this.x,(int)this.y);
+        if(this.image==null)
+            this.hexagono.Render(gr);
+        else
+            this.image.RenderCentrado((int)this.x,(int)this.y);
         if(this.disparo && this.fuego > 0){
             gr.setColor(0xffff0000);
             gr.rellenarCirculo(this.enemigo.getX(),this.enemigo.getY(),15);

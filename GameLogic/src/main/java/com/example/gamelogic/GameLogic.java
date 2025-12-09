@@ -693,22 +693,32 @@ public class GameLogic implements State {
                 //en cada caso hacemos una comprobación de cosmeticos para poder darle el cosmetico correspondiente
                 //a cada torre
                     case botonRayo:
-                         torre="TorreRayo";
-                        if(save.getBoolean("rayo"))
-                            torre="TorreRayoCosmetico";
-                        torreR = new ThunderTower
-                                (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
-                                        this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
-                                        new Image(this.style.getJSONObject(torre),this.gr));
+                        if(save.getBoolean("rayo")) {
+                            torre = "TorreRayoCosmetico";
+                            torreR = new ThunderTower
+                                    (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
+                                            this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
+                                            new Image(this.style.getJSONObject(torre), this.gr));
+                        }
+                        else {
+                            torreR = new ThunderTower
+                                    (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
+                                            this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY());
+                        }
                         break;
                     case botonFuego:
-                        torre="TorreFuego";
-                        if(save.getBoolean("fuego"))
-                            torre="TorreFuegoCosmetico";
-                        torreR = new FireTower
-                                (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
-                                        this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
-                                        new Image(this.style.getJSONObject(torre),this.gr));
+                        if(save.getBoolean("fuego")) {
+                            torre = "TorreFuegoCosmetico";
+                            torreR = new FireTower
+                                    (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
+                                            this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
+                                            new Image(this.style.getJSONObject(torre), this.gr));
+                        }
+                        else{
+                            torreR = new FireTower
+                                    (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
+                                            this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY()                                     );
+                        }
                         break;
                     case botonMini:
                         torre="TorreMini";
@@ -718,12 +728,18 @@ public class GameLogic implements State {
                                         new Image(this.style.getJSONObject(torre),this.gr));
                         break;
                     default:
-                        torre="TorreHielo";
-                        if(save.getBoolean("hielo"))
-                            torre="TorreHieloCosmetico";
-                        torreR = new IceTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
-                                this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
-                                new Image(this.style.getJSONObject(torre),this.gr));
+                        if(save.getBoolean("hielo")) {
+                            torre = "TorreHieloCosmetico";
+                            torreR = new IceTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
+                                    this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
+                                    new Image(this.style.getJSONObject(torre), this.gr));
+                        }
+                        else
+                        {
+                            torreR = new IceTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
+                                    this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY());
+                        }
+
                         break;
                 }
                 torreR.setListaEnemigos(this.enemigos);
