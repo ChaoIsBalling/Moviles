@@ -24,6 +24,8 @@ public class Tienda implements State {
     private Button botonFuego;
     private Button botonHielo;
 
+    private Button botonMini;
+
     private Text coste;
     private Button botonComprar;
 
@@ -33,8 +35,15 @@ public class Tienda implements State {
     private boolean fuego;
     private boolean hielo;
 
+    private boolean mini;
+
+    private Text CTorres;
+    private Text CSkins;
+
+    private Image imagenDiamante;
+
     private enum Estado{
-        normal, botonRayo, botonFuego, botonHielo
+        normal, botonRayo, botonFuego, botonHielo, botonMini
     }
 
     JSONObject datos;
@@ -51,6 +60,7 @@ public class Tienda implements State {
         this.botonRayo = new Button(this.datos.getJSONObject("BotonRayo"));
         this.botonFuego = new Button(this.datos.getJSONObject("BotonFuego"));
         this.botonHielo = new Button(this.datos.getJSONObject("BotonHielo"));
+        this.botonMini = new Button(this.datos.getJSONObject("BotonMini"));
 
         if(this.rayo){
             this.botonRayo.setColor("#ff00ff00");
@@ -61,6 +71,9 @@ public class Tienda implements State {
         if(this.hielo){
             this.botonHielo.setColor("#ff00ff00");
         }
+        if(this.mini){
+            this.botonMini.setColor("#ff00ff00");
+        }
 
         this.fondoDes = new Square(500,300,300,400,true);
         this.fondoDes.setColor("#ff00ffff");
@@ -69,6 +82,8 @@ public class Tienda implements State {
         this.botonComprar.setText(new Text(this.datos.getJSONObject("TextoComprar")));
         this.estado = Estado.normal;
 
+        this.CTorres = new Text(this.datos.getJSONObject("TextoCTorres"));
+        this.CSkins = new Text(this.datos.getJSONObject("TextoCSkins"));
 
     }
 
@@ -82,9 +97,10 @@ public class Tienda implements State {
                 this.rayo = obj.getBoolean("rayo");
                 this.fuego = obj.getBoolean("fuego");
                 this.hielo = obj.getBoolean("hielo");
+                this.mini = obj.getBoolean("mini");
                 this.diamantes = obj.getInt("gems");
                 this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
-                this.textoDiamantes.setText("Tienes " + this.diamantes);
+                this.textoDiamantes.setText("" + this.diamantes);
             }
             else{
                 //resetea el progreso
@@ -105,6 +121,7 @@ public class Tienda implements State {
         obj.put("rayo",false);
         obj.put("fuego",false);
         obj.put("hielo",false);
+        obj.put("mini",false);
         this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
         this.engine.writeFile("save",obj.toString());
         this.rayo = false;
@@ -122,6 +139,7 @@ public class Tienda implements State {
         obj.put("rayo",this.rayo);
         obj.put("fuego",this.fuego);
         obj.put("hielo",this.hielo);
+        obj.put("mini",this.mini);
         this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
         this.engine.writeFile("save",obj.toString());
     }
@@ -138,6 +156,10 @@ public class Tienda implements State {
         this.botonRayo.Render(gr);
         this.botonFuego.Render(gr);
         this.botonHielo.Render(gr);
+        this.botonMini.Render(gr);
+        this.CTorres.Render(gr);
+        this.CSkins.Render(gr);
+        this.imagenDiamante.Render();
         if(this.estado!=Estado.normal){
             this.fondoDes.Render(gr);
             this.coste.Render(gr);
@@ -151,6 +173,8 @@ public class Tienda implements State {
         this.botonRayo.setImagen(new Image(datos.getJSONObject("ImagenRayo"),gr));
         this.botonFuego.setImagen(new Image(datos.getJSONObject("ImagenFuego"),gr));
         this.botonHielo.setImagen(new Image(datos.getJSONObject("ImagenHielo"),gr));
+        this.botonMini.setImagen(new Image(datos.getJSONObject("ImagenMini"),gr));
+        this.imagenDiamante = new Image(datos.getJSONObject("ImagenDiamante"),gr);
     }
 
     @Override
@@ -201,6 +225,9 @@ public class Tienda implements State {
                 case botonHielo://has tocado el boton para comprar la skin de la una torre de hielo
                     this.gestionCompra(e,Integer.parseInt(this.datos.getString("CosteHielo")));
                     break;
+                case botonMini://has tocado el boton para comprar la skin de la una torre de hielo
+                    this.gestionCompra(e,Integer.parseInt(this.datos.getString("CosteMini")));
+                    break;
             }
         }
     }
@@ -215,6 +242,8 @@ public class Tienda implements State {
             this.cambiarEstado(Estado.botonFuego);
         } else if (this.botonHielo.contains(e.x, e.y)) {
             this.cambiarEstado(Estado.botonHielo);
+        }else if (this.botonMini.contains(e.x, e.y)) {
+            this.cambiarEstado(Estado.botonMini);
         } else if (this.botonComprar.contains(e.x, e.y) && this.diamantes >= precio) {
             this.comprar(precio);
             this.cambiarEstado(Estado.normal);
@@ -229,19 +258,29 @@ public class Tienda implements State {
             case botonRayo://has tocado el boton para comprar la skin de la torre de rayo
                 this.diamantes-=precio;
                 this.rayo = true;
-                this.textoDiamantes.setText("Tienes " + this.diamantes);
+                this.textoDiamantes.setText("" + this.diamantes);
+                this.botonRayo.setColor("#ff00ff00");
                 this.guardar();
                 break;
             case botonFuego://has tocado el boton para comprar la skin de la una torre de fuego
                 this.diamantes-=precio;
                 this.fuego=true;
-                this.textoDiamantes.setText("Tienes " + this.diamantes);
+                this.textoDiamantes.setText("" + this.diamantes);
+                this.botonFuego.setColor("#ff00ff00");
                 this.guardar();
                 break;
             case botonHielo://has tocado el boton para comprar la skin de la una torre de hielo
                 this.diamantes-=precio;
                 this.hielo = true;
                 this.textoDiamantes.setText("Tienes " + this.diamantes);
+                this.botonHielo.setColor("#ff00ff00");
+                this.guardar();
+                break;
+            case botonMini://has tocado el boton para comprar la skin de la una torre de hielo
+                this.diamantes-=precio;
+                this.mini = true;
+                this.textoDiamantes.setText("Tienes " + this.diamantes);
+                this.botonMini.setColor("#ff00ff00");
                 this.guardar();
                 break;
         }
@@ -266,6 +305,10 @@ public class Tienda implements State {
                 break;
             case botonHielo:
                 this.coste.setText("Coste: "+ this.datos.getString("CosteHielo"));
+                this.estado = nuevoEstado;
+                break;
+            case botonMini:
+                this.coste.setText("Coste: "+ this.datos.getString("CosteMini"));
                 this.estado = nuevoEstado;
                 break;
 

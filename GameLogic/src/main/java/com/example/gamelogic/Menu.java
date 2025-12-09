@@ -85,6 +85,7 @@ public class Menu implements State {
             obj.put("rayo",false);
             obj.put("fuego",false);
             obj.put("hielo",false);
+            obj.put("mini",false);
             this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
             this.engine.writeFile("save",obj.toString());
     }
