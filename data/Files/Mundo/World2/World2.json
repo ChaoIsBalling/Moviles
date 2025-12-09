@@ -1,5 +1,5 @@
 {
-    "nivelFilas":2,
+    "niveles":5,
     "nivelColumnas":3, 
     "colorCompleted": "#FF00BBD0",
     "colorLocked": "#FF0F4C89",

@@ -24,13 +24,17 @@ public class Mundo implements State {
     private Engine engine;
 
     private Mobile mobile;
-    int fil;
-    int col;
     //booleanos que determinan si el mundo actual tiene un mundo anterior o posterior
     private boolean next;
     private boolean previous;
 
+    private int numNiveles;
+
+    //en que mundo estamos ahora
     private int mundo;
+
+    //cuantos niveles han habido hasta ahora de cada mundo
+    private int nivelesHastaAhora=0;
 
     //variable que inspecciona cuantos niveles hemos derrotado
     int completed;
@@ -49,8 +53,14 @@ public class Mundo implements State {
         botones=engine.readJsonFile("Mundo/style.json");
         JSONObject mundoInfo=engine.readJsonFile("Mundo/World"+this.mundo+"/World"+this.mundo+".json");
 
-        this.fil =mundoInfo.getInt("nivelFilas");
-        this.col=mundoInfo.getInt("nivelColumnas");
+        //esto calcula cuantos niveles han habido hasta este mundo
+        for(int i=1;i<this.mundo;i++)
+        {
+            JSONObject obj=engine.readJsonFile("Mundo/World"+i+"/World"+i+".json");
+            this.nivelesHastaAhora+=obj.getInt("niveles");
+        }
+
+        this.numNiveles=mundoInfo.getInt("niveles");
 
         this.next=mundoInfo.getBoolean("next");
         this.previous=mundoInfo.getBoolean("previous");
@@ -60,22 +70,17 @@ public class Mundo implements State {
         String colorCompleted=mundoInfo.getString("colorCompleted");
         String colorLocked=mundoInfo.getString("colorLocked");
         //inicialización de todos los botones de niveles
-        for(int i=0;i<fil;i++)
+        for(int i=0;i<this.numNiveles;i++)
         {
-            for(int j=0;j<col;j++)
-            {
                 Button nivelMundo = new Button(botones.getJSONObject("NivelMundo"));
                 Text nivel = new Text(botones.getJSONObject("TextoNivel"));
                 nivel.setText("X");
                 nivelMundo.setText(nivel);
-                nivelMundo.setX(nivelMundo.getX()+nivelMundo.getWidth()*(float)j*1.5f);
                 nivelMundo.setY(nivelMundo.getY()+nivelMundo.getHeight()*(float)i*1.5f);
                 nivelMundo.setColor(colorLocked);
                 niveles.add(nivelMundo);
-
-            }
         }
-        for(int i=0;i<=Math.min(this.completed-((this.mundo-1)*(fil*col)),this.niveles.size()-1);i++)
+        for(int i=0;i<=Math.min(niveles.size()-1,this.completed-this.nivelesHastaAhora);i++)
         {
             niveles.get(i).setColor(colorCompleted);
             niveles.get(i).changeText(String.valueOf(i+1));
@@ -144,7 +149,7 @@ public class Mundo implements State {
                     else{
                      for(int i=0;i< niveles.size();i++)
                      {
-                         if(niveles.get(i).contains(e.x,e.y)&&i<=this.completed-((this.mundo-1)*(fil*col)))
+                         if(niveles.get(i).contains(e.x,e.y)&&i<=this.completed-this.nivelesHastaAhora)
                          {
                              GameLogic gameLogic = new GameLogic(this.engine,this.mobile,"Mundo/World"+this.mundo+"/Level"+(i+1)+".json");
                              this.engine.setState(gameLogic);

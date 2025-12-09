@@ -1,12 +1,10 @@
 {
-    "nivelFilas":2,
-    "nivelColumnas":3, 
     "colorCompleted": "#FF399847",
     "colorLocked": "#FFA1BF37",
     "NivelMundo":    
-    {   "x":200,
+    {   "x":300,
         "y":150,
-        "w":70,
+        "w":300,
         "h":70,
         "isRound":false,
         "ar":20,
