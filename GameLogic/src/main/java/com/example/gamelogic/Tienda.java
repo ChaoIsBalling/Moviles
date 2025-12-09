@@ -53,13 +53,13 @@ public class Tienda implements State {
         this.botonHielo = new Button(this.datos.getJSONObject("BotonHielo"));
 
         if(this.rayo){
-            this.botonRayo.setColor("0xff00ff00");
+            this.botonRayo.setColor("#ff00ff00");
         }
         if(this.fuego){
-            this.botonFuego .setColor("0xff00ff00");
+            this.botonFuego .setColor("#ff00ff00");
         }
         if(this.hielo){
-            this.botonHielo.setColor("0xff00ff00");
+            this.botonHielo.setColor("#ff00ff00");
         }
 
         this.fondoDes = new Square(500,300,300,400,true);

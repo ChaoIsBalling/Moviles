@@ -117,6 +117,8 @@ public class GameLogic implements State {
     private Dificultad dificultad;
     //JSONArray que gestiona las oleadas en el juego
     JSONArray oleadasDatos;
+    //JsonObject que representa los datos de partida guardada
+    JSONObject save;
        /**
      * Constructora del estado principal de juego en el modo normal
      * @param engine Motor
@@ -174,11 +176,12 @@ public class GameLogic implements State {
     this.franjaGris.setColor(0xFF999999);
 }
  /**
-     * Metodo que lee mapa de un archivo txt
+     * Metodo que lee los datos del nivel desde un archivo json
      * @param mapa ruta del archivo
      */
     private void inicializarNivel(String mapa)
     {
+        this.save=this.engine.readJsonFile2("save");
         JSONObject obj=engine.readJsonFile(mapa);
         JSONArray arr= obj.getJSONArray("mapa");
         this.levelNumber=obj.getInt("level");
@@ -194,8 +197,9 @@ public class GameLogic implements State {
             for(int j =0; j<this.col;j++){
                 Casilla casilla;
                 if(arr.get(i).toString().charAt(j) == 'h'){
-                     casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,false,false);
-                     casilla.setColor(0xff000000);
+                    //el fill lo pongo a true para que haya mayor contraste entre la casilla y las torres
+                     casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,true,false);
+                     casilla.setColor(0xff6efa55);
                 } else {
                     casilla = new Casilla((float) (j * 35 + 30), (float) (i * 35 + 50), this.anchoCasilla, this.altoCasilla, true, true);
                     casilla.setColor(0xff944d03);
@@ -289,15 +293,14 @@ public class GameLogic implements State {
         if (this.oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()) {
             this.stopSoundTorres();
             GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true);
-            JSONObject obj=this.engine.readJsonFile2("save");
-            obj.put("gems",obj.getInt("gems") + this.recompensas);
+            save.put("gems",save.getInt("gems") + this.recompensas);
             //comprobamos si el nivel que hemos derrotado es un nivel nuevo
-            if(this.levelNumber>obj.getInt("completed"))
+            if(this.levelNumber>save.getInt("completed"))
             {
-                obj.put("completed",this.levelNumber);
+                save.put("completed",this.levelNumber);
             }
-            this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
-            this.engine.writeFile("save",obj.toString());
+            this.engine.writeFile("hash",this.engine.createHash(save.toString()));
+            this.engine.writeFile("save",save.toString());
             this.engine.setState(gameOver);
         }
 
@@ -422,8 +425,6 @@ public class GameLogic implements State {
         //Comprobamos si se ha acabado la partida
         comprobarFinal();
     }
-
-
 
     /**
      * Dada una posición (x,y) se determina en que casilla está a partir
@@ -679,23 +680,35 @@ public class GameLogic implements State {
         Vector2D casillaR = this.determinaCasillaRaton(e.x, e.y);
         if (this.dinero >= precio && !this.casillas.get(casillaR.getX()).get(casillaR.getY()).esCamino()) {
             Tower torreR;
+            String torre;
             switch (this.estado) {
+                //en cada caso hacemos una comprobación de cosmeticos para poder darle el cosmetico correspondiente
+                //a cada torre
                     case botonRayo:
+                         torre="TorreRayo";
+                        if(save.getBoolean("rayo"))
+                            torre="TorreRayoCosmetico";
                         torreR = new ThunderTower
                                 (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
                                         this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
-                                        new Image(this.style.getJSONObject("TorreRayo"),this.gr));
+                                        new Image(this.style.getJSONObject(torre),this.gr));
                         break;
                     case botonFuego:
+                        torre="TorreFuego";
+                        if(save.getBoolean("fuego"))
+                            torre="TorreFuegoCosmetico";
                         torreR = new FireTower
                                 (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
                                         this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
-                                        new Image(this.style.getJSONObject("TorreFuego"),this.gr));
+                                        new Image(this.style.getJSONObject(torre),this.gr));
                         break;
                     default:
+                        torre="TorreHielo";
+                        if(save.getBoolean("hielo"))
+                            torre="TorreHieloCosmetico";
                         torreR = new IceTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
                                 this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
-                                new Image(this.style.getJSONObject("TorreHielo"),this.gr));
+                                new Image(this.style.getJSONObject(torre),this.gr));
                         break;
                 }
                 torreR.setListaEnemigos(this.enemigos);
