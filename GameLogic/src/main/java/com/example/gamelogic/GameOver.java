@@ -193,11 +193,7 @@ public class GameOver implements State {
     }
 
     private boolean canClickButton(Button boton,float x, float y){
-        if(boton != null && boton.contains(x,y)){
-            return true;
-        }
-        return false;
-
+        return boton != null && boton.contains(x, y);
     }
 
 }
