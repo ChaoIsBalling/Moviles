@@ -67,10 +67,12 @@ public class MainActivity extends AppCompatActivity {
         this.mobile = new AndroidMobile(this,this.renderView,this.adContainerView);
         this.engine = new AndroidEngine(this.renderView,this.mobile);
         this.engine.setNotificationIcon(R.drawable.ic_tower_defense_noti);
-        this.engine.setState(new Menu(engine,this.mobile));
-
         //Comprobamos si el jugador ha vuelto a entrar al juego por la notificacion recompensada
         checkRewardNotifiactionIntent();
+
+        this.engine.setState(new Menu(engine,this.mobile));
+
+
     }
 
     @Override
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Si es por hacer click a la notifiación por bonificación, regalamos diamantes al jugador
         if(intent != null && intent.getBooleanExtra("REWARD_NOTIFICATION",false)){
-            //this.engine.giveReward();
+            this.engine.modfificarParametro("gems",3);
             System.out.println("Diamantes recibidos");
         }
     }

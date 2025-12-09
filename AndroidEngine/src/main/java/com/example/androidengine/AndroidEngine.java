@@ -151,6 +151,31 @@ public class AndroidEngine implements Engine,Runnable {
         this.state.setGraphics(this.gr);
         this.state.setAudio(this.audio);
     }
+
+
+    //Metodo para cambiar el valor de un parametro en el archivo de guardado
+    //(si existe) a partir de su lectura
+    public void modfificarParametro(String key, int amount){
+        if(this.checkFileExists("save")) {
+            JSONObject obj;
+            try {
+                obj = this.readJsonFile2("save");
+                String hash = this.createHash(obj.toString());
+                if (this.checkHash(hash)) {
+                    //modificamos el parametro
+                    obj.put(key, obj.getInt(key) + amount);
+                }
+
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            //Volvemos a encriptarlo y a sobreescribimos el guardado
+            this.writeFile("hash", this.createHash(obj.toString()));
+            this.writeFile("save", obj.toString());
+        }else{
+            System.out.println("No existe un archivo de guardado sobre el que modificar el parámetro");
+        }
+    }
     //getter del audio
     @Override
     public Audio getAudio() {
