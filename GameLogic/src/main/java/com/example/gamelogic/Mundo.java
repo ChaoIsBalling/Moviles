@@ -85,7 +85,7 @@ public class Mundo implements State {
         this.textoMundo = new Text(botones.getJSONObject("TextoMundo"));
         this.textoMundo.setText("Mundo "+this.mundo);
         this.fondoTexto = new Square(300,50,300,70,true);
-        this.fondoTexto.setColor(0xffDAB628);
+        this.fondoTexto.setColor("#ffDAB628");
 
         //en caso de que hava un siguiente o anterior mundo inicializamos los botones correspondientes
         if(this.next) {

@@ -57,6 +57,7 @@ public class GameOver implements State {
         //Botones comunes de ambos modos
         botonMenu = new Button(botones.getJSONObject("BotonMenu"));
         botonCompartir =new Button(botones.getJSONObject("BotonIntent"));
+        botonCompartir.setImagen(new Image(botones.getJSONObject( "ImagenCompartir"),this.engine.getGraphics()));
         botonMenu.setText(new Text(botones.getJSONObject("TextoBoton")));
 
 

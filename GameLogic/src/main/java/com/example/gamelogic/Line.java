@@ -13,7 +13,7 @@ public class Line implements Figure {
     private float y2;
 
     //color de la linea
-    private int color;
+    private String color;
 
     //Grosor de la línea
     private float w;
@@ -49,7 +49,7 @@ public class Line implements Figure {
         return this.y1;
     }
     @Override
-    public int getColor() {
+    public String getColor() {
         return this.color;
     }
 
@@ -64,7 +64,7 @@ public class Line implements Figure {
     }
 
     @Override
-    public void setColor(int color) {
+    public void setColor(String color) {
         this.color = color;
     }
 

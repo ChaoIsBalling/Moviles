@@ -63,7 +63,7 @@ public class Tienda implements State {
         }
 
         this.fondoDes = new Square(500,300,300,400,true);
-        this.fondoDes.setColor(0xff00ffff);
+        this.fondoDes.setColor("#ff00ffff");
         this.coste = new Text(this.datos.getJSONObject("TextoCoste"));
         this.botonComprar = new Button(this.datos.getJSONObject("BotonComprar"));
         this.botonComprar.setText(new Text(this.datos.getJSONObject("TextoComprar")));

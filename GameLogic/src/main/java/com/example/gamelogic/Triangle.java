@@ -14,7 +14,7 @@ public class Triangle implements Figure {
     //radio desde el que generar los vertices del triangulo
     private float r;
     //color
-    private int color = 0xFF000000;
+    private String color = "#FF000000";
     //Indica si esta relleno o no
     private boolean isFill;
 
@@ -46,7 +46,7 @@ public class Triangle implements Figure {
         return this.cy;
     }
     @Override
-    public int getColor() {
+    public String getColor() {
         return this.color;
     }
 
@@ -63,7 +63,7 @@ public class Triangle implements Figure {
         this.cy = y;
     }
     @Override
-    public void setColor(int color) {
+    public void setColor(String color) {
         this.color = color;
     }
 

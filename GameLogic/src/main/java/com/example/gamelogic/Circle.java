@@ -10,7 +10,7 @@ public class Circle implements Figure{
     private float x;
     private float y;
     private float r; //radio
-    private int color;
+    private String color;
     private boolean isFill; //Si esta relleno o no
 
     /**
@@ -42,7 +42,7 @@ public class Circle implements Figure{
         return this.y;
     }
     @Override
-    public int getColor() {
+    public String getColor() {
         return this.color;
     }
 
@@ -60,7 +60,7 @@ public class Circle implements Figure{
     }
 
     @Override
-    public void setColor(int color) {
+    public void setColor(String color) {
         this.color = color;
     }
 

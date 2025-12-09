@@ -1,15 +1,28 @@
 {
     "level":7,
+      "colorNivel":"#ff30D3F0",
     "waves": [
+      {
+     "enemy": "goblin",
+     "amount":3        
+    }, 
+    {
+      "enemy":"orc",
+      "amount": 2
+    }, 
+    { 
+     "enemy": "imp",
+     "amount":3   
+    }
    
     ],
     "reward": 10,
     "mapa":["hhhhhhhhhhhhhh", 
-            "cccccccchhhhhh", 
-            "hhhhhhhchhhhhh",
-            "hhhhhhhchhhhhh",
-            "hhhhhhhchhhhhh",
-            "hhhhhhhchhhhhh",
-            "hhhhhhhccccccc",
+            "hhhcccccchhhhh", 
+            "hhhchhhhchhhhh",
+            "hhhchhhhchhhhh",
+            "hhhchhhhchhhhh",
+            "hhhchhhhchhhhh",
+            "cccchhhhcccccc",
             "hhhhhhhhhhhhhh"]
 }

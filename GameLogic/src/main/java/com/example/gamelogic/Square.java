@@ -16,7 +16,7 @@ public class Square implements Figure{
     //Radio de las esquinas (si es que son redondeadas)
     private float arcRadius;
     //color del cuadrado
-    private int color;
+    private String color;
 
     //Determinan si esta relleno o redondeado
     private boolean isFill = false;
@@ -61,7 +61,7 @@ public class Square implements Figure{
         return this.y;
     }
     @Override
-    public int getColor() {
+    public String getColor() {
         return this.color;
     }
 
@@ -77,7 +77,7 @@ public class Square implements Figure{
         this.y = y;
     }
     @Override
-    public void setColor(int color) {
+    public void setColor(String color) {
         this.color = color;
     }
 

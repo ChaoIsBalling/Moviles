@@ -21,7 +21,7 @@ public interface Figure {
      * Devuelve el color de la figura
      * @return color
      */
-    int getColor();
+    String getColor();
 
     /**
      * Da valor a la coordenada x
@@ -38,7 +38,7 @@ public interface Figure {
      * Da un color a la figura
      * @param color color deseado
      */
-    void setColor(int color);
+    void setColor(String color);
 
     /**
      * Renderiza la figura

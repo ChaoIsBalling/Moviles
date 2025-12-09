@@ -16,7 +16,7 @@ public class Hexagon implements Figure{
     private float r;
 
     //Color del hexágono
-    private int color;
+    private String color;
 
     //Indica si es relleno o no
     private boolean isFill;
@@ -48,7 +48,7 @@ public class Hexagon implements Figure{
         return this.cy;
     }
     @Override
-    public int getColor() {
+    public String getColor() {
         return this.color;
     }
 
@@ -56,7 +56,7 @@ public class Hexagon implements Figure{
      * setters
      */
     @Override
-    public void setColor(int color) {
+    public void setColor(String color) {
         this.color= color;
     }
 

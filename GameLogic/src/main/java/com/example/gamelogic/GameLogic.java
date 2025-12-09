@@ -119,6 +119,9 @@ public class GameLogic implements State {
     JSONArray oleadasDatos;
     //JsonObject que representa los datos de partida guardada
     JSONObject save;
+
+    //String que determina el color del nivel
+    String colorNivel;
        /**
      * Constructora del estado principal de juego en el modo normal
      * @param engine Motor
@@ -173,7 +176,7 @@ public class GameLogic implements State {
     this.deadEnemies=new ArrayList<Enemy>();
     this.casillas = new ArrayList<ArrayList<Casilla>>();
     this.franjaGris = new Square(300,370,600,100,true);
-    this.franjaGris.setColor(0xFF999999);
+    this.franjaGris.setColor("#FF999999");
 }
  /**
      * Metodo que lee los datos del nivel desde un archivo json
@@ -181,8 +184,10 @@ public class GameLogic implements State {
      */
     private void inicializarNivel(String mapa)
     {
+
         this.save=this.engine.readJsonFile2("save");
         JSONObject obj=engine.readJsonFile(mapa);
+        colorNivel=obj.getString("colorNivel");
         JSONArray arr= obj.getJSONArray("mapa");
         this.levelNumber=obj.getInt("level");
         this.oleadasDatos =obj.getJSONArray("waves");
@@ -199,10 +204,10 @@ public class GameLogic implements State {
                 if(arr.get(i).toString().charAt(j) == 'h'){
                     //el fill lo pongo a true para que haya mayor contraste entre la casilla y las torres
                      casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,true,false);
-                     casilla.setColor(0xff6efa55);
+                     casilla.setColor(this.colorNivel);
                 } else {
                     casilla = new Casilla((float) (j * 35 + 30), (float) (i * 35 + 50), this.anchoCasilla, this.altoCasilla, true, true);
-                    casilla.setColor(0xff944d03);
+                    casilla.setColor("#ff944d03");
                     if (j == 0) {
                         this.IniX = j * 35 + 30;
                         this.IniY = i * 35 + 50;

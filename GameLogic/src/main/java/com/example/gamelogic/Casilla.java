@@ -24,7 +24,7 @@ public class Casilla {
     /**
      * Setters
      */
-    public void setColor(int color){
+    public void setColor(String color){
         this.cuadrado.setColor(color);
     }
     public void setTorre(Tower tower){
