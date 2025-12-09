@@ -20,6 +20,9 @@ public class GameLogic implements State {
     private Button botonMejoraCuadrados;
     private Button botonMejoraHexagonos;
 
+    private Button botonMejoraMini;
+    boolean mini = false;
+
     private Button botonMejoraAtaque;
     private Button botonMejoraRango;
     private Button botonMejoraVelocidad;
@@ -100,7 +103,7 @@ public class GameLogic implements State {
     Text textoOleadas;//Numero de oleadas en texto
       //Enumaerado que determina en que estado de juego estamos
     private enum Estado {
-        normal, botonRayo, botonFuego, botonHielo, torre
+        normal, botonRayo, botonFuego, botonHielo, torre, botonMini
     }
 
     //Estado actual de juego
@@ -478,6 +481,9 @@ public class GameLogic implements State {
             this.botonMejoraCuadrados.Render(gr);
             this.botonMejoraTriangulos.Render(gr);
             this.botonMejoraHexagonos.Render(gr);
+            if(this.mini){
+                this.botonMejoraMini.Render(gr);
+            }
         } else {
             this.botonMejoraAtaque.Render(gr);
             this.botonMejoraRango.Render(gr);
@@ -501,6 +507,7 @@ public class GameLogic implements State {
         this.botonMejoraCuadrados = new Button(style.getJSONObject("BotonMejoraCuadrados"));
         this.botonMejoraTriangulos = new Button(style.getJSONObject("BotonMejoraTriangulos"));
         this.botonMejoraHexagonos = new Button(style.getJSONObject("BotonMejoraHexagonos"));
+        this.botonMejoraMini = new Button(style.getJSONObject("BotonMejoraMini"));
 
         //Los botones de cuadrado triangulos y hexagonos usan los mismos valores de apariencia
         //que los botones de ataque rango y velocidad
@@ -512,10 +519,12 @@ public class GameLogic implements State {
         this.botonMejoraCuadrados.setImagen(new Image(style.getJSONObject("ImagenHielo"),this.gr));
         this.botonMejoraTriangulos.setImagen(new Image(style.getJSONObject("ImagenRayo"),this.gr));
         this.botonMejoraHexagonos.setImagen(new Image(style.getJSONObject("ImagenFuego"),this.gr));
+        this.botonMejoraMini.setImagen(new Image(style.getJSONObject("TorreMini"),this.gr));
 
         this.botonMejoraCuadrados.setText(new Text(style.getJSONObject("CosteMejoraCuadrados")));
         this.botonMejoraTriangulos.setText(new Text(style.getJSONObject("CosteMejoraTriangulos")));
         this.botonMejoraHexagonos.setText(new Text(style.getJSONObject("CosteMejoraHexagonos")));
+        this.botonMejoraMini.setText(new Text(style.getJSONObject("CosteMejoraMini")));
 
         this.botonMejoraAtaque.setText(new Text(style.getJSONObject("CosteMejoraAtaques")));
         this.botonMejoraRango.setText(new Text(style.getJSONObject("CosteMejoraAtaques")));
@@ -592,6 +601,8 @@ public class GameLogic implements State {
                     this.cambiarEstado(Estado.botonFuego);
                 } else if (this.botonMejoraCuadrados.contains(e.x, e.y)) {
                     this.cambiarEstado(Estado.botonHielo);
+                }else if (this.botonMejoraMini.contains(e.x, e.y) && this.mini) {
+                    this.cambiarEstado(Estado.botonMini);
                 } else {
                     Vector2D casilla = this.determinaCasillaRaton(e.x, e.y);
                     if (casilla.getX() < this.fil && casilla.getY() < this.col && casilla.getX() >= 0 && casilla.getY() >= 0) {
@@ -637,6 +648,9 @@ public class GameLogic implements State {
             case botonHielo://has tocado el boton para crear una torre de hielo
                 pulsarBotones(e, 150);
                 break;
+            case botonMini://has tocado el boton para crear una torre de hielo
+                pulsarBotones(e, 50);
+                break;
         }
     }
 
@@ -650,6 +664,8 @@ public class GameLogic implements State {
             this.cambiarEstado(Estado.botonFuego);
         } else if (this.botonMejoraCuadrados.contains(e.x, e.y)) {
             this.cambiarEstado(Estado.botonHielo);
+        }else if (this.botonMejoraMini.contains(e.x, e.y) && this.mini) {
+            this.cambiarEstado(Estado.botonMini);
         } else {
             Vector2D casilla = this.determinaCasillaRaton(e.x, e.y);
             if (casilla.getX() < this.fil && casilla.getY() < this.col && casilla.getX() >= 0 && casilla.getY() >= 0) {
@@ -694,6 +710,13 @@ public class GameLogic implements State {
                                         this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
                                         new Image(this.style.getJSONObject(torre),this.gr));
                         break;
+                    case botonMini:
+                        torre="TorreMini";
+                        torreR = new MiniThunderTower
+                                (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
+                                        this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
+                                        new Image(this.style.getJSONObject(torre),this.gr));
+                        break;
                     default:
                         torre="TorreHielo";
                         if(save.getBoolean("hielo"))
@@ -725,6 +748,7 @@ public class GameLogic implements State {
                 this.botonMejoraTriangulos.setColor("#FFFFFFFF");
                 this.botonMejoraHexagonos.setColor("#FFFFFFFF");
                 this.botonMejoraCuadrados.setColor("#FFFFFFFF");
+                this.botonMejoraMini.setColor("#FFFFFFFF");
                 this.estado = nuevoEstado;
                 break;
             case torre:
@@ -734,21 +758,30 @@ public class GameLogic implements State {
                 this.botonMejoraTriangulos.setColor("#FFFFFB64");
                 this.botonMejoraHexagonos.setColor("#FFFFFFFF");
                 this.botonMejoraCuadrados.setColor("#FFFFFFFF");
+                this.botonMejoraMini.setColor("#FFFFFFFF");
                 this.estado = nuevoEstado;
                 break;
             case botonFuego:
                 this.botonMejoraTriangulos.setColor("#FFFFFFFF");
                 this.botonMejoraHexagonos.setColor("#FFFFFB64");
                 this.botonMejoraCuadrados.setColor("#FFFFFFFF");
+                this.botonMejoraMini.setColor("#FFFFFFFF");
                 this.estado = nuevoEstado;
                 break;
             case botonHielo:
                 this.botonMejoraTriangulos.setColor("#FFFFFFFF");
                 this.botonMejoraHexagonos.setColor("#FFFFFFFF");
                 this.botonMejoraCuadrados.setColor("#FFFFFB64");
+                this.botonMejoraMini.setColor("#FFFFFFFF");
                 this.estado = nuevoEstado;
                 break;
-
+            case botonMini:
+                this.botonMejoraTriangulos.setColor("#FFFFFFFF");
+                this.botonMejoraHexagonos.setColor("#FFFFFFFF");
+                this.botonMejoraCuadrados.setColor("#FFFFFFFF");
+                this.botonMejoraMini.setColor("#FFFFFB64");
+                this.estado = nuevoEstado;
+                break;
         }
     }
     /**

@@ -211,6 +211,34 @@
         "y":-20,
         "w":35,
         "h":35
+    },
+    "BotonMejoraMini":    
+    {   "x":380,
+        "y":360,
+        "w":50,
+        "h":50,
+        "isRound":true,
+        "ar":20,
+        "color":"#FFFFFFFF"
+    },
+    "CosteMejoraMini":
+    {
+        "texto":"50",
+        "font":"Inika-Regular.ttf",
+        "x":0,
+        "y":15,
+        "size":15,
+        "bold":true,
+        "italic":true,
+        "color":"#FF000000"
+    },
+    "TorreMini":
+    {
+        "imagen":"MiniTorreRayo.png",
+        "x":-15,
+        "y":-20,
+        "w":35,
+        "h":35
     }
     
 

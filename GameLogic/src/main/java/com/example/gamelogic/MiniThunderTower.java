@@ -12,7 +12,7 @@ public class MiniThunderTower implements Tower{
     float rango= 70;
     float velocidad = (float )0.7;
     float enfriamiento = 0;
-    float rayo =1;
+    float rayo =0.3f;
     float x;
     float y;
     //Referencia al audio manager y el sonido de ataque
@@ -109,7 +109,7 @@ public class MiniThunderTower implements Tower{
                 this.enfriamiento = this.velocidad;
                 this.disparo = true;
                 this.audio.playSound(this.attack);
-                this.rayo = 1;
+                this.rayo = 0.3f;
             }
 
         }
@@ -129,7 +129,7 @@ public class MiniThunderTower implements Tower{
     public void Render(Graphics gr) {
         this.imagen.RenderCentrado((int)this.x,(int)this.y);
         if(this.disparo && this.rayo > 0){
-            gr.setColor(0xff00ffff);
+            gr.setColor(0xffff0000);
             gr.pintarLinea(this.x,this.y,this.enemigo.getX(),this.enemigo.getY(),5);
         }
     }
