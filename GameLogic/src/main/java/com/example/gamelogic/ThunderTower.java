@@ -10,7 +10,8 @@ import java.util.ArrayList;
  * Clase que representa la torre de Rayo e implementa la interfaz Tower
  */
 public class ThunderTower implements Tower{
-
+    //figura de la torre
+    Triangle triangulo;
     //stats de la torre de Rayo
     float ataque=4;
     float rango= 70;
@@ -25,7 +26,7 @@ public class ThunderTower implements Tower{
 
     //Determina si está disparando
     boolean disparo = false;
-    Image imagen;
+    Image imagen=null;
 
     Tipo tipo = Tipo.rayo;
 
@@ -37,6 +38,13 @@ public class ThunderTower implements Tower{
     /**
      * Constructora de la torre de rayo con sus coordenadas
      */
+    public ThunderTower(float x, float y){
+
+        this.x=x;
+        this.y=y;
+        this.triangulo = new Triangle(x,y,15,true);
+        this.triangulo.setColor("#FF000000");
+    }
     public ThunderTower(float x, float y, Image im){
         this.imagen=im;
         this.x=x;
@@ -131,7 +139,10 @@ public class ThunderTower implements Tower{
      */
     @Override
     public void Render(Graphics gr) {
-        this.imagen.RenderCentrado((int)this.x,(int)this.y);
+        if(this.imagen!=null)
+            this.imagen.RenderCentrado((int)this.x,(int)this.y);
+        else
+            this.triangulo.Render(gr);
         if(this.disparo && this.rayo > 0){
             gr.setColor(0xff00ffff);
             gr.pintarLinea(this.x,this.y,this.enemigo.getX(),this.enemigo.getY(),5);
