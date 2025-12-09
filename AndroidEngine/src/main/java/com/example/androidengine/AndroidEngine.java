@@ -24,6 +24,7 @@ import androidx.work.WorkRequest;
 
 import com.example.engine.Audio;
 import com.example.engine.Engine;
+import com.example.engine.Input;
 import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.Graphics;
@@ -190,6 +191,11 @@ public class AndroidEngine implements Engine,Runnable {
     //getter de los graficos
     public Graphics getGraphics(){
         return this.gr;
+    }
+
+    @Override
+    public Input getInput() {
+        return this.input;
     }
 
     //metodo que inicializa un intent implícito pasandole un string
@@ -450,11 +456,11 @@ public class AndroidEngine implements Engine,Runnable {
 
             // Informe de FPS
             double elapsedTime = (double) nanoElapsedTime / 1.0E9;
-
             if (this.state != null) {
                 for (TouchEvent e: this.input.getTouchEvents()){
                     e.x = this.gr.real2LogicX(e.x);
                     e.y = this.gr.real2LogicY(e.y);
+
                 }
                 state.handleInput(this.input.getTouchEvents(), elapsedTime);
                 this.state.update(elapsedTime);

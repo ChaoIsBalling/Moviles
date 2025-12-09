@@ -12,8 +12,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Mundo implements State {
-
-
     private Text textoMundo;
     private Square fondoTexto;
 
@@ -40,6 +38,17 @@ public class Mundo implements State {
     int completed;
 
     JSONObject botones;
+
+    //Ultima cordenada Y tocada
+    float lastTouchedY;
+
+    //bool que nos dice si estamos haciendo scroll de pantalla
+    boolean scroll;
+
+    //valor minimo que puede tener la Y
+    float minY;
+    //valor maximo que puede tener la Y
+    float maxY;
 
     //constructora del estado que crea e inicializa los botones de la escena
     public Mundo(Engine engine,Mobile mobile, int mundo){
@@ -120,6 +129,7 @@ public class Mundo implements State {
         if(this.previous)
             this.anteriorMundo.Render(gr);
         this.botonVolver.Render(gr);
+
     }
 
     @Override
@@ -142,46 +152,67 @@ public class Mundo implements State {
             }
             switch (e.type){
                 case TOUCH_DOWN:
-                    if(this.botonVolver.contains(e.x,e.y)){
-                        Menu menu = new Menu(this.engine,this.mobile);
-                        this.engine.setState(menu);
-                    }
-                    else{
-                     for(int i=0;i< niveles.size();i++)
-                     {
-                         if(niveles.get(i).contains(e.x,e.y)&&i<=this.completed-this.nivelesHastaAhora)
-                         {
-                             GameLogic gameLogic = new GameLogic(this.engine,this.mobile,"Mundo/World"+this.mundo+"/Level"+(i+1)+".json");
-                             this.engine.setState(gameLogic);
-                         }
-                     }
-                     if(this.previous)
-                     {
-                        if(this.anteriorMundo.contains(e.x,e.y))
-                        {
-                            Mundo mundoAnterior= new Mundo(this.engine,this.mobile,this.mundo-1);
-                            this.engine.setState(mundoAnterior);
-                        }
-                     }
-                     if(this.next)
-                     {
-                         if(siguienteMundo.contains(e.x,e.y))
-                         {
-                             Mundo mundoNext= new Mundo(this.engine,this.mobile,this.mundo+1);
-                             this.engine.setState(mundoNext);
-                         }
-                     }
-
-                    }
+                   gestionBotones(e);
+                   onTouchDown(e);
                     break;
                 case TOUCH_UP:
+                    onTouchUp();
                     break;
                 case TOUCH_MOVE:
+                    onTouchMove(e);
                     break;
             }
         }
     }
 
+    private void onTouchDown(TouchEvent e){
+    lastTouchedY=e.y;
+    scroll=true;
+    }
+    private void onTouchUp(){
+    scroll = false;
+    }
+    private void onTouchMove(TouchEvent e)
+    {
+     if(!scroll)
+         return;
+
+     float destY=e.y-lastTouchedY;
+     lastTouchedY=e.y;
+
+     for(int i=0;i<niveles.size();i++)
+     {
+        float newY=niveles.get(i).getY()+destY;
+        niveles.get(i).setY(newY);
+     }
+    }
+
+    //metodo que gestiono lo que se hace si se presiona sobre cualquier boton de la escena
+    private void gestionBotones(TouchEvent e) {
+        if (this.botonVolver.contains(e.x, e.y)) {
+            Menu menu = new Menu(this.engine, this.mobile);
+            this.engine.setState(menu);
+        } else {
+            for (int i = 0; i < niveles.size(); i++) {
+                if (niveles.get(i).contains(e.x, e.y) && i <= this.completed - this.nivelesHastaAhora) {
+                    GameLogic gameLogic = new GameLogic(this.engine, this.mobile, "Mundo/World" + this.mundo + "/Level" + (i + 1) + ".json");
+                    this.engine.setState(gameLogic);
+                }
+            }
+            if (this.previous) {
+                if (this.anteriorMundo.contains(e.x, e.y)) {
+                    Mundo mundoAnterior = new Mundo(this.engine, this.mobile, this.mundo - 1);
+                    this.engine.setState(mundoAnterior);
+                }
+            }
+            if (this.next) {
+                if (siguienteMundo.contains(e.x, e.y)) {
+                    Mundo mundoNext = new Mundo(this.engine, this.mobile, this.mundo + 1);
+                    this.engine.setState(mundoNext);
+                }
+            }
+        }
+    }
     @Override
     public void setAudio(Audio audio) {
     }

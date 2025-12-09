@@ -53,6 +53,11 @@ public interface Engine {
      * @return gestor Graficos
      */
     public Graphics getGraphics();
+    /**
+     * Este metodo devuelve el gestor de Inputs del motor
+     * @return gestor Input
+     */
+    public Input getInput();
 
     /**
      * Este metodo lanza un Intent implicito simple

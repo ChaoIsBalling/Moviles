@@ -17,6 +17,8 @@ import java.util.List;
 public class AndroidInput implements Input,View.OnTouchListener{
     ArrayList<TouchEvent> events;
     ArrayList<TouchEvent> pendingEvents;
+    boolean dragging =false;
+    float lastY;
     //inicializa las listas de la clase
     public AndroidInput(){
         events = new ArrayList<TouchEvent>();
@@ -61,4 +63,5 @@ public class AndroidInput implements Input,View.OnTouchListener{
         this.pendingEvents.clear();
         return this.events;
     }
+
 }
