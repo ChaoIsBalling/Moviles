@@ -105,6 +105,8 @@ public class GameLogic implements State {
 
     float offsetX = 30;
     float offsetY = 50;
+    //Indica si el nivel se ha completado en el modo aventura
+    boolean isCompleted;
 
       //Enumaerado que determina en que estado de juego estamos
     private enum Estado {
@@ -142,30 +144,29 @@ public class GameLogic implements State {
     }
     /**
      * Constructora del estado principal de juego en el modo aventura a partir de la lectura del mapa del nivel
-     * @param engine Motor
      */
-    public GameLogic(Engine engine, Mobile mobile, String mapa){
+    public GameLogic(Engine engine, Mobile mobile, String mapa, boolean isCompleted){
         this.engine=engine;
         this.dificultad = Dificultad.aventura;
         this.oleadasRestantes=0;
+        this.isCompleted = isCompleted;
         this.init();
         this.inicializarNivel(mapa);
         this.mobile = mobile;
         this.mobile.setVisibleAdBanner(false);
     }
-    private void init()
-    {
-    this.vida=10;
-    this.dinero = 300;
-    this.oleada =1;
-    this.textoOleadas = new Text("Inika-Regular.ttf","Oleada:" + this.oleada,60,15,25);
-    this.torres = new ArrayList<Tower>();
-    this.enemigos=new ArrayList<Enemy>();
-    this.deadEnemies=new ArrayList<Enemy>();
-    this.casillas = new ArrayList<ArrayList<Casilla>>();
-    this.franjaGris = new Square(300,370,600,100,true);
-    this.franjaGris.setColor("#FF999999");
-}
+    private void init() {
+        this.vida=10;
+        this.dinero = 300;
+        this.oleada =1;
+        this.textoOleadas = new Text("Inika-Regular.ttf","Oleada:" + this.oleada,60,15,25);
+        this.torres = new ArrayList<Tower>();
+        this.enemigos=new ArrayList<Enemy>();
+        this.deadEnemies=new ArrayList<Enemy>();
+        this.casillas = new ArrayList<ArrayList<Casilla>>();
+        this.franjaGris = new Square(300,370,600,100,true);
+        this.franjaGris.setColor("#FF999999");
+    }
  /**
      * Metodo que lee los datos del nivel desde un archivo json
      * @param mapa ruta del archivo
@@ -321,7 +322,7 @@ public class GameLogic implements State {
         //En caso de que haya ganado, no habrá oleadas, enemigos y la vida es mayor a 0
         if (this.oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()) {
             this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true, this.isCompleted);
             save.put("gems",save.getInt("gems") + this.recompensas);
             //comprobamos si el nivel que hemos derrotado es un nivel nuevo
             if(this.levelNumber>save.getInt("completed"))
@@ -336,7 +337,7 @@ public class GameLogic implements State {
         //En caso de que haya perdido
         if (this.vida <= 0) {
             this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false, this.isCompleted);
             this.engine.setState(gameOver);
         }
     }

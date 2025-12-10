@@ -93,5 +93,7 @@ public interface Engine {
     public boolean checkFileExists(String file);
 
     public String hashSHA256(String string);
+    public int leerParametroInt(String key);
+    public void modificarParametro(String key, int amount);
 
 }

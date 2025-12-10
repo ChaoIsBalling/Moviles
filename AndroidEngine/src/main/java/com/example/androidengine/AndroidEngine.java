@@ -3,17 +3,13 @@ package com.example.androidengine;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.view.SurfaceView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -33,7 +29,6 @@ import com.example.engine.TouchEvent;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,14 +39,11 @@ import java.io.File;
 
 import org.json.JSONObject;
 import org.json.JSONException;
-import org.json.JSONArray;
 
 //import androidx.work.Worker;
 //import androidx.work.WorkerParameters;
 import android.content.Intent;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.graphics.Bitmap;
 
 /**
  * Clase que implementa el motor principal del juego para Android.
@@ -156,7 +148,7 @@ public class AndroidEngine implements Engine,Runnable {
 
     //Metodo para cambiar el valor de un parametro en el archivo de guardado
     //(si existe) a partir de su lectura
-    public void modfificarParametro(String key, int amount){
+    public void modificarParametro(String key, int amount){
         if(this.checkFileExists("save")) {
             JSONObject obj;
             try {
@@ -177,6 +169,26 @@ public class AndroidEngine implements Engine,Runnable {
             System.out.println("No existe un archivo de guardado sobre el que modificar el parámetro");
         }
     }
+    //Metodo para leer el valor de un parametro en el archivo de guardado
+    //(si existe) a partir de su lectura
+    public int leerParametroInt(String key) {
+        int param=0;
+        if(this.checkFileExists("save")) {
+            JSONObject obj = this.readJsonFile2("save");
+            String hash = this.createHash(obj.toString());
+            if (this.checkHash(hash)) {
+                try {
+                    param = obj.getInt(key);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        return param;
+    }
+
+
     //getter del audio
     @Override
     public Audio getAudio() {

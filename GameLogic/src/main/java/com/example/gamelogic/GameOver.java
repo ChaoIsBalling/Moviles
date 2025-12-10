@@ -41,9 +41,19 @@ public class GameOver implements State {
     //Determina si el jugador ha ganado
     boolean win;
 
+    //determina si el jugador completó el nivel con anterioridad en el modo aventura
+    boolean isCompleted;
+    int diamantes; //la cantidad total de diamantes que tiene el jugador antes de retirar la recompensa
+    Text textoDiamantes; //Representa la cantidad de diamantes
+    Text textoRecompensa;
+
+    //Recompensa que ganará el jugador
+    int recompensa = 0;
+
+
     //Dificultad con la que se ha superado el nivel (Para saber el modo de juego)
     GameLogic.Dificultad dificultad;
-    public GameOver(Engine engine, Audio audio, Mobile mobile, GameLogic.Dificultad dificultad ,boolean win)
+    public GameOver(Engine engine, Audio audio, Mobile mobile, GameLogic.Dificultad dificultad ,boolean win, boolean isCompleted)
     {
         //Inicializamos los botones y textos
         this.engine = engine;
@@ -53,6 +63,11 @@ public class GameOver implements State {
         this.setAudio(audio);
         this.audio = audio;
         this.mobile = mobile;
+
+        //si estamos en modo aventura, se detectara si el nivel se completó, en modo normal será true por defecto
+        this.isCompleted =
+                (this.dificultad == GameLogic.Dificultad.aventura) ? isCompleted : true;
+
 
         //Botones comunes de ambos modos
         botonMenu = new Button(botones.getJSONObject("BotonMenu"));
@@ -72,24 +87,49 @@ public class GameOver implements State {
 
             botonRecompensaAd = new Button(botones.getJSONObject("BotonRecompensaAd"));
             botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAd")));
+
+            //Diamantes que tenemos ahora mismo
+            this.diamantes= this.engine.leerParametroInt("gems");
+            this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantesActuales"));
+            this.textoDiamantes.setText(String.valueOf(this.diamantes));
+
+            this.textoRecompensa = new Text(botones.getJSONObject("TextoRecompensaAd"));
+
         }
 
         //Dependiendo del resultado de la partida reproducimos un sonido distinto
         if(win) {
             textoInicial = new Text(botones.getJSONObject("TextoWin"));
-
             this.victory = this.audio.newSound("victory_trumpet.wav");
             this.audio.playSound(this.victory);
+
+            if(dificultad == GameLogic.Dificultad.aventura){
+                //Si el nivel no estaba completado, añadimos 10 de recompensa
+                if(!isCompleted){
+                    this.recompensa = 10;
+                    this.engine.modificarParametro("gems", recompensa);
+                    this.diamantes += this.recompensa;
+                }
+                else{
+                    this.recompensa = 0;
+                }
+            }
         }
         else {
             textoInicial = new Text(botones.getJSONObject("TextoLose"));
-
             this.lose = this.audio.newSound("death_sound.wav");
+            this.recompensa = 0;
             this.audio.playSound(this.lose);
+
+            if(dificultad == GameLogic.Dificultad.aventura){
+                //Si ha perdido, no habra recompensa
+                this.recompensa = 0;
+
+            }
         }
 
+        //Se muestra el banner
         this.mobile.setVisibleAdBanner(true);
-
     }
     @Override
     public void update(double deltaTime) {
@@ -115,6 +155,8 @@ public class GameOver implements State {
             botonMenu.Render(gr);
             botonRecompensaAd.Render(gr);
             botonVolverMundo.Render(gr);
+            textoDiamantes.Render(gr);
+            textoRecompensa.Render(gr);
         }
     }
 
@@ -146,9 +188,7 @@ public class GameOver implements State {
                         this.engine.setState(dificultad);
                     }
                     if(canClickButton(botonRecompensaAd,e.x,e.y) && this.botonRecompensaAd.isEnable()){
-                        this.mobile.showRewardedAd();
-                        this.botonRecompensaAd.setEnabled(false);
-                        this.botonRecompensaAd.setVisible(false);
+                        reclamarRecompensa();
                     }
                     if(canClickButton(botonCompartir,e.x,e.y))
                     {
@@ -194,6 +234,22 @@ public class GameOver implements State {
 
     private boolean canClickButton(Button boton,float x, float y){
         return boton != null && boton.contains(x, y);
+    }
+
+    private void reclamarRecompensa(){
+        this.mobile.showRewardedAd(); //vemos el anuncio
+        System.out.println(this.recompensa);
+        this.recompensa = 10; //incrementamos la recompensa en 10
+        //Escondemos e inhabilitamos el boton
+        this.botonRecompensaAd.setEnabled(false);
+        this.botonRecompensaAd.setVisible(false);
+
+        //Modificamos el parmametro añadiendole la cantidad de recompensa en el archivo de guardado
+        this.engine.modificarParametro("gems", recompensa);
+        //Modificamos la cantidad actual de diamantes en el texto
+        this.diamantes += this.recompensa;
+        //Actualizamos el texto de Game Over del numero de diamantes
+        this.textoDiamantes.setText(String.valueOf(this.diamantes));
     }
 
 }

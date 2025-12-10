@@ -76,8 +76,8 @@ public class Mundo implements State {
 
         niveles=new ArrayList<Button>();
 
-        String colorCompleted=mundoInfo.getString("colorCompleted");
-        String colorLocked=mundoInfo.getString("colorLocked");
+        String colorCompleted = mundoInfo.getString("colorCompleted");
+        String colorLocked = mundoInfo.getString("colorLocked");
         this.minY=(float)botones.getJSONObject("NivelMundo").getInt("y");
         this.maxY=400-botones.getJSONObject("NivelMundo").getInt("h");
         //inicialización de todos los botones de niveles
@@ -131,7 +131,6 @@ public class Mundo implements State {
         if(this.previous)
             this.anteriorMundo.Render(gr);
         this.botonVolver.Render(gr);
-
     }
 
     @Override
@@ -169,8 +168,8 @@ public class Mundo implements State {
 
     //si el evento es de tipo TouchDown guardamos el ultimo valor de la Y y ponemo a true el scroll
     private void onTouchDown(TouchEvent e){
-    lastTouchedY=e.y;
-    scroll=true;
+        lastTouchedY=e.y;
+        scroll=true;
     }
     //si es de tipo touch up el scroll se pone a false
     private void onTouchUp(){
@@ -179,24 +178,23 @@ public class Mundo implements State {
     //si es de tipo touchmove manejamos el scroll del juego
     private void onTouchMove(TouchEvent e)
     {
-     if(!scroll)
-         return;
+        if(!scroll)
+            return;
 
-     float destY=e.y-lastTouchedY;
-     lastTouchedY=e.y;
-    boolean canScroll=true;
+        float destY=e.y-lastTouchedY;
+        lastTouchedY=e.y;
+        boolean canScroll=true;
         //checkeamos si los extremeos de los objetos scrolleables (el mas alto y el mas bajo)
         //estan entre el minimo y maximo Y que hemos definido
-    if((niveles.get(0).getY()>minY&&destY>0)||(niveles.get(niveles.size()-1).getY()<maxY&&destY<0))
-        canScroll=false;
+        if((niveles.get(0).getY()>minY&&destY>0)||(niveles.get(niveles.size()-1).getY()<maxY&&destY<0))
+            canScroll=false;
 
-    if(canScroll) {
-        for (int i = 0; i < niveles.size(); i++) {
-            float newY = niveles.get(i).getY() + destY;
-            niveles.get(i).setY(newY);
+        if(canScroll) {
+            for (int i = 0; i < niveles.size(); i++) {
+                float newY = niveles.get(i).getY() + destY;
+                niveles.get(i).setY(newY);
+            }
         }
-
-    }
     }
 
     //metodo que gestiono lo que se hace si se presiona sobre cualquier boton de la escena
@@ -207,7 +205,11 @@ public class Mundo implements State {
         } else {
             for (int i = 0; i < niveles.size(); i++) {
                 if (niveles.get(i).contains(e.x, e.y) && i <= this.completed - this.nivelesHastaAhora) {
-                    GameLogic gameLogic = new GameLogic(this.engine, this.mobile, "Mundo/World" + this.mundo + "/Level" + (i + 1) + ".json");
+                    //(i == this.completed - this.nivelesHastaAhora) -> Ultimo nivel sin completar
+                    //(i <                                         ) -> Nivel completado
+                    boolean isLevelCompleted = (i == this.completed - this.nivelesHastaAhora) ? false: true;
+                    System.out.println(isLevelCompleted);
+                    GameLogic gameLogic = new GameLogic(this.engine, this.mobile, "Mundo/World" + this.mundo + "/Level" + (i + 1) + ".json",isLevelCompleted);
                     this.engine.setState(gameLogic);
                 }
             }
