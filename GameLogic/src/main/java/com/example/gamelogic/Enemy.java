@@ -132,7 +132,7 @@ public class Enemy {
         //calculamos direccion
         float dirX = gl.getRealX(objetivo.getY());
         float dirY = gl.getRealY(objetivo.getX());
-        System.out.println(dirX + ","+dirY);
+        //System.out.println(dirX + ","+dirY);
 
         dirX -= this.x;
         dirY -=this.y;
