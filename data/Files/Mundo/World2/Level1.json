@@ -14,6 +14,15 @@
      "enemy": "imp",
      "amount":3   
     }
+    , 
+    {
+      "enemy":"orc",
+      "amount": 6
+    }, 
+    { 
+     "enemy": "imp",
+     "amount":4   
+    }
    
     ],
     "reward": 10,

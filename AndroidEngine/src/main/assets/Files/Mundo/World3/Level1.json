@@ -2,17 +2,17 @@
     "level":13,
     "colorNivel":"#ffFF295F",
     "waves": [
-        {
+    {
      "enemy": "goblin",
-     "amount":3        
+     "amount":4        
     }, 
     {
       "enemy":"orc",
-      "amount": 2
+      "amount": 6
     }, 
     { 
      "enemy": "imp",
-     "amount":3   
+     "amount":5   
     }
    
     ],

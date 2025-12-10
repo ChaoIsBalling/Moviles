@@ -84,8 +84,6 @@ public class GameLogic implements State {
     float mejDefEn = 1;//mejora de defensa de enemigo
     float mejResEn = 1;//mejora de resistencia de enemigo
 
-    int tipoResEn = 0;
-
     int oleada;//numero oleada
     int oleadasRestantes;
     int enemigosGenerar;//enemigos a generar
@@ -171,7 +169,6 @@ public class GameLogic implements State {
      */
     private void inicializarNivel(String mapa)
     {
-
         this.save=this.engine.readJsonFile2("save");
         JSONObject obj=engine.readJsonFile(mapa);
         colorNivel=obj.getString("colorNivel");
@@ -204,6 +201,7 @@ public class GameLogic implements State {
         this.fil=arr.length();
         this.col=arr.get(0).toString().length();
         this.recompensas=obj.getInt("reward");
+
 
         int numPuntos = this.camino.length(); //tamaño del array del json
         this.caminoEnemigos = new ArrayList<>(numPuntos);
@@ -391,11 +389,11 @@ public class GameLogic implements State {
             //dependiendo del tipo de enemigo tiene un tipo distinto
             String enemy =this.oleadasDatos.getJSONObject(this.oleadaGenerar).getString("enemy");
             Image im;
-            if(enemy=="goblin") {
+            if(enemy.equals("goblin")) {
                 tipo = Tipo.rayo;
                 im=new Image(this.style.getJSONObject("ImagenGoblin"),this.gr);
             }
-            else if(enemy=="imp") {
+            else if(enemy.equals("imp")) {
                 tipo = Tipo.fuego;
                 im=new Image(this.style.getJSONObject("ImagenImp"),this.gr);
             }
@@ -594,7 +592,7 @@ public class GameLogic implements State {
             }
             switch (e.type) {
                 case TOUCH_DOWN:
-                    gestiónEstadosJuego(e);
+                    gestionEstadosJuego(e);
             }
         }
     }
@@ -630,7 +628,7 @@ public class GameLogic implements State {
     /**
      * Metodo que gestiona los estados del juego
      */
-    private void gestiónEstadosJuego(TouchEvent e) //maneja los estados del juego cuando pulsas botones o las torres
+    private void gestionEstadosJuego(TouchEvent e) //maneja los estados del juego cuando pulsas botones o las torres
     {
         switch (this.estado) {
             case normal://cuando ningun boton o torre está seleccionado

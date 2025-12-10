@@ -2,7 +2,22 @@
     "level":4,
       "colorNivel":"#ff6efa55",
     "waves": [
-   
+   {
+     "enemy": "goblin",
+     "amount":1       
+    }, 
+    {
+      "enemy":"orc",
+      "amount": 4
+    }, 
+    { 
+     "enemy": "imp",
+     "amount":8   
+    },
+    {
+     "enemy": "goblin",
+     "amount":1       
+    }
     ],
     "reward": 10,
     "mapa":["hhhhhhhhhhhhhh", 

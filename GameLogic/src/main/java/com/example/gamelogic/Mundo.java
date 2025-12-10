@@ -185,13 +185,10 @@ public class Mundo implements State {
      float destY=e.y-lastTouchedY;
      lastTouchedY=e.y;
     boolean canScroll=true;
+        //checkeamos si los extremeos de los objetos scrolleables (el mas alto y el mas bajo)
+        //estan entre el minimo y maximo Y que hemos definido
     if((niveles.get(0).getY()>minY&&destY>0)||(niveles.get(niveles.size()-1).getY()<maxY&&destY<0))
-    {
         canScroll=false;
-    }
-    else {
-        canScroll=true;
-    }
 
     if(canScroll) {
         for (int i = 0; i < niveles.size(); i++) {

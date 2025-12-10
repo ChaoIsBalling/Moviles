@@ -13,6 +13,10 @@
     { 
      "enemy": "imp",
      "amount":3   
+    },
+    {
+      "enemy":"orc",
+      "amount": 2
     }
     ],
     "reward": 10,

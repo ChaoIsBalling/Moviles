@@ -202,7 +202,6 @@ public class Tienda implements State {
 
     @Override
     public void update(double deltatime) {
-
     }
 
     @Override
@@ -273,13 +272,11 @@ public class Tienda implements State {
         float destY=e.y-lastTouchedY;
         lastTouchedY=e.y;
         boolean canScroll=true;
+        //checkeamos si los extremeos de los objetos scrolleables (el mas alto y el mas bajo)
+        //estan entre el minimo y maximo Y que hemos definido
         if((ScrollableText.get(0).y>minY&&destY>0)||(ScrollableButtons.get(ScrollableButtons.size()-1).getY()<maxY&&destY<0))
-        {
             canScroll=false;
-        }
-        else {
-            canScroll=true;
-        }
+
         if(canScroll) {
             for (int i = 0; i < ScrollableText.size(); i++) {
                 float newY = ScrollableText.get(i).y + destY;
@@ -288,7 +285,6 @@ public class Tienda implements State {
             for (int i = 0; i < ScrollableButtons.size(); i++) {
                 float newY = ScrollableButtons.get(i).getY() + destY;
                 ScrollableButtons.get(i).setY(newY);
-
             }
         }
     }
