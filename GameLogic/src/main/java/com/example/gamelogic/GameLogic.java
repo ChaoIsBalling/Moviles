@@ -101,6 +101,10 @@ public class GameLogic implements State {
     float tiempEnG;//tiempo que falta para generar un nuevo enemigo
     int recompensas;//cantidad de gemas que consigues al terminar un nivel
     Text textoOleadas;//Numero de oleadas en texto
+
+    JSONArray camino; //Array con el numero de puntos que debe recorrer el enemigo en JSON
+    ArrayList<Vector2D> caminoEnemigos;
+
       //Enumaerado que determina en que estado de juego estamos
     private enum Estado {
         normal, botonRayo, botonFuego, botonHielo, torre, botonMini
@@ -174,6 +178,8 @@ public class GameLogic implements State {
         JSONArray arr= obj.getJSONArray("mapa");
         this.levelNumber=obj.getInt("level");
         this.oleadasDatos =obj.getJSONArray("waves");
+        this.camino = obj.getJSONArray("road"); //camino de puntos de los enemigos
+
         switch(this.dificultad) {
             case corto:
                 this.oleadasRestantes = 3;
@@ -198,6 +204,18 @@ public class GameLogic implements State {
         this.fil=arr.length();
         this.col=arr.get(0).toString().length();
         this.recompensas=obj.getInt("reward");
+
+        int numPuntos = this.camino.length(); //tamaño del array del json
+        this.caminoEnemigos = new ArrayList<>(numPuntos);
+        //Vamos metiendo cada una de las coordenadas del
+        //vector road del JSON al camino de enemigos en forma de coordenadas
+        for(int i = 0; i<numPuntos;i++){
+            JSONArray pair = this.camino.getJSONArray(i);
+            int x = pair.getInt(0);
+            int y = pair.getInt(1);
+            this.caminoEnemigos.add(new Vector2D(x,y));
+        }
+
         for (int i =0; i<this.fil;i++){
             ArrayList<Casilla> fila = new ArrayList<Casilla>();
             for(int j =0; j<this.col;j++){
@@ -392,6 +410,7 @@ public class GameLogic implements State {
                     0 + (this.mejDefEn * (this.oleada/this.oleadasT)),
                     0 + (this.mejResEn * (this.oleada/this.oleadasT)),
                     tipo,
+                    this.caminoEnemigos,
                     this));
             this.enemigos.get(this.enemigos.size()-1).setImagen(im);
 
@@ -456,6 +475,26 @@ public class GameLogic implements State {
 
         return c;
     }
+
+    /**
+     * Metodos para obtener las coordenadas reales de una casilla a partir de
+     * sus coordenadas en el tablero
+     * @return coordenada real
+     */
+    public float getRealX(int colCoor) {
+        int offsetX = 10;
+        int col  = colCoor;
+        float x = offsetX + col * this.anchoCasilla + this.anchoCasilla / 2f;
+        return x;
+    }
+
+    public float getRealY(int filCoor){
+        int offsetY = 35;
+        int fila = filCoor;
+        float y = offsetY + fila * this.altoCasilla + this.altoCasilla / 2f;
+        return y;
+    }
+
 
     /**
      * Metodo que renderiza el tablero, entidades y botones

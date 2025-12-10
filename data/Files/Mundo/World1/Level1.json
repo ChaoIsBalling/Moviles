@@ -23,5 +23,6 @@
             "hhhhhhhchhhhhh",
             "hhhhhhhchhhhhh",
             "hhhhhhhccccccc",
-            "hhhhhhhhhhhhhh"]
+            "hhhhhhhhhhhhhh"],
+    "road":[ [1,0], [1,7], [6,7], [6,14] ]
 }
