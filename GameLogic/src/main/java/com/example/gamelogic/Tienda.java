@@ -6,6 +6,7 @@ import com.example.engine.Graphics;
 import com.example.engine.Mobile;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
+import java.util.*;
 
 import org.json.JSONObject;
 
@@ -40,27 +41,75 @@ public class Tienda implements State {
     private Text CTorres;
     private Text CSkins;
 
+    //ArrayList de elementos de la tienda que pueden hacer scroll
+    private ArrayList<Button> ScrollableButtons;
+    private ArrayList<Text>ScrollableText;
+
     private Image imagenDiamante;
 
     private enum Estado{
         normal, botonRayo, botonFuego, botonHielo, botonMini
     }
+    //Ultima cordenada Y tocada
+    float lastTouchedY;
 
+    //bool que nos dice si estamos haciendo scroll de pantalla
+    boolean scroll;
+
+    //La posición minima que puede tener el promer boton de la lista en la posicion y
+    float minY;
+    //La posición minima que puede tener el promer boton de la lista en la posicion y
+    float maxY;
     JSONObject datos;
     private Estado estado;
+    //Comparadores que ordenan los elementos de la lista de mas altos a mas bajos
+    //en la representacion
+    class ButtonComparator implements Comparator<Button> {
+        // Function to compare
+        public int compare(Button c1, Button c2)
+        {
+            if (c1.getY() == c2.getY())
+                return 0;
+            else if (c1.getY() > c2.getY())
+                return 1;
+            else
+                return -1;
+        }
+    }
+    class TextComparator implements Comparator<Text> {
+        // Function to compare
+        public int compare(Text c1, Text c2)
+        {
+            if (c1.y == c2.y)
+                return 0;
+            else if (c1.y > c2.y)
+                return 1;
+            else
+                return -1;
+        }
+    }
 
     Mobile mobile;
     public Tienda(Engine engine,Mobile mobile){
+        ScrollableText=new ArrayList<Text>();
+        ScrollableButtons=new ArrayList<Button>();
         this.engine=engine;
         this.mobile = mobile;
         this.datos =engine.readJsonFile("Tienda/style.json");
         this.botonVolver = new Button(this.datos.getJSONObject("BotonVolver"));
         this.cargarDatos();
 
+        this.botonMini = new Button(this.datos.getJSONObject("BotonMini"));
         this.botonRayo = new Button(this.datos.getJSONObject("BotonRayo"));
         this.botonFuego = new Button(this.datos.getJSONObject("BotonFuego"));
         this.botonHielo = new Button(this.datos.getJSONObject("BotonHielo"));
-        this.botonMini = new Button(this.datos.getJSONObject("BotonMini"));
+
+        ScrollableButtons.add(botonMini);
+        ScrollableButtons.add(botonRayo);
+        ScrollableButtons.add(botonFuego);
+        ScrollableButtons.add(botonHielo);
+
+        Collections.sort(ScrollableButtons,new ButtonComparator());
 
         if(this.rayo){
             this.botonRayo.setColor("#ff00ff00");
@@ -84,6 +133,13 @@ public class Tienda implements State {
 
         this.CTorres = new Text(this.datos.getJSONObject("TextoCTorres"));
         this.CSkins = new Text(this.datos.getJSONObject("TextoCSkins"));
+        ScrollableText.add(this.CTorres);
+        ScrollableText.add(this.CSkins);
+
+        Collections.sort(ScrollableText,new TextComparator());
+
+        this.minY=ScrollableText.get(0).y;
+        this.maxY=400-ScrollableButtons.get(ScrollableButtons.size()-1).getHeight();
 
     }
 
@@ -186,12 +242,53 @@ public class Tienda implements State {
             }
             switch (e.type){
                 case TOUCH_DOWN:
+                    onTouchDown(e);
                     this.gestionBotones(e);
                     break;
                 case TOUCH_UP:
+                    onTouchUp();
                     break;
                 case TOUCH_MOVE:
+                    onTouchMove(e);
                     break;
+            }
+        }
+    }
+
+    //si el evento es de tipo TouchDown guardamos el ultimo valor de la Y y ponemo a true el scroll
+    private void onTouchDown(TouchEvent e){
+        lastTouchedY=e.y;
+        scroll=true;
+    }
+    //si es de tipo touch up el scroll se pone a false
+    private void onTouchUp(){
+        scroll = false;
+    }
+    //si es de tipo touchmove manejamos el scroll del juego
+    private void onTouchMove(TouchEvent e)
+    {
+        if(!scroll)
+            return;
+
+        float destY=e.y-lastTouchedY;
+        lastTouchedY=e.y;
+        boolean canScroll=true;
+        if((ScrollableText.get(0).y>minY&&destY>0)||(ScrollableButtons.get(ScrollableButtons.size()-1).getY()<maxY&&destY<0))
+        {
+            canScroll=false;
+        }
+        else {
+            canScroll=true;
+        }
+        if(canScroll) {
+            for (int i = 0; i < ScrollableText.size(); i++) {
+                float newY = ScrollableText.get(i).y + destY;
+                ScrollableText.get(i).y=newY;
+            }
+            for (int i = 0; i < ScrollableButtons.size(); i++) {
+                float newY = ScrollableButtons.get(i).getY() + destY;
+                ScrollableButtons.get(i).setY(newY);
+
             }
         }
     }

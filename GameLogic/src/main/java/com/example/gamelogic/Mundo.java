@@ -197,8 +197,8 @@ public class Mundo implements State {
         for (int i = 0; i < niveles.size(); i++) {
             float newY = niveles.get(i).getY() + destY;
             niveles.get(i).setY(newY);
-
         }
+
     }
     }
 
