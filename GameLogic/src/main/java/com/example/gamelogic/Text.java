@@ -9,8 +9,7 @@ import org.json.JSONArray;
  * Clase que representa un texto
  */
 public class Text {
-    //Contenido y font del texto
-    String text;
+    //Font del texto
     String font;
     //Posición
     float x;
@@ -23,12 +22,15 @@ public class Text {
     //color del texto
     String color = "#FF000000";
 
+    //el texto despues de hacerle un Split, tiene todo el contenido en string del texto
+    String[] myArray;
+
     /**
      * Constructora del texto con su contenido, posición, tamaño y si es en negrito e italica
      */
     public Text(String font, String text, float x, float y,float size,boolean bold, boolean italic){
         this.font=font;
-        this.text=text;
+        this.myArray=text.split("\n");
         this.x=x;
         this.y=y;
         this.size=size;
@@ -37,7 +39,7 @@ public class Text {
     }
     public Text(String font, String text, float x, float y){
         this.font=font;
-        this.text=text;
+        this.myArray=text.split("\n");
         this.x=x;
         this.y=y;
         this.size=12;
@@ -46,7 +48,7 @@ public class Text {
     }
     public Text(String font, String text, float x, float y,float size){
         this.font=font;
-        this.text=text;
+        this.myArray=text.split("\n");
         this.x=x;
         this.y=y;
         this.size=size;
@@ -55,7 +57,7 @@ public class Text {
     }
     public Text(String font, String text, float x, float y,float size,boolean bold){
         this.font=font;
-        this.text=text;
+        this.myArray=text.split("\n");
         this.x=x;
         this.y=y;
         this.size=size;
@@ -64,7 +66,8 @@ public class Text {
     }
     public Text(JSONObject json)
     {
-        this.text= json.getString("texto");
+        String text= json.getString("texto");
+        this.myArray=text.split("\n");
         this.font=json.getString("font");
         this.x=json.getInt("x");
         this.y=json.getInt("y");
@@ -80,7 +83,7 @@ public class Text {
         this.color = color;
     }
     public void setText(String text){
-        this.text = text;
+        this.myArray=text.split("\n");
     }
 
     /**
@@ -91,12 +94,14 @@ public class Text {
         IFont fuente = gr.newFont(this.font,this.size,this.bold,this.italic);
         gr.setColor(this.color);
         gr.setFont(fuente);
-        gr.pintarTextoCentrado(this.text, this.x,this.y);
+        for(int i=0;i<myArray.length;i++)
+            gr.pintarTextoCentrado(myArray[i], this.x,this.y+i*size);
     }
     public void RenderCentrado(Graphics gr,float x, float y){
         IFont fuente = gr.newFont(this.font,this.size,this.bold,this.italic);
         gr.setColor(this.color);
         gr.setFont(fuente);
-        gr.pintarTextoCentrado(this.text, x+this.x,y+this.y);
+        for(int i=0;i<myArray.length;i++)
+        gr.pintarTextoCentrado(myArray[i], x+this.x,y+this.y+i*size);
     }
 }

@@ -390,19 +390,19 @@ public class Tienda implements State {
                 this.estado = nuevoEstado;
                 break;
             case botonRayo:
-                this.coste.setText("Coste: "+ this.datos.getString("CosteRayo"));
+                this.coste.setText("Coste: "+ this.datos.getString("CosteRayo")+"\nCosmetico de la torre\nde Rayo");
                 this.estado = nuevoEstado;
                 break;
             case botonFuego:
-                this.coste.setText("Coste: "+ this.datos.getString("CosteFuego"));
+                this.coste.setText("Coste: "+ this.datos.getString("CosteFuego")+"\nCosmetico de la torre\nde Fuego");
                 this.estado = nuevoEstado;
                 break;
             case botonHielo:
-                this.coste.setText("Coste: "+ this.datos.getString("CosteHielo"));
+                this.coste.setText("Coste: "+ this.datos.getString("CosteHielo")+"\nCosmetico de la torre\nde Hielo");
                 this.estado = nuevoEstado;
                 break;
             case botonMini:
-                this.coste.setText("Coste: "+ this.datos.getString("CosteMini"));
+                this.coste.setText("Coste: "+ this.datos.getString("CosteMini")+"\n Nueva torre como la\ntorre de rayo pero\n mas rapida");
                 this.estado = nuevoEstado;
                 break;
 

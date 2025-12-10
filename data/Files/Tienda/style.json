@@ -83,7 +83,7 @@
     {
         "texto":"Coste:",
         "font":"Inika-Regular.ttf",
-        "x":430,
+        "x":500,
         "y":150,
         "size":30,
         "bold":true,
@@ -136,7 +136,7 @@
         "texto":"Nuevas torres",
         "font":"Inika-Regular.ttf",
         "x":150,
-        "y":150,
+        "y":100,
         "size":40,
         "bold":true,
         "italic":true,
