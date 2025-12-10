@@ -103,6 +103,9 @@ public class GameLogic implements State {
     JSONArray camino; //Array con el numero de puntos que debe recorrer el enemigo en JSON
     ArrayList<Vector2D> caminoEnemigos;
 
+    float offsetX = 30;
+    float offsetY = 50;
+
       //Enumaerado que determina en que estado de juego estamos
     private enum Estado {
         normal, botonRayo, botonFuego, botonHielo, torre, botonMini
@@ -220,18 +223,18 @@ public class GameLogic implements State {
                 Casilla casilla;
                 if(arr.get(i).toString().charAt(j) == 'h'){
                     //el fill lo pongo a true para que haya mayor contraste entre la casilla y las torres
-                     casilla = new Casilla((float)(j*35+30),(float)(i*35+50),this.anchoCasilla,this.altoCasilla,true,false);
+                     casilla = new Casilla((float)(j*this.anchoCasilla+this.offsetX),(float)(i*this.altoCasilla+this.offsetY),this.anchoCasilla,this.altoCasilla,true,false);
                      casilla.setColor(this.colorNivel);
                 } else {
-                    casilla = new Casilla((float) (j * 35 + 30), (float) (i * 35 + 50), this.anchoCasilla, this.altoCasilla, true, true);
+                    casilla = new Casilla((float) (j * this.anchoCasilla + this.offsetX), (float) (i * this.altoCasilla + this.offsetY), this.anchoCasilla, this.altoCasilla, true, true);
                     casilla.setColor("#ff944d03");
                     if (j == 0) {
-                        this.IniX = j * 35 + 30;
-                        this.IniY = i * 35 + 50;
+                        this.IniX = j * this.anchoCasilla + this.offsetX;
+                        this.IniY = i * this.altoCasilla + this.offsetY;
                     }
                     if (j == this.col - 1) {
-                        this.FinX = j * 35 + 30;
-                        this.FinY = i * 35 + 50;
+                        this.FinX = j * this.anchoCasilla + this.offsetX;
+                        this.FinY = i * this.altoCasilla + this.offsetY;
                     }
                 }
                 casilla.setCoor(new Vector2D(i, j));
@@ -444,11 +447,8 @@ public class GameLogic implements State {
      */
     public Vector2D determinaCasilla(float x, float y) {
 
-        int offsetX = 30;
-        int offsetY = 50;
-
-        int j = (int) ((x - offsetX) / this.anchoCasilla);
-        int i = (int) ((y - offsetY) / this.altoCasilla);
+        int j = (int) ((x - this.offsetX) / this.anchoCasilla);
+        int i = (int) ((y - this.offsetY) / this.altoCasilla);
 
         Vector2D c = new Vector2D(i, j);
         //System.out.println("("+c.getX()+","+c.getY()+")");
@@ -459,14 +459,12 @@ public class GameLogic implements State {
      * Dada una posición (x,y) del ratón se determina a que casilla esta clicando
      */
     public Vector2D determinaCasillaRaton(float x, float y) {
-        if (x < 30 - this.anchoCasilla / 2 || y < 50 - this.altoCasilla / 2) {
+        if (x < this.offsetX - this.anchoCasilla / 2 || y < this.offsetY - this.altoCasilla / 2) {
             return new Vector2D(-1, -1);
         }
-        int offsetX = 30;
-        int offsetY = 50;
 
-        int j = (int) (((x + (this.anchoCasilla / 2) - offsetX)) / this.anchoCasilla);
-        int i = (int) (((y + (this.altoCasilla / 2) - offsetY)) / this.altoCasilla);
+        int j = (int) (((x + (this.anchoCasilla / 2) - this.offsetX)) / this.anchoCasilla);
+        int i = (int) (((y + (this.altoCasilla / 2) - this.offsetY)) / this.altoCasilla);
 
         Vector2D c = new Vector2D(i, j);
         //System.out.println("("+c.getX()+","+c.getY()+")");
