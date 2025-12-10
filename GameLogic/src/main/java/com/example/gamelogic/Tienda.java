@@ -311,7 +311,8 @@ public class Tienda implements State {
                         this.cambiarEstado(Estado.botonFuego);
                     } else if (this.botonHielo.contains(e.x, e.y) && !this.hielo) {
                         this.cambiarEstado(Estado.botonHielo);
-                    }
+                    }else if(this.botonMini.contains(e.x, e.y) && !this.mini)
+                        this.cambiarEstado(Estado.botonMini);
                     break;
                 case botonRayo://has tocado el boton para comprar la skin de la torre de rayo
                     this.gestionCompra(e,Integer.parseInt(this.datos.getString("CosteRayo")));
@@ -322,7 +323,7 @@ public class Tienda implements State {
                 case botonHielo://has tocado el boton para comprar la skin de la una torre de hielo
                     this.gestionCompra(e,Integer.parseInt(this.datos.getString("CosteHielo")));
                     break;
-                case botonMini://has tocado el boton para comprar la skin de la una torre de hielo
+                case botonMini://has tocado el boton para comprar la torre de mini rayo
                     this.gestionCompra(e,Integer.parseInt(this.datos.getString("CosteMini")));
                     break;
             }
