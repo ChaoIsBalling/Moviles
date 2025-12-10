@@ -45,9 +45,9 @@ public class Mundo implements State {
     //bool que nos dice si estamos haciendo scroll de pantalla
     boolean scroll;
 
-    //valor minimo que puede tener la Y
+    //La posición minima que puede tener el promer boton de la lista en la posicion y
     float minY;
-    //valor maximo que puede tener la Y
+    //La posición minima que puede tener el promer boton de la lista en la posicion y
     float maxY;
 
     //constructora del estado que crea e inicializa los botones de la escena
@@ -78,6 +78,8 @@ public class Mundo implements State {
 
         String colorCompleted=mundoInfo.getString("colorCompleted");
         String colorLocked=mundoInfo.getString("colorLocked");
+        this.minY=(float)botones.getJSONObject("NivelMundo").getInt("y");
+        this.maxY=400-botones.getJSONObject("NivelMundo").getInt("h");
         //inicialización de todos los botones de niveles
         for(int i=0;i<this.numNiveles;i++)
         {
@@ -165,13 +167,16 @@ public class Mundo implements State {
         }
     }
 
+    //si el evento es de tipo TouchDown guardamos el ultimo valor de la Y y ponemo a true el scroll
     private void onTouchDown(TouchEvent e){
     lastTouchedY=e.y;
     scroll=true;
     }
+    //si es de tipo touch up el scroll se pone a false
     private void onTouchUp(){
     scroll = false;
     }
+    //si es de tipo touchmove manejamos el scroll del juego
     private void onTouchMove(TouchEvent e)
     {
      if(!scroll)
@@ -179,12 +184,22 @@ public class Mundo implements State {
 
      float destY=e.y-lastTouchedY;
      lastTouchedY=e.y;
+    boolean canScroll=true;
+    if((niveles.get(0).getY()>minY&&destY>0)||(niveles.get(niveles.size()-1).getY()<maxY&&destY<0))
+    {
+        canScroll=false;
+    }
+    else {
+        canScroll=true;
+    }
 
-     for(int i=0;i<niveles.size();i++)
-     {
-        float newY=niveles.get(i).getY()+destY;
-        niveles.get(i).setY(newY);
-     }
+    if(canScroll) {
+        for (int i = 0; i < niveles.size(); i++) {
+            float newY = niveles.get(i).getY() + destY;
+            niveles.get(i).setY(newY);
+
+        }
+    }
     }
 
     //metodo que gestiono lo que se hace si se presiona sobre cualquier boton de la escena

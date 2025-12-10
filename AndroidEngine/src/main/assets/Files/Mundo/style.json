@@ -27,7 +27,7 @@
         "texto":"Mundo 1",
         "font":"Inika-Regular.ttf",
         "x":300,
-        "y":0,
+        "y":50,
         "size":40,
         "bold":true,
         "italic":true,
@@ -35,7 +35,7 @@
     },
     "SiguienteMundo":    
     {   "x":490,
-        "y":0,
+        "y":50,
         "w":50,
         "h":50,
         "isRound":true,
@@ -44,7 +44,7 @@
     },
     "AnteriorMundo":    
     {   "x":110,
-        "y":0,
+        "y":50,
         "w":50,
         "h":50,
         "isRound":true,
@@ -53,7 +53,7 @@
     },
     "BotonVolver":    
     {   "x":30,
-        "y":0,
+        "y":50,
         "w":30,
         "h":30,
         "isRound":true,
