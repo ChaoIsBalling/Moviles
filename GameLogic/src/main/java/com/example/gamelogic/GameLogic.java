@@ -208,7 +208,7 @@ public class GameLogic implements State {
         this.recompensas=obj.getInt("reward");
 
         float anchoM = this.anchoCasilla*this.col;
-        this.offsetX = (600-anchoM)/2;
+        this.offsetX = ((600-anchoM)/2)+(this.altoCasilla/2);
 
         int numPuntos = this.camino.length(); //tamaño del array del json
         this.caminoEnemigos = new ArrayList<>(numPuntos);
