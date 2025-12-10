@@ -122,7 +122,7 @@ public class Enemy {
 
         //vamos recorriendo mientras haya puntos por los que el enemigo pueda ir
         if(puntoIndex >= puntosCamino.size()){
-            //el enemigo acaba
+            this.win = true;
             return;
         }
 

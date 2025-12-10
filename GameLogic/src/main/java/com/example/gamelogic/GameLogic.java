@@ -194,6 +194,7 @@ public class GameLogic implements State {
                 this.oleadasRestantes=this.oleadasDatos.length();
                 break;
         }
+        this.mini = this.save.getBoolean("mini");
         this.oleadaGenerar =0;
         this.oleadasT = this.oleadasDatos.length();
         this.enemigosGenerar = this.oleadasDatos.getJSONObject(this.oleadaGenerar).getInt("amount");
@@ -205,6 +206,8 @@ public class GameLogic implements State {
         this.col=arr.get(0).toString().length();
         this.recompensas=obj.getInt("reward");
 
+        float anchoM = this.anchoCasilla*this.col;
+        this.offsetX = (600-anchoM)/2;
 
         int numPuntos = this.camino.length(); //tamaño del array del json
         this.caminoEnemigos = new ArrayList<>(numPuntos);
@@ -216,6 +219,11 @@ public class GameLogic implements State {
             int y = pair.getInt(1);
             this.caminoEnemigos.add(new Vector2D(x,y));
         }
+        this.IniX = this.caminoEnemigos.get(0).getY()* this.anchoCasilla + this.offsetX;
+        this.IniY = this.caminoEnemigos.get(0).getX()* this.altoCasilla + this.offsetY;
+
+        this.FinX = this.caminoEnemigos.get(numPuntos-1).getY()* this.anchoCasilla + this.offsetX;
+        this.FinY = this.caminoEnemigos.get(numPuntos-1).getX()* this.altoCasilla + this.offsetY;
 
         for (int i =0; i<this.fil;i++){
             ArrayList<Casilla> fila = new ArrayList<Casilla>();
@@ -289,19 +297,16 @@ public class GameLogic implements State {
         for (int i = 0; i < this.enemigos.size(); i++) {
             this.enemigos.get(i).Update(deltaTime);
             //Si el enemigo llega a la casilla final
-            if (haAcabado(this.enemigos.get(i))) {
+            if (this.enemigos.get(i).Win()) {
                 this.vida--;
                 this.textoV.setText(String.valueOf(this.vida));
                 //Añadimos al enemigo en la lista de ganadores para que sea eliminado (se comprueba en el tercer if)
-                this.enemigos.get(i).setWin();
+                deadEnemies.add(this.enemigos.get(i));
             }
             if (this.enemigos.get(i).Dead()) { //En caso de morir nos da dinero y lo eliminamos
                 deadEnemies.add(this.enemigos.get(i));
                 this.dinero += 50;
                 this.textoD.setText(String.valueOf(this.dinero));
-            }
-            if (this.enemigos.get(i).Win()) {//Si un enemigo gana se mete en la lista de muertos para ser eliminado
-                deadEnemies.add(this.enemigos.get(i));
             }
         }
 
@@ -478,17 +483,11 @@ public class GameLogic implements State {
      * @return coordenada real
      */
     public float getRealX(int colCoor) {
-        int offsetX = 10;
-        int col  = colCoor;
-        float x = offsetX + col * this.anchoCasilla + this.anchoCasilla / 2f;
-        return x;
+        return this.casillas.get(0).get(colCoor).getX();
     }
 
     public float getRealY(int filCoor){
-        int offsetY = 35;
-        int fila = filCoor;
-        float y = offsetY + fila * this.altoCasilla + this.altoCasilla / 2f;
-        return y;
+        return this.casillas.get(filCoor).get(0).getY();
     }
 
 
