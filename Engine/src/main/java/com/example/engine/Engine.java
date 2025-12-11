@@ -52,11 +52,6 @@ public interface Engine {
      * @return gestor Graficos
      */
     public Graphics getGraphics();
-    /**
-     * Este metodo devuelve el gestor de Inputs del motor
-     * @return gestor Input
-     */
-    public Input getInput();
 
     /**
      * Este metodo lanza un Intent implicito simple
@@ -79,7 +74,7 @@ public interface Engine {
     public JSONObject readJsonFile2(String file);
 
     public JSONObject readJsonFile(String file);
-    public String openAssetFile(String file);
+
     public void writeFile(String file,String output);
 
     public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText);

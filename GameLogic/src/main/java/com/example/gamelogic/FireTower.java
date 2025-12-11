@@ -42,6 +42,8 @@ public class FireTower implements Tower {
      * Constructora de la torre de fuego
      */
     public FireTower(float x, float y) {
+        this.x=x;
+        this.y=y;
         this.hexagono = new Hexagon(x, y, 15, true);
         this.hexagono.setColor("#ffff0000");
     }
@@ -49,7 +51,6 @@ public class FireTower implements Tower {
         this.x=x;
         this.y=y;
         this.image=im;
-        this.attack=attack;
     }
 
     /**
