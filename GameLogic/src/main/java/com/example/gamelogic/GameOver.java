@@ -126,8 +126,11 @@ public class GameOver implements State {
             this.audio.playSound(this.lose);
 
             if(dificultad == GameLogic.Dificultad.aventura){
-                //Si ha perdido, no habra recompensa
-                this.botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAd")));
+                //Si ha perdido, no habra recompensa, solo se puede conseguir con el anuncio
+                //this.botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAd")));
+                ocultarBoton(this.botonRecompensaAd);
+                ocultarTexto(this.textoDiamantes);
+                ocultarTexto(this.textoRecompensa);
                 this.recompensa = 0;
 
             }
@@ -162,8 +165,10 @@ public class GameOver implements State {
             botonVolverMundo.Render(gr);
             textoDiamantes.Render(gr);
             textoRecompensa.Render(gr);
-            this.imagenDiamantes = new Image(botones.getJSONObject("ImagenDiamante"),gr);
-            this.imagenDiamantes.Render();
+            if(win){
+                this.imagenDiamantes = new Image(botones.getJSONObject("ImagenDiamante"),gr);
+                this.imagenDiamantes.Render();
+            }
         }
     }
 
@@ -260,4 +265,12 @@ public class GameOver implements State {
 
     }
 
+    private void ocultarBoton(Button button){
+        button.setEnabled(false);
+        button.setVisible(false);
+    }
+
+    private void ocultarTexto(Text text){
+        text.setText(" ");//quitamos el contenido
+    }
 }
