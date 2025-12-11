@@ -19,8 +19,8 @@ public class GameLogic implements State {
     private Button botonMejoraTriangulos;
     private Button botonMejoraCuadrados;
     private Button botonMejoraHexagonos;
-
     private Button botonMejoraMini;
+
     boolean mini = false;//si esta desbloqueada la nueva torre
 
     private Button botonMejoraAtaque;
@@ -171,10 +171,10 @@ public class GameLogic implements State {
     {
         this.cargarDatos();
         JSONObject obj=engine.readJsonFile(mapa);
-        colorNivel=obj.getString("colorNivel");
-        JSONArray arr= obj.getJSONArray("mapa");
-        this.levelNumber=obj.getInt("level");
-        this.oleadasDatos =obj.getJSONArray("waves");
+        colorNivel=obj.getString("colorNivel"); //color de fondo
+        JSONArray arr= obj.getJSONArray("mapa"); //array del mapa
+        this.levelNumber=obj.getInt("level"); //numero de nivel
+        this.oleadasDatos =obj.getJSONArray("waves"); //oleadas de enemigos
         this.camino = obj.getJSONArray("road"); //camino de puntos de los enemigos
 
         switch(this.dificultad) {
@@ -207,8 +207,9 @@ public class GameLogic implements State {
 
         int numPuntos = this.camino.length(); //tamaño del array del json
         this.caminoEnemigos = new ArrayList<>(numPuntos);
+
         //Vamos metiendo cada una de las coordenadas del
-        //vector road del JSON al camino de enemigos en forma de coordenadas
+        //vector road del JSON al camino de enemigos en forma de coordenadas del tablero
         for(int i = 0; i<numPuntos;i++){
             JSONArray pair = this.camino.getJSONArray(i);
             int x = pair.getInt(0);
@@ -216,6 +217,7 @@ public class GameLogic implements State {
             this.caminoEnemigos.add(new Vector2D(x,y));
         }
 
+        //rellenamos el mapa
         for (int i =0; i<this.fil;i++){
             ArrayList<Casilla> fila = new ArrayList<Casilla>();
             for(int j =0; j<this.col;j++){
@@ -237,7 +239,6 @@ public class GameLogic implements State {
 
     //carga el progreso y comprueba que no ha sido modificado
     private void cargarDatos(){
-
         if(this.engine.checkFileExists("save"))
         {
             this.save=this.engine.readJsonFile2("save");
@@ -497,10 +498,7 @@ public class GameLogic implements State {
         return this.casillas.get(0).get(colCoor).getX();
     }
 
-    public float getRealY(int filCoor){
-
-        return this.casillas.get(filCoor).get(0).getY();
-    }
+    public float getRealY(int filCoor){ return this.casillas.get(filCoor).get(0).getY(); }
 
 
     /**

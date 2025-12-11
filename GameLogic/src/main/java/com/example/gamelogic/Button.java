@@ -77,11 +77,13 @@ public class Button {
     public void setText(Text text) {
         this.text = text;
     }
-    //metodo que cambia el string del textp
+    //metodo que cambia el string del texto
     public void changeText(String message)
     {
         this.text.setText(message);
     }
+
+    //setters
     public void setColor(String color){
         this.color = color;
     }
@@ -89,6 +91,7 @@ public class Button {
     public void setImagen(Image img){this.imagen = img;}
     public void setEnabled(boolean enabled){this.isEnable = enabled;}
     public void setVisible(boolean visible){this.isVisible = visible;}
+
     //getter de los parametros de tamaño y posicion
     public float getWidth(){return this.w;}
     public float getHeight(){return this.h;}

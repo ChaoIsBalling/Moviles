@@ -34,18 +34,20 @@ public class GameOver implements State {
     //Sonidos de victoria y derrota
     private Sound victory;
     private Sound lose;
+
+    //Modulos del motor
     private Audio audio;
     Engine engine;
-
     Mobile mobile;
+
     //Determina si el jugador ha ganado
     boolean win;
 
     //determina si el jugador completó el nivel con anterioridad en el modo aventura
     boolean isCompleted;
-    int diamantes; //la cantidad total de diamantes que tiene el jugador antes de retirar la recompensa
+    int numDiamantes; //la cantidad total de diamantes que tiene el jugador antes de retirar la recompensa
     Text textoDiamantes; //Representa la cantidad de diamantes
-    Text textoRecompensa;
+    Text textoRecompensa; //la recompensa ganada tras superar el nivel
 
     JSONObject botones;
 
@@ -92,9 +94,9 @@ public class GameOver implements State {
             botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAdx2")));
 
             //Diamantes que tenemos ahora mismo
-            this.diamantes= this.engine.leerParametroInt("gems");
+            this.numDiamantes = this.engine.leerParametroInt("gems");
             this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantesActuales"));
-            this.textoDiamantes.setText(String.valueOf(this.diamantes));
+            this.textoDiamantes.setText(String.valueOf(this.numDiamantes));
 
             this.textoRecompensa = new Text(botones.getJSONObject("TextoRecompensaAd"));
 
@@ -111,8 +113,9 @@ public class GameOver implements State {
                 if(!isCompleted){
                     this.recompensa = 10;
                     this.engine.incrementarParametro("gems", recompensa); //incrementamos la recompensa
-                    this.diamantes += this.recompensa;
+                    this.numDiamantes += this.recompensa;
                 }
+                //si ya estaba completado, el jugador solo puede ganar 10 si ve el anuncio
                 else{
                     this.botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAd")));
                     this.recompensa = 0;
@@ -120,15 +123,15 @@ public class GameOver implements State {
             }
         }
         else {
+            //Si perdemos, simplemente no se deja optar por una recompensa por anuncio
             textoInicial = new Text(botones.getJSONObject("TextoLose"));
             this.lose = this.audio.newSound("death_sound.wav");
             this.recompensa = 0;
             this.audio.playSound(this.lose);
 
             if(dificultad == GameLogic.Dificultad.aventura){
-                //Si ha perdido, no habra recompensa, solo se puede conseguir con el anuncio
-                //this.botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAd")));
-                ocultarBoton(this.botonRecompensaAd);
+                //Si ha perdido, no habra recompensa
+                inhabilitarBoton(this.botonRecompensaAd);
                 ocultarTexto(this.textoDiamantes);
                 ocultarTexto(this.textoRecompensa);
                 this.recompensa = 0;
@@ -200,7 +203,7 @@ public class GameOver implements State {
                         this.engine.setState(dificultad);
                     }
                     if(canClickButton(botonRecompensaAd,e.x,e.y) && this.botonRecompensaAd.isEnable()){
-                        reclamarRecompensa();
+                        reclamarRecompensaDuplicada();
                     }
                     if(canClickButton(botonCompartir,e.x,e.y))
                     {
@@ -213,7 +216,7 @@ public class GameOver implements State {
                         {
                             message="Soy una desgracia >:(";
                         }
-                        this.engine.luanchShareIntent(message);
+                        this.engine.luanchShareIntent(message); //intent
                     }
                     if(canClickButton(botonVolverMundo,e.x,e.y)){
                         Mundo mundo = new Mundo(this.engine,this.mobile,1);
@@ -244,32 +247,44 @@ public class GameOver implements State {
         this.mobile = mobile;
     }
 
+    /**
+     * Metodo que determina si se puede interactuar con el boton o no
+     */
     private boolean canClickButton(Button boton,float x, float y){
         return boton != null && boton.contains(x, y);
     }
 
-    private void reclamarRecompensa(){
+    /**
+     * Se llama a este metodo cuando se pulsa el boton de ver anuncio para duplicar
+     * u obtener más recompensas
+     */
+    private void reclamarRecompensaDuplicada(){
         this.mobile.showRewardedAd(); //vemos el anuncio
         this.recompensa = 10; //incrementamos la recompensa en 10
         //Escondemos e inhabilitamos el boton
-        this.botonRecompensaAd.setEnabled(false);
-        this.botonRecompensaAd.setVisible(false);
+        this.inhabilitarBoton(this.botonRecompensaAd);
 
         //Modificamos el parmametro añadiendole la cantidad de recompensa en el archivo de guardado
         this.engine.incrementarParametro("gems", recompensa);
         //Modificamos la cantidad actual de diamantes en el texto
-        this.diamantes += this.recompensa;
+        this.numDiamantes += this.recompensa;
         //Actualizamos el texto de Game Over del numero de diamantes
-        this.textoDiamantes.setText(String.valueOf(this.diamantes));
-        this.textoRecompensa.setText(" ");//quitamos la cantidad de la recompensa
+        this.textoDiamantes.setText(String.valueOf(this.numDiamantes));
+        ocultarTexto(this.textoRecompensa);//quitamos la cantidad de la recompensa
 
     }
 
-    private void ocultarBoton(Button button){
+    /**
+     * Este metodo hace que un boton no se vea y que quede inutilizable
+     */
+    private void inhabilitarBoton(Button button){
         button.setEnabled(false);
         button.setVisible(false);
     }
 
+    /**
+     * Oculta el texto poniendo una cadena vacía
+     */
     private void ocultarTexto(Text text){
         text.setText(" ");//quitamos el contenido
     }

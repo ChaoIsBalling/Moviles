@@ -25,6 +25,7 @@ public class Dificultad implements State {
 
     Mobile mobile;
 
+    //Json del que vamos a leer los parametros de los botones
     JSONObject botones;
 
     /**
@@ -34,7 +35,9 @@ public class Dificultad implements State {
     public Dificultad(Engine engine, Mobile mobile){
         this.engine = engine;
         this.mobile = mobile;
-        botones=engine.readJsonFile("Dificultad/style.json");
+        botones=engine.readJsonFile("Dificultad/style.json");//Archivo a leer
+
+        //botones y textos
         botonCorto = new Button(botones.getJSONObject("BotonCorto"));
         botonCorto.setText(new Text(botones.getJSONObject("TextoC")));
         botonLargo = new Button(botones.getJSONObject("BotonLargo"));
@@ -43,6 +46,7 @@ public class Dificultad implements State {
         botonInfinito.setText(new Text(botones.getJSONObject("TextoI")));
         this.botonVolver = new Button(botones.getJSONObject("BotonVolver"));
 
+        //escondemos el banner
         this.mobile.setVisibleAdBanner(false);
     }
     @Override

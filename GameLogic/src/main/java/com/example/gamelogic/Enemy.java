@@ -156,6 +156,9 @@ public class Enemy {
         this.imagen.RenderCentrado((int)this.x,(int)this.y);
     }
 
+    /**
+     * @return si el enemigo ha ganado o no
+     */
     public boolean Win(){return this.win;}
 
     /**
