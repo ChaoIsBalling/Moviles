@@ -3,6 +3,7 @@ package com.example.gamelogic;
 import com.example.engine.Engine;
 import com.example.engine.Graphics;
 import com.example.engine.Mobile;
+import com.example.engine.RewardCallback;
 import com.example.engine.State;
 import com.example.engine.TouchEvent;
 import com.example.engine.Audio;
@@ -135,7 +136,6 @@ public class GameOver implements State {
                 ocultarTexto(this.textoDiamantes);
                 ocultarTexto(this.textoRecompensa);
                 this.recompensa = 0;
-
             }
         }
 
@@ -259,19 +259,24 @@ public class GameOver implements State {
      * u obtener más recompensas
      */
     private void reclamarRecompensaDuplicada(){
-        this.mobile.showRewardedAd(); //vemos el anuncio
-        this.recompensa = 10; //incrementamos la recompensa en 10
-        //Escondemos e inhabilitamos el boton
-        this.inhabilitarBoton(this.botonRecompensaAd);
 
-        //Modificamos el parmametro añadiendole la cantidad de recompensa en el archivo de guardado
-        this.engine.incrementarParametro("gems", recompensa);
-        //Modificamos la cantidad actual de diamantes en el texto
-        this.numDiamantes += this.recompensa;
-        //Actualizamos el texto de Game Over del numero de diamantes
-        this.textoDiamantes.setText(String.valueOf(this.numDiamantes));
-        ocultarTexto(this.textoRecompensa);//quitamos la cantidad de la recompensa
-
+        //Llamamos a la interfaz mobile con un callback para
+        //que se encargue de la gestión de recompensas una vez ya se ha reproducido el anuncio
+        this.mobile.showRewardedAd(new RewardCallback() {
+            @Override
+            public void onReward() {
+                recompensa = 10;
+                //Modificamos el parmametro añadiendole la cantidad de recompensa en el archivo de guardado
+                engine.incrementarParametro("gems", recompensa); //10 diamantes
+                //Modificamos la cantidad actual de diamantes en el texto
+                numDiamantes += recompensa;
+                //Escondemos e inhabilitamos el boton
+                inhabilitarBoton(botonRecompensaAd);
+                //Actualizamos el texto de Game Over del numero de diamantes
+                textoDiamantes.setText(String.valueOf(numDiamantes));
+                ocultarTexto(textoRecompensa);//quitamos la cantidad de la recompensa
+            }
+        }); //vemos el anuncio y si se acaba de ver, damos recompensa
     }
 
     /**

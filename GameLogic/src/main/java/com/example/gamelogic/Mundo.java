@@ -15,6 +15,9 @@ public class Mundo implements State {
     private Text textoMundo;
     private Square fondoTexto;
 
+    //pequeño cuadrado del mismo color que el fondo para esconder cuando los botones desaparecen
+    //cuando salen de la vista principal del juego
+    private Square esconderScroll;
     private Button siguienteMundo;
     private Button anteriorMundo;
     private Button botonVolver;
@@ -101,6 +104,8 @@ public class Mundo implements State {
         this.textoMundo = new Text(botones.getJSONObject("TextoMundo"));
         this.textoMundo.setText("Mundo "+this.mundo);
         this.fondoTexto = new Square(300,50,300,70,true);
+        this.esconderScroll=new Square(300,-150,600,300,true);
+        this.esconderScroll.setColor("#ffffffff");
         this.fondoTexto.setColor("#ffDAB628");
 
         //en caso de que hava un siguiente o anterior mundo inicializamos los botones correspondientes
@@ -124,6 +129,7 @@ public class Mundo implements State {
     public void render(Graphics gr) {
         for(int i=0;i<niveles.size();i++)
             niveles.get(i).Render(gr);
+        this.esconderScroll.Render(gr);
         this.fondoTexto.Render(gr);
         this.textoMundo.Render(gr);
         if(this.next)

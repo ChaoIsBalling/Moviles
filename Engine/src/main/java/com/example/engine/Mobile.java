@@ -9,7 +9,7 @@ public interface Mobile {
     /**
      * Muestra un anuncio recompensado.
      */
-    public void showRewardedAd();
+    public void showRewardedAd(RewardCallback callback);
 
     /**
      * Controla la visibilidad del banner

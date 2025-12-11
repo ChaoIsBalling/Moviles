@@ -113,7 +113,7 @@ public class Button {
      * @param gr
      */
     public void Render(Graphics gr) {
-        if(this.isVisible){
+        if(this.isVisible&&this.y>=-h){
             //Renderizamos el cuadrado que representa el botón
             gr.setColor(this.color);
 

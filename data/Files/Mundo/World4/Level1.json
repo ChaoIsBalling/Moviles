@@ -1,0 +1,29 @@
+{
+    "level":17,
+    "colorNivel":"#ffFF295F",
+    "waves": [
+    {
+     "enemy": "goblin",
+     "amount":4        
+    }, 
+    {
+      "enemy":"orc",
+      "amount": 6
+    }, 
+    { 
+     "enemy": "imp",
+     "amount":5   
+    }
+   
+    ],
+    "reward": 10,
+    "mapa":["hhhhhhhhhhhhhh", 
+            "cccccccccccchh", 
+            "hhhhhhhhhhhchh",
+            "hhcccccccccchh",
+            "hhchhhhhhhhhhh",
+            "hhchhhhhhhhhhh",
+            "hhcccccccccccc",
+            "hhhhhhhhhhhhhh"],
+    "road":[ [1,0], [1,11], [3,11], [3,2], [6,2],[6,13] ]
+}

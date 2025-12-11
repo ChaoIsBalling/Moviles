@@ -91,11 +91,13 @@ public class Text {
      * @param gr
      */
     public void Render(Graphics gr){
-        IFont fuente = gr.newFont(this.font,this.size,this.bold,this.italic);
-        gr.setColor(this.color);
-        gr.setFont(fuente);
-        for(int i=0;i<myArray.length;i++)
-            gr.pintarTextoCentrado(myArray[i], this.x,this.y+i*size);
+        if(this.y>=-size) {
+            IFont fuente = gr.newFont(this.font, this.size, this.bold, this.italic);
+            gr.setColor(this.color);
+            gr.setFont(fuente);
+            for (int i = 0; i < myArray.length; i++)
+                gr.pintarTextoCentrado(myArray[i], this.x, this.y + i * size);
+        }
     }
     public void RenderCentrado(Graphics gr,float x, float y){
         IFont fuente = gr.newFont(this.font,this.size,this.bold,this.italic);
