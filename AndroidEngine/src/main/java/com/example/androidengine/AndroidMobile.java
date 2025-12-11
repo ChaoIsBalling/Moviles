@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.engine.Engine;
+import com.example.engine.RewardCallback;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -152,7 +154,7 @@ public class AndroidMobile implements Mobile {
      * Metodo que muestra un anuncio recompensado una vez ya se ha cargado
      */
     @Override
-    public void showRewardedAd() {
+    public void showRewardedAd(RewardCallback callback) {
         //Llamar al hilo principal para ver el anuncio
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -162,9 +164,8 @@ public class AndroidMobile implements Mobile {
                         @Override
                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                             // Handle the reward.
-                            //Log.d(TAG, "The user earned the reward.");
-                            //la gestion de la recompensa se hace en la logica del juego
-
+                            Log.d(TAG, "The user earned the reward.");
+                            callback.onReward();
                         }
                     });
                 } else {
