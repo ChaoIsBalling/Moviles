@@ -192,11 +192,6 @@ public class AndroidEngine implements Engine,Runnable {
         return this.gr;
     }
 
-    @Override
-    public Input getInput() {
-        return this.input;
-    }
-
     //metodo que inicializa un intent implícito pasandole un string
     @Override
     public void launchIntent(String application) {
@@ -252,6 +247,7 @@ public class AndroidEngine implements Engine,Runnable {
         return obj;
     }
 
+//metodo de lectura de archivos tipo JSON
     @Override
     public JSONObject readJsonFile(String file) {
         JSONObject jsonObject;
@@ -276,12 +272,7 @@ public class AndroidEngine implements Engine,Runnable {
         return jsonObject;
     }
 
-    @Override
-    public String openAssetFile(String file) {
-        return "";
-    }
-
-    //Metodo para escribir en un archivo de texto
+    //Metodo para escribir en un archivo dentro del sistema de ficheros del programa
     @Override
     public void writeFile(String file,String output) {
         FileOutputStream os = null;
@@ -367,6 +358,7 @@ public class AndroidEngine implements Engine,Runnable {
         this.iconNotification=icon;
     }
 
+    //Un booleano el cual hace una comptobación de seguridad de si el hash ya existe en el sistema
     @Override
     public Boolean checkHash(String hash) {
         if(!checkFileExists("hash"))
@@ -379,7 +371,7 @@ public class AndroidEngine implements Engine,Runnable {
         return true;
     }
 
-    //metodo que te crea un hash para el encriptado
+    //metodo que te crea automaticamente un String hash para el encriptado el cual ya tiene contraseña
     @Override
     public String createHash(String file) {
         return hashSHA256(this.password+file);
@@ -411,6 +403,7 @@ public class AndroidEngine implements Engine,Runnable {
         return f.exists();
     }
 
+    //encripta un string a hashSHA256 usando el NDK
     @Override
     public String hashSHA256(String string) {
         return nativeHash(string);
