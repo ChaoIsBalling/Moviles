@@ -143,6 +143,7 @@ public class Tienda implements State {
 
     }
 
+    //carga el progreso y comprueba que no ha sido modificado
     private void cargarDatos(){
 
         if(this.engine.checkFileExists("save"))

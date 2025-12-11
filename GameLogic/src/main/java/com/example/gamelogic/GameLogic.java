@@ -21,7 +21,7 @@ public class GameLogic implements State {
     private Button botonMejoraHexagonos;
 
     private Button botonMejoraMini;
-    boolean mini = false;
+    boolean mini = false;//si esta desbloqueada la nueva torre
 
     private Button botonMejoraAtaque;
     private Button botonMejoraRango;
@@ -85,7 +85,7 @@ public class GameLogic implements State {
     float mejResEn = 1;//mejora de resistencia de enemigo
 
     int oleada;//numero oleada
-    int oleadasRestantes;
+    int oleadasRestantes;//oleadas restantes
     int enemigosGenerar;//enemigos a generar
     int oleadaGenerar;//oleada a generar del json
     int oleadasT;//cantidad de oleadas del json
@@ -101,8 +101,9 @@ public class GameLogic implements State {
     Text textoOleadas;//Numero de oleadas en texto
 
     JSONArray camino; //Array con el numero de puntos que debe recorrer el enemigo en JSON
-    ArrayList<Vector2D> caminoEnemigos;
+    ArrayList<Vector2D> caminoEnemigos;//el camino que recorren los enemigos
 
+    //offsets para centrar
     float offsetX = 30;
     float offsetY = 50;
     //Indica si el nivel se ha completado en el modo aventura
@@ -118,7 +119,7 @@ public class GameLogic implements State {
 
     private Mobile mobile;
 
-    public enum Dificultad {
+    public enum Dificultad {//si estamos en la aventura, partida corta, partida larga o modo infinito
         corto, largo, infinito, aventura
     }
 
@@ -155,6 +156,7 @@ public class GameLogic implements State {
         this.mobile = mobile;
         this.mobile.setVisibleAdBanner(false);
     }
+    //inicializa parametros
     private void init() {
         this.vida=10;
         this.dinero = 300;
@@ -173,7 +175,7 @@ public class GameLogic implements State {
      */
     private void inicializarNivel(String mapa)
     {
-        this.save=this.engine.readJsonFile2("save");
+        this.cargarDatos();
         JSONObject obj=engine.readJsonFile(mapa);
         colorNivel=obj.getString("colorNivel");
         JSONArray arr= obj.getJSONArray("mapa");
@@ -195,7 +197,6 @@ public class GameLogic implements State {
                 this.oleadasRestantes=this.oleadasDatos.length();
                 break;
         }
-        this.mini = this.save.getBoolean("mini");
         this.oleadaGenerar =0;
         this.oleadasT = this.oleadasDatos.length();
         this.enemigosGenerar = this.oleadasDatos.getJSONObject(this.oleadaGenerar).getInt("amount");
@@ -208,7 +209,7 @@ public class GameLogic implements State {
         this.recompensas=obj.getInt("reward");
 
         float anchoM = this.anchoCasilla*this.col;
-        this.offsetX = ((600-anchoM)/2)+(this.altoCasilla/2);
+        this.offsetX = ((600-anchoM)/2)+(this.altoCasilla/2);//calcular offset
 
         int numPuntos = this.camino.length(); //tamaño del array del json
         this.caminoEnemigos = new ArrayList<>(numPuntos);
@@ -220,6 +221,7 @@ public class GameLogic implements State {
             int y = pair.getInt(1);
             this.caminoEnemigos.add(new Vector2D(x,y));
         }
+        //inicio y fin del camino de los enemigos
         this.IniX = this.caminoEnemigos.get(0).getY()* this.anchoCasilla + this.offsetX;
         this.IniY = this.caminoEnemigos.get(0).getX()* this.altoCasilla + this.offsetY;
 
@@ -237,20 +239,46 @@ public class GameLogic implements State {
                 } else {
                     casilla = new Casilla((float) (j * this.anchoCasilla + this.offsetX), (float) (i * this.altoCasilla + this.offsetY), this.anchoCasilla, this.altoCasilla, true, true);
                     casilla.setColor("#ff944d03");
-                    if (j == 0) {
-                        this.IniX = j * this.anchoCasilla + this.offsetX;
-                        this.IniY = i * this.altoCasilla + this.offsetY;
-                    }
-                    if (j == this.col - 1) {
-                        this.FinX = j * this.anchoCasilla + this.offsetX;
-                        this.FinY = i * this.altoCasilla + this.offsetY;
-                    }
                 }
                 casilla.setCoor(new Vector2D(i, j));
                 fila.add(casilla);
             }
             this.casillas.add(fila);
         }
+    }
+
+    //carga el progreso y comprueba que no ha sido modificado
+    private void cargarDatos(){
+
+        if(this.engine.checkFileExists("save"))
+        {
+            this.save=this.engine.readJsonFile2("save");
+            String hash = this.engine.createHash(this.save.toString());
+            if(this.engine.checkHash(hash)) {
+                this.mini = this.save.getBoolean("mini");
+            }
+            else{
+                //resetea el progreso
+                this.reset();
+            }
+
+        }
+        else {
+            this.reset();
+        }
+    }
+
+    //resetea el progreso
+    private void reset(){
+        JSONObject obj=new JSONObject();
+        obj.put("gems",0);
+        obj.put("completed",0);
+        obj.put("rayo",false);
+        obj.put("fuego",false);
+        obj.put("hielo",false);
+        obj.put("mini",false);
+        this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
+        this.engine.writeFile("save",obj.toString());
     }
 
     /**
@@ -268,14 +296,6 @@ public class GameLogic implements State {
         for (int i = 0; i < this.torres.size(); i++) {
             this.torres.get(i).Update(deltaTime);
         }
-    }
-
-    /**
-     * Determina si el enemigo ha llegado al final del mapa
-     * @param e Enemigo
-     */
-    private boolean haAcabado (Enemy e){
-        return e.getX() >= this.FinX && e.getY() >= this.FinY;
     }
 
     /**
@@ -662,7 +682,7 @@ public class GameLogic implements State {
                     this.torreSeleccionada.UpdateRange(this.ranTorre);
                     this.dinero -= 75;
                     this.textoD.setText(String.valueOf(this.dinero));
-                } else if (this.botonMejoraVelocidad.contains(e.x, e.y) && this.dinero >= 75) {
+                } else if (this.botonMejoraVelocidad.contains(e.x, e.y) && this.dinero >= 100) {
                     this.torreSeleccionada.UpdateFireRate(this.velTorre);
                     this.dinero -= 100;
                     this.textoD.setText(String.valueOf(this.dinero));
