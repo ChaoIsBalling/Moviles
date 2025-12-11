@@ -29,7 +29,7 @@ public class ReminderWorker extends Worker {
     public static final String CHANNEL_NAME = "channel_worker";
     public static final String CHANNEL_DESCRIPTION = "Canal_de_notificaciones_worker";
 
-    Context context; //Referencia al contexto
+    Context context; //Referencia al contexto de la app
     public ReminderWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         this.context = context;
@@ -78,9 +78,9 @@ public class ReminderWorker extends Worker {
         //y por ultimo añadimos el intent al crear la notificacion
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),CHANNEL_ID)
                 .setSmallIcon(icon) //icono
-                .setContentTitle(title)
-                .setContentText(text)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
+                .setContentTitle(title) //titulo
+                .setContentText(text) //texto
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text)) //estilo
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT) //prioridad
                 .setAutoCancel(true) //Se desecha la notifiacion cuando el usuario la toca
                 .setContentIntent(contentIntent); //Agregamos el intent a la notificacion
@@ -90,7 +90,8 @@ public class ReminderWorker extends Worker {
         NotificationManagerCompat manager = NotificationManagerCompat.from(this.context);
 
         //Comprobamos que la app tenga permisos de postear una notificación
-        if (ActivityCompat.checkSelfPermission(this.context, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this.context, android.Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED) {
             // notificationId is a unique int for each notification that you must define.
             int NOTIFICATION_ID = (int) System.currentTimeMillis();  // ID único
             manager.notify(NOTIFICATION_ID, builder.build()); //Invocamos la notificación
@@ -98,7 +99,6 @@ public class ReminderWorker extends Worker {
         }
 
         return Result.failure(); //Ha habido un fallo
-
     }
 
     /**

@@ -52,21 +52,9 @@ import android.net.Uri;
  */
 
 public class AndroidEngine implements Engine,Runnable {
-
-    /**
-     * Instancia del Android Graphics
-     */
-    private AndroidGraphics gr;
-
-    /**
-     * Instancia de los AssetManager de Android
-     */
-    private AssetManager assetManager;
-
-    /**
-     *
-     */
-    private Thread renderThread;
+    private AndroidGraphics gr; //Instancia del Android Graphics
+    private AssetManager assetManager;   //Instancia de los AssetManager de Android
+    private Thread renderThread; //Hilo
 
     private boolean running;
 
@@ -84,9 +72,9 @@ public class AndroidEngine implements Engine,Runnable {
 
     private String sharedPrefFile = "sharedprefs";
 
-    private int iconNotification;
+    private int iconNotification; //icono de la app
 
-    //contrasena para el hash
+    //clave para el hash
     private String password="Mahjong";
 
 
@@ -97,11 +85,11 @@ public class AndroidEngine implements Engine,Runnable {
 
     public AndroidEngine(SurfaceView view, AndroidMobile androidMobile){
         this.sView = view;
-        this.input = new AndroidInput();
+        this.input = new AndroidInput(); //incializa input
         this.sView.setOnTouchListener(this.input);
         assetManager=this.sView.getContext().getAssets();
         this.gr = new AndroidGraphics(view);
-        this.audio=new AndroidAudio(sView.getContext().getAssets());
+        this.audio= new AndroidAudio(sView.getContext().getAssets());
         this.mobile = androidMobile;
 
 
@@ -146,10 +134,10 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
 
-    //Metodo para cambiar el valor de un parametro en el archivo de guardado
+    //Metodo para incrementar el valor de un parametro int en el archivo de guardado
     //(si existe) a partir de su lectura
-    public void modificarParametro(String key, int amount){
-        if(this.checkFileExists("save")) {
+    public void incrementarParametro(String key, int amount){
+        if(this.checkFileExists("save")) { //si existe el archivo de guardado
             JSONObject obj;
             try {
                 obj = this.readJsonFile2("save");
@@ -169,8 +157,8 @@ public class AndroidEngine implements Engine,Runnable {
             System.out.println("No existe un archivo de guardado sobre el que modificar el parámetro");
         }
     }
-    //Metodo para leer el valor de un parametro en el archivo de guardado
-    //(si existe) a partir de su lectura
+    //Metodo para leer el valor de un parametro int en el archivo de guardado
+    //(si existe) a partir de su lectura. Usado para modificar la cantidad de diamantes
     public int leerParametroInt(String key) {
         int param=0;
         if(this.checkFileExists("save")) {
@@ -178,17 +166,16 @@ public class AndroidEngine implements Engine,Runnable {
             String hash = this.createHash(obj.toString());
             if (this.checkHash(hash)) {
                 try {
-                    param = obj.getInt(key);
+                    param = obj.getInt(key); //leemos el parametro
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
             }
+        }else {
+            System.out.println("No existe un archivo de guardado sobre el que leer el parámetro");
         }
-
         return param;
     }
-
-
     //getter del audio
     @Override
     public Audio getAudio() {
@@ -238,7 +225,6 @@ public class AndroidEngine implements Engine,Runnable {
         shareIntent.putExtra(Intent.EXTRA_TEXT, message );
         this.sView.getContext().startActivity(Intent. createChooser(shareIntent , "Share Text" ));
     }
-
 
     //getter de mobile
     @Override
@@ -295,6 +281,7 @@ public class AndroidEngine implements Engine,Runnable {
         return "";
     }
 
+    //Metodo para escribir en un archivo de texto
     @Override
     public void writeFile(String file,String output) {
         FileOutputStream os = null;
@@ -305,10 +292,18 @@ public class AndroidEngine implements Engine,Runnable {
             throw new RuntimeException(e);
         }
         catch (IOException e) {
-        throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Metodo para crear una notifiacción push programada
+     * @param time tiempo
+     * @param timeunit unidad de tiempo
+     * @param icon icono
+     * @param title titulo de la noti
+     * @param firstText texto de la noti
+     */
     @Override
     public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText) {
         WorkRequest request = new OneTimeWorkRequest.Builder(ReminderWorker.class)
@@ -325,8 +320,10 @@ public class AndroidEngine implements Engine,Runnable {
 
     }
 
+    //Metodo para mostrar una notificación de forma directa, sin temporizador
     @Override
     public void showNotificacion(String title, String firstText) {
+        //Construimos la notificacion
         NotificationCompat.Builder builder = new NotificationCompat.Builder( this.sView.getContext(), CHANNEL_ID)
                 .setSmallIcon(this.iconNotification)
                 .setContentTitle(title)
@@ -340,25 +337,17 @@ public class AndroidEngine implements Engine,Runnable {
         Activity activity = (Activity) sView.getContext();
         if (ActivityCompat.checkSelfPermission(activity,
                 android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
             // ActivityCompat#requestPermissions
             //si no los tiene, los solicitamos
-            ActivityCompat.requestPermissions((Activity) this.sView.getContext(),new String[]{Manifest.permission.POST_NOTIFICATIONS},101);
-            // here to request the missing permissions, and then overriding
-            // public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                        int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            //return;
+            ActivityCompat.requestPermissions((Activity) this.sView.getContext(),
+                    new String[]{Manifest.permission.POST_NOTIFICATIONS},101);
         }
         // notificationId is a unique int for each notification that you must define.
         int NOTIFICATION_ID = (int) System.currentTimeMillis();  // ID único
         notificationManager.notify(NOTIFICATION_ID, builder.build()); //Invocamos la notificación
     }
 
-    /**
-     * Metodo para crear un canal por el que transmitir notificaciones
-     */
+    //Metodo para crear un canal por el que transmitir notificaciones
     private void createNotificationChannel(){
         // Verifica si es necesario crear un canal de notificaciones (a partir de Android 8.0)
         if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
@@ -372,6 +361,7 @@ public class AndroidEngine implements Engine,Runnable {
         }
     }
 
+    //Setter del icono de la notificacion
     @Override
     public void setNotificationIcon(int icon) {
         this.iconNotification=icon;
@@ -443,8 +433,6 @@ public class AndroidEngine implements Engine,Runnable {
             }
         }
     }
-    //Metodo que se encarga de desde un json inicializar todos los parametros de un boton
-
 
     //Metodo que corre el bucle principal del motor
     @Override
@@ -472,7 +460,6 @@ public class AndroidEngine implements Engine,Runnable {
                 for (TouchEvent e: this.input.getTouchEvents()){
                     e.x = this.gr.real2LogicX(e.x);
                     e.y = this.gr.real2LogicY(e.y);
-
                 }
                 state.handleInput(this.input.getTouchEvents(), elapsedTime);
                 this.state.update(elapsedTime);

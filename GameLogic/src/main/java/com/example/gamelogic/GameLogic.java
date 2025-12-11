@@ -322,8 +322,7 @@ public class GameLogic implements State {
         //En caso de que haya ganado, no habrá oleadas, enemigos y la vida es mayor a 0
         if (this.oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()) {
             this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true, this.isCompleted);
-            save.put("gems",save.getInt("gems") + this.recompensas);
+
             //comprobamos si el nivel que hemos derrotado es un nivel nuevo
             if(this.levelNumber>save.getInt("completed"))
             {
@@ -331,6 +330,9 @@ public class GameLogic implements State {
             }
             this.engine.writeFile("hash",this.engine.createHash(save.toString()));
             this.engine.writeFile("save",save.toString());
+
+            //Vamos al estado de GameOver
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true, this.isCompleted);
             this.engine.setState(gameOver);
         }
 
@@ -488,6 +490,7 @@ public class GameLogic implements State {
     }
 
     public float getRealY(int filCoor){
+
         return this.casillas.get(filCoor).get(0).getY();
     }
 
