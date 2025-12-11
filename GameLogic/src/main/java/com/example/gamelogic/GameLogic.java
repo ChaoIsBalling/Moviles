@@ -41,12 +41,6 @@ public class GameLogic implements State {
     int vida = 0;
     float dinero = 0;
 
-    //Posiciones iniciales y finales
-    float IniX;
-    float IniY;
-    float FinX;
-    float FinY;
-
     //Las dimensiones de una casilla
     float anchoCasilla = 35;
     float altoCasilla = 35;
@@ -221,12 +215,6 @@ public class GameLogic implements State {
             int y = pair.getInt(1);
             this.caminoEnemigos.add(new Vector2D(x,y));
         }
-        //inicio y fin del camino de los enemigos
-        this.IniX = this.caminoEnemigos.get(0).getY()* this.anchoCasilla + this.offsetX;
-        this.IniY = this.caminoEnemigos.get(0).getX()* this.altoCasilla + this.offsetY;
-
-        this.FinX = this.caminoEnemigos.get(numPuntos-1).getY()* this.anchoCasilla + this.offsetX;
-        this.FinY = this.caminoEnemigos.get(numPuntos-1).getX()* this.altoCasilla + this.offsetY;
 
         for (int i =0; i<this.fil;i++){
             ArrayList<Casilla> fila = new ArrayList<Casilla>();
@@ -433,7 +421,7 @@ public class GameLogic implements State {
                 im=new Image(this.style.getJSONObject("ImagenOgre"),this.gr);
             }
             //Generamos enemigo
-            this.enemigos.add(new Enemy(this.IniX, this.IniY,
+            this.enemigos.add(new Enemy(
                     8 + (this.mejVidaEn * (this.oleada/this.oleadasT)),
                     30 + (this.mejVelEn * (this.oleada/this.oleadasT)),
                     0 + (this.mejDefEn * (this.oleada/this.oleadasT)),

@@ -48,10 +48,10 @@ public class Enemy {
     /**
      * Constructora de la clase Enemy con todos sus parámetros a inicializar
      */
-    public Enemy(float x, float y, float vida, float velocidad, float defensa, float resistencia, Tipo tipoRes, ArrayList<Vector2D>camino, GameLogic gl){
+    public Enemy(float vida, float velocidad, float defensa, float resistencia, Tipo tipoRes, ArrayList<Vector2D>camino, GameLogic gl){
         //El enmeigo se representa mediante un círculo
-        this.x=x;
-        this.y=y;
+        this.x=gl.getRealX(camino.get(0).getY());
+        this.y=gl.getRealY(camino.get(0).getX());
         this.vida=vida; //Vida
         this.direccion = new Vector2D(1,0); //Direccion representado por un Vector2D
         this.velocidad = velocidad; //Velocidad con la que se mueve
