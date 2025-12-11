@@ -194,7 +194,7 @@ public class GameLogic implements State {
         this.oleadaGenerar =0;
         this.oleadasT = this.oleadasDatos.length();
         this.enemigosGenerar = this.oleadasDatos.getJSONObject(this.oleadaGenerar).getInt("amount");
-        this.tiempoOleada = 5*this.enemigosGenerar;
+        this.tiempoOleada = 3*this.enemigosGenerar;
         this.tiempOl = this.tiempoOleada;
         this.tiempoEnGenerar = (float) 0.3;
         this.tiempEnG =0;
@@ -375,7 +375,7 @@ public class GameLogic implements State {
             //Resetear numero de enemigos generados
             this.numE = 0;
 
-            this.tiempoOleada = 5*this.enemigosGenerar;//mas tiempo entre oleadas
+            this.tiempoOleada = 3*this.enemigosGenerar;//mas tiempo entre oleadas
             this.tiempOl = this.tiempoOleada;//resetear tiempo entre oleadas
 
             this.tiempEnG = 0;//que salga el primer enemigo de inmediato
