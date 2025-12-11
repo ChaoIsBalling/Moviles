@@ -4,15 +4,15 @@
   "waves": [
     {
      "enemy": "goblin",
-     "amount":3        
+     "amount":3
     }, 
     {
       "enemy":"orc",
-      "amount": 2
+      "amount": 4
     }, 
     { 
      "enemy": "imp",
-     "amount":3   
+     "amount":5
     }
   ],
   "reward": 10,
