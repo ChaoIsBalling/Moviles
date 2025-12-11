@@ -35,6 +35,7 @@ public class AndroidMobile implements Mobile {
     private FrameLayout adContainer; //Contenedor del anuncio
     private Activity activity;  //El main Activity
     private RewardedAd rewardedAd; //Anuncio recompensado
+    private SurfaceView surfaceView;
 
     //ID`s de unidad de anuncios de prueba, tanto para banner como para reward
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741";
@@ -47,9 +48,10 @@ public class AndroidMobile implements Mobile {
      * @param activity actividad principal de la app
      * @param adContainer contenedor del anuncio
      */
-    public AndroidMobile(Activity activity,FrameLayout adContainer){
+    public AndroidMobile(Activity activity, SurfaceView surfaceView, FrameLayout adContainer){
         this.activity = activity;
         this.adContainer = adContainer;
+        this.surfaceView = surfaceView;
 
         //Inicializa los anuncios de adMob
         MobileAds.initialize(activity, new OnInitializationCompleteListener() {
@@ -58,6 +60,7 @@ public class AndroidMobile implements Mobile {
 
             }
         });
+
         loadRewardedAd(); //Cargamos anuncio recompensado
         loadBannerAd(); //Cargamos anuncio banner
     }
@@ -92,7 +95,7 @@ public class AndroidMobile implements Mobile {
                 new RewardedAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull RewardedAd rAd) {
-                        //Log.d(TAG, "Ad was loaded.");
+                        Log.d(TAG, "Ad was loaded.");
                         rewardedAd = rAd;
                         rewardedAd.setFullScreenContentCallback(
                                 new FullScreenContentCallback() {
@@ -126,20 +129,20 @@ public class AndroidMobile implements Mobile {
                                     @Override
                                     public void onAdImpression() {
                                         // Called when an impression is recorded for an ad.
-                                        //Log.d(TAG, "Ad recorded an impression.");
+                                        Log.d(TAG, "Ad recorded an impression.");
                                     }
 
                                     @Override
                                     public void onAdClicked() {
                                         // Called when an ad is clicked.
-                                        //Log.d(TAG, "Ad was clicked.");
+                                        Log.d(TAG, "Ad was clicked.");
                                     }
                                 });
                     }
 
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        //Log.d(TAG, loadAdError.getMessage());
+                        Log.d(TAG, loadAdError.getMessage());
                         rewardedAd = null;
                     }
                 });

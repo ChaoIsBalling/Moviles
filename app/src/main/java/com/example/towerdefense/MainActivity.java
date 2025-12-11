@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         this.adContainerView = findViewById(R.id.ad_view_container);
 
         //Inicializamos motor e interfaz de mobile que accede a los métodos de main activity
-        this.mobile = new AndroidMobile(this,this.adContainerView);
+        this.mobile = new AndroidMobile(this,this.renderView,this.adContainerView);
         this.engine = new AndroidEngine(this.renderView,this.mobile);
         this.engine.setNotificationIcon(R.drawable.ic_tower_defense_noti); //icono de notificación
 
