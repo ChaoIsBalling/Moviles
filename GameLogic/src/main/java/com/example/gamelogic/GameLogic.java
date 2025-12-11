@@ -209,7 +209,7 @@ public class GameLogic implements State {
         this.recompensas=obj.getInt("reward");
 
         float anchoM = this.anchoCasilla*this.col;
-        this.offsetX = ((600-anchoM)/2)+(this.altoCasilla/2);
+        this.offsetX = ((600-anchoM)/2)+(this.altoCasilla/2);//calcular offset
 
         int numPuntos = this.camino.length(); //tamaño del array del json
         this.caminoEnemigos = new ArrayList<>(numPuntos);
@@ -221,6 +221,7 @@ public class GameLogic implements State {
             int y = pair.getInt(1);
             this.caminoEnemigos.add(new Vector2D(x,y));
         }
+        //inicio y fin del camino de los enemigos
         this.IniX = this.caminoEnemigos.get(0).getY()* this.anchoCasilla + this.offsetX;
         this.IniY = this.caminoEnemigos.get(0).getX()* this.altoCasilla + this.offsetY;
 
@@ -238,14 +239,6 @@ public class GameLogic implements State {
                 } else {
                     casilla = new Casilla((float) (j * this.anchoCasilla + this.offsetX), (float) (i * this.altoCasilla + this.offsetY), this.anchoCasilla, this.altoCasilla, true, true);
                     casilla.setColor("#ff944d03");
-                    if (j == 0) {
-                        this.IniX = j * this.anchoCasilla + this.offsetX;
-                        this.IniY = i * this.altoCasilla + this.offsetY;
-                    }
-                    if (j == this.col - 1) {
-                        this.FinX = j * this.anchoCasilla + this.offsetX;
-                        this.FinY = i * this.altoCasilla + this.offsetY;
-                    }
                 }
                 casilla.setCoor(new Vector2D(i, j));
                 fila.add(casilla);
@@ -303,14 +296,6 @@ public class GameLogic implements State {
         for (int i = 0; i < this.torres.size(); i++) {
             this.torres.get(i).Update(deltaTime);
         }
-    }
-
-    /**
-     * Determina si el enemigo ha llegado al final del mapa
-     * @param e Enemigo
-     */
-    private boolean haAcabado (Enemy e){
-        return e.getX() >= this.FinX && e.getY() >= this.FinY;
     }
 
     /**
