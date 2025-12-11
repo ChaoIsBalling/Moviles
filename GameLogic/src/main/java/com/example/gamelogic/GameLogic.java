@@ -662,7 +662,7 @@ public class GameLogic implements State {
                     this.torreSeleccionada.UpdateRange(this.ranTorre);
                     this.dinero -= 75;
                     this.textoD.setText(String.valueOf(this.dinero));
-                } else if (this.botonMejoraVelocidad.contains(e.x, e.y) && this.dinero >= 75) {
+                } else if (this.botonMejoraVelocidad.contains(e.x, e.y) && this.dinero >= 100) {
                     this.torreSeleccionada.UpdateFireRate(this.velTorre);
                     this.dinero -= 100;
                     this.textoD.setText(String.valueOf(this.dinero));
