@@ -72,6 +72,16 @@
         "color": "#FF000000"
     },
 
+    "TextoAdx2": {
+        "texto": "AD x2",
+        "font": "Inika-Regular.ttf",
+        "x": 0,
+        "y": 0,
+        "size": 30,
+        "bold": true,
+        "italic": true,
+        "color": "#FF000000"
+    },
     "TextoAd": {
         "texto": "AD",
         "font": "Inika-Regular.ttf",
@@ -108,7 +118,7 @@
     "TextoDiamantesActuales": {
         "texto":"",
         "font":"Inika-Regular.ttf",
-        "x":170,
+        "x":220,
         "y":250,
         "size":40,
         "bold":true,
@@ -142,5 +152,13 @@
         "y":-20,
         "w":35,
         "h":35
+    },
+        "ImagenDiamante":
+    {
+       "imagen":"Diamante.png",
+        "x":120,
+        "y":230,
+        "w":50,
+        "h":50
     } 
 }
