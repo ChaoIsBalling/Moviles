@@ -110,7 +110,7 @@ public class GameOver implements State {
                 //Si el nivel no estaba completado, añadimos 10 de recompensa
                 if(!isCompleted){
                     this.recompensa = 10;
-                    this.engine.modificarParametro("gems", recompensa); //incrementamos la recompensa
+                    this.engine.incrementarParametro("gems", recompensa); //incrementamos la recompensa
                     this.diamantes += this.recompensa;
                 }
                 else{
@@ -251,7 +251,7 @@ public class GameOver implements State {
         this.botonRecompensaAd.setVisible(false);
 
         //Modificamos el parmametro añadiendole la cantidad de recompensa en el archivo de guardado
-        this.engine.modificarParametro("gems", recompensa);
+        this.engine.incrementarParametro("gems", recompensa);
         //Modificamos la cantidad actual de diamantes en el texto
         this.diamantes += this.recompensa;
         //Actualizamos el texto de Game Over del numero de diamantes

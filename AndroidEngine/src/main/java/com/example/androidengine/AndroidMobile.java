@@ -27,50 +27,45 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.example.engine.Mobile;
 
 /**
- * Clase que implementa los metodos para mostrar anuncios y gestionar las notificaciones
+ * Clase que implementa los metodos para la gestión de anuncios
  * Implementa la interfaz Mobile del motor exclusivamente para Android
  */
 public class AndroidMobile implements Mobile {
-    //anuncio banner y su contenedor en el xml
-    private AdView adView;
-    private FrameLayout adContainer;
-    //El main Activity
-    private Activity activity;
-    private SurfaceView surfaceView;
-
-    //Anuncio recompensado
-    private RewardedAd rewardedAd;
+    private AdView adView;   //anuncio banner y su contenedor en el xml del MainActivity
+    private FrameLayout adContainer; //Contenedor del anuncio
+    private Activity activity;  //El main Activity
+    private RewardedAd rewardedAd; //Anuncio recompensado
 
     //ID`s de unidad de anuncios de prueba, tanto para banner como para reward
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741";
     private static final String AD_REWARD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
     private static final String TAG = "MainActivity";
+    boolean isBannerVisible = true; //Indica si el banner debe verse o no
 
-    //Indica si el banner debe verse o no
-    boolean isBannerVisible = true;
-    public AndroidMobile(Activity activity, SurfaceView surfaceView,FrameLayout adContainer){
+    /**
+     * Constructor del gestor de Android Mobile.
+     * @param activity actividad principal de la app
+     * @param adContainer contenedor del anuncio
+     */
+    public AndroidMobile(Activity activity,FrameLayout adContainer){
         this.activity = activity;
-        //this.adView = adView;
-        this.surfaceView = surfaceView;
         this.adContainer = adContainer;
 
+        //Inicializa los anuncios de adMob
         MobileAds.initialize(activity, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
 
             }
         });
-        //Cargamos anuncio recompensado
-        loadRewardedAd();
-        //Cargamos anuncio banner
-        loadBannerAd();
+        loadRewardedAd(); //Cargamos anuncio recompensado
+        loadBannerAd(); //Cargamos anuncio banner
     }
 
     /**
      * Metodo para mostrar un anuncio Banner
      */
     private void loadBannerAd(){
-        // cargamos el anuncio banner
         // Crear un addView en el que meter el anuncio
         adView = new AdView(activity);
         adView.setAdUnitId(AD_UNIT_ID);
@@ -86,7 +81,7 @@ public class AndroidMobile implements Mobile {
     }
 
     /**
-     * Metodo para mostrar el anuncio recompensado con Admob
+     * Metodo para cargar el anuncio recompensado con Admob
      */
     public void loadRewardedAd() {
         AdRequest adRequest =  new AdRequest.Builder().build();
@@ -97,21 +92,15 @@ public class AndroidMobile implements Mobile {
                 new RewardedAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull RewardedAd rAd) {
-                        Log.d(TAG, "Ad was loaded.");
+                        //Log.d(TAG, "Ad was loaded.");
                         rewardedAd = rAd;
-
                         rewardedAd.setFullScreenContentCallback(
                                 new FullScreenContentCallback() {
                                     @Override
                                     public void onAdDismissedFullScreenContent() {
                                         // Called when fullscreen content is dismissed.
                                         Log.d(TAG, "Ad was dismissed.");
-                                        // Don't forget to set the ad reference to null so you
-                                        // don't show the ad a second time.
-                                        //rewardedAd = null;
-                                        //Toast.makeText(activity, "onAdDismissedFullScreenContent", Toast.LENGTH_SHORT).show();
-
-                                        loadRewardedAd(); //volvemos a recargar anunciop, una vez ha sido consumido el anterior
+                                        loadRewardedAd(); //volvemos a recargar anuncio, una vez ha sido consumido el anterior
                                     }
 
                                     @Override
@@ -121,44 +110,39 @@ public class AndroidMobile implements Mobile {
                                         // Don't forget to set the ad reference to null so you
                                         // don't show the ad a second time.
                                         rewardedAd = null;
-                                        Toast.makeText(activity, "onAdFailedToShowFullScreenContent", Toast.LENGTH_SHORT)
-                                                .show();
+                                        //Texto en la pantalla
+                                        //Toast.makeText(activity, "onAdFailedToShowFullScreenContent", Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
                                     public void onAdShowedFullScreenContent() {
                                         // Called when fullscreen content is shown.
                                         Log.d(TAG, "Ad showed fullscreen content.");
-
-                                        Toast.makeText(activity, "onAdShowedFullScreenContent", Toast.LENGTH_SHORT)
-                                                .show();
+                                        //Texto en la pantalla
+                                        //Toast.makeText(activity, "onAdShowedFullScreenContent", Toast.LENGTH_SHORT).show();
 
                                     }
 
                                     @Override
                                     public void onAdImpression() {
                                         // Called when an impression is recorded for an ad.
-                                        Log.d(TAG, "Ad recorded an impression.");
+                                        //Log.d(TAG, "Ad recorded an impression.");
                                     }
 
                                     @Override
                                     public void onAdClicked() {
                                         // Called when an ad is clicked.
-                                        Log.d(TAG, "Ad was clicked.");
+                                        //Log.d(TAG, "Ad was clicked.");
                                     }
                                 });
                     }
 
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        Log.d(TAG, loadAdError.getMessage());
+                        //Log.d(TAG, loadAdError.getMessage());
                         rewardedAd = null;
                     }
                 });
-    }
-    @Override
-    public void makeNotification() {
-
     }
 
     /**
@@ -175,9 +159,9 @@ public class AndroidMobile implements Mobile {
                         @Override
                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                             // Handle the reward.
-                            Log.d(TAG, "The user earned the reward.");
-                            //int rewardAmount = rewardItem.getAmount();
-                            //String rewardType = rewardItem.getType();
+                            //Log.d(TAG, "The user earned the reward.");
+                            //la gestion de la recompensa se hace en la logica del juego
+
                         }
                     });
                 } else {
@@ -187,18 +171,11 @@ public class AndroidMobile implements Mobile {
             }
         });
     }
-
-
-    @Override
-    public void scheduleNotificationWithWorkManager() {
-
-    }
-
-
     public void setVisibleAdBanner(boolean cond){
-        //Evitamos llamadas inecesarias al banner en cada update
+        //Si no cambia el booleano de condicion, no hacemos nada
         if(cond == isBannerVisible)
             return;
+
         isBannerVisible = cond; //actualizamos booleano
 
         //las views de nuestra UI solo se pueden modificar en el hilo principal

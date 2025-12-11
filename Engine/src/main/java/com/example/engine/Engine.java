@@ -2,12 +2,8 @@ package com.example.engine;
 
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
-import org.json.JSONObject;
 
 /**
  * Interfaz Engine que heredaran los motores de Desktop y Android
@@ -94,6 +90,6 @@ public interface Engine {
 
     public String hashSHA256(String string);
     public int leerParametroInt(String key);
-    public void modificarParametro(String key, int amount);
+    public void incrementarParametro(String key, int amount);
 
 }
