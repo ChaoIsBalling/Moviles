@@ -27,6 +27,14 @@ public class Tienda implements State {
 
     private Button botonMini;
 
+    private Button rayoF;
+    private Button fuegoF;
+    private Button hieloF;
+
+    private Button rayoS;
+    private Button fuegoS;
+    private Button hieloS;
+
     private Text coste;
     private Button botonComprar;
 
@@ -37,6 +45,10 @@ public class Tienda implements State {
     private boolean hielo;
 
     private boolean mini;
+
+    private String skinRayo;
+    private String skinFuego;
+    private String skinHielo;
 
     private Text CTorres;
     private Text CSkins;
@@ -141,6 +153,36 @@ public class Tienda implements State {
         this.minY=ScrollableText.get(0).y;
         this.maxY=400-ScrollableButtons.get(ScrollableButtons.size()-1).getHeight();
 
+        this.rayoF = new Button(this.datos.getJSONObject("BotonRayoF"));
+        this.fuegoF = new Button(this.datos.getJSONObject("BotonFuegoF"));
+        this.hieloF = new Button(this.datos.getJSONObject("BotonHieloF"));
+        this.rayoS = new Button(this.datos.getJSONObject("BotonRayoS"));
+        this.fuegoS = new Button(this.datos.getJSONObject("BotonFuegoS"));
+        this.hieloS = new Button(this.datos.getJSONObject("BotonHieloS"));
+        Triangle tri = new Triangle(0,0,40,true);
+        tri.setColor("#FF000000");
+        this.rayoF.setFigura(tri);
+        Hexagon hex = new Hexagon(0,0,40,true);
+        hex.setColor("#FFFF0000");
+        this.fuegoF.setFigura(hex);
+        Square sq = new Square(0,0,80,80,true);
+        sq.setColor("#FFC8A2C8");
+        this.hieloF.setFigura(sq);
+        if(Objects.equals(this.skinRayo, "Figura")){
+            this.rayoF.setColor("#FF00FF00");
+        } else if (Objects.equals(this.skinRayo, "TorreRayoCosmetico")) {
+            this.rayoS.setColor("#FF00FF00");
+        }
+        if(Objects.equals(this.skinFuego, "Figura")){
+            this.fuegoF.setColor("#FF00FF00");
+        } else if (Objects.equals(this.skinFuego, "TorreFuegoCosmetico")) {
+            this.fuegoS.setColor("#FF00FF00");
+        }
+        if(Objects.equals(this.skinHielo, "Figura")){
+            this.hieloF.setColor("#FF00FF00");
+        } else if (Objects.equals(this.skinHielo, "TorreHieloCosmetico")) {
+            this.hieloS.setColor("#FF00FF00");
+        }
     }
 
     //carga el progreso y comprueba que no ha sido modificado
@@ -156,6 +198,9 @@ public class Tienda implements State {
                 this.hielo = obj.getBoolean("hielo");
                 this.mini = obj.getBoolean("mini");
                 this.diamantes = obj.getInt("gems");
+                this.skinRayo=obj.getString("skinRayo");
+                this.skinFuego=obj.getString("skinFuego");
+                this.skinHielo=obj.getString("skinHielo");
                 this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
                 this.textoDiamantes.setText("" + this.diamantes);
             }
@@ -179,6 +224,9 @@ public class Tienda implements State {
         obj.put("fuego",false);
         obj.put("hielo",false);
         obj.put("mini",false);
+        obj.put("skinRayo","Figura");
+        obj.put("skinFuego","Figura");
+        obj.put("skinHielo","Figura");
         this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
         this.engine.writeFile("save",obj.toString());
         this.rayo = false;
@@ -197,6 +245,9 @@ public class Tienda implements State {
         obj.put("fuego",this.fuego);
         obj.put("hielo",this.hielo);
         obj.put("mini",this.mini);
+        obj.put("skinRayo",this.skinRayo);
+        obj.put("skinFuego",this.skinFuego);
+        obj.put("skinHielo",this.skinHielo);
         this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
         this.engine.writeFile("save",obj.toString());
     }
@@ -218,8 +269,20 @@ public class Tienda implements State {
         this.imagenDiamante.Render();
         if(this.estado!=Estado.normal){
             this.fondoDes.Render(gr);
+            if(this.estado ==Estado.botonRayo&&this.rayo){
+                this.rayoF.Render(gr);
+                this.rayoS.Render(gr);
+            }
+            else if (this.estado==Estado.botonFuego&&this.fuego){
+                this.fuegoF.Render(gr);
+                this.fuegoS.Render(gr);
+            } else if (this.estado==Estado.botonHielo&&this.hielo) {
+                this.hieloF.Render(gr);
+                this.hieloS.Render(gr);
+            } else{
             this.coste.Render(gr);
             this.botonComprar.Render(gr);
+            }
         }
     }
 
@@ -231,6 +294,9 @@ public class Tienda implements State {
         this.botonHielo.setImagen(new Image(datos.getJSONObject("ImagenHielo"),gr));
         this.botonMini.setImagen(new Image(datos.getJSONObject("ImagenMini"),gr));
         this.imagenDiamante = new Image(datos.getJSONObject("ImagenDiamante"),gr);
+        this.rayoS.setImagen(new Image(datos.getJSONObject("ImagenRayo"),gr));
+        this.fuegoS.setImagen(new Image(datos.getJSONObject("ImagenFuego"),gr));
+        this.hieloS.setImagen(new Image(datos.getJSONObject("ImagenHielo"),gr));
     }
 
     @Override
@@ -302,28 +368,99 @@ public class Tienda implements State {
         else {
             switch (this.estado) {
                 case normal://cuando ningun elemento esta seleccionado
-                    if (this.botonRayo.contains(e.x, e.y) && !this.rayo) {
+                    if (this.botonRayo.contains(e.x, e.y)) {
                         this.cambiarEstado(Estado.botonRayo);
-                    } else if (this.botonFuego.contains(e.x, e.y) && !this.fuego) {
+                    } else if (this.botonFuego.contains(e.x, e.y)) {
                         this.cambiarEstado(Estado.botonFuego);
-                    } else if (this.botonHielo.contains(e.x, e.y) && !this.hielo) {
+                    } else if (this.botonHielo.contains(e.x, e.y)) {
                         this.cambiarEstado(Estado.botonHielo);
                     }else if(this.botonMini.contains(e.x, e.y) && !this.mini)
                         this.cambiarEstado(Estado.botonMini);
                     break;
-                case botonRayo://has tocado el boton para comprar la skin de la torre de rayo
-                    this.gestionCompra(e,Integer.parseInt(this.datos.getString("CosteRayo")));
+                case botonRayo://has tocado el boton para comprar la skin de la torre de rayo o cambiarla
+                    if(!this.rayo){
+                        this.gestionCompra(e,Integer.parseInt(this.datos.getString("CosteRayo")));
+                    }
+                    else{
+                        this.gestionarSkin(e);
+                    }
                     break;
-                case botonFuego://has tocado el boton para comprar la skin de la una torre de fuego
-                    this.gestionCompra(e,Integer.parseInt(this.datos.getString("CosteFuego")));
+                case botonFuego://has tocado el boton para comprar la skin de la una torre de fuego o cambiarla
+                    if(!this.fuego){
+                        this.gestionCompra(e,Integer.parseInt(this.datos.getString("CosteFuego")));
+                    }
+                    else{
+                        this.gestionarSkin(e);
+                    }
                     break;
-                case botonHielo://has tocado el boton para comprar la skin de la una torre de hielo
-                    this.gestionCompra(e,Integer.parseInt(this.datos.getString("CosteHielo")));
+                case botonHielo://has tocado el boton para comprar la skin de la una torre de hielo o cambiarla
+                    if(!this.hielo){
+                        this.gestionCompra(e,Integer.parseInt(this.datos.getString("CosteHielo")));
+                    }
+                    else{
+                        this.gestionarSkin(e);
+                    }
                     break;
                 case botonMini://has tocado el boton para comprar la torre de mini rayo
                     this.gestionCompra(e,Integer.parseInt(this.datos.getString("CosteMini")));
                     break;
             }
+        }
+    }
+
+    //gestiona el cambio de skin
+    private void gestionarSkin(TouchEvent e){
+        if (this.botonRayo.contains(e.x, e.y)) {
+            this.cambiarEstado(Estado.botonRayo);
+        } else if (this.botonFuego.contains(e.x, e.y)) {
+            this.cambiarEstado(Estado.botonFuego);
+        } else if (this.botonHielo.contains(e.x, e.y)) {
+            this.cambiarEstado(Estado.botonHielo);
+        } else if (this.botonMini.contains(e.x, e.y)) {
+            this.cambiarEstado(Estado.botonMini);
+        } else {
+            switch (this.estado){
+                case botonRayo:
+                    if(this.rayoF.contains(e.x,e.y)){
+                        this.rayoF.setColor("#ff00ff00");
+                        this.rayoS.setColor("#ffffffff");
+                        this.skinRayo="Figura";
+                        this.guardar();
+                    } else if (this.rayoS.contains(e.x,e.y)) {
+                        this.rayoF.setColor("#ffffffff");
+                        this.rayoS.setColor("#ff00ff00");
+                        this.skinRayo="TorreRayoCosmetico";
+                        this.guardar();
+                    }
+                    break;
+                case botonFuego:
+                    if(this.fuegoF.contains(e.x,e.y)){
+                        this.fuegoF.setColor("#ff00ff00");
+                        this.fuegoS.setColor("#ffffffff");
+                        this.skinFuego="Figura";
+                        this.guardar();
+                    } else if (this.fuegoS.contains(e.x,e.y)) {
+                        this.fuegoF.setColor("#ffffffff");
+                        this.fuegoS.setColor("#ff00ff00");
+                        this.skinFuego="TorreFuegoCosmetico";
+                        this.guardar();
+                    }
+                    break;
+                case botonHielo:
+                    if(this.hieloF.contains(e.x,e.y)){
+                        this.hieloF.setColor("#ff00ff00");
+                        this.hieloS.setColor("#ffffffff");
+                        this.skinHielo="Figura";
+                        this.guardar();
+                    } else if (this.hieloS.contains(e.x,e.y)) {
+                        this.hieloF.setColor("#ffffffff");
+                        this.hieloS.setColor("#ff00ff00");
+                        this.skinHielo="TorreHieloCosmetico";
+                        this.guardar();
+                    }
+                    break;
+            }
+            this.cambiarEstado(Estado.normal);
         }
     }
 
@@ -353,22 +490,28 @@ public class Tienda implements State {
             case botonRayo://has tocado el boton para comprar la skin de la torre de rayo
                 this.diamantes-=precio;
                 this.rayo = true;
+                this.skinRayo="TorreRayoCosmetico";
                 this.textoDiamantes.setText("" + this.diamantes);
                 this.botonRayo.setColor("#ff00ff00");
+                this.rayoS.setColor("#ff00ff00");
                 this.guardar();
                 break;
             case botonFuego://has tocado el boton para comprar la skin de la una torre de fuego
                 this.diamantes-=precio;
-                this.fuego=true;
+                this.fuego = true;
+                this.skinFuego="TorreFuegoCosmetico";
                 this.textoDiamantes.setText("" + this.diamantes);
                 this.botonFuego.setColor("#ff00ff00");
+                this.fuegoS.setColor("#ff00ff00");
                 this.guardar();
                 break;
             case botonHielo://has tocado el boton para comprar la skin de la una torre de hielo
                 this.diamantes-=precio;
                 this.hielo = true;
+                this.skinHielo="TorreHieloCosmetico";
                 this.textoDiamantes.setText("" + this.diamantes);
                 this.botonHielo.setColor("#ff00ff00");
+                this.fuegoS.setColor("#ff00ff00");
                 this.guardar();
                 break;
             case botonMini://has tocado el boton para comprar la skin de la una torre de hielo

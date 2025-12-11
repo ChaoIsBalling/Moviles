@@ -10,6 +10,7 @@ import com.example.engine.Audio;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Clase que representa la interfaz principal de juego, donde se desarrolla toda su lógica de gameplay
@@ -266,6 +267,9 @@ public class GameLogic implements State {
         obj.put("fuego",false);
         obj.put("hielo",false);
         obj.put("mini",false);
+        obj.put("skinRayo","Figura");
+        obj.put("skinFuego","Figura");
+        obj.put("skinHielo","Figura");
         this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
         this.engine.writeFile("save",obj.toString());
     }
@@ -558,11 +562,31 @@ public class GameLogic implements State {
         this.botonMejoraAtaque = new Button(style.getJSONObject("BotonMejoraTriangulos"));
         this.botonMejoraRango = new Button(style.getJSONObject("BotonMejoraCuadrados"));
         this.botonMejoraVelocidad = new Button(style.getJSONObject("BotonMejoraHexagonos"));
-
-
-        this.botonMejoraCuadrados.setImagen(new Image(style.getJSONObject("ImagenHielo"),this.gr));
-        this.botonMejoraTriangulos.setImagen(new Image(style.getJSONObject("ImagenRayo"),this.gr));
-        this.botonMejoraHexagonos.setImagen(new Image(style.getJSONObject("ImagenFuego"),this.gr));
+        //depende de la skin el boton es figura o skin seleccionada
+        if(!Objects.equals(save.getString("skinRayo"), "Figura")){
+            this.botonMejoraTriangulos.setImagen(new Image(style.getJSONObject(save.getString("skinRayo")),this.gr));
+        }
+        else{
+            Triangle tri = new Triangle(0,0,15,true);
+            tri.setColor("#FF000000");
+            this.botonMejoraTriangulos.setFigura(tri);
+        }
+        if(!Objects.equals(save.getString("skinFuego"), "Figura")){
+            this.botonMejoraHexagonos.setImagen(new Image(style.getJSONObject(save.getString("skinFuego")),this.gr));
+        }
+        else{
+            Hexagon hex = new Hexagon(0,-5,15,true);
+            hex.setColor("#FFFF0000");
+            this.botonMejoraHexagonos.setFigura(hex);
+        }
+        if(!Objects.equals(save.getString("skinHielo"), "Figura")){
+            this.botonMejoraCuadrados.setImagen(new Image(style.getJSONObject(save.getString("skinHielo")),this.gr));
+        }
+        else{
+            Square sq = new Square(0,-5,30,30,true);
+            sq.setColor("#FFC8A2C8");
+            this.botonMejoraCuadrados.setFigura(sq);
+        }
         this.botonMejoraMini.setImagen(new Image(style.getJSONObject("TorreMini"),this.gr));
 
         this.botonMejoraCuadrados.setText(new Text(style.getJSONObject("CosteMejoraCuadrados")));
@@ -737,8 +761,8 @@ public class GameLogic implements State {
                 //en cada caso hacemos una comprobación de cosmeticos para poder darle el cosmetico correspondiente
                 //a cada torre
                     case botonRayo:
-                        if(save.getBoolean("rayo")) {
-                            torre = "TorreRayoCosmetico";
+                        if(save.getBoolean("rayo")&& !Objects.equals(save.getString("skinRayo"), "Figura")) {
+                            torre = save.getString("skinRayo");
                             torreR = new ThunderTower
                                     (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
                                             this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
@@ -751,8 +775,8 @@ public class GameLogic implements State {
                         }
                         break;
                     case botonFuego:
-                        if(save.getBoolean("fuego")) {
-                            torre = "TorreFuegoCosmetico";
+                        if(save.getBoolean("fuego")&& !Objects.equals(save.getString("skinFuego"), "Figura")) {
+                            torre = save.getString("skinFuego");
                             torreR = new FireTower
                                     (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
                                             this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
@@ -772,8 +796,8 @@ public class GameLogic implements State {
                                         new Image(this.style.getJSONObject(torre),this.gr));
                         break;
                     default:
-                        if(save.getBoolean("hielo")) {
-                            torre = "TorreHieloCosmetico";
+                        if(save.getBoolean("hielo")&& !Objects.equals(save.getString("skinHielo"), "Figura")) {
+                            torre = save.getString("skinHielo");
                             torreR = new IceTower(this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
                                     this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
                                     new Image(this.style.getJSONObject(torre), this.gr));

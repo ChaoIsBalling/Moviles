@@ -160,6 +160,60 @@
         "y":25,
         "w":50,
         "h":50
+    },
+    "BotonRayoF":    
+    {   "x":420,
+        "y":170,
+        "w":100,
+        "h":100,
+        "isRound":true,
+        "ar":15,
+        "color":"#FFFFFFFF"
+    },
+    "BotonFuegoF":    
+    {   "x":420,
+        "y":170,
+        "w":100,
+        "h":100,
+        "isRound":true,
+        "ar":15,
+        "color":"#FFFFFFFF"
+    },
+    "BotonHieloF":    
+    {   "x":420,
+        "y":170,
+        "w":100,
+        "h":100,
+        "isRound":true,
+        "ar":15,
+        "color":"#FFFFFFFF"
+    },
+    "BotonRayoS":    
+    {   "x":530,
+        "y":170,
+        "w":100,
+        "h":100,
+        "isRound":true,
+        "ar":15,
+        "color":"#FFFFFFFF"
+    },
+    "BotonFuegoS":    
+    {   "x":530,
+        "y":170,
+        "w":100,
+        "h":100,
+        "isRound":true,
+        "ar":15,
+        "color":"#FFFFFFFF"
+    },
+    "BotonHieloS":    
+    {   "x":530,
+        "y":170,
+        "w":100,
+        "h":100,
+        "isRound":true,
+        "ar":15,
+        "color":"#FFFFFFFF"
     }
 
 }
