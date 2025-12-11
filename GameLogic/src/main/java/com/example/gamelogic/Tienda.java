@@ -186,7 +186,7 @@ public class Tienda implements State {
         this.hielo = false;
         this.diamantes = 0;
         this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
-        this.textoDiamantes.setText("Tienes " + this.diamantes);
+        this.textoDiamantes.setText("" + this.diamantes);
     }
 
     //guardar progreso
@@ -367,14 +367,14 @@ public class Tienda implements State {
             case botonHielo://has tocado el boton para comprar la skin de la una torre de hielo
                 this.diamantes-=precio;
                 this.hielo = true;
-                this.textoDiamantes.setText("Tienes " + this.diamantes);
+                this.textoDiamantes.setText("" + this.diamantes);
                 this.botonHielo.setColor("#ff00ff00");
                 this.guardar();
                 break;
             case botonMini://has tocado el boton para comprar la skin de la una torre de hielo
                 this.diamantes-=precio;
                 this.mini = true;
-                this.textoDiamantes.setText("Tienes " + this.diamantes);
+                this.textoDiamantes.setText("" + this.diamantes);
                 this.botonMini.setColor("#ff00ff00");
                 this.guardar();
                 break;
