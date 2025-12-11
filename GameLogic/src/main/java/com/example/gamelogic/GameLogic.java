@@ -175,7 +175,7 @@ public class GameLogic implements State {
      */
     private void inicializarNivel(String mapa)
     {
-        this.save=this.engine.readJsonFile2("save");
+        this.cargarDatos();
         JSONObject obj=engine.readJsonFile(mapa);
         colorNivel=obj.getString("colorNivel");
         JSONArray arr= obj.getJSONArray("mapa");
@@ -197,7 +197,6 @@ public class GameLogic implements State {
                 this.oleadasRestantes=this.oleadasDatos.length();
                 break;
         }
-        this.mini = this.save.getBoolean("mini");
         this.oleadaGenerar =0;
         this.oleadasT = this.oleadasDatos.length();
         this.enemigosGenerar = this.oleadasDatos.getJSONObject(this.oleadaGenerar).getInt("amount");
@@ -255,7 +254,39 @@ public class GameLogic implements State {
         }
     }
 
+    //carga el progreso y comprueba que no ha sido modificado
+    private void cargarDatos(){
 
+        if(this.engine.checkFileExists("save"))
+        {
+            this.save=this.engine.readJsonFile2("save");
+            String hash = this.engine.createHash(this.save.toString());
+            if(this.engine.checkHash(hash)) {
+                this.mini = this.save.getBoolean("mini");
+            }
+            else{
+                //resetea el progreso
+                this.reset();
+            }
+
+        }
+        else {
+            this.reset();
+        }
+    }
+
+    //resetea el progreso
+    private void reset(){
+        JSONObject obj=new JSONObject();
+        obj.put("gems",0);
+        obj.put("completed",0);
+        obj.put("rayo",false);
+        obj.put("fuego",false);
+        obj.put("hielo",false);
+        obj.put("mini",false);
+        this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
+        this.engine.writeFile("save",obj.toString());
+    }
 
     /**
      * Actualiza los contadores de tiempo de acuerdo al deltatime
