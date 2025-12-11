@@ -21,7 +21,7 @@ public class GameLogic implements State {
     private Button botonMejoraHexagonos;
 
     private Button botonMejoraMini;
-    boolean mini = false;
+    boolean mini = false;//si esta desbloqueada la nueva torre
 
     private Button botonMejoraAtaque;
     private Button botonMejoraRango;
@@ -85,7 +85,7 @@ public class GameLogic implements State {
     float mejResEn = 1;//mejora de resistencia de enemigo
 
     int oleada;//numero oleada
-    int oleadasRestantes;
+    int oleadasRestantes;//oleadas restantes
     int enemigosGenerar;//enemigos a generar
     int oleadaGenerar;//oleada a generar del json
     int oleadasT;//cantidad de oleadas del json
@@ -101,8 +101,9 @@ public class GameLogic implements State {
     Text textoOleadas;//Numero de oleadas en texto
 
     JSONArray camino; //Array con el numero de puntos que debe recorrer el enemigo en JSON
-    ArrayList<Vector2D> caminoEnemigos;
+    ArrayList<Vector2D> caminoEnemigos;//el camino que recorren los enemigos
 
+    //offsets para centrar
     float offsetX = 30;
     float offsetY = 50;
     //Indica si el nivel se ha completado en el modo aventura
@@ -118,7 +119,7 @@ public class GameLogic implements State {
 
     private Mobile mobile;
 
-    public enum Dificultad {
+    public enum Dificultad {//si estamos en la aventura, partida corta, partida larga o modo infinito
         corto, largo, infinito, aventura
     }
 
@@ -155,6 +156,7 @@ public class GameLogic implements State {
         this.mobile = mobile;
         this.mobile.setVisibleAdBanner(false);
     }
+    //inicializa parametros
     private void init() {
         this.vida=10;
         this.dinero = 300;
@@ -252,6 +254,8 @@ public class GameLogic implements State {
             this.casillas.add(fila);
         }
     }
+
+
 
     /**
      * Actualiza los contadores de tiempo de acuerdo al deltatime
