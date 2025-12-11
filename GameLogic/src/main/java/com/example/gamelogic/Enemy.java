@@ -47,7 +47,7 @@ public class Enemy {
      * Constructora de la clase Enemy con todos sus parámetros a inicializar
      */
     public Enemy(float vida, float velocidad, float defensa, float resistencia, Tipo tipoRes, ArrayList<Vector2D>camino, GameLogic gl){
-        //El enmeigo se representa mediante un círculo
+        //Posicion inicial sacada del inicio del camino
         this.x=gl.getRealX(camino.get(0).getY());
         this.y=gl.getRealY(camino.get(0).getX());
         this.vida=vida; //Vida
@@ -77,15 +77,15 @@ public class Enemy {
      * Metodo que se llama cada vez que el enemigo sufre daño
      */
     public void damage(float damage, Tipo tipo){
-        if(tipo == Tipo.hielo){
+        if(tipo == Tipo.hielo){//si es la torre de hielo reduce la velocidad
             float dam = damage;
             if(this.tipo == tipo){
                 dam -= this.resistencia;
             }
-            if(dam < 7){
+            if(dam < 7){//la velocidad se reduce en 7 como minimo
                 dam = 7;
             }
-            if(this.ralentizar < dam){
+            if(this.ralentizar < dam){//si hay varias torres solo surge efecto la que mas realentice
                 this.ralentizar = dam;
             }
         }
@@ -94,7 +94,7 @@ public class Enemy {
             if(this.tipo == tipo){
                 dam -= this.resistencia;
             }
-            if(dam <2){
+            if(dam <1){//daño minimo 1
                 dam = 2;
             }
             this.vida -= dam;
