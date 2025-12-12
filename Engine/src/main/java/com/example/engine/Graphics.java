@@ -1,7 +1,5 @@
 package com.example.engine;
 
-import java.awt.Font;
-
 /**
  * Interfaz de gráficos de la que heredarán los gestores de gráficos tanto de Android como Desktop
  */
@@ -39,6 +37,17 @@ public interface Graphics {
      * @param y Posición y
      */
     public void pintarImagen(IImage img, int x, int y);
+
+
+    /**
+     * Metodo que pinta una imagen en una posición (x,y) y con escalado scaleX y scaleY
+     * @param img
+     * @param x
+     * @param y
+     * @param scaleX
+     * @param ScaleY
+     */
+    public void pintarImagenEscalada(IImage img, int x, int y, int scaleX, int ScaleY);
 
     /**
      * Metodo que pinta el texto centrado (el calculo es diferente en cada motor) en una posición (x,y)

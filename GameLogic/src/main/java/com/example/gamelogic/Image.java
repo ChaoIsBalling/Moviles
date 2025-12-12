@@ -29,8 +29,8 @@ public class Image {
         this.imagen = imagen;
         this.x = x;
         this.y = y;
-        this.w=w;
-        this.h=h;
+        this.w= w;
+        this.h= h;
         this.gr = gr;
         this.im = this.gr.newImage(imagen,this.w,this.h);
     }
@@ -52,11 +52,28 @@ public class Image {
         this.im = this.gr.newImage(this.imagen,this.w,this.h);
     }
 
+    public void setX(int x){
+        this.x = x;
+    }
+    public void setY(int y){
+        this.y = y;
+    }
+    public void setW(int w){
+        this.w = w;
+    }
+    public void setH(int h){
+        this.h = h;
+    }
+
     /**
-     * Reneriza la imagen con la referencia a Graphics
+     * Renderiza la imagen con la referencia a Graphics
      */
     public void Render(){
         this.gr.pintarImagen(this.im,this.x,this.y);
+    }
+
+    public void RenderEscalado(){
+        this.gr.pintarImagenEscalada(this.im,this.x,this.y,this.w,this.h);
     }
     /**
      * Reneriza la imagen de forma centrada con la referencia a Graphics
