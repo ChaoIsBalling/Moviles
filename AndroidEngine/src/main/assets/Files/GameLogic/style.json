@@ -135,41 +135,6 @@
         "y":-20,
         "w":35,
         "h":35
-    }
-    ,
-        "ImagenHielo":
-    {
-        "imagen":"Hielo.png",
-        "x":-15,
-        "y":-20,
-        "w":35,
-        "h":35
-    }
-     ,
-        "ImagenFuego":
-    {
-        "imagen":"Fuego.png",
-        "x":-15,
-        "y":-20,
-        "w":35,
-        "h":35
-    }
-    ,
-        "ImagenRayo":
-    {
-        "imagen":"Rayo.png",
-        "x":-15,
-        "y":-20,
-        "w":35,
-        "h":35
-    } ,
-        "TorreRayo":
-    {
-        "imagen":"TorreRayoTriangulo.png",
-        "x":-15,
-        "y":-20,
-        "w":35,
-        "h":35
     },
      "TorreRayoCosmetico":
     {
@@ -178,27 +143,10 @@
         "y":-20,
         "w":35,
         "h":35
-    }
-     ,
-        "TorreHielo":
-    {
-        "imagen":"TorreHieloCuadrado.png",
-        "x":-15,
-        "y":-20,
-        "w":35,
-        "h":35
-    } ,
+    },
         "TorreHieloCosmetico":
     {
         "imagen":"TorreHielo.png",
-        "x":-15,
-        "y":-20,
-        "w":35,
-        "h":35
-    } ,
-        "TorreFuego":
-    {
-        "imagen":"TorreFuegoCirculo.png",
         "x":-15,
         "y":-20,
         "w":35,
