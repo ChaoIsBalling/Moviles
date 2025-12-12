@@ -28,5 +28,14 @@
             "hhhhhhhchhhhhh",
             "hhhhhhhccccccc",
             "hhhhhhhhhhhhhh"],
-    "road":[ [1,0], [1,7], [6,7], [6,13] ]
+    "road":[ [1,0], [1,7], [6,7], [6,13] ],
+    
+    "background" :
+    {
+        "imagen":"Hierba.png",
+        "x":0,
+        "y":0,
+        "w":600,
+        "h":400
+    }
 }

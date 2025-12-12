@@ -32,6 +32,8 @@ public class GameLogic implements State {
     private Image imagenVida;
     private Image imagenDinero;
 
+    private Image imagenFondo;
+
     //Franja en la que están los botones
     private Square franjaGris;
 
@@ -101,6 +103,10 @@ public class GameLogic implements State {
     //offsets para centrar
     float offsetX = 30;
     float offsetY = 50;
+
+    int ancho = 0;
+
+    int alto = 0;
     //Indica si el nivel se ha completado en el modo aventura
     boolean isCompleted;
 
@@ -123,6 +129,8 @@ public class GameLogic implements State {
     JSONArray oleadasDatos;
     //JsonObject que representa los datos de partida guardada
     JSONObject save;
+    //Para leer el mapa
+    JSONObject obj;
 
     //String que determina el color del nivel
     String colorNivel;
@@ -135,6 +143,7 @@ public class GameLogic implements State {
         this.init();
         this.dificultad = dificultad;
         this.inicializarNivel("mapa1.json");
+        //this.imagenFondo = new Image();
         this.mobile = mobile;
         this.mobile.setVisibleAdBanner(false);
     }
@@ -171,12 +180,13 @@ public class GameLogic implements State {
     private void inicializarNivel(String mapa)
     {
         this.cargarDatos();
-        JSONObject obj=engine.readJsonFile(mapa);
+        this.obj=engine.readJsonFile(mapa);
         colorNivel=obj.getString("colorNivel"); //color de fondo
         JSONArray arr= obj.getJSONArray("mapa"); //array del mapa
         this.levelNumber=obj.getInt("level"); //numero de nivel
         this.oleadasDatos =obj.getJSONArray("waves"); //oleadas de enemigos
         this.camino = obj.getJSONArray("road"); //camino de puntos de los enemigos
+
 
         switch(this.dificultad) {
             case corto:
@@ -199,8 +209,12 @@ public class GameLogic implements State {
         this.tiempOl = this.tiempoOleada;
         this.tiempoEnGenerar = (float) 0.3;
         this.tiempEnG =0;
+
+        //dimensiones tablero
         this.fil=arr.length();
         this.col=arr.get(0).toString().length();
+        this.ancho = col*(int)anchoCasilla;
+        this.alto= fil*(int)altoCasilla;
         this.recompensas=obj.getInt("reward");
 
         float anchoM = this.anchoCasilla*this.col;
@@ -225,8 +239,8 @@ public class GameLogic implements State {
                 Casilla casilla;
                 if(arr.get(i).toString().charAt(j) == 'h'){
                     //el fill lo pongo a true para que haya mayor contraste entre la casilla y las torres
-                     casilla = new Casilla((float)(j*this.anchoCasilla+this.offsetX),(float)(i*this.altoCasilla+this.offsetY),this.anchoCasilla,this.altoCasilla,true,false);
-                     casilla.setColor(this.colorNivel);
+                     casilla = new Casilla((float)(j*this.anchoCasilla+this.offsetX),(float)(i*this.altoCasilla+this.offsetY),this.anchoCasilla,this.altoCasilla,false,false);
+                     casilla.setColor("#ff000000");
                 } else {
                     casilla = new Casilla((float) (j * this.anchoCasilla + this.offsetX), (float) (i * this.altoCasilla + this.offsetY), this.anchoCasilla, this.altoCasilla, true, true);
                     casilla.setColor("#ff944d03");
@@ -513,6 +527,8 @@ public class GameLogic implements State {
     public void render(Graphics gr) {
         //gr.setColor(0x00000000);
         gr.clear();
+
+        this.imagenFondo.RenderEscalado();
         for (int i = 0; i < this.fil; i++) {
             for (int j = 0; j < this.col; j++) {
                 this.casillas.get(i).get(j).Render(gr);
@@ -606,6 +622,7 @@ public class GameLogic implements State {
         this.textoD = new Text("Inika-Regular.ttf", String.valueOf(this.dinero), 30, 370, 20);
         this.imagenVida = new Image( style.getJSONObject("ImagenVida"), this.gr);
         this.imagenDinero = new Image(style.getJSONObject("ImagenDinero"), this.gr);
+
     }
 
     /**
@@ -654,6 +671,11 @@ public class GameLogic implements State {
     public void setGraphics(Graphics gr) {
         this.gr = gr;
         this.inicializarUI();
+
+        //Inicializamos posicion y escalado del fondo
+        this.imagenFondo=new Image(obj.getJSONObject("background"),this.gr); //Fondo del nivel
+        this.imagenFondo.setX((int)this.offsetX -17); this.imagenFondo.setY((int)this.offsetY -17);
+        this.imagenFondo.setW(this.ancho); this.imagenFondo.setH(this.alto);
     }
 
     /**

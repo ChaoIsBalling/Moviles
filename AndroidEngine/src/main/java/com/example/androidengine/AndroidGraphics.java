@@ -225,6 +225,22 @@ public class AndroidGraphics implements Graphics {
        AndroidImage image= (AndroidImage)img;
        canvas.drawBitmap(image.getBitmap(),x,y,null);
     }
+
+    @Override
+    public void pintarImagenEscalada(IImage img, int x, int y, int scaleX, int scaleY) {
+        if(img instanceof AndroidImage){
+            AndroidImage aImage = (AndroidImage) img; //casteamos a andorid Image
+            Bitmap bm = aImage.getBitmap(); //obtenemosBitmap
+
+            //Hacemos un nuevo bitmap escalado, por si habia que actualizar scaleX,scaleY
+            Bitmap scaled = Bitmap.createScaledBitmap(bm, scaleX, scaleY, false);
+
+            //El canvas dibuja el bitmap
+            canvas.drawBitmap(scaled, (int)x, (int)y,this.paint);
+
+        }
+    }
+
     /**
      * Metodo que pinta un texto centrado
      */
