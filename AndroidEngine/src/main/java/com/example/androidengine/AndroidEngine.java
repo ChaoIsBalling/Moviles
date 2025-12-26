@@ -18,7 +18,6 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
-import com.example.engine.Mobile;
 import com.example.engine.TouchEvent;
 
 import java.io.FileNotFoundException;
@@ -215,7 +214,7 @@ public class AndroidEngine implements Runnable {
 
     //getter de mobile
 
-    public Mobile getMobile() { return this.mobile; }
+    public AndroidMobile getMobile() { return this.mobile; }
 
     //lector que coje un archivo interno y lo convierte a Json
     public JSONObject readJsonFile2(String file) {

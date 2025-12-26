@@ -3,13 +3,12 @@ package com.example.gamelogic;
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.State;
-import com.example.engine.Mobile;
 import com.example.engine.TouchEvent;
 import java.util.*;
 import com.example.androidengine.AndroidAudio;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import com.example.androidengine.AndroidMobile;
 import java.util.ArrayList;
 
 public class Tienda implements State {
@@ -105,8 +104,8 @@ public class Tienda implements State {
         }
     }
 
-    Mobile mobile;
-    public Tienda(AndroidEngine engine,Mobile mobile){
+    AndroidMobile mobile;
+    public Tienda(AndroidEngine engine,AndroidMobile mobile){
         ScrollableText=new ArrayList<Text>();
         ScrollableButtons=new ArrayList<Button>();
         this.engine=engine;
@@ -595,7 +594,7 @@ public class Tienda implements State {
     }
 
     @Override
-    public void setMobile(Mobile mobile) {
+    public void setMobile(AndroidMobile mobile) {
 
     }
 }

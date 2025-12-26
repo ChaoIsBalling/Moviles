@@ -1,10 +1,10 @@
 package com.example.gamelogic;
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.State;
-import com.example.engine.Mobile;
 import com.example.engine.TouchEvent;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
+import com.example.androidengine.AndroidMobile;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -118,7 +118,7 @@ public class GameLogic implements State {
     //Estado actual de juego
     private Estado estado = Estado.normal;
 
-    private Mobile mobile;
+    private AndroidMobile mobile;
 
     public enum Dificultad {//si estamos en la aventura, partida corta, partida larga o modo infinito
         corto, largo, infinito, aventura
@@ -137,7 +137,7 @@ public class GameLogic implements State {
      * Constructora del estado principal de juego en el modo normal
      * @param engine Motor
      */
-    public GameLogic(AndroidEngine engine, Mobile mobile, Dificultad dificultad){
+    public GameLogic(AndroidEngine engine, AndroidMobile mobile, Dificultad dificultad){
         this.engine=engine;
         this.init();
         this.dificultad = dificultad;
@@ -149,7 +149,7 @@ public class GameLogic implements State {
     /**
      * Constructora del estado principal de juego en el modo aventura a partir de la lectura del mapa del nivel
      */
-    public GameLogic(AndroidEngine engine, Mobile mobile, String mapa, boolean isCompleted){
+    public GameLogic(AndroidEngine engine, AndroidMobile mobile, String mapa, boolean isCompleted){
         this.engine=engine;
         this.dificultad = Dificultad.aventura;
         this.oleadasRestantes=0;
@@ -711,7 +711,7 @@ public class GameLogic implements State {
     }
 
     @Override
-    public void setMobile(Mobile mobile) {
+    public void setMobile(AndroidMobile mobile) {
             this.mobile = mobile;
     }
 

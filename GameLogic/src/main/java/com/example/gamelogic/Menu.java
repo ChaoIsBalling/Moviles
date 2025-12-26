@@ -2,10 +2,10 @@ package com.example.gamelogic;
 
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.State;
-import com.example.engine.Mobile;
 import com.example.engine.TouchEvent;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
+import com.example.androidengine.AndroidMobile;
 import java.util.ArrayList;
 
 import org.json.JSONException;
@@ -33,14 +33,14 @@ public class Menu implements State {
     private AndroidAudio audio;
     AndroidEngine engine;
     AndroidGraphics gr;
-    Mobile mobile;
+    AndroidMobile mobile;
 
     JSONObject botones;
 
     /**
      * Constructora del menú
      */
-    public Menu(AndroidEngine engine, Mobile mobile){
+    public Menu(AndroidEngine engine, AndroidMobile mobile){
         this.engine = engine;
         this.mobile = mobile;
         botones=engine.readJsonFile("Menu/style.json");
@@ -191,7 +191,7 @@ public class Menu implements State {
      * @param mobile Interfaz Mobile
      */
     @Override
-    public void setMobile(Mobile mobile) {
+    public void setMobile(AndroidMobile mobile) {
         this.mobile = mobile;
     }
 }

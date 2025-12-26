@@ -23,13 +23,11 @@ import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
-import com.example.engine.Mobile;
-
 /**
  * Clase que implementa los metodos para la gestión de anuncios
  * Implementa la interfaz Mobile del motor exclusivamente para Android
  */
-public class AndroidMobile implements Mobile {
+public class AndroidMobile {
     private AdView adView;   //anuncio banner y su contenedor en el xml del MainActivity
     private FrameLayout adContainer; //Contenedor del anuncio
     private Activity activity;  //El main Activity
@@ -150,7 +148,6 @@ public class AndroidMobile implements Mobile {
     /**
      * Metodo que muestra un anuncio recompensado una vez ya se ha cargado
      */
-    @Override
     public void showRewardedAd(RewardCallback callback) {
         //Llamar al hilo principal para ver el anuncio
         activity.runOnUiThread(new Runnable() {

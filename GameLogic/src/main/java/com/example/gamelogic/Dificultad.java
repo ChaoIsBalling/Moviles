@@ -1,13 +1,13 @@
 package com.example.gamelogic;
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.State;
-import com.example.engine.Mobile;
 import com.example.engine.TouchEvent;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidGraphics;
+import com.example.androidengine.AndroidMobile;
 /**
  * Clase que representa el menú de seleccción de dificultad
  */
@@ -22,7 +22,7 @@ public class Dificultad implements State {
     private AndroidEngine engine;
     AndroidGraphics gr;
 
-    Mobile mobile;
+    AndroidMobile mobile;
 
     //Json del que vamos a leer los parametros de los botones
     JSONObject botones;
@@ -31,7 +31,7 @@ public class Dificultad implements State {
      * Constructora del menú de dificultad con los tres botones que representan los tres modos de juego
      * @param engine
      */
-    public Dificultad(AndroidEngine engine, Mobile mobile){
+    public Dificultad(AndroidEngine engine, AndroidMobile mobile){
         this.engine = engine;
         this.mobile = mobile;
         botones=engine.readJsonFile("Dificultad/style.json");//Archivo a leer
@@ -129,7 +129,7 @@ public class Dificultad implements State {
     }
 
     @Override
-    public void setMobile(Mobile mobile) {
+    public void setMobile(AndroidMobile mobile) {
     }
 
 }

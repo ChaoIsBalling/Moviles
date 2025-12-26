@@ -1,5 +1,4 @@
 package com.example.androidengine;
-import com.example.engine.Mobile;
 import com.example.engine.TouchEvent;
 
 import java.util.ArrayList;
@@ -45,5 +44,5 @@ public interface State {
      * Inicializa el sistema de mobile del motor de Android
      * @param mobile Interfaz Mobile
      */
-    void setMobile(Mobile mobile);
+    void setMobile(AndroidMobile mobile);
 }

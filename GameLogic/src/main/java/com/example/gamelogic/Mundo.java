@@ -1,13 +1,13 @@
 package com.example.gamelogic;
 
 import com.example.androidengine.State;
-import com.example.engine.Mobile;
 import com.example.engine.TouchEvent;
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.example.androidengine.AndroidMobile;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ public class Mundo implements State {
     private ArrayList<Button> niveles;
     private AndroidEngine engine;
 
-    private Mobile mobile;
+    private AndroidMobile mobile;
     //booleanos que determinan si el mundo actual tiene un mundo anterior o posterior
     private boolean next;
     private boolean previous;
@@ -54,7 +54,7 @@ public class Mundo implements State {
     float maxY;
 
     //constructora del estado que crea e inicializa los botones de la escena
-    public Mundo(AndroidEngine engine,Mobile mobile, int mundo){
+    public Mundo(AndroidEngine engine,AndroidMobile mobile, int mundo){
         this.engine=engine;
         this.mundo=mundo;
         this.mobile = mobile;
@@ -246,6 +246,6 @@ public class Mundo implements State {
     }
 
     @Override
-    public void setMobile(Mobile mobile) {
+    public void setMobile(AndroidMobile mobile) {
     }
 }
