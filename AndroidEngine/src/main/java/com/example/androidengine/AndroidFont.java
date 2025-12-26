@@ -2,9 +2,8 @@ package com.example.androidengine;
 
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
-import com.example.engine.IFont;
 
-public class AndroidFont implements IFont {
+public class AndroidFont {
     private Typeface tFont;
 
     boolean bold;
@@ -31,12 +30,12 @@ public class AndroidFont implements IFont {
         return this.tFont;
     }
     //getter del tamaño
-    @Override
+
     public int getSize() {
         return (int)size;
     }
     //getter del bold
-    @Override
+
     public boolean isBold() {
         return this.bold;
     }

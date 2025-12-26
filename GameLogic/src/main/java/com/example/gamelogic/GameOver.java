@@ -2,11 +2,12 @@ package com.example.gamelogic;
 
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
+import com.example.androidengine.State;
 import com.example.engine.Mobile;
 import com.example.engine.RewardCallback;
 import com.example.engine.TouchEvent;
-import com.example.engine.Audio;
-import com.example.engine.Sound;
+import com.example.androidengine.AndroidAudio;
+import com.example.androidengine.AndroidSound;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,11 +34,11 @@ public class GameOver implements State {
     private Text textoInicial;
 
     //Sonidos de victoria y derrota
-    private Sound victory;
-    private Sound lose;
+    private AndroidSound victory;
+    private AndroidSound lose;
 
     //Modulos del motor
-    private Audio audio;
+    private AndroidAudio audio;
     AndroidEngine engine;
     Mobile mobile;
 
@@ -59,7 +60,7 @@ public class GameOver implements State {
 
     //Dificultad con la que se ha superado el nivel (Para saber el modo de juego)
     GameLogic.Dificultad dificultad;
-    public GameOver(AndroidEngine engine, Audio audio, Mobile mobile, GameLogic.Dificultad dificultad ,boolean win, boolean isCompleted)
+    public GameOver(AndroidEngine engine, AndroidAudio audio, Mobile mobile, GameLogic.Dificultad dificultad ,boolean win, boolean isCompleted)
     {
         //Inicializamos los botones y textos
         this.engine = engine;
@@ -248,7 +249,7 @@ public class GameOver implements State {
      * @param audio Interfaz Audio
      */
     @Override
-    public void setAudio(Audio audio) {
+    public void setAudio(AndroidAudio audio) {
         this.audio=audio;
     }
 

@@ -1,6 +1,4 @@
-package com.example.gamelogic;
-import com.example.androidengine.AndroidGraphics;
-import com.example.engine.Audio;
+package com.example.androidengine;
 import com.example.engine.Mobile;
 import com.example.engine.TouchEvent;
 
@@ -41,7 +39,7 @@ public interface State {
      * Inicializa el sistema de audio del motor
      * @param audio Interfaz Audio
      */
-    void setAudio(Audio audio);
+    void setAudio(AndroidAudio audio);
 
     /**
      * Inicializa el sistema de mobile del motor de Android

@@ -1,7 +1,6 @@
 package com.example.androidengine;
-import com.example.engine.Sound;
 
-public class AndroidSound implements Sound {
+public class AndroidSound {
     private int id;
 
     private int streamId;

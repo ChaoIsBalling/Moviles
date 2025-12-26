@@ -1,9 +1,8 @@
 package com.example.gamelogic;
 
-import com.example.engine.Sound;
 import com.example.androidengine.AndroidGraphics;
-import com.example.engine.Audio;
-
+import com.example.androidengine.AndroidAudio;
+import com.example.androidengine.AndroidSound;
 import java.util.ArrayList;
 
 /**
@@ -22,8 +21,8 @@ public class FireTower implements Tower {
     boolean disparo = false;
 
     //Referencia al audio manager y el sonido de ataque
-    Audio audio;
-    Sound attack;
+    AndroidAudio audio;
+    AndroidSound attack;
 
     //Tipo de la torre
     Tipo tipo = Tipo.fuego;
@@ -85,7 +84,7 @@ public class FireTower implements Tower {
         this.enemigos = enemigos;
     }
     @Override
-    public void setAudio(Audio audio)
+    public void setAudio(AndroidAudio audio)
     {
         this.audio=audio;
         this.attack=audio.newSound("fire.wav");

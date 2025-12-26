@@ -1,7 +1,7 @@
 package com.example.gamelogic;
 
-import com.example.engine.Audio;
-import com.example.engine.Sound;
+import com.example.androidengine.AndroidAudio;
+import com.example.androidengine.AndroidSound;
 import com.example.androidengine.AndroidGraphics;
 import java.util.ArrayList;
 
@@ -20,8 +20,8 @@ public class ThunderTower implements Tower{
     float x;
     float y;
     //Referencia al audio manager y el sonido de ataque
-    Audio audio;
-    Sound attack;
+    AndroidAudio audio;
+    AndroidSound attack;
 
     //Determina si está disparando
     boolean disparo = false;
@@ -77,7 +77,7 @@ public class ThunderTower implements Tower{
         this.enemigos = enemigos;
     }
     @Override
-    public void setAudio(Audio audio) {
+    public void setAudio(AndroidAudio audio) {
         this.audio=audio;
         this.attack=audio.newSound("laser.wav");
     }

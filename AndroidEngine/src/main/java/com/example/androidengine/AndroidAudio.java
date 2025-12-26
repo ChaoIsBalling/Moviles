@@ -3,9 +3,6 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.SoundPool;
 
-import com.example.engine.Sound;
-import com.example.engine.Audio;
-
 import java.io.IOException;
 
 import android.media.AudioAttributes;
@@ -15,7 +12,7 @@ import android.media.AudioAttributes;
  * Clase que hereda de la interfaz Audio de Engine y que
  * se encarga de la gestión de sonidos en Android
  */
-public class AndroidAudio implements Audio {
+public class AndroidAudio {
     /**
      * Clase SoundPool propia de Android Develop que reproduce resources para
      * nuestra aplicación
@@ -51,8 +48,8 @@ public class AndroidAudio implements Audio {
      * @param file Nombre del archivo de sonido
      * @return Interfaz Sound del motor
      */
-    @Override
-    public Sound newSound(String file)
+
+    public AndroidSound newSound(String file)
     {
         int id=-1;
 
@@ -75,8 +72,8 @@ public class AndroidAudio implements Audio {
      * del sonido que queramos escuchar en nuestra app
      * @param sound Interfaz sound del engine
      */
-    @Override
-    public void playSound(Sound sound)
+
+    public void playSound(AndroidSound sound)
     {
         AndroidSound s =(AndroidSound)sound;
         int streamId =this.spool.play(s.getID(),1,1,0,0,1);
@@ -88,8 +85,8 @@ public class AndroidAudio implements Audio {
      * de su interfaz Sound en nuestra app
      * @param sound Interfaz sound del engine
      */
-    @Override
-    public void loopSound(Sound sound) {
+
+    public void loopSound(AndroidSound sound) {
         AndroidSound s =(AndroidSound)sound;
         int streamId =this.spool.play(s.getID(),1,1,0,-1,1);
         s.setStreamId(streamId);
@@ -99,8 +96,8 @@ public class AndroidAudio implements Audio {
      * Metodo que detiene el sonido a traves de la interfaz del sonido en nuestra app
      * @param sound Interfaz sound del engine
      */
-    @Override
-    public void stopSound(Sound sound)
+
+    public void stopSound(AndroidSound sound)
     {
         AndroidSound s =(AndroidSound)sound;
         this.spool.stop(s.getStreamId());

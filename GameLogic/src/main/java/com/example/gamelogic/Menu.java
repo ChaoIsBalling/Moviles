@@ -1,10 +1,11 @@
 package com.example.gamelogic;
 
 import com.example.androidengine.AndroidEngine;
+import com.example.androidengine.State;
 import com.example.engine.Mobile;
 import com.example.engine.TouchEvent;
-import com.example.engine.Audio;
 import com.example.androidengine.AndroidGraphics;
+import com.example.androidengine.AndroidAudio;
 import java.util.ArrayList;
 
 import org.json.JSONException;
@@ -29,7 +30,7 @@ public class Menu implements State {
 
 
     //Referencias al Audio Manager, al motor y a Graphics y a Mobile
-    private Audio audio;
+    private AndroidAudio audio;
     AndroidEngine engine;
     AndroidGraphics gr;
     Mobile mobile;
@@ -181,7 +182,7 @@ public class Menu implements State {
      * @param audio Interfaz Audio
      */
     @Override
-    public void setAudio(Audio audio) {
+    public void setAudio(AndroidAudio audio) {
     this.audio=audio;
     }
 

@@ -1,9 +1,9 @@
 package com.example.gamelogic;
 
-import com.example.engine.IFont;
 import org.json.JSONObject;
 import org.json.JSONException;
 import com.example.androidengine.AndroidGraphics;
+import com.example.androidengine.AndroidFont;
 /**
  * Clase que representa un texto
  */
@@ -95,7 +95,7 @@ public class Text {
      */
     public void Render(AndroidGraphics gr){
         if(this.y>=-size) {
-            IFont fuente = gr.newFont(this.font, this.size, this.bold, this.italic);
+            AndroidFont fuente = gr.newFont(this.font, this.size, this.bold, this.italic);
             gr.setColor(this.color);
             gr.setFont(fuente);
             for (int i = 0; i < myArray.length; i++)
@@ -103,7 +103,7 @@ public class Text {
         }
     }
     public void RenderCentrado(AndroidGraphics gr,float x, float y){
-        IFont fuente = gr.newFont(this.font,this.size,this.bold,this.italic);
+        AndroidFont fuente = gr.newFont(this.font,this.size,this.bold,this.italic);
         gr.setColor(this.color);
         gr.setFont(fuente);
         for(int i=0;i<myArray.length;i++)

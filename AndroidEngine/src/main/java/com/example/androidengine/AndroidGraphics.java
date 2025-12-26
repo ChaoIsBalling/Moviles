@@ -8,7 +8,6 @@ import android.graphics.RectF;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
-import com.example.engine.IFont;
 import com.example.engine.IImage;
 import android.graphics.Bitmap;
 
@@ -281,28 +280,28 @@ public class AndroidGraphics{
     /**
      * seteo de una fuente
      */
-    public void setFont(IFont font) {
+    public void setFont(AndroidFont font) {
         this.af =(AndroidFont) font;
         this.paint.setTypeface(this.af.getTypeface());
     }
     /**
      * creacion de una nueva fuente con tamaño
      */
-    public IFont newFont(String f, float size) {
+    public AndroidFont newFont(String f, float size) {
         return this.newFont(f, size, false, false);
     }
     /**
      * creacion de una nueva fuente
      */
 
-    public IFont newFont(String f) {
+    public AndroidFont newFont(String f) {
         return this.newFont(f,10, false, false);
     }
     /**
      * creacion de una nueva fuente con tamaño y negrita
      */
 
-    public IFont newFont(String path, float size,boolean bold )
+    public AndroidFont newFont(String path, float size,boolean bold )
     {
         return this.newFont(path,size,bold,false);
     }
@@ -310,7 +309,7 @@ public class AndroidGraphics{
      * creacion de una nueva fuente con tamaño , negrita e italics
      */
 
-    public IFont newFont(String path, float size,boolean bold, boolean italic )
+    public AndroidFont newFont(String path, float size,boolean bold, boolean italic )
     {
         return new AndroidFont(this.assetManager,fontDir+path,size,bold,italic);
     }

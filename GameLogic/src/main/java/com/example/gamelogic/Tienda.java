@@ -2,11 +2,11 @@ package com.example.gamelogic;
 
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
-import com.example.engine.Audio;
+import com.example.androidengine.State;
 import com.example.engine.Mobile;
 import com.example.engine.TouchEvent;
 import java.util.*;
-
+import com.example.androidengine.AndroidAudio;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -590,7 +590,7 @@ public class Tienda implements State {
     }
 
     @Override
-    public void setAudio(Audio audio) {
+    public void setAudio(AndroidAudio audio) {
 
     }
 

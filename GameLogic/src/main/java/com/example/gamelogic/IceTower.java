@@ -1,8 +1,8 @@
 package com.example.gamelogic;
 
-import com.example.engine.Audio;
-import com.example.engine.Sound;
 import com.example.androidengine.AndroidGraphics;
+import com.example.androidengine.AndroidAudio;
+import com.example.androidengine.AndroidSound;
 import java.util.ArrayList;
 
 /**
@@ -16,8 +16,8 @@ public class IceTower implements Tower{
     float velocidad = 4;
 
     //Referencia al audio manager y el sonido de ataque
-    Audio audio;
-    Sound attack;
+    AndroidAudio audio;
+    AndroidSound attack;
     float x;
     float y;
     Image image;
@@ -88,7 +88,7 @@ public class IceTower implements Tower{
         this.enemigos = enemigos;
     }
     @Override
-    public void setAudio(Audio audio) {
+    public void setAudio(AndroidAudio audio) {
         this.audio=audio;
         this.attack=audio.newSound("ice.wav");
     }

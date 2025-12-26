@@ -18,9 +18,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
-import com.example.engine.Audio;
 import com.example.engine.Mobile;
-import com.example.gamelogic.State;
 import com.example.engine.TouchEvent;
 
 import java.io.FileNotFoundException;
@@ -173,7 +171,7 @@ public class AndroidEngine implements Runnable {
     }
     //getter del audio
 
-    public Audio getAudio() {
+    public AndroidAudio getAudio() {
         return this.audio;
     }
     //getter del estado

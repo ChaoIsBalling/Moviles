@@ -7,14 +7,11 @@ import static android.view.MotionEvent.ACTION_UP;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.engine.Input;
 import com.example.engine.TouchEvent;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-public class AndroidInput implements Input,View.OnTouchListener{
+public class AndroidInput implements View.OnTouchListener{
     ArrayList<TouchEvent> events;
     ArrayList<TouchEvent> pendingEvents;
     boolean dragging =false;
@@ -57,7 +54,6 @@ public class AndroidInput implements Input,View.OnTouchListener{
      * Añade los eventos pendientes a la lista de eventos actaules y limpia la lista de pendientes
      * @return Eventos pendientes
      */
-    @Override
     public synchronized ArrayList<TouchEvent> getTouchEvents() {
         this.events.addAll(this.pendingEvents);
         this.pendingEvents.clear();

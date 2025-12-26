@@ -1,7 +1,7 @@
 package com.example.gamelogic;
 
-import com.example.engine.Audio;
 import com.example.androidengine.AndroidGraphics;
+import com.example.androidengine.AndroidAudio;
 import java.util.ArrayList;
 
 /**
@@ -41,7 +41,7 @@ public interface Tower {
      * Setea el audio asociado a la torre
      * @param audio interfaz de audio
      */
-    public void setAudio(Audio audio);
+    public void setAudio(AndroidAudio audio);
 
     /**
      * Renderiza el enemigo

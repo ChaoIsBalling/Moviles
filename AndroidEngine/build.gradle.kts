@@ -55,7 +55,6 @@ dependencies {
     implementation(files("../app/libs/json-20250517.jar"))
     implementation(libs.work.runtime)
     implementation(libs.firebase.crashlytics.buildtools)
-    implementation(project(":GameLogic"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
