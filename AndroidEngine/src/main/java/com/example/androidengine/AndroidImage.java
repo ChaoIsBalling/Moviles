@@ -2,9 +2,7 @@ package com.example.androidengine;
 
 import android.graphics.Bitmap;
 
-import com.example.engine.IImage;
-
-public class AndroidImage implements IImage {
+public class AndroidImage {
     private Bitmap bm;
     //constructora que inicializa el bitmap
     AndroidImage(Bitmap bm) {this.bm = bm;}
@@ -16,12 +14,12 @@ public class AndroidImage implements IImage {
     protected Bitmap getBitmap() {return bm;}
 
     //getter del alto
-    @Override
+
     public int getHeight() {
         return this.bm.getHeight();
     }
     //getter del ancho
-    @Override
+
     public int getWidth() {
         return this.bm.getWidth();
     }

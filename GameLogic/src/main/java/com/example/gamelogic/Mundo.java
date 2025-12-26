@@ -1,7 +1,7 @@
 package com.example.gamelogic;
 
 import com.example.androidengine.State;
-import com.example.engine.TouchEvent;
+import com.example.androidengine.TouchEvent;
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;

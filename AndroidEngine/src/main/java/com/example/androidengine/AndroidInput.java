@@ -7,8 +7,6 @@ import static android.view.MotionEvent.ACTION_UP;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.engine.TouchEvent;
-
 import java.util.ArrayList;
 
 public class AndroidInput implements View.OnTouchListener{

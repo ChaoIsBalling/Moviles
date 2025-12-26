@@ -17,4 +17,3 @@ rootProject.name = "TowerDefense"
 include(":app")
 include(":AndroidEngine")
 include(":GameLogic")
-include(":Engine")

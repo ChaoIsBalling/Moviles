@@ -8,7 +8,6 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
-import com.example.engine.RewardCallback;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;

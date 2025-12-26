@@ -1,6 +1,5 @@
 package com.example.gamelogic;
-
-import com.example.engine.IImage;
+import com.example.androidengine.AndroidImage;
 import com.example.androidengine.AndroidGraphics;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +18,7 @@ public class Image {
     //Path de la imagen
     String imagen;
     //Interfaz del motor
-    IImage im;
+    AndroidImage im;
     //Graphics del motor
     AndroidGraphics gr;
 

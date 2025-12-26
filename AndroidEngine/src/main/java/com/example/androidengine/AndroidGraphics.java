@@ -8,7 +8,6 @@ import android.graphics.RectF;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
-import com.example.engine.IImage;
 import android.graphics.Bitmap;
 
 import java.io.IOException;
@@ -209,12 +208,12 @@ public class AndroidGraphics{
     /**
      * Metodo que pinta una imagen
      */
-    public void pintarImagen(IImage img, int x, int y) {
+    public void pintarImagen(AndroidImage img, int x, int y) {
        AndroidImage image= (AndroidImage)img;
        canvas.drawBitmap(image.getBitmap(),x,y,null);
     }
 
-    public void pintarImagenEscalada(IImage img, int x, int y, int scaleX, int scaleY) {
+    public void pintarImagenEscalada(AndroidImage img, int x, int y, int scaleX, int scaleY) {
         if(img instanceof AndroidImage){
             AndroidImage aImage = (AndroidImage) img; //casteamos a andorid Image
             Bitmap bm = aImage.getBitmap(); //obtenemosBitmap
@@ -255,7 +254,7 @@ public class AndroidGraphics{
     /**
      * creacion de una nueva pintura
      */
-    public IImage newImage(String f) {
+    public AndroidImage newImage(String f) {
         InputStream is = null;
         try {
             is = assetManager.open(imageDir+f);
@@ -267,7 +266,7 @@ public class AndroidGraphics{
     }  /**
      * creacion de una nueva pintura con ancho y altura
      */
-    public IImage newImage(String f,int width, int height) {
+    public AndroidImage newImage(String f,int width, int height) {
         InputStream is = null;
         try {
             is = assetManager.open(imageDir+f);

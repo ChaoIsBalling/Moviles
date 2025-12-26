@@ -1,7 +1,7 @@
 package com.example.gamelogic;
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.State;
-import com.example.engine.TouchEvent;
+import com.example.androidengine.TouchEvent;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;

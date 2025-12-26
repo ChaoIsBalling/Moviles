@@ -51,7 +51,6 @@ dependencies {
 
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(project(":Engine"))
     implementation(files("../app/libs/json-20250517.jar"))
     implementation(libs.work.runtime)
     implementation(libs.firebase.crashlytics.buildtools)
