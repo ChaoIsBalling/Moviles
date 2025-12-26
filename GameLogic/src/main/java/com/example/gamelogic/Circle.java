@@ -1,7 +1,5 @@
 package com.example.gamelogic;
-
-import com.example.engine.Graphics;
-
+import com.example.androidengine.AndroidGraphics;
 /**
  * Clase que representa un círculo e implementa a Figura
  */
@@ -68,7 +66,7 @@ public class Circle implements Figure{
      * Renderiza el circulo
      */
     @Override
-    public void Render(Graphics gr) {
+    public void Render(AndroidGraphics gr) {
         gr.setColor(this.color);
 
         if(isFill)
@@ -80,7 +78,7 @@ public class Circle implements Figure{
      * Renderiza el circulo de forma centrada a partir de una coordenada x,y
      */
     @Override
-    public void RenderCentrado(Graphics gr, float x, float y) {
+    public void RenderCentrado(AndroidGraphics gr, float x, float y) {
         gr.setColor(this.color);
 
         if(isFill)

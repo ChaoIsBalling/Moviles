@@ -1,14 +1,14 @@
 package com.example.gamelogic;
 
-import com.example.engine.Engine;
-import com.example.engine.Graphics;
+import com.example.androidengine.AndroidEngine;
+import com.example.androidengine.AndroidGraphics;
 import com.example.engine.Mobile;
 import com.example.engine.RewardCallback;
-import com.example.engine.State;
 import com.example.engine.TouchEvent;
 import com.example.engine.Audio;
 import com.example.engine.Sound;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class GameOver implements State {
 
     //Modulos del motor
     private Audio audio;
-    Engine engine;
+    AndroidEngine engine;
     Mobile mobile;
 
     //Determina si el jugador ha ganado
@@ -59,7 +59,7 @@ public class GameOver implements State {
 
     //Dificultad con la que se ha superado el nivel (Para saber el modo de juego)
     GameLogic.Dificultad dificultad;
-    public GameOver(Engine engine, Audio audio, Mobile mobile, GameLogic.Dificultad dificultad ,boolean win, boolean isCompleted)
+    public GameOver(AndroidEngine engine, Audio audio, Mobile mobile, GameLogic.Dificultad dificultad ,boolean win, boolean isCompleted)
     {
         //Inicializamos los botones y textos
         this.engine = engine;
@@ -76,10 +76,12 @@ public class GameOver implements State {
 
 
         //Botones comunes de ambos modos
-        botonMenu = new Button(botones.getJSONObject("BotonMenu"));
-        botonCompartir =new Button(botones.getJSONObject("BotonIntent"));
-        botonCompartir.setImagen(new Image(botones.getJSONObject( "ImagenCompartir"),this.engine.getGraphics()));
-        botonMenu.setText(new Text(botones.getJSONObject("TextoBoton")));
+        try {
+            botonMenu = new Button(botones.getJSONObject("BotonMenu"));
+            botonCompartir =new Button(botones.getJSONObject("BotonIntent"));
+            botonCompartir.setImagen(new Image(botones.getJSONObject( "ImagenCompartir"),this.engine.getGraphics()));
+            botonMenu.setText(new Text(botones.getJSONObject("TextoBoton")));
+
 
 
         //botones exclusivos del modo normal y del modo aventura
@@ -141,7 +143,11 @@ public class GameOver implements State {
 
         //Se muestra el banner
         this.mobile.setVisibleAdBanner(true);
+        } catch (JSONException e) {
+        throw new RuntimeException(e);
     }
+
+}
     @Override
     public void update(double deltaTime) {
 
@@ -152,7 +158,7 @@ public class GameOver implements State {
      * @param gr Graphics del motor
      */
     @Override
-    public void render(Graphics gr) {
+    public void render(AndroidGraphics gr) {
         gr.setColor(0x00000000);
 
         //botones y texto coumunes de ambos modos de juego
@@ -169,14 +175,18 @@ public class GameOver implements State {
             textoDiamantes.Render(gr);
             textoRecompensa.Render(gr);
             if(win){
-                this.imagenDiamantes = new Image(botones.getJSONObject("ImagenDiamante"),gr);
+                try {
+                    this.imagenDiamantes = new Image(botones.getJSONObject("ImagenDiamante"),gr);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
                 this.imagenDiamantes.Render();
             }
         }
     }
 
     @Override
-    public void setGraphics(Graphics gr) {
+    public void setGraphics(AndroidGraphics gr) {
 
     }
 

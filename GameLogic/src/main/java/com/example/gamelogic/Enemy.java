@@ -1,7 +1,5 @@
 package com.example.gamelogic;
-
-import com.example.engine.Graphics;
-
+import com.example.androidengine.AndroidGraphics;
 import java.util.ArrayList;
 
 /**
@@ -152,7 +150,7 @@ public class Enemy {
      * Metodo para renderizar al enemigo
      * @param gr Graphics
      */
-    public void Render(Graphics gr){
+    public void Render(AndroidGraphics gr){
         this.imagen.RenderCentrado((int)this.x,(int)this.y);
     }
 

@@ -1,7 +1,5 @@
 package com.example.gamelogic;
-
-import com.example.engine.Graphics;
-
+import com.example.androidengine.AndroidGraphics;
 /**
  * Clase que representa un cuadrado e implementa los métodos de Figura
  */
@@ -86,7 +84,7 @@ public class Square implements Figure{
      * @param gr Interfaz Graphics
      */
     @Override
-    public void Render(Graphics gr) {
+    public void Render(AndroidGraphics gr) {
         gr.setColor(this.color);
         if(this.isFill && this.isRound)
             gr.rellenarCuadradoRedondeado(this.x, this.y,this.w,this.h,this.arcRadius);
@@ -102,7 +100,7 @@ public class Square implements Figure{
     /**
      * Renderiza centrado
      */
-    public void RenderCentrado(Graphics gr, float x, float y) {
+    public void RenderCentrado(AndroidGraphics gr, float x, float y) {
         gr.setColor(this.color);
         if(this.isFill && this.isRound)
             gr.rellenarCuadradoRedondeado(x+this.x, y+this.y,this.w,this.h,this.arcRadius);

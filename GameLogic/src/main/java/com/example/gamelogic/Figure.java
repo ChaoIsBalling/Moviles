@@ -1,7 +1,5 @@
 package com.example.gamelogic;
-
-import com.example.engine.Graphics;
-
+import com.example.androidengine.AndroidGraphics;
 /**
  * Interfaz para cada uno de todos los tipos de figuras
  */
@@ -44,10 +42,10 @@ public interface Figure {
      * Renderiza la figura
      * @param gr Interfaz Graphics
      */
-    void Render(Graphics gr);
+    void Render(AndroidGraphics gr);
 
     /**
      * Renderiza la figura centrada desde una posicion x,y
      */
-    void RenderCentrado(Graphics gr, float x, float y);
+    void RenderCentrado(AndroidGraphics gr, float x, float y);
 }

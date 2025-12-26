@@ -1,12 +1,11 @@
 package com.example.gamelogic;
 
 import com.example.engine.Audio;
-import com.example.engine.Engine;
-import com.example.engine.Graphics;
 import com.example.engine.Mobile;
-import com.example.engine.State;
 import com.example.engine.TouchEvent;
-
+import com.example.androidengine.AndroidEngine;
+import com.example.androidengine.AndroidGraphics;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class Mundo implements State {
     private Button anteriorMundo;
     private Button botonVolver;
     private ArrayList<Button> niveles;
-    private Engine engine;
+    private AndroidEngine engine;
 
     private Mobile mobile;
     //booleanos que determinan si el mundo actual tiene un mundo anterior o posterior
@@ -54,13 +53,14 @@ public class Mundo implements State {
     float maxY;
 
     //constructora del estado que crea e inicializa los botones de la escena
-    public Mundo(Engine engine,Mobile mobile, int mundo){
+    public Mundo(AndroidEngine engine,Mobile mobile, int mundo){
         this.engine=engine;
         this.mundo=mundo;
         this.mobile = mobile;
 
         JSONObject save=this.engine.readJsonFile2("save");
-        this.completed= save.getInt("completed");
+        try {
+            this.completed= save.getInt("completed");
 
         botones=engine.readJsonFile("Mundo/style.json");
         JSONObject mundoInfo=engine.readJsonFile("Mundo/World"+this.mundo+"/World"+this.mundo+".json");
@@ -118,6 +118,9 @@ public class Mundo implements State {
         this.botonVolver = new Button(botones.getJSONObject("BotonVolver"));
 
         this.mobile.setVisibleAdBanner(false);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -126,7 +129,7 @@ public class Mundo implements State {
     }
     //renderización de todos los botones y texto
     @Override
-    public void render(Graphics gr) {
+    public void render(AndroidGraphics gr) {
         for(int i=0;i<niveles.size();i++)
             niveles.get(i).Render(gr);
         this.esconderScroll.Render(gr);
@@ -140,7 +143,8 @@ public class Mundo implements State {
     }
 
     @Override
-    public void setGraphics(Graphics gr) {
+    public void setGraphics(AndroidGraphics gr) {
+        try{
         this.botonVolver.setImagen(new Image(botones.getJSONObject("ImagenVolver"),gr));
         if(this.next) {
             this.siguienteMundo.setImagen(new Image(botones.getJSONObject("ImagenSiguiente"),gr));
@@ -148,6 +152,9 @@ public class Mundo implements State {
         if(this.previous) {
             this.anteriorMundo.setImagen(new Image(botones.getJSONObject("ImagenAnterior"),gr));
         }
+    } catch (JSONException e) {
+        throw new RuntimeException(e);
+    }
     }
 //manejo de los inputs
     @Override

@@ -1,10 +1,9 @@
 package com.example.gamelogic;
 
-import com.example.engine.Graphics;
 import com.example.engine.IFont;
 import org.json.JSONObject;
 import org.json.JSONException;
-import org.json.JSONArray;
+import com.example.androidengine.AndroidGraphics;
 /**
  * Clase que representa un texto
  */
@@ -66,6 +65,7 @@ public class Text {
     }
     public Text(JSONObject json)
     {
+        try{
         String text= json.getString("texto");
         this.myArray=text.split("\n");
         this.font=json.getString("font");
@@ -75,6 +75,9 @@ public class Text {
         this.bold= json.getBoolean("bold");
         this.italic =json.getBoolean("italic");
         this.color=json.getString("color");
+    } catch (JSONException e) {
+        throw new RuntimeException(e);
+    }
     }
     /**
      * Setters
@@ -90,7 +93,7 @@ public class Text {
      * Renderiza el texto (con y sin centrado) con la fuente y color deseados
      * @param gr
      */
-    public void Render(Graphics gr){
+    public void Render(AndroidGraphics gr){
         if(this.y>=-size) {
             IFont fuente = gr.newFont(this.font, this.size, this.bold, this.italic);
             gr.setColor(this.color);
@@ -99,7 +102,7 @@ public class Text {
                 gr.pintarTextoCentrado(myArray[i], this.x, this.y + i * size);
         }
     }
-    public void RenderCentrado(Graphics gr,float x, float y){
+    public void RenderCentrado(AndroidGraphics gr,float x, float y){
         IFont fuente = gr.newFont(this.font,this.size,this.bold,this.italic);
         gr.setColor(this.color);
         gr.setFont(fuente);

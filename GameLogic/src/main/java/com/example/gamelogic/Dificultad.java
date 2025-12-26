@@ -1,14 +1,12 @@
 package com.example.gamelogic;
-
+import com.example.androidengine.AndroidEngine;
 import com.example.engine.Audio;
-import com.example.engine.Engine;
-import com.example.engine.Graphics;
 import com.example.engine.Mobile;
-import com.example.engine.State;
 import com.example.engine.TouchEvent;
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
-
+import com.example.androidengine.AndroidGraphics;
 /**
  * Clase que representa el menú de seleccción de dificultad
  */
@@ -20,8 +18,8 @@ public class Dificultad implements State {
     private Button botonVolver;
 
     //Referencias de modulos del motor
-    private Engine engine;
-    Graphics gr;
+    private AndroidEngine engine;
+    AndroidGraphics gr;
 
     Mobile mobile;
 
@@ -32,19 +30,24 @@ public class Dificultad implements State {
      * Constructora del menú de dificultad con los tres botones que representan los tres modos de juego
      * @param engine
      */
-    public Dificultad(Engine engine, Mobile mobile){
+    public Dificultad(AndroidEngine engine, Mobile mobile){
         this.engine = engine;
         this.mobile = mobile;
         botones=engine.readJsonFile("Dificultad/style.json");//Archivo a leer
 
         //botones y textos
-        botonCorto = new Button(botones.getJSONObject("BotonCorto"));
-        botonCorto.setText(new Text(botones.getJSONObject("TextoC")));
-        botonLargo = new Button(botones.getJSONObject("BotonLargo"));
-        botonLargo.setText(new Text(botones.getJSONObject("TextoL")));
-        botonInfinito = new Button(botones.getJSONObject("BotonInfinito"));
-        botonInfinito.setText(new Text(botones.getJSONObject("TextoI")));
-        this.botonVolver = new Button(botones.getJSONObject("BotonVolver"));
+        try {
+            botonCorto = new Button(botones.getJSONObject("BotonCorto"));
+            botonCorto.setText(new Text(botones.getJSONObject("TextoC")));
+            botonLargo = new Button(botones.getJSONObject("BotonLargo"));
+            botonLargo.setText(new Text(botones.getJSONObject("TextoL")));
+            botonInfinito = new Button(botones.getJSONObject("BotonInfinito"));
+            botonInfinito.setText(new Text(botones.getJSONObject("TextoI")));
+            this.botonVolver = new Button(botones.getJSONObject("BotonVolver"));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
 
         //escondemos el banner
         this.mobile.setVisibleAdBanner(false);
@@ -58,7 +61,7 @@ public class Dificultad implements State {
      * Renderiza los botones
      */
     @Override
-    public void render(Graphics gr) {
+    public void render(AndroidGraphics gr) {
         botonCorto.Render(gr);
         botonLargo.Render(gr);
         botonInfinito.Render(gr);
@@ -70,9 +73,13 @@ public class Dificultad implements State {
      * @param gr Graphics
      */
     @Override
-    public void setGraphics(Graphics gr) {
+    public void setGraphics(AndroidGraphics gr) {
         this.gr=gr;
-        this.botonVolver.setImagen(new Image(botones.getJSONObject("ImagenVolver"),gr));
+        try {
+            this.botonVolver.setImagen(new Image(botones.getJSONObject("ImagenVolver"),gr));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

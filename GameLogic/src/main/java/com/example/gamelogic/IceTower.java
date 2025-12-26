@@ -1,9 +1,8 @@
 package com.example.gamelogic;
 
 import com.example.engine.Audio;
-import com.example.engine.Graphics;
 import com.example.engine.Sound;
-
+import com.example.androidengine.AndroidGraphics;
 import java.util.ArrayList;
 
 /**
@@ -128,7 +127,7 @@ public class IceTower implements Tower{
      * @param gr Interfaz graphics
      */
     @Override
-    public void Render(Graphics gr) {
+    public void Render(AndroidGraphics gr) {
         if(this.image!=null)
         this.image.RenderCentrado((int)this.x,(int)this.y);
         else

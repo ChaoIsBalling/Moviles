@@ -1,13 +1,13 @@
 package com.example.gamelogic;
 
+import com.example.androidengine.AndroidEngine;
+import com.example.androidengine.AndroidGraphics;
 import com.example.engine.Audio;
-import com.example.engine.Engine;
-import com.example.engine.Graphics;
 import com.example.engine.Mobile;
-import com.example.engine.State;
 import com.example.engine.TouchEvent;
 import java.util.*;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class Tienda implements State {
     //cuando salen de la vista principal del juego
     private Square esconderScroll;
 
-    private Engine engine;
+    private AndroidEngine engine;
 
     private Text textoDiamantes;
     private int diamantes;
@@ -106,12 +106,13 @@ public class Tienda implements State {
     }
 
     Mobile mobile;
-    public Tienda(Engine engine,Mobile mobile){
+    public Tienda(AndroidEngine engine,Mobile mobile){
         ScrollableText=new ArrayList<Text>();
         ScrollableButtons=new ArrayList<Button>();
         this.engine=engine;
         this.mobile = mobile;
         this.datos =engine.readJsonFile("Tienda/style.json");
+        try{
         this.botonVolver = new Button(this.datos.getJSONObject("BotonVolver"));
         this.cargarDatos();
 
@@ -188,6 +189,10 @@ public class Tienda implements State {
         } else if (Objects.equals(this.skinHielo, "TorreHieloCosmetico")) {
             this.hieloS.setColor("#FF00FF00");
         }
+    } catch (
+    JSONException e) {
+        throw new RuntimeException(e);
+    }
     }
 
     //carga el progreso y comprueba que no ha sido modificado
@@ -198,6 +203,7 @@ public class Tienda implements State {
             JSONObject obj=this.engine.readJsonFile2("save");
             String hash = this.engine.createHash(obj.toString());
             if(this.engine.checkHash(hash)) {
+                try{
                 this.rayo = obj.getBoolean("rayo");
                 this.fuego = obj.getBoolean("fuego");
                 this.hielo = obj.getBoolean("hielo");
@@ -207,6 +213,9 @@ public class Tienda implements State {
                 this.skinFuego=obj.getString("skinFuego");
                 this.skinHielo=obj.getString("skinHielo");
                 this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
+                } catch (JSONException e) {
+                throw new RuntimeException(e);
+                }
                 this.textoDiamantes.setText("" + this.diamantes);
             }
             else{
@@ -223,6 +232,7 @@ public class Tienda implements State {
     //resetea el progreso
     private void reset(){
         JSONObject obj=new JSONObject();
+        try{
         obj.put("gems",0);
         obj.put("completed",0);
         obj.put("rayo",false);
@@ -240,11 +250,15 @@ public class Tienda implements State {
         this.diamantes = 0;
         this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
         this.textoDiamantes.setText("" + this.diamantes);
+    } catch (JSONException e) {
+        throw new RuntimeException(e);
+    }
     }
 
     //guardar progreso
     private void guardar(){
         JSONObject obj=this.engine.readJsonFile2("save");
+        try{
         obj.put("gems",this.diamantes);
         obj.put("rayo",this.rayo);
         obj.put("fuego",this.fuego);
@@ -255,6 +269,9 @@ public class Tienda implements State {
         obj.put("skinHielo",this.skinHielo);
         this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
         this.engine.writeFile("save",obj.toString());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -262,7 +279,7 @@ public class Tienda implements State {
     }
 
     @Override
-    public void render(Graphics gr) {
+    public void render(AndroidGraphics gr) {
 
         this.botonRayo.Render(gr);
         this.botonFuego.Render(gr);
@@ -294,7 +311,8 @@ public class Tienda implements State {
     }
 
     @Override
-    public void setGraphics(Graphics gr) {
+    public void setGraphics(AndroidGraphics gr) {
+        try{
         this.botonVolver.setImagen(new Image(datos.getJSONObject("ImagenVolver"),gr));
         this.botonRayo.setImagen(new Image(datos.getJSONObject("ImagenRayo"),gr));
         this.botonFuego.setImagen(new Image(datos.getJSONObject("ImagenFuego"),gr));
@@ -304,6 +322,9 @@ public class Tienda implements State {
         this.rayoS.setImagen(new Image(datos.getJSONObject("ImagenRayo"),gr));
         this.fuegoS.setImagen(new Image(datos.getJSONObject("ImagenFuego"),gr));
         this.hieloS.setImagen(new Image(datos.getJSONObject("ImagenHielo"),gr));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -368,6 +389,7 @@ public class Tienda implements State {
      */
     private void gestionBotones(TouchEvent e) //maneja los estados del juego cuando pulsas botones o las torres
     {
+        try{
         if(this.botonVolver.contains(e.x,e.y)){
             Menu menu = new Menu(this.engine,this.mobile);
             this.engine.setState(menu);
@@ -413,6 +435,9 @@ public class Tienda implements State {
                     break;
             }
         }
+    } catch (JSONException ex) {
+        throw new RuntimeException(ex);
+    }
     }
 
     //gestiona el cambio de skin
@@ -536,6 +561,7 @@ public class Tienda implements State {
      * @param nuevoEstado
      */
     private void cambiarEstado(Estado nuevoEstado) {
+        try{
         switch (nuevoEstado) {
             case normal:
                 this.estado = nuevoEstado;
@@ -557,6 +583,9 @@ public class Tienda implements State {
                 this.estado = nuevoEstado;
                 break;
 
+        }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -1,7 +1,11 @@
-package com.example.engine;
+package com.example.gamelogic;
+import com.example.androidengine.AndroidGraphics;
+import com.example.engine.Audio;
+import com.example.engine.Mobile;
+import com.example.engine.TouchEvent;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * Interfaz que define un estado del juego, así como su actualización, render e input
@@ -18,13 +22,13 @@ public interface State {
      * Dibuja el contenido del estado
      * @param gr Graphics del motor
      */
-    void render(Graphics gr);
+    void render(AndroidGraphics gr);
 
     /**
      * Inicializa el Graphics del motor
      * @param gr Graphics
      */
-    void setGraphics(Graphics gr);
+    void setGraphics(AndroidGraphics gr);
 
     /**
      * Procesa los eventos de entrada del usuario

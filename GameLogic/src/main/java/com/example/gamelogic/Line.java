@@ -1,7 +1,5 @@
 package com.example.gamelogic;
-
-import com.example.engine.Graphics;
-
+import com.example.androidengine.AndroidGraphics;
 /**
  * Clase que representa una linea recta e implementa de Figura
  */
@@ -73,13 +71,13 @@ public class Line implements Figure {
      * @param gr Interfaz Graphics
      */
     @Override
-    public void Render(Graphics gr) {
+    public void Render(AndroidGraphics gr) {
         gr.setColor(this.color);
         gr.pintarLinea(this.x1,this.y1, this.x2, this.y2,this.w);
     }
 
     @Override
-    public void RenderCentrado(Graphics gr, float x, float y) {
+    public void RenderCentrado(AndroidGraphics gr, float x, float y) {
         gr.setColor(this.color);
         gr.pintarLinea(this.x1,this.y1, this.x2, this.y2,this.w);
     }

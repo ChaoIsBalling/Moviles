@@ -1,13 +1,13 @@
 package com.example.gamelogic;
 
-import com.example.engine.Engine;
-import com.example.engine.Graphics;
+import com.example.androidengine.AndroidEngine;
 import com.example.engine.Mobile;
-import com.example.engine.State;
 import com.example.engine.TouchEvent;
 import com.example.engine.Audio;
-
+import com.example.androidengine.AndroidGraphics;
 import java.util.ArrayList;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -30,8 +30,8 @@ public class Menu implements State {
 
     //Referencias al Audio Manager, al motor y a Graphics y a Mobile
     private Audio audio;
-    Engine engine;
-    Graphics gr;
+    AndroidEngine engine;
+    AndroidGraphics gr;
     Mobile mobile;
 
     JSONObject botones;
@@ -39,30 +39,39 @@ public class Menu implements State {
     /**
      * Constructora del menú
      */
-    public Menu(Engine engine, Mobile mobile){
+    public Menu(AndroidEngine engine, Mobile mobile){
         this.engine = engine;
         this.mobile = mobile;
         botones=engine.readJsonFile("Menu/style.json");
-        this.botonInicial = new Button(botones.getJSONObject("BotonInicial"));
-        this.botonInicial.setText(new Text(botones.getJSONObject("TextoBoton")));
+        try {
+            this.botonInicial = new Button(botones.getJSONObject("BotonInicial"));
+            this.botonInicial.setText(new Text(botones.getJSONObject("TextoBoton")));
 
-        this.textoInicial = new Text(botones.getJSONObject("TextoInicial"));
+            this.textoInicial = new Text(botones.getJSONObject("TextoInicial"));
 
-        this.botonAventura = new Button(botones.getJSONObject("BotonAventura"));
-        this.botonAventura.setText( new Text(botones.getJSONObject("TextoAventura")));
+            this.botonAventura = new Button(botones.getJSONObject("BotonAventura"));
+            this.botonAventura.setText( new Text(botones.getJSONObject("TextoAventura")));
 
-        this.botonTienda = new Button(botones.getJSONObject("BotonTienda"));
-        this.botonTienda.setText( new Text(botones.getJSONObject("TextoTienda")));
+            this.botonTienda = new Button(botones.getJSONObject("BotonTienda"));
+            this.botonTienda.setText( new Text(botones.getJSONObject("TextoTienda")));
 
-        //cambiamos el numero de gemas dependiendo de cuanto dinero hemos ganado
-        this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantes"));
+            //cambiamos el numero de gemas dependiendo de cuanto dinero hemos ganado
+            this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantes"));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
 
         if(this.engine.checkFileExists("save"))
         {
             JSONObject obj=this.engine.readJsonFile2("save");
             String hash = this.engine.createHash(obj.toString());
             if(this.engine.checkHash(hash)){
-                this.textoDiamantes.setText(String.valueOf(obj.getInt("gems")));
+                try {
+                    this.textoDiamantes.setText(String.valueOf(obj.getInt("gems")));
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
             else{
                 //resetea el progreso
@@ -80,6 +89,7 @@ public class Menu implements State {
     void newGame()
     {
             JSONObject obj=new JSONObject();
+        try {
             obj.put("gems",0);
             obj.put("completed",0);
             obj.put("rayo",false);
@@ -89,6 +99,10 @@ public class Menu implements State {
             obj.put("skinRayo","Figura");
             obj.put("skinFuego","Figura");
             obj.put("skinHielo","Figura");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
             this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
             this.engine.writeFile("save",obj.toString());
     }
@@ -101,7 +115,7 @@ public class Menu implements State {
      * @param gr Graphics del motor
      */
     @Override
-    public void render(Graphics gr) {
+    public void render(AndroidGraphics gr) {
         botonInicial.Render(gr);
         textoInicial.Render(gr);
         botonAventura.Render(gr);
@@ -115,9 +129,13 @@ public class Menu implements State {
      * @param gr Graphics
      */
     @Override
-    public void setGraphics(Graphics gr) {
+    public void setGraphics(AndroidGraphics gr) {
         this.gr=gr;
-        this.imagenDiamante = new Image(botones.getJSONObject("ImagenDiamante"),gr);
+        try {
+            this.imagenDiamante = new Image(botones.getJSONObject("ImagenDiamante"),gr);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

@@ -1,7 +1,5 @@
 package com.example.gamelogic;
-
-import com.example.engine.Graphics;
-
+import com.example.androidengine.AndroidGraphics;
 /**
  * Clase que representa un traingulo e implementa los métodos de Figura
  */
@@ -72,7 +70,7 @@ public class Triangle implements Figure {
      * @param gr Interfaz Graphics
      */
     @Override
-    public void Render(Graphics gr) {
+    public void Render(AndroidGraphics gr) {
         gr.setColor(this.color);
         if(isFill){
             gr.rellenarPoligono(this.cx,this.cy,this.r, 3);
@@ -82,7 +80,7 @@ public class Triangle implements Figure {
         }
     }
     @Override
-    public void RenderCentrado(Graphics gr, float x, float y) {
+    public void RenderCentrado(AndroidGraphics gr, float x, float y) {
         gr.setColor(this.color);
         if(isFill){
             gr.rellenarPoligono(x+ this.cx,y + this.cy,this.r, 3);

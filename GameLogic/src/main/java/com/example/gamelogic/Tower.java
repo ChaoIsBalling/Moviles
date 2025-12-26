@@ -1,8 +1,7 @@
 package com.example.gamelogic;
 
-import com.example.engine.Graphics;
 import com.example.engine.Audio;
-
+import com.example.androidengine.AndroidGraphics;
 import java.util.ArrayList;
 
 /**
@@ -48,7 +47,7 @@ public interface Tower {
      * Renderiza el enemigo
      * @param gr
      */
-    public void Render(Graphics gr);
+    public void Render(AndroidGraphics gr);
 
     /**
      * Getters de atributos de la torre

@@ -1,7 +1,8 @@
 package com.example.gamelogic;
 
-import com.example.engine.Graphics;
 import com.example.engine.IImage;
+import com.example.androidengine.AndroidGraphics;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -20,12 +21,12 @@ public class Image {
     //Interfaz del motor
     IImage im;
     //Graphics del motor
-    Graphics gr;
+    AndroidGraphics gr;
 
     /**
      * Constructora de la imagen, con sus coordenadas, dimensiones y referencia al graphics del motor
      */
-    public Image(String imagen, int x, int y,int w,int h, Graphics gr){
+    public Image(String imagen, int x, int y,int w,int h, AndroidGraphics gr){
         this.imagen = imagen;
         this.x = x;
         this.y = y;
@@ -34,20 +35,25 @@ public class Image {
         this.gr = gr;
         this.im = this.gr.newImage(imagen,this.w,this.h);
     }
-    public Image(String imagen, int x, int y, Graphics gr){
+    public Image(String imagen, int x, int y, AndroidGraphics gr){
         this.imagen = imagen;
         this.x = x;
         this.y = y;
         this.gr = gr;
         this.im = this.gr.newImage(this.imagen);
     }
-    public Image(JSONObject json,Graphics gr)
+    public Image(JSONObject json,AndroidGraphics gr)
     {
+        try{
         this.imagen= json.getString("imagen");
         this.x = json.getInt("x");
         this.y= json.getInt("y");
         this.w= json.getInt("w");
         this.h=json.getInt("h");
+    } catch (
+    JSONException e) {
+        throw new RuntimeException(e);
+    }
         this.gr=gr;
         this.im = this.gr.newImage(this.imagen,this.w,this.h);
     }

@@ -1,9 +1,7 @@
 package com.example.gamelogic;
 
-import com.example.engine.Graphics;
-
 import com.example.engine.Sound;
-
+import com.example.androidengine.AndroidGraphics;
 import com.example.engine.Audio;
 
 import java.util.ArrayList;
@@ -159,7 +157,7 @@ public class FireTower implements Tower {
      * Renderiza la torre
      */
     @Override
-    public void Render(Graphics gr) {
+    public void Render(AndroidGraphics gr) {
         if(this.image==null)
             this.hexagono.Render(gr);
         else

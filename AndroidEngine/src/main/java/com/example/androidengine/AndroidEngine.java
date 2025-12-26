@@ -19,11 +19,8 @@ import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
 import com.example.engine.Audio;
-import com.example.engine.Engine;
-import com.example.engine.Input;
 import com.example.engine.Mobile;
-import com.example.engine.State;
-import com.example.engine.Graphics;
+import com.example.gamelogic.State;
 import com.example.engine.TouchEvent;
 
 import java.io.FileNotFoundException;
@@ -51,7 +48,7 @@ import android.net.Uri;
  * Implementa Runnable (propia de Java) y la interfaz Engine.
  */
 
-public class AndroidEngine implements Engine,Runnable {
+public class AndroidEngine implements Runnable {
     private AndroidGraphics gr; //Instancia del Android Graphics
     private AssetManager assetManager;   //Instancia de los AssetManager de Android
     private Thread renderThread; //Hilo
@@ -99,7 +96,6 @@ public class AndroidEngine implements Engine,Runnable {
         System.loadLibrary("AndroidEngine");
     }
     //lector de archivos
-    @Override
     public ArrayList<String> readFile(String path)
     {//usa el input stream y elbuffered reader para leer linea a linea un fichero y pasarlo a un arraylist
         ArrayList<String> file = new ArrayList<>();
@@ -117,7 +113,6 @@ public class AndroidEngine implements Engine,Runnable {
         return file;
     }
     //quita el pause
-    @Override
     public void resume(){
         if(!this.running){
             this.running = true;
@@ -126,7 +121,7 @@ public class AndroidEngine implements Engine,Runnable {
         }
     }
     //setter del estado
-    @Override
+
     public void setState(State state){
         this.state = state;
         this.state.setGraphics(this.gr);
@@ -177,23 +172,23 @@ public class AndroidEngine implements Engine,Runnable {
         return param;
     }
     //getter del audio
-    @Override
+
     public Audio getAudio() {
         return this.audio;
     }
     //getter del estado
-    @Override
+
     public State getState()
     {
         return this.state;
     }
     //getter de los graficos
-    public Graphics getGraphics(){
+    public AndroidGraphics getGraphics(){
         return this.gr;
     }
 
     //metodo que inicializa un intent implícito pasandole un string
-    @Override
+
     public void launchIntent(String application) {
         Intent intent = null;
         intent = new Intent(Intent.ACTION_VIEW, Uri.parse(application));
@@ -201,7 +196,7 @@ public class AndroidEngine implements Engine,Runnable {
     }
     //metodo que inicializa un intent implícito pasandole un string y con mas parametros
     //en su creación
-    @Override
+
     public void launchIntent(String application, String text, String parameter)
     {
         Intent intent = null;
@@ -211,7 +206,6 @@ public class AndroidEngine implements Engine,Runnable {
         this.sView.getContext().startActivity(intent);
     }
     //metodo que lanza un intent que comparte un mensaje de texto
-    @Override
     public void luanchShareIntent(String message)
     {
 
@@ -222,11 +216,10 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     //getter de mobile
-    @Override
+
     public Mobile getMobile() { return this.mobile; }
 
     //lector que coje un archivo interno y lo convierte a Json
-    @Override
     public JSONObject readJsonFile2(String file) {
         JSONObject obj = null;
         try {
@@ -248,7 +241,6 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
 //metodo de lectura de archivos tipo JSON
-    @Override
     public JSONObject readJsonFile(String file) {
         JSONObject jsonObject;
     try{
@@ -273,7 +265,6 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     //Metodo para escribir en un archivo dentro del sistema de ficheros del programa
-    @Override
     public void writeFile(String file,String output) {
         FileOutputStream os = null;
         try {
@@ -295,7 +286,6 @@ public class AndroidEngine implements Engine,Runnable {
      * @param title titulo de la noti
      * @param firstText texto de la noti
      */
-    @Override
     public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText) {
         WorkRequest request = new OneTimeWorkRequest.Builder(ReminderWorker.class)
                 .setInitialDelay(time, timeunit) //Tiempo que tiene que pasar para que se envie la notificacion
@@ -312,7 +302,6 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     //Metodo para mostrar una notificación de forma directa, sin temporizador
-    @Override
     public void showNotificacion(String title, String firstText) {
         //Construimos la notificacion
         NotificationCompat.Builder builder = new NotificationCompat.Builder( this.sView.getContext(), CHANNEL_ID)
@@ -353,13 +342,11 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     //Setter del icono de la notificacion
-    @Override
     public void setNotificationIcon(int icon) {
         this.iconNotification=icon;
     }
 
     //Un booleano el cual hace una comptobación de seguridad de si el hash ya existe en el sistema
-    @Override
     public Boolean checkHash(String hash) {
         if(!checkFileExists("hash"))
             return false;
@@ -372,13 +359,13 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     //metodo que te crea automaticamente un String hash para el encriptado el cual ya tiene contraseña
-    @Override
+
     public String createHash(String file) {
         return hashSHA256(this.password+file);
     }
 
     //lectura de archivo que se enfoca en obtener un String con los datos del fichero
-    @Override
+
     public String readFile2(String file) {
         String obj ="";
         try {
@@ -397,21 +384,21 @@ public class AndroidEngine implements Engine,Runnable {
     }
 
     //Metodo que comprueba si un archivo existe o si ya esta creado
-    @Override
+
     public boolean checkFileExists(String file) {
         File f = new File(this.sView.getContext().getFilesDir(),file);
         return f.exists();
     }
 
     //encripta un string a hashSHA256 usando el NDK
-    @Override
+
     public String hashSHA256(String string) {
         return nativeHash(string);
     }
 
     private native String nativeHash(String s);
 
-    @Override
+
     public void pause(){
         if(this.running){
             this.running = false;

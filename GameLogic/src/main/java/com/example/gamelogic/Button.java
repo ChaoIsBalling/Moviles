@@ -1,14 +1,10 @@
 package com.example.gamelogic;
 
-//import java.awt.Font;
-//import java.awt.Graphics;
+import com.example.androidengine.AndroidGraphics;
 
-import com.example.engine.Graphics;
-import com.example.engine.IFont;
 import org.json.JSONObject;
 import org.json.JSONException;
-import org.json.JSONArray;
-import java.awt.Color;
+
 /**
  * Clase que representa un boton en la interfaz del juego
  */
@@ -59,7 +55,8 @@ public class Button {
     //Constructora que te crea un boton a partir de un Json
     public Button(JSONObject json)
     {
-        this.x = json.getInt("x");
+        try {
+            this.x = json.getInt("x");
         this.y= json.getInt("y");
         this.w= json.getInt("w");
         this.h=json.getInt("h");
@@ -67,6 +64,9 @@ public class Button {
         if(isRound)
             this.arcRadius=json.getInt("ar");
         this.color=json.getString("color");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
     /**
      * Setters de atributos del botón
@@ -112,7 +112,7 @@ public class Button {
      * Metodo que renderiza el boton
      * @param gr
      */
-    public void Render(Graphics gr) {
+    public void Render(AndroidGraphics gr) {
         if(this.isVisible&&this.y>=-h){
             //Renderizamos el cuadrado que representa el botón
             gr.setColor(this.color);

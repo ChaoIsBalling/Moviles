@@ -1,9 +1,8 @@
 package com.example.gamelogic;
 
 import com.example.engine.Audio;
-import com.example.engine.Graphics;
 import com.example.engine.Sound;
-
+import com.example.androidengine.AndroidGraphics;
 import java.util.ArrayList;
 
 public class MiniThunderTower implements Tower{
@@ -126,7 +125,7 @@ public class MiniThunderTower implements Tower{
      * @param gr
      */
     @Override
-    public void Render(Graphics gr) {
+    public void Render(AndroidGraphics gr) {
         this.imagen.RenderCentrado((int)this.x,(int)this.y);
         if(this.disparo && this.rayo > 0){
             gr.setColor(0xffff0000);

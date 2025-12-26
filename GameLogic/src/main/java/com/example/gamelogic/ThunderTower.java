@@ -1,9 +1,8 @@
 package com.example.gamelogic;
 
 import com.example.engine.Audio;
-import com.example.engine.Graphics;
 import com.example.engine.Sound;
-
+import com.example.androidengine.AndroidGraphics;
 import java.util.ArrayList;
 
 /**
@@ -138,7 +137,7 @@ public class ThunderTower implements Tower{
      * @param gr
      */
     @Override
-    public void Render(Graphics gr) {
+    public void Render(AndroidGraphics gr) {
         if(this.imagen!=null)
             this.imagen.RenderCentrado((int)this.x,(int)this.y);
         else

@@ -1,16 +1,15 @@
 package com.example.gamelogic;
-
-import com.example.engine.Graphics;
+import com.example.androidengine.AndroidEngine;
 import com.example.engine.Mobile;
-import com.example.engine.State;
 import com.example.engine.TouchEvent;
-import com.example.engine.Engine;
 import com.example.engine.Audio;
-
+import com.example.androidengine.AndroidGraphics;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.Objects;
+
 
 /**
  * Clase que representa la interfaz principal de juego, donde se desarrolla toda su lógica de gameplay
@@ -61,9 +60,9 @@ public class GameLogic implements State {
     ArrayList<Enemy> deadEnemies;
 
     //referencias a módulos del motor
-    Engine engine;
+    AndroidEngine engine;
     Audio audio;
-    Graphics gr;
+    AndroidGraphics gr;
 
     //La torre que mantengamos seleccionada
     Tower torreSeleccionada;
@@ -132,13 +131,12 @@ public class GameLogic implements State {
     //Para leer el mapa
     JSONObject obj;
 
-    //String que determina el color del nivel
-    String colorNivel;
+
        /**
      * Constructora del estado principal de juego en el modo normal
      * @param engine Motor
      */
-    public GameLogic(Engine engine, Mobile mobile, Dificultad dificultad){
+    public GameLogic(AndroidEngine engine, Mobile mobile, Dificultad dificultad){
         this.engine=engine;
         this.init();
         this.dificultad = dificultad;
@@ -150,7 +148,7 @@ public class GameLogic implements State {
     /**
      * Constructora del estado principal de juego en el modo aventura a partir de la lectura del mapa del nivel
      */
-    public GameLogic(Engine engine, Mobile mobile, String mapa, boolean isCompleted){
+    public GameLogic(AndroidEngine engine, Mobile mobile, String mapa, boolean isCompleted){
         this.engine=engine;
         this.dificultad = Dificultad.aventura;
         this.oleadasRestantes=0;
@@ -181,11 +179,16 @@ public class GameLogic implements State {
     {
         this.cargarDatos();
         this.obj=engine.readJsonFile(mapa);
-        colorNivel=obj.getString("colorNivel"); //color de fondo
-        JSONArray arr= obj.getJSONArray("mapa"); //array del mapa
-        this.levelNumber=obj.getInt("level"); //numero de nivel
-        this.oleadasDatos =obj.getJSONArray("waves"); //oleadas de enemigos
-        this.camino = obj.getJSONArray("road"); //camino de puntos de los enemigos
+        JSONArray arr= null; //array del mapa
+        try {
+            arr = obj.getJSONArray("mapa");
+            this.levelNumber=obj.getInt("level"); //numero de nivel
+            this.oleadasDatos =obj.getJSONArray("waves"); //oleadas de enemigos
+            this.camino = obj.getJSONArray("road"); //camino de puntos de los enemigos
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
 
 
         switch(this.dificultad) {
@@ -204,7 +207,11 @@ public class GameLogic implements State {
         }
         this.oleadaGenerar =0;
         this.oleadasT = this.oleadasDatos.length();
-        this.enemigosGenerar = this.oleadasDatos.getJSONObject(this.oleadaGenerar).getInt("amount");
+        try {
+            this.enemigosGenerar = this.oleadasDatos.getJSONObject(this.oleadaGenerar).getInt("amount");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
         this.tiempoOleada = 3*this.enemigosGenerar;
         this.tiempOl = this.tiempoOleada;
         this.tiempoEnGenerar = (float) 0.3;
@@ -212,10 +219,13 @@ public class GameLogic implements State {
 
         //dimensiones tablero
         this.fil=arr.length();
-        this.col=arr.get(0).toString().length();
+        try {
+            this.col=arr.get(0).toString().length();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
         this.ancho = col*(int)anchoCasilla;
         this.alto= fil*(int)altoCasilla;
-        this.recompensas=obj.getInt("reward");
 
         float anchoM = this.anchoCasilla*this.col;
         this.offsetX = ((600-anchoM)/2)+(this.altoCasilla/2);//calcular offset
@@ -225,10 +235,19 @@ public class GameLogic implements State {
 
         //Vamos metiendo cada una de las coordenadas del
         //vector road del JSON al camino de enemigos en forma de coordenadas del tablero
+
         for(int i = 0; i<numPuntos;i++){
-            JSONArray pair = this.camino.getJSONArray(i);
-            int x = pair.getInt(0);
-            int y = pair.getInt(1);
+            JSONArray pair = null;
+            int x=0; int y=0;
+
+            try {
+                pair = this.camino.getJSONArray(i);
+                 x = pair.getInt(0);
+                 y = pair.getInt(1);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
             this.caminoEnemigos.add(new Vector2D(x,y));
         }
 
@@ -237,13 +256,17 @@ public class GameLogic implements State {
             ArrayList<Casilla> fila = new ArrayList<Casilla>();
             for(int j =0; j<this.col;j++){
                 Casilla casilla;
-                if(arr.get(i).toString().charAt(j) == 'h'){
-                    //el fill lo pongo a true para que haya mayor contraste entre la casilla y las torres
-                     casilla = new Casilla((float)(j*this.anchoCasilla+this.offsetX),(float)(i*this.altoCasilla+this.offsetY),this.anchoCasilla,this.altoCasilla,false,false);
-                     casilla.setColor("#ff000000");
-                } else {
-                    casilla = new Casilla((float) (j * this.anchoCasilla + this.offsetX), (float) (i * this.altoCasilla + this.offsetY), this.anchoCasilla, this.altoCasilla, true, true);
-                    casilla.setColor("#ff944d03");
+                try {
+                    if(arr.get(i).toString().charAt(j) == 'h'){
+                        //el fill lo pongo a true para que haya mayor contraste entre la casilla y las torres
+                         casilla = new Casilla((float)(j*this.anchoCasilla+this.offsetX),(float)(i*this.altoCasilla+this.offsetY),this.anchoCasilla,this.altoCasilla,false,false);
+                         casilla.setColor("#ff000000");
+                    } else {
+                        casilla = new Casilla((float) (j * this.anchoCasilla + this.offsetX), (float) (i * this.altoCasilla + this.offsetY), this.anchoCasilla, this.altoCasilla, true, true);
+                        casilla.setColor("#ff944d03");
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
                 casilla.setCoor(new Vector2D(i, j));
                 fila.add(casilla);
@@ -259,7 +282,11 @@ public class GameLogic implements State {
             this.save=this.engine.readJsonFile2("save");
             String hash = this.engine.createHash(this.save.toString());
             if(this.engine.checkHash(hash)) {
-                this.mini = this.save.getBoolean("mini");
+                try {
+                    this.mini = this.save.getBoolean("mini");
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
             else{
                 //resetea el progreso
@@ -275,15 +302,20 @@ public class GameLogic implements State {
     //resetea el progreso
     private void reset(){
         JSONObject obj=new JSONObject();
-        obj.put("gems",0);
-        obj.put("completed",0);
-        obj.put("rayo",false);
-        obj.put("fuego",false);
-        obj.put("hielo",false);
-        obj.put("mini",false);
-        obj.put("skinRayo","Figura");
-        obj.put("skinFuego","Figura");
-        obj.put("skinHielo","Figura");
+        try {
+            obj.put("gems",0);
+            obj.put("completed",0);
+            obj.put("rayo",false);
+            obj.put("fuego",false);
+            obj.put("hielo",false);
+            obj.put("mini",false);
+            obj.put("skinRayo","Figura");
+            obj.put("skinFuego","Figura");
+            obj.put("skinHielo","Figura");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
         this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
         this.engine.writeFile("save",obj.toString());
     }
@@ -351,9 +383,13 @@ public class GameLogic implements State {
             this.stopSoundTorres();
 
             //comprobamos si el nivel que hemos derrotado es un nivel nuevo
-            if(this.levelNumber>save.getInt("completed"))
-            {
-                save.put("completed",this.levelNumber);
+            try {
+                if(this.levelNumber>save.getInt("completed"))
+                {
+                    save.put("completed",this.levelNumber);
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
             this.engine.writeFile("hash",this.engine.createHash(save.toString()));
             this.engine.writeFile("save",save.toString());
@@ -387,7 +423,11 @@ public class GameLogic implements State {
             //para evitar que esto pete
             if(this.oleadasRestantes!=0) {
                 this.oleadaGenerar = (this.oleada-1)%this.oleadasT;
-                this.enemigosGenerar = this.oleadasDatos.getJSONObject(this.oleadaGenerar).getInt("amount") + this.oleada/this.oleadasT;
+                try {
+                    this.enemigosGenerar = this.oleadasDatos.getJSONObject(this.oleadaGenerar).getInt("amount") + this.oleada/this.oleadasT;
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             //Resetear numero de enemigos generados
@@ -425,20 +465,27 @@ public class GameLogic implements State {
         if (this.numE < this.enemigosGenerar) {
             Tipo tipo;
             //dependiendo del tipo de enemigo tiene un tipo distinto
-            String enemy =this.oleadasDatos.getJSONObject(this.oleadaGenerar).getString("enemy");
+            String enemy = null;
             Image im;
-            if(enemy.equals("goblin")) {
-                tipo = Tipo.rayo;
-                im=new Image(this.style.getJSONObject("ImagenGoblin"),this.gr);
+            try {
+                enemy = this.oleadasDatos.getJSONObject(this.oleadaGenerar).getString("enemy");
+
+                if(enemy.equals("goblin")) {
+                    tipo = Tipo.rayo;
+                    im=new Image(this.style.getJSONObject("ImagenGoblin"),this.gr);
+                }
+                else if(enemy.equals("imp")) {
+                    tipo = Tipo.fuego;
+                    im=new Image(this.style.getJSONObject("ImagenImp"),this.gr);
+                }
+                else {
+                    tipo = Tipo.hielo;
+                    im=new Image(this.style.getJSONObject("ImagenOgre"),this.gr);
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
-            else if(enemy.equals("imp")) {
-                tipo = Tipo.fuego;
-                im=new Image(this.style.getJSONObject("ImagenImp"),this.gr);
-            }
-            else {
-                tipo = Tipo.hielo;
-                im=new Image(this.style.getJSONObject("ImagenOgre"),this.gr);
-            }
+
             //Generamos enemigo
             this.enemigos.add(new Enemy(
                     8 + (this.mejVidaEn * (this.oleada/this.oleadasT)),
@@ -524,7 +571,7 @@ public class GameLogic implements State {
      * @param gr Graphics del motor
      */
     @Override
-    public void render(Graphics gr) {
+    public void render(AndroidGraphics gr) {
         //gr.setColor(0x00000000);
         gr.clear();
 
@@ -568,7 +615,9 @@ public class GameLogic implements State {
     public void inicializarUI() {
 
         this.style =engine.readJsonFile("GameLogic/style.json");
-        this.botonMejoraCuadrados = new Button(style.getJSONObject("BotonMejoraCuadrados"));
+        try {
+            this.botonMejoraCuadrados = new Button(style.getJSONObject("BotonMejoraCuadrados"));
+
         this.botonMejoraTriangulos = new Button(style.getJSONObject("BotonMejoraTriangulos"));
         this.botonMejoraHexagonos = new Button(style.getJSONObject("BotonMejoraHexagonos"));
         this.botonMejoraMini = new Button(style.getJSONObject("BotonMejoraMini"));
@@ -622,7 +671,9 @@ public class GameLogic implements State {
         this.textoD = new Text("Inika-Regular.ttf", String.valueOf(this.dinero), 30, 370, 20);
         this.imagenVida = new Image( style.getJSONObject("ImagenVida"), this.gr);
         this.imagenDinero = new Image(style.getJSONObject("ImagenDinero"), this.gr);
-
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -668,12 +719,16 @@ public class GameLogic implements State {
      * @param gr Graphics
      */
     @Override
-    public void setGraphics(Graphics gr) {
+    public void setGraphics(AndroidGraphics gr) {
         this.gr = gr;
         this.inicializarUI();
 
         //Inicializamos posicion y escalado del fondo
-        this.imagenFondo=new Image(obj.getJSONObject("background"),this.gr); //Fondo del nivel
+        try {
+            this.imagenFondo=new Image(obj.getJSONObject("background"),this.gr); //Fondo del nivel
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
         this.imagenFondo.setX((int)this.offsetX -17); this.imagenFondo.setY((int)this.offsetY -17);
         this.imagenFondo.setW(this.ancho); this.imagenFondo.setH(this.alto);
     }
@@ -779,22 +834,25 @@ public class GameLogic implements State {
         if (this.dinero >= precio && !this.casillas.get(casillaR.getX()).get(casillaR.getY()).esCamino()) {
             Tower torreR;
             String torre;
+            try {
             switch (this.estado) {
                 //en cada caso hacemos una comprobación de cosmeticos para poder darle el cosmetico correspondiente
                 //a cada torre
                     case botonRayo:
-                        if(save.getBoolean("rayo")&& !Objects.equals(save.getString("skinRayo"), "Figura")) {
-                            torre = save.getString("skinRayo");
-                            torreR = new ThunderTower
-                                    (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
-                                            this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
-                                            new Image(this.style.getJSONObject(torre), this.gr));
-                        }
-                        else {
-                            torreR = new ThunderTower
-                                    (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
-                                            this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY());
-                        }
+
+                            if(save.getBoolean("rayo")&& !Objects.equals(save.getString("skinRayo"), "Figura")) {
+                                torre = save.getString("skinRayo");
+                                torreR = new ThunderTower
+                                        (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
+                                                this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY(),
+                                                new Image(this.style.getJSONObject(torre), this.gr));
+                            }
+                            else {
+                                torreR = new ThunderTower
+                                        (this.casillas.get(casillaR.getX()).get(casillaR.getY()).getX(),
+                                                this.casillas.get(casillaR.getX()).get(casillaR.getY()).getY());
+                            }
+
                         break;
                     case botonFuego:
                         if(save.getBoolean("fuego")&& !Objects.equals(save.getString("skinFuego"), "Figura")) {
@@ -832,6 +890,10 @@ public class GameLogic implements State {
 
                         break;
                 }
+            }
+            catch (JSONException ex) {
+                throw new RuntimeException(ex);
+             }
                 torreR.setListaEnemigos(this.enemigos);
                 torreR.setAudio(this.audio);
                 this.casillas.get(casillaR.getX()).get(casillaR.getY()).setTorre(torreR);

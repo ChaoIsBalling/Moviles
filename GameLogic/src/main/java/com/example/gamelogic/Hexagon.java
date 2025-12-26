@@ -1,7 +1,5 @@
 package com.example.gamelogic;
-
-import com.example.engine.Graphics;
-
+import com.example.androidengine.AndroidGraphics;
 /**
  * Clase que representa un Hexágono
  */
@@ -75,7 +73,7 @@ public class Hexagon implements Figure{
      * @param gr Interfaz Graphics
      */
     @Override
-    public void Render(Graphics gr) {
+    public void Render(AndroidGraphics gr) {
         gr.setColor(this.color);
         if(isFill){
             gr.rellenarHexagono(this.cx, this.cy,this.r);
@@ -89,7 +87,7 @@ public class Hexagon implements Figure{
      * Renderiza de forma centrada el círculo a partir de una posicion x,y
      */
     @Override
-    public void RenderCentrado(Graphics gr, float x, float y) {
+    public void RenderCentrado(AndroidGraphics gr, float x, float y) {
         gr.setColor(this.color);
         if(isFill){
             gr.rellenarHexagono(x+this.cx, y+ this.cy,this.r);

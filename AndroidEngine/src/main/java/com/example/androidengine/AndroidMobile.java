@@ -5,11 +5,9 @@ import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.engine.Engine;
 import com.example.engine.RewardCallback;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
@@ -19,7 +17,6 @@ import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
-import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.rewarded.RewardItem;

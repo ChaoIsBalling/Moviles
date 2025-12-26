@@ -1,6 +1,5 @@
 package com.example.gamelogic;
-
-import com.example.engine.Graphics;
+import com.example.androidengine.AndroidGraphics;
 
 /**
  * Clase que representa una casilla del mapa en el juego
@@ -54,7 +53,7 @@ public class Casilla {
     /**
      * Renderiza el cuadrado de la casilla
      */
-    public void Render(Graphics gr){
+    public void Render(AndroidGraphics gr){
         this.cuadrado.Render(gr);
     }
 }
