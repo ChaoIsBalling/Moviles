@@ -9,4 +9,5 @@ dependencies {
     implementation(project(":Engine"))
     implementation(files("../app/libs/json-20250517.jar"))
     implementation("com.google.code.gson:gson:2.8.9")
+    implementation(project(":AndroidEngine"))
 }
