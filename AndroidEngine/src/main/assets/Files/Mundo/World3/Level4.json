@@ -1,6 +1,5 @@
 {
     "level":16,
-     "colorNivel":"#ffFF295F",
     "waves": [
       {
       "enemy":"orc",

@@ -1,6 +1,5 @@
 {
     "level":2,
-      "colorNivel":"#ff6efa55",
     "waves": [
     {
      "enemy": "goblin",

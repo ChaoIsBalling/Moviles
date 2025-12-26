@@ -1,6 +1,5 @@
 {
     "level":15,
-     "colorNivel":"#ffFF295F",
     "waves": [ 
     { 
      "enemy": "imp",
