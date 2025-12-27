@@ -108,9 +108,9 @@ public class AndroidGraphics{
     /**
      * Metodo que limita lo que se renderiza en pantalla al tamaño logico
      */
-    public void EmpezarLimiteDibujado(){
+    public void EmpezarLimiteDibujado(float left, float top, float right, float botton){
         this.canvas.save();
-        this.canvas.clipRect(this.offsetX,this.offsetY,this.offsetX+logicW*this.scale,this.offsetY+logicH*this.scale);
+        this.canvas.clipRect(left, top, right, botton);
     }
 
     /**

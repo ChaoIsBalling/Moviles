@@ -15,9 +15,6 @@ public class Tienda implements State {
 
     private Button botonVolver;
 
-    //pequeño cuadrado del mismo color que el fondo para esconder cuando los botones desaparecen
-    //cuando salen de la vista principal del juego
-
     private AndroidEngine engine;
 
     private Text textoDiamantes;
@@ -277,14 +274,14 @@ public class Tienda implements State {
     @Override
     public void render(AndroidGraphics gr) {
 
-        this.engine.EmpezarLimiteDibujado();
+        gr.EmpezarLimiteDibujado(0,80,600,500);
         this.botonRayo.Render(gr);
         this.botonFuego.Render(gr);
         this.botonHielo.Render(gr);
         this.botonMini.Render(gr);
         this.CTorres.Render(gr);
         this.CSkins.Render(gr);
-        this.engine.TerminarLimiteDibujado();
+        gr.TerminarLimiteDibujado();
         this.botonVolver.Render(gr);
         this.textoDiamantes.Render(gr);
         this.imagenDiamante.Render();
