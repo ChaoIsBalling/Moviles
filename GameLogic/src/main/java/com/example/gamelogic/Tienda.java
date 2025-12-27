@@ -17,7 +17,6 @@ public class Tienda implements State {
 
     //pequeño cuadrado del mismo color que el fondo para esconder cuando los botones desaparecen
     //cuando salen de la vista principal del juego
-    private Square esconderScroll;
 
     private AndroidEngine engine;
 
@@ -146,8 +145,6 @@ public class Tienda implements State {
         this.botonComprar = new Button(this.datos.getJSONObject("BotonComprar"));
         this.botonComprar.setText(new Text(this.datos.getJSONObject("TextoComprar")));
         this.estado = Estado.normal;
-        this.esconderScroll=new Square(300,-150,600,300,true);
-        this.esconderScroll.setColor("#ffffffff");
         this.CTorres = new Text(this.datos.getJSONObject("TextoCTorres"));
         this.CSkins = new Text(this.datos.getJSONObject("TextoCSkins"));
         ScrollableText.add(this.CTorres);
@@ -280,13 +277,14 @@ public class Tienda implements State {
     @Override
     public void render(AndroidGraphics gr) {
 
+        this.engine.EmpezarLimiteDibujado();
         this.botonRayo.Render(gr);
         this.botonFuego.Render(gr);
         this.botonHielo.Render(gr);
         this.botonMini.Render(gr);
         this.CTorres.Render(gr);
         this.CSkins.Render(gr);
-        this.esconderScroll.Render(gr);
+        this.engine.TerminarLimiteDibujado();
         this.botonVolver.Render(gr);
         this.textoDiamantes.Render(gr);
         this.imagenDiamante.Render();

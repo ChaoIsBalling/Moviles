@@ -104,6 +104,22 @@ public class AndroidGraphics{
     protected void endFrame(){
         this.holder.unlockCanvasAndPost(canvas);
     }
+
+    /**
+     * Metodo que limita lo que se renderiza en pantalla al tamaño logico
+     */
+    public void EmpezarLimiteDibujado(){
+        this.canvas.save();
+        this.canvas.clipRect(this.offsetX,this.offsetY,this.offsetX+logicW*this.scale,this.offsetY+logicH*this.scale);
+    }
+
+    /**
+     * Metodo que termina la limitacion de pintado en pantalla
+     */
+    public void TerminarLimiteDibujado(){
+        this.canvas.restore();
+    }
+
     /**
      * Metodo que limpia y pinta el texto
      */
