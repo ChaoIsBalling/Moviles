@@ -83,7 +83,7 @@
     {
         "texto":"Coste:",
         "font":"Inika-Regular.ttf",
-        "x":500,
+        "x":470,
         "y":150,
         "size":30,
         "bold":true,
@@ -91,7 +91,7 @@
         "color":"#FF000000"
     },
     "BotonComprar":    
-    {   "x":500,
+    {   "x":470,
         "y":350,
         "w":100,
         "h":50,
