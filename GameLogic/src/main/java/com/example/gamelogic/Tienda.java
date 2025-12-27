@@ -274,7 +274,8 @@ public class Tienda implements State {
     @Override
     public void render(AndroidGraphics gr) {
 
-        gr.EmpezarLimiteDibujado(0,80,600,500);
+        gr.EmpezarLimiteDibujado(0,0,600,400);
+        gr.EmpezarLimiteDibujado(0,80,600,400);
         this.botonRayo.Render(gr);
         this.botonFuego.Render(gr);
         this.botonHielo.Render(gr);
@@ -302,6 +303,7 @@ public class Tienda implements State {
             this.botonComprar.Render(gr);
             }
         }
+        gr.TerminarLimiteDibujado();
     }
 
     @Override
