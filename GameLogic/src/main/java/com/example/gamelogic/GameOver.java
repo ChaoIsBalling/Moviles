@@ -44,6 +44,11 @@ public class GameOver implements State {
     //Determina si el jugador ha ganado
     boolean win;
 
+    //nivel, mundo y oleada actual
+    int nivel;
+    int mundo;
+    int oleada;
+
     //determina si el jugador completó el nivel con anterioridad en el modo aventura
     boolean isCompleted;
     int numDiamantes; //la cantidad total de diamantes que tiene el jugador antes de retirar la recompensa
@@ -59,7 +64,7 @@ public class GameOver implements State {
 
     //Dificultad con la que se ha superado el nivel (Para saber el modo de juego)
     GameLogic.Dificultad dificultad;
-    public GameOver(AndroidEngine engine, AndroidAudio audio, AndroidMobile mobile, GameLogic.Dificultad dificultad ,boolean win, boolean isCompleted)
+    public GameOver(AndroidEngine engine, AndroidAudio audio, AndroidMobile mobile, GameLogic.Dificultad dificultad ,boolean win, boolean isCompleted, int nivel, int mundo, int oleada)
     {
         //Inicializamos los botones y textos
         this.engine = engine;
@@ -69,6 +74,9 @@ public class GameOver implements State {
         this.setAudio(audio);
         this.audio = audio;
         this.mobile = mobile;
+        this.nivel=nivel;
+        this.mundo=mundo;
+        this.oleada = oleada;
 
         //si estamos en modo aventura, se detectara si el nivel se completó, en modo normal será true por defecto
         this.isCompleted =
@@ -220,11 +228,24 @@ public class GameOver implements State {
                         String message;
                         if(this.win)
                         {
-                            message="Mira lo bueno que soy en este juego";
+                            if(this.dificultad == GameLogic.Dificultad.corto){
+                                message = "Mira lo bueno que soy me he pasado una partida corta del mejor tower defense de todos los tiempos";
+                            }
+                            else if(this.dificultad == GameLogic.Dificultad.largo){
+                                message = "Mira lo bueno que soy me he pasado una partida larga del mejor tower defense de todos los tiempos";
+                            }
+                            else {
+                                message = "Mira lo bueno que soy me he pasado el nivel " + this.nivel + " del mundo " + this.mundo + " del mejor tower defense de todos los tiempos";
+                            }
                         }
                         else
                         {
-                            message="Soy una desgracia >:(";
+                            if(this.dificultad == GameLogic.Dificultad.infinito){
+                                message = "Mira lo bueno que soy me he llegado a la oleada "+this.oleada+" del modo infinito del mejor tower defense de todos los tiempos";
+                            }
+                            else {
+                                message = "Soy una desgracia >:(";
+                            }
                         }
                         this.engine.luanchShareIntent(message); //intent
                     }
