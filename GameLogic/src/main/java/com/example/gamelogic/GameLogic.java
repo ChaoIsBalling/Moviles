@@ -280,7 +280,7 @@ public class GameLogic implements State {
     private void cargarDatos(){
         if(this.engine.checkFileExists("save"))
         {
-            this.save=this.engine.readJsonFile2("save");
+            this.save=this.engine.readInternalJsonFile("save");
             String hash = this.engine.createHash(this.save.toString());
             if(this.engine.checkHash(hash)) {
                 try {

@@ -56,7 +56,7 @@ public class Mundo implements State {
         this.mundo=mundo;
         this.mobile = mobile;
 
-        JSONObject save=this.engine.readJsonFile2("save");
+        JSONObject save=this.engine.readInternalJsonFile("save");
         try {
             this.completed= save.getInt("completed");
 

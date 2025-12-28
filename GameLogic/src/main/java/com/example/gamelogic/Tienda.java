@@ -193,7 +193,7 @@ public class Tienda implements State {
 
         if(this.engine.checkFileExists("save"))
         {
-            JSONObject obj=this.engine.readJsonFile2("save");
+            JSONObject obj=this.engine.readInternalJsonFile("save");
             String hash = this.engine.createHash(obj.toString());
             if(this.engine.checkHash(hash)) {
                 try{
@@ -250,7 +250,7 @@ public class Tienda implements State {
 
     //guardar progreso
     private void guardar(){
-        JSONObject obj=this.engine.readJsonFile2("save");
+        JSONObject obj=this.engine.readInternalJsonFile("save");
         try{
         obj.put("gems",this.diamantes);
         obj.put("rayo",this.rayo);

@@ -130,12 +130,10 @@ public class AndroidEngine implements Runnable {
         if(this.checkFileExists("save")) { //si existe el archivo de guardado
             JSONObject obj;
             try {
-                obj = this.readJsonFile2("save");
+                obj = this.readInternalJsonFile("save");
                 String hash = this.createHash(obj.toString());
-                if (this.checkHash(hash)) {
-                    //modificamos el parametro
-                    obj.put(key, obj.getInt(key) + amount);
-                }
+                //modificamos el parametro
+                obj.put(key, obj.getInt(key) + amount);
 
             } catch (JSONException e) {
                 throw new RuntimeException(e);
@@ -152,7 +150,7 @@ public class AndroidEngine implements Runnable {
     public int leerParametroInt(String key) {
         int param=0;
         if(this.checkFileExists("save")) {
-            JSONObject obj = this.readJsonFile2("save");
+            JSONObject obj = this.readInternalJsonFile("save");
             String hash = this.createHash(obj.toString());
             if (this.checkHash(hash)) {
                 try {
@@ -215,7 +213,7 @@ public class AndroidEngine implements Runnable {
     public AndroidMobile getMobile() { return this.mobile; }
 
     //lector que coje un archivo interno y lo convierte a Json
-    public JSONObject readJsonFile2(String file) {
+    public JSONObject readInternalJsonFile(String file) {
         JSONObject obj = null;
         try {
             FileInputStream fis = this.sView.getContext().openFileInput(file);

@@ -65,7 +65,7 @@ public class Menu implements State {
 
         if(this.engine.checkFileExists("save"))
         {
-            JSONObject obj=this.engine.readJsonFile2("save");
+            JSONObject obj=this.engine.readInternalJsonFile("save");
             String hash = this.engine.createHash(obj.toString());
             if(this.engine.checkHash(hash)){
                 try {
