@@ -180,6 +180,20 @@ public class AndroidEngine implements Runnable {
         return this.gr;
     }
 
+    //Método que determina cuantos archivos tiene un directorio
+    public int getDirectoryLenght(String dir){
+        String[] files = null;
+        try {
+            files = this.assetManager.list(this.filesDir + dir);
+            //devolvemos la longitud del directorio
+            return files != null ? files.length : 0;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
     //metodo que inicializa un intent implícito pasandole un string
 
     public void launchIntent(String application) {

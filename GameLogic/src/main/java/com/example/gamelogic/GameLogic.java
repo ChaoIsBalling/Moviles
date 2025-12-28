@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
+
 
 
 /**
@@ -132,6 +134,8 @@ public class GameLogic implements State {
     //Para leer el mapa
     JSONObject obj;
 
+    //Generador de numeros aleatorios de java
+    Random rnd;
 
        /**
      * Constructora del estado principal de juego en el modo normal
@@ -141,8 +145,14 @@ public class GameLogic implements State {
         this.engine=engine;
         this.init();
         this.dificultad = dificultad;
-        this.inicializarNivel("mapa1.json");
-        //this.imagenFondo = new Image();
+
+        //Elegimos un nivel entre un subcojunto de niveles de la carpeta Mapas
+        int l = this.engine.getDirectoryLenght("Mapas");
+        rnd = new Random();
+        int level = rnd.nextInt(l) + 1;
+
+        //Inicializamos el nivel correspondiente
+        this.inicializarNivel("Mapas/mapa" + level + ".json");
         this.mobile = mobile;
         this.mobile.setVisibleAdBanner(false);
     }
