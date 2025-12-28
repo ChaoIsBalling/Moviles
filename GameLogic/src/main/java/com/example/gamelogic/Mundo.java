@@ -89,15 +89,16 @@ public class Mundo implements State {
                 nivel.setText("X");
                 nivelMundo.setText(nivel);
                 nivelMundo.setY(nivelMundo.getY()+nivelMundo.getHeight()*(float)i*1.5f);
-                nivelMundo.setColor(colorLocked);
+                nivelMundo.setColor("#FFABABAC");
                 niveles.add(nivelMundo);
         }
         for(int i=0;i<=Math.min(niveles.size()-1,this.completed-this.nivelesHastaAhora);i++)
         {
             niveles.get(i).setColor(colorCompleted);
             niveles.get(i).changeText(String.valueOf(i+1));
-
         }
+        if(this.completed-this.nivelesHastaAhora>=0&&this.completed-this.nivelesHastaAhora<niveles.size())
+            niveles.get(this.completed-this.nivelesHastaAhora).setColor(colorLocked);
 
         this.textoMundo = new Text(botones.getJSONObject("TextoMundo"));
         this.textoMundo.setText("Mundo "+this.mundo);
@@ -219,7 +220,7 @@ public class Mundo implements State {
                     //(i == this.completed - this.nivelesHastaAhora) -> Ultimo nivel sin completar
                     //(i <                                         ) -> Nivel completado
                     boolean isLevelCompleted = (i == this.completed - this.nivelesHastaAhora) ? false: true;
-                    System.out.println(isLevelCompleted);
+
                     GameLogic gameLogic = new GameLogic(this.engine, this.mobile, "Mundo/World" + this.mundo + "/Level" + (i + 1) + ".json",isLevelCompleted);
                     this.engine.setState(gameLogic);
                 }
