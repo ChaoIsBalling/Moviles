@@ -112,6 +112,10 @@ public class GameLogic implements State {
     //Indica si el nivel se ha completado en el modo aventura
     boolean isCompleted;
 
+    //nivel y mundo actual
+    int nivel;
+    int mundo;
+
       //Enumaerado que determina en que estado de juego estamos
     private enum Estado {
         normal, botonRayo, botonFuego, botonHielo, torre, botonMini
@@ -159,7 +163,7 @@ public class GameLogic implements State {
     /**
      * Constructora del estado principal de juego en el modo aventura a partir de la lectura del mapa del nivel
      */
-    public GameLogic(AndroidEngine engine, AndroidMobile mobile, String mapa, boolean isCompleted){
+    public GameLogic(AndroidEngine engine, AndroidMobile mobile, String mapa, boolean isCompleted, int nivel, int mundo){
         this.engine=engine;
         this.dificultad = Dificultad.aventura;
         this.oleadasRestantes=0;
@@ -168,6 +172,8 @@ public class GameLogic implements State {
         this.inicializarNivel(mapa);
         this.mobile = mobile;
         this.mobile.setVisibleAdBanner(false);
+        this.nivel=nivel;
+        this.mundo=mundo;
     }
     //inicializa parametros
     private void init() {
@@ -406,14 +412,14 @@ public class GameLogic implements State {
             this.engine.writeFile("save",save.toString());
 
             //Vamos al estado de GameOver
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true, this.isCompleted);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true, this.isCompleted, this.nivel, this.mundo, this.oleada);
             this.engine.setState(gameOver);
         }
 
         //En caso de que haya perdido
         if (this.vida <= 0) {
             this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false, this.isCompleted);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false, this.isCompleted, this.nivel, this.mundo, this.oleada);
             this.engine.setState(gameOver);
         }
     }
