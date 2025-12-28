@@ -91,22 +91,6 @@ public class AndroidEngine implements Runnable {
         System.loadLibrary("AndroidEngine");
     }
     //lector de archivos
-    public ArrayList<String> readFile(String path)
-    {//usa el input stream y elbuffered reader para leer linea a linea un fichero y pasarlo a un arraylist
-        ArrayList<String> file = new ArrayList<>();
-
-        try {
-            InputStream inputStream = assetManager.open(filesDir+path);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            String line;
-
-            while ((line = reader.readLine()) != null)
-                file.add(line);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return file;
-    }
     //quita el pause
     public void resume(){
         if(!this.running){
@@ -194,24 +178,6 @@ public class AndroidEngine implements Runnable {
 
     }
 
-    //metodo que inicializa un intent implícito pasandole un string
-
-    public void launchIntent(String application) {
-        Intent intent = null;
-        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(application));
-        this.sView.getContext().startActivity(intent);
-    }
-    //metodo que inicializa un intent implícito pasandole un string y con mas parametros
-    //en su creación
-
-    public void launchIntent(String application, String text, String parameter)
-    {
-        Intent intent = null;
-        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(application).buildUpon()
-                .appendQueryParameter( text, parameter )
-                .build());
-        this.sView.getContext().startActivity(intent);
-    }
     //metodo que lanza un intent que comparte un mensaje de texto
     public void luanchShareIntent(String message)
     {
@@ -308,31 +274,6 @@ public class AndroidEngine implements Runnable {
 
     }
 
-    //Metodo para mostrar una notificación de forma directa, sin temporizador
-    public void showNotificacion(String title, String firstText) {
-        //Construimos la notificacion
-        NotificationCompat.Builder builder = new NotificationCompat.Builder( this.sView.getContext(), CHANNEL_ID)
-                .setSmallIcon(this.iconNotification)
-                .setContentTitle(title)
-                .setContentText(firstText)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(firstText))
-                .setPriority(NotificationCompat. PRIORITY_DEFAULT);
-        //Llamamos al manager de notifiaciones
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.sView.getContext());
-        //Comprobamos que la app tenga permisos de postear una notificación
-        Activity activity = (Activity) sView.getContext();
-        if (ActivityCompat.checkSelfPermission(activity,
-                android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // ActivityCompat#requestPermissions
-            //si no los tiene, los solicitamos
-            ActivityCompat.requestPermissions((Activity) this.sView.getContext(),
-                    new String[]{Manifest.permission.POST_NOTIFICATIONS},101);
-        }
-        // notificationId is a unique int for each notification that you must define.
-        int NOTIFICATION_ID = (int) System.currentTimeMillis();  // ID único
-        notificationManager.notify(NOTIFICATION_ID, builder.build()); //Invocamos la notificación
-    }
 
     //Metodo para crear un canal por el que transmitir notificaciones
     private void createNotificationChannel(){
