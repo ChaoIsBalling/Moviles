@@ -214,6 +214,64 @@
         "isRound":true,
         "ar":15,
         "color":"#FFFFFFFF"
-    }
+    },
+    "BotonRojo":    
+    {   "x":100,
+        "y":650,
+        "w":100,
+        "h":100,
+        "isRound":true,
+        "ar":15,
+        "color":"#FFFF0000"
+    },
+    "BotonAzul":    
+    {   "x":250,
+        "y":650,
+        "w":100,
+        "h":100,
+        "isRound":true,
+        "ar":15,
+        "color":"#FF0000FF"
+    },
+    "TextoColores":
+    {
+        "texto":"Colores fondo",
+        "font":"Inika-Regular.ttf",
+        "x":170,
+        "y":570,
+        "size":40,
+        "bold":true,
+        "italic":true,
+        "color":"#FF000000"
+    },
+    "BotonBlancoF":    
+    {   "x":420,
+        "y":170,
+        "w":80,
+        "h":80,
+        "isRound":true,
+        "ar":15,
+       "color":"#FFFFFFFF"
+    },
+    "BotonRojoF":    
+    {   "x":530,
+        "y":170,
+        "w":80,
+        "h":80,
+        "isRound":true,
+        "ar":15,
+        "color":"#FFFF0000"
+    },
+    "BotonAzulF":    
+    {   "x":530,
+        "y":170,
+        "w":80,
+        "h":80,
+        "isRound":true,
+        "ar":15,
+        "color":"#FF0000FF"
+    },
+    "CosteRojo":"100",
+    "CosteAzul":"100"
 
 }

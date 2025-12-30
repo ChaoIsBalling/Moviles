@@ -28,6 +28,8 @@ public class Menu implements State {
 
     private Image imagenDiamante;
 
+    private String fondo;
+
 
     //Referencias al Audio Manager, al motor y a Graphics y a Mobile
     private AndroidAudio audio;
@@ -61,7 +63,7 @@ public class Menu implements State {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
+        this.fondo="#FFFFFFFF";
 
         if(this.engine.checkFileExists("save"))
         {
@@ -70,6 +72,7 @@ public class Menu implements State {
             if(this.engine.checkHash(hash)){
                 try {
                     this.textoDiamantes.setText(String.valueOf(obj.getInt("gems")));
+                    this.fondo = obj.getString("fondo");
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -91,7 +94,7 @@ public class Menu implements State {
     {
             JSONObject obj=new JSONObject();
         try {
-            obj.put("gems",0);
+            obj.put("gems",10000);
             obj.put("completed",0);
             obj.put("rayo",false);
             obj.put("fuego",false);
@@ -100,6 +103,9 @@ public class Menu implements State {
             obj.put("skinRayo","Figura");
             obj.put("skinFuego","Figura");
             obj.put("skinHielo","Figura");
+            obj.put("rojo",false);
+            obj.put("azul",false);
+            obj.put("fondo","#FFFFFFFF");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -134,6 +140,7 @@ public class Menu implements State {
         this.gr=gr;
         try {
             this.imagenDiamante = new Image(botones.getJSONObject("ImagenDiamante"),gr);
+            this.gr.setColorClear(this.fondo);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

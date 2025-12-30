@@ -40,6 +40,8 @@ public class AndroidGraphics{
     private float logicW;
     private Context context;
 
+    private String colorClean;
+
     private AndroidFont af;
 
     //private Asset asset;
@@ -56,6 +58,7 @@ public class AndroidGraphics{
         this.canvas = new Canvas();
         context= sView.getContext();
         assetManager= context.getAssets();
+        this.colorClean="#FFFFFFFF";
 
 
         scale =0;
@@ -96,8 +99,13 @@ public class AndroidGraphics{
      */
     public void clear(){
         this.canvas.drawColor(Color.TRANSPARENT, Mode.CLEAR);
-        this.canvas.drawColor(Color.WHITE);
+        this.canvas.drawColor(Color.parseColor(this.colorClean));
     }
+
+    public void setColorClear(String color){
+        this.colorClean = color;
+    }
+
     /**
      * Metodo que desbloque el canvas
      */
