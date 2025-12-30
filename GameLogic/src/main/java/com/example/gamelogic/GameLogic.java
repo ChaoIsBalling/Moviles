@@ -701,6 +701,9 @@ public class GameLogic implements State {
         this.botonMejoraCuadrados.setColor(this.fondo);
         this.botonMejoraHexagonos.setColor(this.fondo);
         this.botonMejoraMini.setColor(this.fondo);
+        this.botonMejoraAtaque.setColor(this.fondo);
+        this.botonMejoraRango.setColor(this.fondo);
+        this.botonMejoraVelocidad.setColor(this.fondo);
     }
 
     /**
