@@ -199,7 +199,13 @@ public class Tienda implements State {
         }
 
         this.botonRojo = new Button(this.datos.getJSONObject("BotonRojo"));
+        Square br = new Square(0,0,80,80,true);
+        br.setColor("#FFFF0000");
+        this.botonRojo.setFigura(br);
         this.botonAzul = new Button(this.datos.getJSONObject("BotonAzul"));
+        Square ba = new Square(0,0,80,80,true);
+        ba.setColor("#FF0000FF");
+        this.botonAzul.setFigura(ba);
         this.botonBlancoF = new Button(this.datos.getJSONObject("BotonBlancoF"));
         this.botonRojoF = new Button(this.datos.getJSONObject("BotonRojoF"));
         this.botonAzulF = new Button(this.datos.getJSONObject("BotonAzulF"));
@@ -207,6 +213,12 @@ public class Tienda implements State {
         ScrollableButtons.add(botonAzul);
         this.CFondo = new Text(this.datos.getJSONObject("TextoColores"));
         ScrollableText.add(CFondo);
+        if(this.rojo){
+            this.botonRojo.setColor("#ff00ff00");
+        }
+        if(this.azul){
+            this.botonAzul.setColor("#ff00ff00");
+        }
     } catch (
     JSONException e) {
         throw new RuntimeException(e);
@@ -649,6 +661,7 @@ public class Tienda implements State {
                 break;
             case botonRojo://has tocado el boton para comprar el color de fondo rojo
                 this.diamantes-=precio;
+                this.botonRojo.setColor("#ff00ff00");
                 this.rojo = true;
                 this.fondo = "#FFFF0000";
                 this.graphics.setColorClear(this.fondo);
@@ -657,6 +670,7 @@ public class Tienda implements State {
                 break;
             case botonAzul://has tocado el boton para comprar el color de fondo azul
                 this.diamantes-=precio;
+                this.botonAzul.setColor("#ff00ff00");
                 this.azul = true;
                 this.fondo = "#FF0000FF";
                 this.graphics.setColorClear(this.fondo);
