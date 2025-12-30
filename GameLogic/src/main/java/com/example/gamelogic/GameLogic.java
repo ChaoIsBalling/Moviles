@@ -138,6 +138,8 @@ public class GameLogic implements State {
     //Para leer el mapa
     JSONObject obj;
 
+    private String fondo;
+
     //Generador de numeros aleatorios de java
     Random rnd;
 
@@ -301,6 +303,7 @@ public class GameLogic implements State {
             if(this.engine.checkHash(hash)) {
                 try {
                     this.mini = this.save.getBoolean("mini");
+                    this.fondo = this.save.getString("fondo");
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -329,6 +332,9 @@ public class GameLogic implements State {
             obj.put("skinRayo","Figura");
             obj.put("skinFuego","Figura");
             obj.put("skinHielo","Figura");
+            obj.put("rojo",false);
+            obj.put("azul",false);
+            obj.put("fondo","#FFFFFFFF");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -691,6 +697,10 @@ public class GameLogic implements State {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+        this.botonMejoraTriangulos.setColor(this.fondo);
+        this.botonMejoraCuadrados.setColor(this.fondo);
+        this.botonMejoraHexagonos.setColor(this.fondo);
+        this.botonMejoraMini.setColor(this.fondo);
     }
 
     /**
@@ -930,10 +940,10 @@ public class GameLogic implements State {
     private void cambiarEstado(Estado nuevoEstado) {
         switch (nuevoEstado) {
             case normal:
-                this.botonMejoraTriangulos.setColor("#FFFFFFFF");
-                this.botonMejoraHexagonos.setColor("#FFFFFFFF");
-                this.botonMejoraCuadrados.setColor("#FFFFFFFF");
-                this.botonMejoraMini.setColor("#FFFFFFFF");
+                this.botonMejoraTriangulos.setColor(this.fondo);
+                this.botonMejoraHexagonos.setColor(this.fondo);
+                this.botonMejoraCuadrados.setColor(this.fondo);
+                this.botonMejoraMini.setColor(this.fondo);
                 this.estado = nuevoEstado;
                 break;
             case torre:
@@ -941,29 +951,29 @@ public class GameLogic implements State {
                 break;
             case botonRayo:
                 this.botonMejoraTriangulos.setColor("#FFFFFB64");
-                this.botonMejoraHexagonos.setColor("#FFFFFFFF");
-                this.botonMejoraCuadrados.setColor("#FFFFFFFF");
-                this.botonMejoraMini.setColor("#FFFFFFFF");
+                this.botonMejoraHexagonos.setColor(this.fondo);
+                this.botonMejoraCuadrados.setColor(this.fondo);
+                this.botonMejoraMini.setColor(this.fondo);
                 this.estado = nuevoEstado;
                 break;
             case botonFuego:
-                this.botonMejoraTriangulos.setColor("#FFFFFFFF");
+                this.botonMejoraTriangulos.setColor(this.fondo);
                 this.botonMejoraHexagonos.setColor("#FFFFFB64");
-                this.botonMejoraCuadrados.setColor("#FFFFFFFF");
-                this.botonMejoraMini.setColor("#FFFFFFFF");
+                this.botonMejoraCuadrados.setColor(this.fondo);
+                this.botonMejoraMini.setColor(this.fondo);
                 this.estado = nuevoEstado;
                 break;
             case botonHielo:
-                this.botonMejoraTriangulos.setColor("#FFFFFFFF");
-                this.botonMejoraHexagonos.setColor("#FFFFFFFF");
+                this.botonMejoraTriangulos.setColor(this.fondo);
+                this.botonMejoraHexagonos.setColor(this.fondo);
                 this.botonMejoraCuadrados.setColor("#FFFFFB64");
-                this.botonMejoraMini.setColor("#FFFFFFFF");
+                this.botonMejoraMini.setColor(this.fondo);
                 this.estado = nuevoEstado;
                 break;
             case botonMini:
-                this.botonMejoraTriangulos.setColor("#FFFFFFFF");
-                this.botonMejoraHexagonos.setColor("#FFFFFFFF");
-                this.botonMejoraCuadrados.setColor("#FFFFFFFF");
+                this.botonMejoraTriangulos.setColor(this.fondo);
+                this.botonMejoraHexagonos.setColor(this.fondo);
+                this.botonMejoraCuadrados.setColor(this.fondo);
                 this.botonMejoraMini.setColor("#FFFFFB64");
                 this.estado = nuevoEstado;
                 break;
