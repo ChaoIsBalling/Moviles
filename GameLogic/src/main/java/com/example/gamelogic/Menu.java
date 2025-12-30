@@ -94,7 +94,7 @@ public class Menu implements State {
     {
             JSONObject obj=new JSONObject();
         try {
-            obj.put("gems",10000);
+            obj.put("gems",0);
             obj.put("completed",0);
             obj.put("rayo",false);
             obj.put("fuego",false);
