@@ -25,11 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private AndroidMobile mobile;//Interfaz para conectar el motor con el MainActivity de la app
     private FrameLayout adContainerView; //Contenedor sobre el que ponemos el anuncio Banner
 
-    //ID`s de unidad de anuncios de prueba, tanto para banner como para reward
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741";
-    private static final String AD_REWARD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
-    private static final String TAG = "MainActivity";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
