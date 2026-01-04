@@ -222,7 +222,7 @@
         "h":100,
         "isRound":true,
         "ar":15,
-        "color":"#FFFF0000"
+        "color":"#FFFFFFFF"
     },
     "BotonAzul":    
     {   "x":250,
@@ -231,7 +231,7 @@
         "h":100,
         "isRound":true,
         "ar":15,
-        "color":"#FF0000FF"
+        "color":"#FFFFFFFF"
     },
     "TextoColores":
     {
