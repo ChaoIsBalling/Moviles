@@ -1,0 +1,29 @@
+@startuml
+class com.example.towerdefense.ExampleInstrumentedTest {
++ void useAppContext()
+}
+
+class com.example.towerdefense.MainActivity {
+- SurfaceView renderView
+- AndroidEngine engine
+- AndroidMobile mobile
+- FrameLayout adContainerView
+- {static} String AD_UNIT_ID
+- {static} String AD_REWARD_UNIT_ID
+- {static} String TAG
+# void onCreate(Bundle)
+# void onResume()
+# void onPause()
+- void requestPermissionNotifiactions()
+- void checkRewardNotifiactionIntent()
+}
+
+
+class com.example.towerdefense.ExampleUnitTest {
++ void addition_isCorrect()
+}
+
+
+
+androidx.appcompat.app.AppCompatActivity <|-- com.example.towerdefense.MainActivity
+@enduml
