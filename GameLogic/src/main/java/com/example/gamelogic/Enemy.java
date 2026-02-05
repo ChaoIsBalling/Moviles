@@ -1,5 +1,7 @@
 package com.example.gamelogic;
 import com.example.androidengine.AndroidGraphics;
+import com.example.gamelogic.states.GameLogic;
+
 import java.util.ArrayList;
 
 /**
@@ -57,7 +59,7 @@ public class Enemy {
         this.gl = gl; //Instancia del gameLogic
         //Obtenemos casilla actual a partir de sus coordenadas
         this.coor = gl.determinaCasilla(this.y, this.x);
-        this.casillaInicial = this.gl.casillas.get(this.coor.getX()).get(this.coor.getY());
+        this.casillaInicial = this.gl.getCasillas().get(this.coor.getX()).get(this.coor.getY());
         this.puntosCamino = camino;
     }
 

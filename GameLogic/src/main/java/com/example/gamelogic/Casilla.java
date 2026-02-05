@@ -1,5 +1,7 @@
 package com.example.gamelogic;
 import com.example.androidengine.AndroidGraphics;
+import com.example.gamelogic.figure.Square;
+import com.example.gamelogic.towers.Tower;
 
 /**
  * Clase que representa una casilla del mapa en el juego

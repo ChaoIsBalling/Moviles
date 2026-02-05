@@ -1,4 +1,4 @@
-package com.example.gamelogic;
+package com.example.gamelogic.figure;
 import com.example.androidengine.AndroidGraphics;
 /**
  * Clase que representa un círculo e implementa a Figura

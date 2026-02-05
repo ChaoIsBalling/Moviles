@@ -1,4 +1,4 @@
-package com.example.gamelogic;
+package com.example.gamelogic.states;
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.State;
 import com.example.androidengine.TouchEvent;
@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidMobile;
+import com.example.gamelogic.Button;
+import com.example.gamelogic.Image;
+import com.example.gamelogic.Text;
+
 /**
  * Clase que representa el menú de seleccción de dificultad
  */

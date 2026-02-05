@@ -1,5 +1,7 @@
 package com.example.gamelogic;
 import com.example.androidengine.AndroidGraphics;
+import com.example.gamelogic.figure.Figure;
+
 /**
  * Clase que representa una linea recta e implementa de Figura
  */

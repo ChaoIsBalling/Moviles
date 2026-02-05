@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 //del motor de android y gameLogic
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidMobile;
-import com.example.gamelogic.Menu;
+import com.example.gamelogic.states.Menu;
 //de Java
 import java.util.concurrent.TimeUnit;
 

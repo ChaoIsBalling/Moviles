@@ -1,6 +1,7 @@
 package com.example.gamelogic;
 
 import com.example.androidengine.AndroidGraphics;
+import com.example.gamelogic.figure.Figure;
 
 import org.json.JSONObject;
 import org.json.JSONException;

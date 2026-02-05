@@ -1,22 +1,21 @@
-package com.example.gamelogic;
+package com.example.gamelogic.towers;
 
+import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidSound;
-import com.example.androidengine.AndroidGraphics;
+import com.example.gamelogic.Enemy;
+import com.example.gamelogic.Image;
+import com.example.gamelogic.Tipo;
+
 import java.util.ArrayList;
 
-/**
- * Clase que representa la torre de Rayo e implementa la interfaz Tower
- */
-public class ThunderTower implements Tower{
-    //figura de la torre
-    Triangle triangulo;
+public class MiniThunderTower implements Tower{
     //stats de la torre de Rayo
-    float ataque=4;
+    float ataque=1;
     float rango= 70;
-    float velocidad = (float )1.6;
+    float velocidad = (float )0.7;
     float enfriamiento = 0;
-    float rayo =1;
+    float rayo =0.3f;
     float x;
     float y;
     //Referencia al audio manager y el sonido de ataque
@@ -25,7 +24,7 @@ public class ThunderTower implements Tower{
 
     //Determina si está disparando
     boolean disparo = false;
-    Image imagen=null;
+    Image imagen;
 
     Tipo tipo = Tipo.rayo;
 
@@ -37,14 +36,7 @@ public class ThunderTower implements Tower{
     /**
      * Constructora de la torre de rayo con sus coordenadas
      */
-    public ThunderTower(float x, float y){
-
-        this.x=x;
-        this.y=y;
-        this.triangulo = new Triangle(x,y,15,true);
-        this.triangulo.setColor("#FF000000");
-    }
-    public ThunderTower(float x, float y, Image im){
+    public MiniThunderTower(float x, float y, Image im){
         this.imagen=im;
         this.x=x;
         this.y=y;
@@ -120,7 +112,7 @@ public class ThunderTower implements Tower{
                 this.enfriamiento = this.velocidad;
                 this.disparo = true;
                 this.audio.playSound(this.attack);
-                this.rayo = 1;
+                this.rayo = 0.3f;
             }
 
         }
@@ -138,12 +130,9 @@ public class ThunderTower implements Tower{
      */
     @Override
     public void Render(AndroidGraphics gr) {
-        if(this.imagen!=null)
-            this.imagen.RenderCentrado((int)this.x,(int)this.y);
-        else
-            this.triangulo.Render(gr);
+        this.imagen.RenderCentrado((int)this.x,(int)this.y);
         if(this.disparo && this.rayo > 0){
-            gr.setColor(0xff00ffff);
+            gr.setColor(0xffff0000);
             gr.pintarLinea(this.x,this.y,this.enemigo.getX(),this.enemigo.getY(),5);
         }
     }

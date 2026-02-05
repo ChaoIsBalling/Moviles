@@ -1,10 +1,26 @@
-package com.example.gamelogic;
+package com.example.gamelogic.states;
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.State;
 import com.example.androidengine.TouchEvent;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidMobile;
+import com.example.gamelogic.Button;
+import com.example.gamelogic.Casilla;
+import com.example.gamelogic.Enemy;
+import com.example.gamelogic.towers.FireTower;
+import com.example.gamelogic.figure.Hexagon;
+import com.example.gamelogic.towers.IceTower;
+import com.example.gamelogic.Image;
+import com.example.gamelogic.towers.MiniThunderTower;
+import com.example.gamelogic.figure.Square;
+import com.example.gamelogic.Text;
+import com.example.gamelogic.towers.ThunderTower;
+import com.example.gamelogic.Tipo;
+import com.example.gamelogic.towers.Tower;
+import com.example.gamelogic.figure.Triangle;
+import com.example.gamelogic.Vector2D;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -58,6 +74,7 @@ public class GameLogic implements State {
 
     //Arrays de casillas, torres y enemigos
     ArrayList<ArrayList<Casilla>> casillas;
+
     ArrayList<Tower> torres;
     ArrayList<Enemy> enemigos;
     ArrayList<Enemy> deadEnemies;
@@ -588,6 +605,7 @@ public class GameLogic implements State {
 
     public float getRealY(int filCoor){ return this.casillas.get(filCoor).get(0).getY(); }
 
+    public  ArrayList<ArrayList<Casilla>> getCasillas(){return this.casillas;}
 
     /**
      * Metodo que renderiza el tablero, entidades y botones

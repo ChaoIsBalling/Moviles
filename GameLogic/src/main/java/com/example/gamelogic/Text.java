@@ -88,6 +88,8 @@ public class Text {
     public void setText(String text){
         this.myArray=text.split("\n");
     }
+    public void setY(float y){this.y=y;}
+    public void setX(float x){this.x=x;}
 
     /**
      * Renderiza el texto (con y sin centrado) con la fuente y color deseados
@@ -109,4 +111,9 @@ public class Text {
         for(int i=0;i<myArray.length;i++)
         gr.pintarTextoCentrado(myArray[i], x+this.x,y+this.y+i*size);
     }
+    /**
+     * Getters
+     */
+    public float getX(){return this.x;}
+    public float getY(){return this.y;}
 }

@@ -1,4 +1,4 @@
-package com.example.gamelogic;
+package com.example.gamelogic.figure;
 import com.example.androidengine.AndroidGraphics;
 /**
  * Interfaz para cada uno de todos los tipos de figuras

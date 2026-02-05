@@ -1,8 +1,13 @@
-package com.example.gamelogic;
+package com.example.gamelogic.towers;
 
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidSound;
+import com.example.gamelogic.Enemy;
+import com.example.gamelogic.Image;
+import com.example.gamelogic.figure.Square;
+import com.example.gamelogic.Tipo;
+
 import java.util.ArrayList;
 
 /**

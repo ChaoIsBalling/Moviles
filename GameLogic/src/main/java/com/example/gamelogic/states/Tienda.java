@@ -1,4 +1,4 @@
-package com.example.gamelogic;
+package com.example.gamelogic.states;
 
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
@@ -9,6 +9,13 @@ import com.example.androidengine.AndroidAudio;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.example.androidengine.AndroidMobile;
+import com.example.gamelogic.Button;
+import com.example.gamelogic.figure.Hexagon;
+import com.example.gamelogic.Image;
+import com.example.gamelogic.figure.Square;
+import com.example.gamelogic.Text;
+import com.example.gamelogic.figure.Triangle;
+
 import java.util.ArrayList;
 
 public class Tienda implements State {
@@ -106,9 +113,9 @@ public class Tienda implements State {
         // Function to compare
         public int compare(Text c1, Text c2)
         {
-            if (c1.y == c2.y)
+            if (c1.getY() == c2.getY())
                 return 0;
-            else if (c1.y > c2.y)
+            else if (c1.getY() > c2.getY())
                 return 1;
             else
                 return -1;
@@ -164,7 +171,7 @@ public class Tienda implements State {
 
         Collections.sort(ScrollableText,new TextComparator());
 
-        this.minY=ScrollableText.get(0).y;
+        this.minY=ScrollableText.get(0).getY();
         this.maxY=400-ScrollableButtons.get(ScrollableButtons.size()-1).getHeight();
 
         this.rayoF = new Button(this.datos.getJSONObject("BotonRayoF"));
@@ -424,13 +431,13 @@ public class Tienda implements State {
         boolean canScroll=true;
         //checkeamos si los extremeos de los objetos scrolleables (el mas alto y el mas bajo)
         //estan entre el minimo y maximo Y que hemos definido
-        if((ScrollableText.get(0).y>minY&&destY>0)||(ScrollableButtons.get(ScrollableButtons.size()-1).getY()<maxY&&destY<0))
+        if((ScrollableText.get(0).getY()>minY&&destY>0)||(ScrollableButtons.get(ScrollableButtons.size()-1).getY()<maxY&&destY<0))
             canScroll=false;
 
         if(canScroll) {
             for (int i = 0; i < ScrollableText.size(); i++) {
-                float newY = ScrollableText.get(i).y + destY;
-                ScrollableText.get(i).y=newY;
+                float newY = ScrollableText.get(i).getY() + destY;
+                ScrollableText.get(i).setY(newY);
             }
             for (int i = 0; i < ScrollableButtons.size(); i++) {
                 float newY = ScrollableButtons.get(i).getY() + destY;
