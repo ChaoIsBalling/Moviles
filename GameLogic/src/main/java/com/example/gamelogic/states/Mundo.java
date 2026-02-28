@@ -35,11 +35,15 @@ public class Mundo implements State {
     //en que mundo estamos ahora
     private int mundo;
 
+    //El archivo de guardado del juego
+    private JSONObject save;
+
     //cuantos niveles han habido hasta ahora de cada mundo
     private int nivelesHastaAhora=0;
 
     //variable que inspecciona cuantos niveles hemos derrotado
     int completed;
+
 
     JSONObject botones;
 
@@ -55,14 +59,14 @@ public class Mundo implements State {
     float maxY;
 
     //constructora del estado que crea e inicializa los botones de la escena
-    public Mundo(AndroidEngine engine,AndroidMobile mobile, int mundo){
+    public Mundo(AndroidEngine engine,AndroidMobile mobile, int mundo, JSONObject save){
+        this.save=save;
         this.engine=engine;
         this.mundo=mundo;
         this.mobile = mobile;
 
-        JSONObject save=this.engine.readInternalJsonFile("save");
         try {
-            this.completed= save.getInt("completed");
+            this.completed= this.save.getInt("completed");
 
         botones=engine.readJsonFile("Mundo/style.json");
         JSONObject mundoInfo=engine.readJsonFile("Mundo/World"+this.mundo+"/World"+this.mundo+".json");
@@ -216,7 +220,7 @@ public class Mundo implements State {
     //metodo que gestiono lo que se hace si se presiona sobre cualquier boton de la escena
     private void gestionBotones(TouchEvent e) {
         if (this.botonVolver.contains(e.x, e.y)) {
-            Menu menu = new Menu(this.engine, this.mobile);
+            Menu menu = new Menu(this.engine, this.mobile,this.save);
             this.engine.setState(menu);
         } else {
             for (int i = 0; i < niveles.size(); i++) {
@@ -225,19 +229,19 @@ public class Mundo implements State {
                     //(i <                                         ) -> Nivel completado
                     boolean isLevelCompleted = (i == this.completed - this.nivelesHastaAhora) ? false: true;
                     //System.out.println(isLevelCompleted);
-                    GameLogic gameLogic = new GameLogic(this.engine, this.mobile, "Mundo/World" + this.mundo + "/Level" + (i + 1) + ".json",isLevelCompleted, i+1,this.mundo);
+                    GameLogic gameLogic = new GameLogic(this.engine, this.mobile, "Mundo/World" + this.mundo + "/Level" + (i + 1) + ".json",isLevelCompleted, i+1,this.mundo,this.save);
                     this.engine.setState(gameLogic);
                 }
             }
             if (this.previous) {
                 if (this.anteriorMundo.contains(e.x, e.y)) {
-                    Mundo mundoAnterior = new Mundo(this.engine, this.mobile, this.mundo - 1);
+                    Mundo mundoAnterior = new Mundo(this.engine, this.mobile, this.mundo - 1,this.save);
                     this.engine.setState(mundoAnterior);
                 }
             }
             if (this.next) {
                 if (siguienteMundo.contains(e.x, e.y)) {
-                    Mundo mundoNext = new Mundo(this.engine, this.mobile, this.mundo + 1);
+                    Mundo mundoNext = new Mundo(this.engine, this.mobile, this.mundo + 1,this.save);
                     this.engine.setState(mundoNext);
                 }
             }

@@ -74,6 +74,8 @@ public class Tienda implements State {
 
     private String fondo;
 
+    //El archivo de guardado del juego
+    private JSONObject save;
     //ArrayList de elementos de la tienda que pueden hacer scroll
     private ArrayList<Button> ScrollableButtons;
     private ArrayList<Text>ScrollableText;
@@ -123,7 +125,8 @@ public class Tienda implements State {
     }
 
     AndroidMobile mobile;
-    public Tienda(AndroidEngine engine,AndroidMobile mobile){
+    public Tienda(AndroidEngine engine,AndroidMobile mobile,JSONObject save){
+        this.save =save;
         ScrollableText=new ArrayList<Text>();
         ScrollableButtons=new ArrayList<Button>();
         this.engine=engine;
@@ -234,90 +237,43 @@ public class Tienda implements State {
 
     //carga el progreso y comprueba que no ha sido modificado
     private void cargarDatos(){
-
-        if(this.engine.checkFileExists("save"))
-        {
-            JSONObject obj=this.engine.readInternalJsonFile("save");
-            String hash = this.engine.createHash(obj.toString());
-            if(this.engine.checkHash(hash)) {
-                try{
-                this.rayo = obj.getBoolean("rayo");
-                this.fuego = obj.getBoolean("fuego");
-                this.hielo = obj.getBoolean("hielo");
-                this.mini = obj.getBoolean("mini");
-                this.diamantes = obj.getInt("gems");
-                this.skinRayo=obj.getString("skinRayo");
-                this.skinFuego=obj.getString("skinFuego");
-                this.skinHielo=obj.getString("skinHielo");
-                this.rojo=obj.getBoolean("rojo");
-                this.azul=obj.getBoolean("azul");
-                this.fondo=obj.getString("fondo");
-                this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
-                } catch (JSONException e) {
-                throw new RuntimeException(e);
+        try{
+            this.rayo = this.save.getBoolean("rayo");
+            this.fuego = this.save.getBoolean("fuego");
+            this.hielo = this.save.getBoolean("hielo");
+            this.mini = this.save.getBoolean("mini");
+            this.diamantes = this.save.getInt("gems");
+            this.skinRayo=this.save.getString("skinRayo");
+            this.skinFuego=this.save.getString("skinFuego");
+            this.skinHielo=this.save.getString("skinHielo");
+            this.rojo=this.save.getBoolean("rojo");
+            this.azul=this.save.getBoolean("azul");
+            this.fondo=this.save.getString("fondo");
+            this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
                 }
-                this.textoDiamantes.setText("" + this.diamantes);
-            }
-            else{
-                //resetea el progreso
-                this.reset();
+            this.textoDiamantes.setText("" + this.diamantes);
             }
 
-        }
-        else {
-            this.reset();
-        }
-    }
 
-    //resetea el progreso
-    private void reset(){
-        JSONObject obj=new JSONObject();
-        try{
-        obj.put("gems",0);
-        obj.put("completed",0);
-        obj.put("rayo",false);
-        obj.put("fuego",false);
-        obj.put("hielo",false);
-        obj.put("mini",false);
-        obj.put("skinRayo","Figura");
-        obj.put("skinFuego","Figura");
-        obj.put("skinHielo","Figura");
-        obj.put("rojo",false);
-        obj.put("azul",false);
-        obj.put("fondo","#FFFFFFFF");
-        this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
-        this.engine.writeFile("save",obj.toString());
-        this.rayo = false;
-        this.fuego = false;
-        this.hielo = false;
-        this.diamantes = 0;
-        this.rojo=false;
-        this.azul=false;
-        this.fondo="#FFFFFFFF";
-        this.textoDiamantes = new Text(this.datos.getJSONObject("TextoDiamantes"));
-        this.textoDiamantes.setText("" + this.diamantes);
-    } catch (JSONException e) {
-        throw new RuntimeException(e);
-    }
-    }
 
-    //guardar progreso
+        //guardar progreso
     private void guardar(){
-        JSONObject obj=this.engine.readInternalJsonFile("save");
         try{
-        obj.put("gems",this.diamantes);
-        obj.put("rayo",this.rayo);
-        obj.put("fuego",this.fuego);
-        obj.put("hielo",this.hielo);
-        obj.put("mini",this.mini);
-        obj.put("skinRayo",this.skinRayo);
-        obj.put("skinFuego",this.skinFuego);
-        obj.put("skinHielo",this.skinHielo);
-        obj.put("rojo",this.rojo);
-        obj.put("azul",this.azul);
-        obj.put("fondo",this.fondo);
-        this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
-        this.engine.writeFile("save",obj.toString());
+        this.save.put("gems",this.diamantes);
+        this.save.put("rayo",this.rayo);
+        this.save.put("fuego",this.fuego);
+        this.save.put("hielo",this.hielo);
+        this.save.put("mini",this.mini);
+        this.save.put("skinRayo",this.skinRayo);
+        this.save.put("skinFuego",this.skinFuego);
+        this.save.put("skinHielo",this.skinHielo);
+        this.save.put("rojo",this.rojo);
+        this.save.put("azul",this.azul);
+        this.save.put("fondo",this.fondo);
+        this.engine.writeFile("hash",this.engine.createHash(this.save.toString()));
+        this.engine.writeFile("save",this.save.toString());
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -453,7 +409,7 @@ public class Tienda implements State {
     {
         try{
         if(this.botonVolver.contains(e.x,e.y)){
-            Menu menu = new Menu(this.engine,this.mobile);
+            Menu menu = new Menu(this.engine,this.mobile,this.save);
             this.engine.setState(menu);
         }
         else {
