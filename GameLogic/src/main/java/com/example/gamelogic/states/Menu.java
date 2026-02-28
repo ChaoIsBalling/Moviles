@@ -33,6 +33,8 @@ public class Menu implements State {
     private Image imagenDiamante;
 
     private String fondo;
+    //El archivo de guardado del juego
+    private JSONObject save;
 
 
     //Referencias al Audio Manager, al motor y a Graphics y a Mobile
@@ -46,9 +48,10 @@ public class Menu implements State {
     /**
      * Constructora del menú
      */
-    public Menu(AndroidEngine engine, AndroidMobile mobile){
+    public Menu(AndroidEngine engine, AndroidMobile mobile, JSONObject save){
         this.engine = engine;
         this.mobile = mobile;
+        this.save=save;
         botones=engine.readJsonFile("Menu/style.json");
         try {
             this.botonInicial = new Button(botones.getJSONObject("BotonInicial"));
@@ -68,55 +71,17 @@ public class Menu implements State {
             throw new RuntimeException(e);
         }
         this.fondo="#FFFFFFFF";
-
-        if(this.engine.checkFileExists("save"))
-        {
-            JSONObject obj=this.engine.readInternalJsonFile("save");
-            String hash = this.engine.createHash(obj.toString());
-            if(this.engine.checkHash(hash)){
-                try {
-                    this.textoDiamantes.setText(String.valueOf(obj.getInt("gems")));
-                    this.fondo = obj.getString("fondo");
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            else{
-                //resetea el progreso
-                this.newGame();
-            }
-        }
-        else {
-            //Si no tenemos creamos un nuevo objeto JSON
-           this.newGame();
-        }
-
-        this.mobile.setVisibleAdBanner(true);
-    }
-    //Creacion de una nueva partida
-    void newGame()
-    {
-            JSONObject obj=new JSONObject();
         try {
-            obj.put("gems",0);
-            obj.put("completed",0);
-            obj.put("rayo",false);
-            obj.put("fuego",false);
-            obj.put("hielo",false);
-            obj.put("mini",false);
-            obj.put("skinRayo","Figura");
-            obj.put("skinFuego","Figura");
-            obj.put("skinHielo","Figura");
-            obj.put("rojo",false);
-            obj.put("azul",false);
-            obj.put("fondo","#FFFFFFFF");
+            this.textoDiamantes.setText(String.valueOf(this.save.getInt("gems")));
+            this.fondo = this.save.getString("fondo");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
 
-            this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
-            this.engine.writeFile("save",obj.toString());
+
+        this.mobile.setVisibleAdBanner(true);
     }
+
     @Override
     public void update(double deltaTime) {
     }
@@ -165,15 +130,15 @@ public class Menu implements State {
             switch (e.type){
                     case TOUCH_DOWN:
                         if(this.botonInicial.contains(e.x,e.y)){
-                            Dificultad dificultad = new Dificultad(this.engine,this.mobile);
+                            Dificultad dificultad = new Dificultad(this.engine,this.mobile,this.save);
                             this.engine.setState(dificultad);
                         }
                         else if(this.botonAventura.contains(e.x,e.y)){
-                            Mundo mundo = new Mundo(this.engine,this.mobile,1);
+                            Mundo mundo = new Mundo(this.engine,this.mobile,1,this.save);
                             this.engine.setState(mundo);
                         }
                         else if(this.botonTienda.contains(e.x,e.y)){
-                            Tienda tienda = new Tienda(this.engine,this.mobile);
+                            Tienda tienda = new Tienda(this.engine,this.mobile,this.save);
                             this.engine.setState(tienda);
                             //this.engine.showNotificacion("Hola","TOnto");
                         }

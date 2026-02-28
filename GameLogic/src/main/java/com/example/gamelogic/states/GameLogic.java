@@ -115,7 +115,7 @@ public class GameLogic implements State {
     float tiempEnG;//tiempo que falta para generar un nuevo enemigo
     int recompensas;//cantidad de gemas que consigues al terminar un nivel
     Text textoOleadas;//Numero de oleadas en texto
-
+    private JSONObject save; //Archivo de Guardado del Juego
     JSONArray camino; //Array con el numero de puntos que debe recorrer el enemigo en JSON
     ArrayList<Vector2D> caminoEnemigos;//el camino que recorren los enemigos
 
@@ -150,8 +150,6 @@ public class GameLogic implements State {
     private Dificultad dificultad;
     //JSONArray que gestiona las oleadas en el juego
     JSONArray oleadasDatos;
-    //JsonObject que representa los datos de partida guardada
-    JSONObject save;
     //Para leer el mapa
     JSONObject obj;
 
@@ -164,7 +162,8 @@ public class GameLogic implements State {
      * Constructora del estado principal de juego en el modo normal
      * @param engine Motor
      */
-    public GameLogic(AndroidEngine engine, AndroidMobile mobile, Dificultad dificultad){
+    public GameLogic(AndroidEngine engine, AndroidMobile mobile, Dificultad dificultad,JSONObject save){
+        this.save = save;
         this.engine=engine;
         this.init();
         this.dificultad = dificultad;
@@ -182,7 +181,8 @@ public class GameLogic implements State {
     /**
      * Constructora del estado principal de juego en el modo aventura a partir de la lectura del mapa del nivel
      */
-    public GameLogic(AndroidEngine engine, AndroidMobile mobile, String mapa, boolean isCompleted, int nivel, int mundo){
+    public GameLogic(AndroidEngine engine, AndroidMobile mobile, String mapa, boolean isCompleted, int nivel, int mundo,JSONObject save){
+        this.save=save;
         this.engine=engine;
         this.dificultad = Dificultad.aventura;
         this.oleadasRestantes=0;
@@ -313,51 +313,12 @@ public class GameLogic implements State {
 
     //carga el progreso y comprueba que no ha sido modificado
     private void cargarDatos(){
-        if(this.engine.checkFileExists("save"))
-        {
-            this.save=this.engine.readInternalJsonFile("save");
-            String hash = this.engine.createHash(this.save.toString());
-            if(this.engine.checkHash(hash)) {
-                try {
-                    this.mini = this.save.getBoolean("mini");
-                    this.fondo = this.save.getString("fondo");
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            else{
-                //resetea el progreso
-                this.reset();
-            }
-
-        }
-        else {
-            this.reset();
-        }
-    }
-
-    //resetea el progreso
-    private void reset(){
-        JSONObject obj=new JSONObject();
         try {
-            obj.put("gems",0);
-            obj.put("completed",0);
-            obj.put("rayo",false);
-            obj.put("fuego",false);
-            obj.put("hielo",false);
-            obj.put("mini",false);
-            obj.put("skinRayo","Figura");
-            obj.put("skinFuego","Figura");
-            obj.put("skinHielo","Figura");
-            obj.put("rojo",false);
-            obj.put("azul",false);
-            obj.put("fondo","#FFFFFFFF");
+            this.mini = this.save.getBoolean("mini");
+            this.fondo = this.save.getString("fondo");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
-        this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
-        this.engine.writeFile("save",obj.toString());
     }
 
     /**
@@ -435,14 +396,14 @@ public class GameLogic implements State {
             this.engine.writeFile("save",save.toString());
 
             //Vamos al estado de GameOver
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true, this.isCompleted, this.nivel, this.mundo, this.oleada);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true, this.isCompleted, this.nivel, this.mundo, this.oleada,this.save);
             this.engine.setState(gameOver);
         }
 
         //En caso de que haya perdido
         if (this.vida <= 0) {
             this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false, this.isCompleted, this.nivel, this.mundo, this.oleada);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false, this.isCompleted, this.nivel, this.mundo, this.oleada,this.save);
             this.engine.setState(gameOver);
         }
     }

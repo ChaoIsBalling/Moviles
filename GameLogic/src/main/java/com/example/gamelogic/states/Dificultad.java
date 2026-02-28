@@ -21,7 +21,8 @@ public class Dificultad implements State {
     private Button botonLargo;
     private Button botonInfinito;
     private Button botonVolver;
-
+    //El archivo de guardado del juego
+    private JSONObject save;
     //Referencias de modulos del motor
     private AndroidEngine engine;
     AndroidGraphics gr;
@@ -35,7 +36,8 @@ public class Dificultad implements State {
      * Constructora del menú de dificultad con los tres botones que representan los tres modos de juego
      * @param engine
      */
-    public Dificultad(AndroidEngine engine, AndroidMobile mobile){
+    public Dificultad(AndroidEngine engine, AndroidMobile mobile,JSONObject save){
+        this.save=save;
         this.engine = engine;
         this.mobile = mobile;
         botones=engine.readJsonFile("Dificultad/style.json");//Archivo a leer
@@ -102,19 +104,19 @@ public class Dificultad implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     if(this.botonCorto.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine,this.mobile, GameLogic.Dificultad.corto);
+                        GameLogic gameLogic = new GameLogic(this.engine,this.mobile, GameLogic.Dificultad.corto,this.save);
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonLargo.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine,this.mobile, GameLogic.Dificultad.largo);
+                        GameLogic gameLogic = new GameLogic(this.engine,this.mobile, GameLogic.Dificultad.largo,this.save);
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonInfinito.contains(e.x,e.y)){
-                        GameLogic gameLogic = new GameLogic(this.engine,this.mobile,GameLogic.Dificultad.infinito);//el -1 es para indicar que es infinito
+                        GameLogic gameLogic = new GameLogic(this.engine,this.mobile,GameLogic.Dificultad.infinito,this.save);//el -1 es para indicar que es infinito
                         this.engine.setState(gameLogic);
                     }
                     else if(this.botonVolver.contains(e.x,e.y)){
-                        Menu menu = new Menu(this.engine,this.mobile);
+                        Menu menu = new Menu(this.engine,this.mobile,this.save);
                         this.engine.setState(menu);
                     }
                     break;

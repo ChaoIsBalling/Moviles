@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.SurfaceView;
 import android.widget.FrameLayout;
+import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 //del motor de android y gameLogic
@@ -14,6 +15,9 @@ import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.states.Menu;
 //de Java
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -42,15 +46,59 @@ public class MainActivity extends AppCompatActivity {
         this.engine.setNotificationIcon(R.drawable.ic_tower_defense_noti); //icono de notificación
 
         checkRewardNotifiactionIntent(); //Comprobamos si el jugador ha vuelto a entrar al juego por la notificacion recompensada
-
-        this.engine.setState(new Menu(engine,this.mobile)); //Estado inicial del juego
+        JSONObject save;
+        if(this.engine.checkFileExists("save"))
+        {
+            save=this.engine.readInternalJsonFile("save");
+            String hash = this.engine.createHash(save.toString());
+            if(!this.engine.checkHash(hash)){
+                save=this.newGame();
+            }
+        }
+        else {
+            //Si no tenemos creamos un nuevo objeto JSON
+            save=this.newGame();
+        }
+        this.engine.setState(new Menu(engine,this.mobile,save)); //Estado inicial del juego
     }
+    /**
+     * Metodo para crear un nuevo archivo de guardado en caso de no tener archivo de guardado
+     * o que el archivo no sea consistente con el hash
+     */
+    JSONObject newGame()
+    {
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("gems",0);
+            obj.put("completed",0);
+            obj.put("rayo",false);
+            obj.put("fuego",false);
+            obj.put("hielo",false);
+            obj.put("mini",false);
+            obj.put("skinRayo","Figura");
+            obj.put("skinFuego","Figura");
+            obj.put("skinHielo","Figura");
+            obj.put("rojo",false);
+            obj.put("azul",false);
+            obj.put("fondo","#FFFFFFFF");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
+        this.engine.writeFile("hash",this.engine.createHash(obj.toString()));
+        this.engine.writeFile("save",obj.toString());
+        return obj;
+    }
     @Override
     protected void onResume(){
         super.onResume();
         this.engine.resume();
         requestPermissionNotifiactions();
+    }
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        Log.i("Ending", "This has Ended.");
     }
 
     @Override
