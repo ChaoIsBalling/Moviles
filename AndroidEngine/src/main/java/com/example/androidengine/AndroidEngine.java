@@ -75,6 +75,11 @@ public class AndroidEngine implements Runnable {
     private final String CHANNEL_DESCRIPTION = "description";
     private final String CHANNEL_ID = "id";
 
+    /**
+     * Constructora del motor de Android
+     * @param view Surface view donde renderizamos el juego
+     * @param androidMobile Interfaz mobile de Android
+     */
     public AndroidEngine(SurfaceView view, AndroidMobile androidMobile){
         this.sView = view;
         this.input = new AndroidInput(); //incializa input
@@ -90,8 +95,10 @@ public class AndroidEngine implements Runnable {
 
         System.loadLibrary("AndroidEngine");
     }
-    //lector de archivos
-    //quita el pause
+
+    /**
+     * Metodo para reanudar el funcionamiento del motor
+     */
     public void resume(){
         if(!this.running){
             this.running = true;
@@ -99,72 +106,47 @@ public class AndroidEngine implements Runnable {
             this.renderThread.start();
         }
     }
-    //setter del estado
 
+    /**
+     * Metodo para cambiar el estado de juego del motor
+     * @param state Estado al que queremos cambiar
+     */
     public void setState(State state){
         this.state = state;
         this.state.setGraphics(this.gr);
         this.state.setAudio(this.audio);
     }
 
-
-    //Metodo para incrementar el valor de un parametro int en el archivo de guardado
-    //(si existe) a partir de su lectura
-    public void incrementarParametro(String key, int amount){
-        if(this.checkFileExists("save")) { //si existe el archivo de guardado
-            JSONObject obj;
-            try {
-                obj = this.readInternalJsonFile("save");
-                String hash = this.createHash(obj.toString());
-                //modificamos el parametro
-                obj.put(key, obj.getInt(key) + amount);
-
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-            //Volvemos a encriptarlo y a sobreescribimos el guardado
-            this.writeFile("hash", this.createHash(obj.toString()));
-            this.writeFile("save", obj.toString());
-        }else{
-            System.out.println("No existe un archivo de guardado sobre el que modificar el parámetro");
-        }
-    }
-    //Metodo para leer el valor de un parametro int en el archivo de guardado
-    //(si existe) a partir de su lectura. Usado para modificar la cantidad de diamantes
-    public int leerParametroInt(String key) {
-        int param=0;
-        if(this.checkFileExists("save")) {
-            JSONObject obj = this.readInternalJsonFile("save");
-            String hash = this.createHash(obj.toString());
-            if (this.checkHash(hash)) {
-                try {
-                    param = obj.getInt(key); //leemos el parametro
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }else {
-            System.out.println("No existe un archivo de guardado sobre el que leer el parámetro");
-        }
-        return param;
-    }
-    //getter del audio
-
+    /**
+     * Metodo para obtener el gestor de audio del motor
+     * @return AndroidSound
+     */
     public AndroidAudio getAudio() {
         return this.audio;
     }
-    //getter del estado
 
+    /**
+     * Metodo para obtener el estado actual del motor
+     * @return estado
+     */
     public State getState()
     {
         return this.state;
     }
-    //getter de los graficos
+
+    /**
+     * Metodo para obtener el gestor de los graficos del motor
+     * @return AndroidGraphics
+     */
     public AndroidGraphics getGraphics(){
         return this.gr;
     }
 
-    //Método que determina cuantos archivos tiene un directorio
+    /**
+     * Metodo que determina cuantos archivos tiene un directorio
+     * @param dir Nombre del directorio
+     * @return int que indica la longitud del directorio
+     */
     public int getDirectoryLenght(String dir){
         String[] files = null;
         try {
@@ -178,7 +160,10 @@ public class AndroidEngine implements Runnable {
 
     }
 
-    //metodo que lanza un intent que comparte un mensaje de texto
+    /**
+     * Metodo que lanza un intent que comparte un mensaje de texto
+     * @param message Mensaje que se quiere mandar
+     */
     public void luanchShareIntent(String message)
     {
 
@@ -188,11 +173,18 @@ public class AndroidEngine implements Runnable {
         this.sView.getContext().startActivity(Intent. createChooser(shareIntent , "Share Text" ));
     }
 
-    //getter de mobile
-
+    /**
+     * Metodo para obtener la interfaz Mobile del motor
+     * @return AndroidMobile
+     */
     public AndroidMobile getMobile() { return this.mobile; }
 
-    //lector que coje un archivo interno y lo convierte a Json
+
+    /**
+     * Lector que coge un archivo interno y lo convierte a Json
+     * @param file nombre del archivo a convertir
+     * @return JSONObject del archivo que queriamos
+     */
     public JSONObject readInternalJsonFile(String file) {
         JSONObject obj = null;
         try {
@@ -213,7 +205,11 @@ public class AndroidEngine implements Runnable {
         return obj;
     }
 
-//metodo de lectura de archivos tipo JSON
+    /**
+     * Metodo de lectura de archivos tipo JSON
+     * @param file Nombre del archivo JSON
+     * @return JSON Object del archivo
+     */
     public JSONObject readJsonFile(String file) {
         JSONObject jsonObject;
     try{
@@ -237,7 +233,11 @@ public class AndroidEngine implements Runnable {
         return jsonObject;
     }
 
-    //Metodo para escribir en un archivo dentro del sistema de ficheros del programa
+    /**
+     * Metodo para escribir en un archivo dentro del sistema de ficheros del programa
+     * @param file Archivo sobre el que queremos escribir
+     * @param output Contenido que queremos escribir
+     */
     public void writeFile(String file,String output) {
         FileOutputStream os = null;
         try {
@@ -255,9 +255,9 @@ public class AndroidEngine implements Runnable {
      * Metodo para crear una notifiacción push programada
      * @param time tiempo
      * @param timeunit unidad de tiempo
-     * @param icon icono
-     * @param title titulo de la noti
-     * @param firstText texto de la noti
+     * @param icon icono asociado a la notificacion
+     * @param title titulo de la notificacion
+     * @param firstText texto de la notificacion
      */
     public void programNotificacion(int time, TimeUnit timeunit, int icon, String title, String firstText) {
         WorkRequest request = new OneTimeWorkRequest.Builder(ReminderWorker.class)
@@ -274,8 +274,9 @@ public class AndroidEngine implements Runnable {
 
     }
 
-
-    //Metodo para crear un canal por el que transmitir notificaciones
+    /**
+     * Metodo para crear un canal por el que transmitir notificaciones
+     */
     private void createNotificationChannel(){
         // Verifica si es necesario crear un canal de notificaciones (a partir de Android 8.0)
         if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
@@ -289,12 +290,20 @@ public class AndroidEngine implements Runnable {
         }
     }
 
-    //Setter del icono de la notificacion
+
+
+    /**
+     * Metodo para settear el icono de la notificacion
+     * @param icon icono de la notificacion
+     */
     public void setNotificationIcon(int icon) {
         this.iconNotification=icon;
     }
-
-    //Un booleano el cual hace una comptobación de seguridad de si el hash ya existe en el sistema
+    /**
+     * Metodo booleano el cual hace una comprobación de seguridad de si el hash ya existe en el sistema
+     * @param hash Hash que queremos comprobar si existe
+     * @return true si existe , false si no
+     */
     public Boolean checkHash(String hash) {
         if(!checkFileExists("hash"))
             return false;
@@ -306,13 +315,20 @@ public class AndroidEngine implements Runnable {
         return true;
     }
 
-    //metodo que te crea automaticamente un String hash para el encriptado el cual ya tiene contraseña
-
+    /**
+     * Metodo que te crea automaticamente un String hash para el encriptado el cual ya tiene contraseña
+     * @param file nombre del archivo al que le queremos aplicar le hash
+     * @return hashSHA256 en formato string
+     */
     public String createHash(String file) {
         return hashSHA256(this.password+file);
     }
 
-    //lectura de archivo que se enfoca en obtener un String con los datos del fichero
+    /**
+     * Lectura de archivo que se enfoca en obtener un String con los datos del fichero
+     * @param file archivo que queremos leer
+     * @return String con los datos
+     */
 
     public String readFile2(String file) {
         String obj ="";
@@ -331,22 +347,38 @@ public class AndroidEngine implements Runnable {
         return obj;
     }
 
-    //Metodo que comprueba si un archivo existe o si ya esta creado
+    /**
+     * Metodo que comprueba si un archivo existe o si ya esta creado
+     * @param file nombre del archivo a comprobar
+     * @return booleano que determina si el archivo existe o no
+     */
 
     public boolean checkFileExists(String file) {
         File f = new File(this.sView.getContext().getFilesDir(),file);
         return f.exists();
     }
 
-    //encripta un string a hashSHA256 usando el NDK
 
+
+    /**
+     * Metodo que encripta un string a hashSHA256 usando el NDK
+     * @param string archivo a encriptar
+     * @return String del hash
+     */
     public String hashSHA256(String string) {
         return nativeHash(string);
     }
 
+    /**
+     * Metodo que llama al metodo interno de c++ que crea un hash
+     * @param s archivo al que aplicar el hash
+     * @return String del hash
+     */
     private native String nativeHash(String s);
 
-
+    /**
+     * Metodo para pausar el funcionamiento del motor
+     */
     public void pause(){
         if(this.running){
             this.running = false;
@@ -362,7 +394,9 @@ public class AndroidEngine implements Runnable {
         }
     }
 
-    //Metodo que corre el bucle principal del motor
+    /**
+     * Metodo que ejecuta el bucle principal del motor
+     */
     @Override
     public void run() {
         if (renderThread != Thread.currentThread()) {

@@ -18,6 +18,10 @@ import android.content.Context;
 import android.graphics.Path;
 import android.graphics.PorterDuff.Mode;
 
+
+/**
+ * Clase que implementa el gestor de los gráficos en Android
+ */
 public class AndroidGraphics{
     AssetManager assetManager;
     private SurfaceHolder holder;
@@ -25,6 +29,7 @@ public class AndroidGraphics{
     private Paint paint;
     private Canvas canvas;
 
+    //Directorios en los que se encuentran los assets a cargar
     private String imageDir="Images/";
     private String fontDir="Fonts/";
 
@@ -51,6 +56,10 @@ public class AndroidGraphics{
     private final Rect rect = new Rect();
 
 
+    /**
+     * Constructora de la clase Graphics
+     * @param view surface view donde se va a renderizar el juego
+     */
     public AndroidGraphics(SurfaceView view){
         this.sView = view;
         this.holder = this.sView.getHolder();
@@ -67,6 +76,7 @@ public class AndroidGraphics{
         logicH=400;
         logicW=600;
     }
+
     /**
      * Metodo que gestiona el inicio de un nuevo frame, recalculando las escalas
      * y limpiando la pantalla
@@ -81,6 +91,7 @@ public class AndroidGraphics{
 
 
     }
+
     /**
      * Metodo que calcula la escala y desplazamientos para centrar el area de juego en la ventana
      */
@@ -94,6 +105,7 @@ public class AndroidGraphics{
         this.offsetY =(this.sView.getHeight() -this.scale*logicH)/2;
 
     }
+
     /**
      * Metodo que limpia la pantalla
      */
@@ -102,12 +114,16 @@ public class AndroidGraphics{
         this.canvas.drawColor(Color.parseColor(this.colorClean));
     }
 
+    /**
+     * Metodo que setea que el color con el que se va a limpiar la pantalla
+     * @param color nombre del color que queramos
+     */
     public void setColorClear(String color){
         this.colorClean = color;
     }
 
     /**
-     * Metodo que desbloque el canvas
+     * Metodo que desbloque el canvas al final de un frame
      */
     protected void endFrame(){
         this.holder.unlockCanvasAndPost(canvas);
@@ -115,6 +131,10 @@ public class AndroidGraphics{
 
     /**
      * Metodo que limita lo que se renderiza en pantalla al tamaño logico
+     * @param left 
+     * @param top
+     * @param right
+     * @param botton
      */
     public void EmpezarLimiteDibujado(float left, float top, float right, float botton){
         this.canvas.save();
@@ -130,29 +150,41 @@ public class AndroidGraphics{
 
     /**
      * Metodo que limpia y pinta el texto
+     * @param text texto a pintar
+     * @param x coordenada x
+     * @param y coordenada y
      */
     public void createText(String text, float x, float y){
         this.canvas.drawText(text,x,y,this.paint);
     }
+
     /**
      * Metodo que devuelve el ancho del juego
      */
-
     public int getWidth()
     {
         return this.sView.getWidth();
     }
+
     /**
      * Metodo que pinta un circulo
+     * @param x coordenada x
+     * @param y coordenada y
+     * @param r radio del circulo
      */
-
     public void pintarCirculo(float x, float y, float r) {
         this.paint.setStyle(Paint.Style.STROKE);
         this.canvas.drawCircle(x,y,r,this.paint);
         this.paint.setStyle(Paint.Style.FILL); //Devolvemos al valor por defecto
     }
+
     /**
      * Metodo que pinta un cuadrado con esquinas redondeadas
+     * @param x coordenada x
+     * @param y coordenada y
+     * @param w ancho del boton
+     * @param h alto del boton
+     * @param ar radio de los bordes
      */
     public void rellenarCuadradoRedondeado(float x, float y, float w, float h, float ar)
     {
@@ -161,16 +193,26 @@ public class AndroidGraphics{
         this.canvas.drawRoundRect(r,ar/2,ar/2,this.paint);//El radio que le pasamos está dividido a la mitad
                                                                  //para tener un aspecto más consistente con desktop
     }
+
     /**
      * Metodo que pinta un cuadrado
+     * @param x coordenada x
+     * @param y coordenada y
+     * @param w ancho del cuadrado
+     * @param h alto del cuadrado
      */
     public void pintarCuadrado(float x, float y, float w, float h) {
         this.paint.setStyle(Paint.Style.STROKE);
         this.canvas.drawRect(x - w/2,y -h/2,x+w /2,y+h/2,this.paint);
         this.paint.setStyle(Paint.Style.FILL); //Devolvemos al valor por defecto
     }
+
     /**
      * Metodo que pinta un poligono
+     * @param cx coordenada x del centro
+     * @param cy coordenada y del centro
+     * @param r radio del poligono
+     * @param nv numero de vertices
      */
     public void pintarPoligono(float cx, float cy, float r, int nv) {
         this.paint.setStyle(Paint.Style.STROKE);
@@ -200,8 +242,14 @@ public class AndroidGraphics{
         this.canvas.drawPath(wallpath, this.paint);
         this.paint.setStyle(Paint.Style.FILL); //Devolvemos al valor por defecto
     }
+
     /**
      * Metodo que pinta una linea
+     * @param x1 coordenada x del punto origen
+     * @param y1 coordenada y del punto origen
+     * @param x2 coordenada x del punto destino
+     * @param y2 coordenada y del punto destino
+     * @param width ancho de la linea
      */
     public void pintarLinea(float x1, float y1, float x2, float y2, float width) {
         float currWidth = this.paint.getStrokeWidth();
@@ -210,8 +258,10 @@ public class AndroidGraphics{
         this.paint.setStrokeWidth(0);
 
     }
+
     /**
-     * Metodo que rellena el fondo
+     * Metodo que rellena de un color el fondo
+     * @param color color con el que queremos pintar el fondo
      */
     public void pintarFondo(int color) {
         this.paint.setColor(color);
@@ -219,8 +269,12 @@ public class AndroidGraphics{
         this.canvas.drawRect(0,0,this.canvas.getWidth(),this.canvas.getHeight(),this.paint);
 
     }
+
     /**
      * Metodo que pinta el texto
+     * @param texto string con el texto a pintar
+     * @param x coordenada x
+     * @param y coordenada y
      */
     public void pintarTexto(String texto, float x, float y) {
         Paint.FontMetrics metrics= this.paint.getFontMetrics();
@@ -231,12 +285,23 @@ public class AndroidGraphics{
 
     /**
      * Metodo que pinta una imagen
+     * @param img Imagen del motor de Android
+     * @param x coordenada x
+     * @param y coordenada y
      */
     public void pintarImagen(AndroidImage img, int x, int y) {
        AndroidImage image= (AndroidImage)img;
        canvas.drawBitmap(image.getBitmap(),x,y,null);
     }
 
+    /**
+     * Metodo que pinta una imagen con la escala que se pase como parametro
+     * @param img Imagen del motor de Android
+     * @param x coordenada x
+     * @param y coordenada y
+     * @param scaleX Escala del ancho de la imagen
+     * @param scaleY Escala del alto de la imagen
+     */
     public void pintarImagenEscalada(AndroidImage img, int x, int y, int scaleX, int scaleY) {
         if(img instanceof AndroidImage){
             AndroidImage aImage = (AndroidImage) img; //casteamos a andorid Image
@@ -253,6 +318,9 @@ public class AndroidGraphics{
 
     /**
      * Metodo que pinta un texto centrado
+     * @param texto String con el texto a pintar
+     * @param x coordenada x
+     * @param y coordenada y
      */
     public void pintarTextoCentrado(String texto, float x, float y) {
         Rect r= new Rect();
@@ -264,19 +332,27 @@ public class AndroidGraphics{
         float yPos =  (y - ((fm.ascent+fm.descent)/2- fm.leading));
         this.canvas.drawText(texto,xPos,yPos,this.paint);
     }
+
     /**
-     * seteo del color de la pintura
+     * Metodo que setea el color con el que pinta el motor grafico
+     * @param color Numero en hexadecimal del color
      */
     public void setColor(int color) {
         this.paint.setColor(color);
     }
 
+    /**
+     * Metodo que setea el color con el que pinta el motor grafico
+     * @param color Nombre del color
+     */
     public void setColor(String color) {
         this.paint.setColor(Color.parseColor(color));
     }
 
     /**
-     * creacion de una nueva pintura
+     * Metodo que crea una nueva imagen a partir de un archivo
+     * @param f nombre del archivo de la imagen
+     * @return Imagen del motor de Andorid
      */
     public AndroidImage newImage(String f) {
         InputStream is = null;
@@ -287,8 +363,14 @@ public class AndroidGraphics{
         }
         Bitmap bitmap = BitmapFactory.decodeStream(is);
         return new AndroidImage(bitmap);
-    }  /**
-     * creacion de una nueva pintura con ancho y altura
+    }
+
+    /**
+     * Metodo que crea una nueva imagen a partir de un archivo
+     * @param f nombre del archivo de la imagen
+     * @param width ancho de la imagen
+     * @param height alto de la imagen
+     * @return Imagen del motor de Andorid
      */
     public AndroidImage newImage(String f,int width, int height) {
         InputStream is = null;
@@ -300,84 +382,114 @@ public class AndroidGraphics{
         Bitmap bitmap = BitmapFactory.decodeStream(is);
         return new AndroidImage(bitmap,width,height);
     }
+
     /**
-     * seteo de una fuente
+     * Setteo de la fuente con la que se escribe un texto
+     * @param font Fuente de texto de Android
      */
     public void setFont(AndroidFont font) {
         this.af =(AndroidFont) font;
         this.paint.setTypeface(this.af.getTypeface());
     }
+
     /**
      * creacion de una nueva fuente con tamaño
+     * @param f nombre de la fuente
+     * @param size tamaño deseado
+     * @return Fuente de texto de Android
      */
     public AndroidFont newFont(String f, float size) {
         return this.newFont(f, size, false, false);
     }
-    /**
-     * creacion de una nueva fuente
-     */
 
+    /**
+     * creacion de una nueva fuente en el motor
+     * @param f nombre
+     * @return
+     */
     public AndroidFont newFont(String f) {
         return this.newFont(f,10, false, false);
     }
+
     /**
      * creacion de una nueva fuente con tamaño y negrita
      */
-
     public AndroidFont newFont(String path, float size,boolean bold )
     {
         return this.newFont(path,size,bold,false);
     }
-    /**
-     * creacion de una nueva fuente con tamaño , negrita e italics
-     */
 
-    public AndroidFont newFont(String path, float size,boolean bold, boolean italic )
+    /**
+     * creacion de una nueva fuente en el motor con las propiedades que queramos
+     * @param path ubicacion de la fuente/nombre en el directorio
+     * @param size tamaño de la fuente
+     * @param bold determina si esta en negrita
+     * @param italic determina si es italica
+     * @return Fuente de texto de Android
+     */
+    public AndroidFont newFont(String path, float size,boolean bold, boolean italic)
     {
         return new AndroidFont(this.assetManager,fontDir+path,size,bold,italic);
     }
-    /**
-     * escalado del canvas
-     */
 
+    /**
+     * Metodo de escalado del canvas
+     * @param x cantidad a escalar en el eje x
+     * @param y cantidad a escalar en el eje y
+     */
     public void escalar(float x, float y) {
         this.canvas.scale(x,y);
     }
-    /**
-     * traslado del canvas
-     */
 
+    /**
+     * Metodo de traslación del canvas
+     * @param x cantidad a trasladar en el eje x
+     * @param y cantidad a trasladar en el eje y
+     */
     public void trasladar(float x, float y) {
         this.canvas.translate(x,y);
     }
-    /**
-     * seteo de los tamaños logicos
-     */
 
+    /**
+     * Metodo que setea el tamaño logico de la ventana
+     * @param w ancho
+     * @param h alto
+     */
     public void setLogicSize(float w, float h) {
         this.logicW =w;
         this.logicH =h;
     }
-    /**
-     * metodo que crea un circulo relleno
-     */
 
+    /**
+     * Metodo que crea un circulo relleno
+     * @param x coordenada x
+     * @param y coordenada y
+     * @param r radio del circulo
+     */
     public void rellenarCirculo(float x, float y, float r) {
         this.paint.setStyle(Paint.Style.FILL);
         this.canvas.drawCircle(x,y,r,this.paint);
     }
-    /**
-     * metodo que crea un cuadrado relleno
-     */
 
+    /**
+     * Metodo que crea un cuadrado relleno
+     * @param x coordenada x
+     * @param y coordenada y
+     * @param w ancho del cuadrado
+     * @param h alto del cuadrado
+     */
     public void rellenarCuadrado(float x, float y, float w, float h) {
         this.paint.setStyle(Paint.Style.FILL);
         this.canvas.drawRect(x - w/2,y -h/2,x+w /2,y+h/2,this.paint);
     }
-    /**
-     * metodo que crea un poligono relleno
-     */
 
+    /**
+     * Metodo que pinta un poligono relleno
+     * @param cx coordenada x del centro
+     * @param cy coordenada y del centro
+     * @param r radio del poligono
+     * @param nv numero de vertices
+     */
     public void rellenarPoligono(float cx, float cy, float r, int nv) {
         this.paint.setStyle(Paint.Style.FILL);
         if(nv<3)
@@ -407,13 +519,15 @@ public class AndroidGraphics{
         this.canvas.drawPath(wallpath, this.paint);
 
     }
-    /**
-     * metodo que crea un hexagono relleno
-     */
 
+    /**
+     * metodo que crea un hexagono relleno (con orientacion distinta)
+     * @param cx coordenada x del centro
+     * @param cy coordenada y del centro
+     * @param r radio del hexagono
+     */
     public void rellenarHexagono(float cx, float cy, float r) {
         this.paint.setStyle(Paint.Style.FILL);
-
 
         //Coordendadas de los vertices del poligono
         int [] coorX = new int[6];
@@ -437,15 +551,21 @@ public class AndroidGraphics{
         wallpath.lineTo(coorX[0], coorY[0]);//Volvemos al primer punto
         this.canvas.drawPath(wallpath, this.paint);
     }
-    //devuelve una conversión de la coordenada X real a la coordenada X en logica
 
+    /**
+     * Devuelve una conversión de la coordenada X real a la coordenada X en logica
+     * @param x coordenada x
+     * @return coordenada parametro con la conversion hecha
+     */
     public float real2LogicX(float x) {
         return (x - offsetX) / scale;
     }
-    //devuelve una conversión de la coordenada Y real a la coordenada Y en logica
-
+    /**
+     * Devuelve una conversión de la coordenada Y real a la coordenada Y en logica
+     * @param y coordenada y
+     * @return coordenada parametro con la conversion hecha
+     */
     public float real2LogicY(float y) {
         return (y - offsetY) / scale;
     }
-
 }
