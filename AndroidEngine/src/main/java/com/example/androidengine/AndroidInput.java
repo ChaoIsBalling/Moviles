@@ -9,17 +9,30 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+/**
+ * Clase que implementa el gestor del input en el motor de Android
+ */
 public class AndroidInput implements View.OnTouchListener{
     ArrayList<TouchEvent> events;
     ArrayList<TouchEvent> pendingEvents;
     boolean dragging =false;
     float lastY;
-    //inicializa las listas de la clase
+
+    /**
+     * Constructora que inicializa las listas de de eventos y eventos pendientes
+     */
     public AndroidInput(){
         events = new ArrayList<TouchEvent>();
         pendingEvents = new ArrayList<TouchEvent>();
     }
-//metodo que registra una acción de touch cuando tocas la pantalla del movil y lo pasa a una lista de eventos pendientes
+
+    /**
+     * Metodo que registra una acción de touch cuando tocas la pantalla del movil
+     * y lo pasa a una lista de eventos pendientes
+     * @param v La vista que fue tocada
+     * @param event The MotionEvent object que contiene toda la info del evento
+     * @return devuelve true por defecto
+     */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         //pasamos la posición del touch respecto a la pantalla y dependiendo del tipo de movimiento le asignamos
@@ -50,7 +63,7 @@ public class AndroidInput implements View.OnTouchListener{
     }
     /**
      * Añade los eventos pendientes a la lista de eventos actaules y limpia la lista de pendientes
-     * @return Eventos pendientes
+     * @return Lista de eventos pendientes
      */
     public synchronized ArrayList<TouchEvent> getTouchEvents() {
         this.events.addAll(this.pendingEvents);

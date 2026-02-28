@@ -23,7 +23,7 @@ import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
 /**
- * Clase que implementa los metodos para la gestión de anuncios
+ * Clase que implementa los metodos para la gestión de anuncios en el motor
  * Implementa la interfaz Mobile del motor exclusivamente para Android
  */
 public class AndroidMobile {
@@ -146,6 +146,7 @@ public class AndroidMobile {
 
     /**
      * Metodo que muestra un anuncio recompensado una vez ya se ha cargado
+     * @param callback Interfaz con la función callback que se ejecuta tras ver el anuncio
      */
     public void showRewardedAd(RewardCallback callback) {
         //Llamar al hilo principal para ver el anuncio
@@ -168,6 +169,11 @@ public class AndroidMobile {
             }
         });
     }
+
+    /**
+     * Metodo para cambiar la visiblidad de un banner publicitario
+     * @param cond determina si el banner es visible o no
+     */
     public void setVisibleAdBanner(boolean cond){
         //Si no cambia el booleano de condicion, no hacemos nada
         if(cond == isBannerVisible)

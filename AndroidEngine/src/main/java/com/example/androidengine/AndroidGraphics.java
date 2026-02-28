@@ -131,10 +131,10 @@ public class AndroidGraphics{
 
     /**
      * Metodo que limita lo que se renderiza en pantalla al tamaño logico
-     * @param left 
-     * @param top
-     * @param right
-     * @param botton
+     * @param left lado izquierdo
+     * @param top lado de arriba
+     * @param right lado derecho
+     * @param botton lado de abajo
      */
     public void EmpezarLimiteDibujado(float left, float top, float right, float botton){
         this.canvas.save();
