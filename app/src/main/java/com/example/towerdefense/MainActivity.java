@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private AndroidEngine engine; //Motor del juego para Android
     private AndroidMobile mobile;//Interfaz para conectar el motor con el MainActivity de la app
     private FrameLayout adContainerView; //Contenedor sobre el que ponemos el anuncio Banner
-
+    private JSONObject save;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         this.engine.setNotificationIcon(R.drawable.ic_tower_defense_noti); //icono de notificación
 
         checkRewardNotifiactionIntent(); //Comprobamos si el jugador ha vuelto a entrar al juego por la notificacion recompensada
-        JSONObject save;
         if(this.engine.checkFileExists("save"))
         {
             save=this.engine.readInternalJsonFile("save");
@@ -137,7 +136,15 @@ public class MainActivity extends AppCompatActivity {
 
         //Si es por hacer click a la notifiación por bonificación, regalamos diamantes al jugador
         if(intent != null && intent.getBooleanExtra("REWARD_NOTIFICATION",false)){
-            this.engine.incrementarParametro("gems",10); //incrementamos el numero de diamantes en el archivo de guarado del juego
+            int numDiamantes=0;
+            //incrementamos el numero de diamantes en el archivo de guardado del juego
+            try {
+                numDiamantes=this.save.getInt("gems");
+                this.save.put("gems",numDiamantes+10);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
         }
     }
 }

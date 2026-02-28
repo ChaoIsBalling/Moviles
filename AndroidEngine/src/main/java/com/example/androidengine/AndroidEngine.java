@@ -108,46 +108,7 @@ public class AndroidEngine implements Runnable {
     }
 
 
-    //Metodo para incrementar el valor de un parametro int en el archivo de guardado
-    //(si existe) a partir de su lectura
-    public void incrementarParametro(String key, int amount){
-        if(this.checkFileExists("save")) { //si existe el archivo de guardado
-            JSONObject obj;
-            try {
-                obj = this.readInternalJsonFile("save");
-                String hash = this.createHash(obj.toString());
-                //modificamos el parametro
-                obj.put(key, obj.getInt(key) + amount);
 
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-            //Volvemos a encriptarlo y a sobreescribimos el guardado
-            this.writeFile("hash", this.createHash(obj.toString()));
-            this.writeFile("save", obj.toString());
-        }else{
-            System.out.println("No existe un archivo de guardado sobre el que modificar el parámetro");
-        }
-    }
-    //Metodo para leer el valor de un parametro int en el archivo de guardado
-    //(si existe) a partir de su lectura. Usado para modificar la cantidad de diamantes
-    public int leerParametroInt(String key) {
-        int param=0;
-        if(this.checkFileExists("save")) {
-            JSONObject obj = this.readInternalJsonFile("save");
-            String hash = this.createHash(obj.toString());
-            if (this.checkHash(hash)) {
-                try {
-                    param = obj.getInt(key); //leemos el parametro
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }else {
-            System.out.println("No existe un archivo de guardado sobre el que leer el parámetro");
-        }
-        return param;
-    }
     //getter del audio
 
     public AndroidAudio getAudio() {

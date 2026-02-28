@@ -111,7 +111,7 @@ public class GameOver implements State {
             botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAdx2")));
 
             //Diamantes que tenemos ahora mismo
-            this.numDiamantes = this.engine.leerParametroInt("gems");
+            this.numDiamantes = this.save.getInt("gems");
             this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantesActuales"));
             this.textoDiamantes.setText(String.valueOf(this.numDiamantes));
 
@@ -129,8 +129,8 @@ public class GameOver implements State {
                 //Si el nivel no estaba completado, añadimos 10 de recompensa
                 if(!isCompleted){
                     this.recompensa = 10;
-                    this.engine.incrementarParametro("gems", recompensa); //incrementamos la recompensa
                     this.numDiamantes += this.recompensa;
+                    this.save.put("gems",this.numDiamantes);
                 }
                 //si ya estaba completado, el jugador solo puede ganar 10 si ve el anuncio
                 else{
@@ -303,10 +303,13 @@ public class GameOver implements State {
             @Override
             public void onReward() {
                 recompensa = 10;
-                //Modificamos el parmametro añadiendole la cantidad de recompensa en el archivo de guardado
-                engine.incrementarParametro("gems", recompensa); //10 diamantes
                 //Modificamos la cantidad actual de diamantes en el texto
                 numDiamantes += recompensa;
+                try {
+                    save.put("gem",numDiamantes);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
                 //Escondemos e inhabilitamos el boton
                 inhabilitarBoton(botonRecompensaAd);
                 //Actualizamos el texto de Game Over del numero de diamantes
