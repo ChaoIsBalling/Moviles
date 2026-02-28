@@ -9,8 +9,7 @@ import android.media.AudioAttributes;
 
 
 /**
- * Clase que hereda de la interfaz Audio de Engine y que
- * se encarga de la gestión de sonidos en Android
+ * Clase que se encarga de la gestión de sonidos en Android
  */
 public class AndroidAudio {
     /**
@@ -96,7 +95,6 @@ public class AndroidAudio {
      * Metodo que detiene el sonido a traves de la interfaz del sonido en nuestra app
      * @param sound Interfaz sound del engine
      */
-
     public void stopSound(AndroidSound sound)
     {
         AndroidSound s =(AndroidSound)sound;
