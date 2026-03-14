@@ -60,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
         }
         this.engine.setState(new Menu(engine,this.mobile,save)); //Estado inicial del juego
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        this.save=this.engine.getState().getSave();
+        this.engine.writeFile("hash",this.engine.createHash(this.save.toString()));
+        this.engine.writeFile("save",this.save.toString());
+    }
     /**
      * Metodo para crear un nuevo archivo de guardado en caso de no tener archivo de guardado
      * o que el archivo no sea consistente con el hash
@@ -97,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        Log.i("Ending", "This has Ended.");
+        this.engine.writeFile("hash",this.engine.createHash(this.save.toString()));
+        this.engine.writeFile("save",this.save.toString());
     }
 
     @Override
@@ -111,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
                 "¡Te echamos de menos! :(",
                 "Vuelve ahora y gana 10 diamantes gratis."
         );
+        this.save=this.engine.getState().getSave();
+        this.engine.writeFile("hash",this.engine.createHash(this.save.toString()));
+        this.engine.writeFile("save",this.save.toString());
         this.engine.pause();
     }
 

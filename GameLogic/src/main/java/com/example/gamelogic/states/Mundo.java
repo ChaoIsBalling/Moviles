@@ -254,4 +254,9 @@ public class Mundo implements State {
     @Override
     public void setMobile(AndroidMobile mobile) {
     }
+
+    @Override
+    public JSONObject getSave() {
+        return this.save;
+    }
 }

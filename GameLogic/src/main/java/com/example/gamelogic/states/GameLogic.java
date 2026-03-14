@@ -392,9 +392,6 @@ public class GameLogic implements State {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            this.engine.writeFile("hash",this.engine.createHash(save.toString()));
-            this.engine.writeFile("save",save.toString());
-
             //Vamos al estado de GameOver
             GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true, this.isCompleted, this.nivel, this.mundo, this.oleada,this.save);
             this.engine.setState(gameOver);
@@ -721,6 +718,11 @@ public class GameLogic implements State {
     @Override
     public void setMobile(AndroidMobile mobile) {
             this.mobile = mobile;
+    }
+
+    @Override
+    public JSONObject getSave() {
+        return this.save;
     }
 
     /**

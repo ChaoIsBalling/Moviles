@@ -137,4 +137,9 @@ public class Dificultad implements State {
     public void setMobile(AndroidMobile mobile) {
     }
 
+    @Override
+    public JSONObject getSave() {
+        return this.save;
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.example.gamelogic.states;
 
+import android.os.Bundle;
+
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.State;
 import com.example.androidengine.TouchEvent;
@@ -169,5 +171,10 @@ public class Menu implements State {
     @Override
     public void setMobile(AndroidMobile mobile) {
         this.mobile = mobile;
+    }
+
+    @Override
+    public JSONObject getSave() {
+        return this.save;
     }
 }

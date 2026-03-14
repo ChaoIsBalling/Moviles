@@ -284,6 +284,11 @@ public class GameOver implements State {
         this.mobile = mobile;
     }
 
+    @Override
+    public JSONObject getSave() {
+        return this.save;
+    }
+
     /**
      * Metodo que determina si se puede interactuar con el boton o no
      */

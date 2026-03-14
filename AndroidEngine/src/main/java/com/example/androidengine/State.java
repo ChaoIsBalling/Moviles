@@ -1,5 +1,7 @@
 package com.example.androidengine;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 
@@ -44,4 +46,9 @@ public interface State {
      * @param mobile Interfaz Mobile
      */
     void setMobile(AndroidMobile mobile);
+
+    /**
+     * Devuelve el Archivo de Guardado del estado
+     */
+    JSONObject getSave();
 }

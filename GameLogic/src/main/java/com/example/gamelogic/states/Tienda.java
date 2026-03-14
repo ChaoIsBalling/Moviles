@@ -272,8 +272,6 @@ public class Tienda implements State {
         this.save.put("rojo",this.rojo);
         this.save.put("azul",this.azul);
         this.save.put("fondo",this.fondo);
-        this.engine.writeFile("hash",this.engine.createHash(this.save.toString()));
-        this.engine.writeFile("save",this.save.toString());
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -692,5 +690,10 @@ public class Tienda implements State {
     @Override
     public void setMobile(AndroidMobile mobile) {
 
+    }
+
+    @Override
+    public JSONObject getSave() {
+        return this.save;
     }
 }
