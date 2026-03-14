@@ -14,7 +14,7 @@ import com.example.gamelogic.Text;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import android.util.Log;
 import java.util.ArrayList;
 
 /**
@@ -306,7 +306,7 @@ public class GameOver implements State {
                 //Modificamos la cantidad actual de diamantes en el texto
                 numDiamantes += recompensa;
                 try {
-                    save.put("gem",numDiamantes);
+                    save.put("gems",numDiamantes);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -316,6 +316,7 @@ public class GameOver implements State {
                 textoDiamantes.setText(String.valueOf(numDiamantes));
                 ocultarTexto(textoRecompensa);//quitamos la cantidad de la recompensa
             }
+
         }); //vemos el anuncio y si se acaba de ver, damos recompensa
     }
 

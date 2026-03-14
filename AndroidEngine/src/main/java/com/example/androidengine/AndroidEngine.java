@@ -147,7 +147,7 @@ public class AndroidEngine implements Runnable {
      * @param dir Nombre del directorio
      * @return int que indica la longitud del directorio
      */
-    public int getDirectoryLenght(String dir)sss{
+    public int getDirectoryLenght(String dir){
         String[] files = null;
         try {
             files = this.assetManager.list(this.filesDir + dir);

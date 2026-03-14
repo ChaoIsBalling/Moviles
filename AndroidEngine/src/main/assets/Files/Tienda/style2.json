@@ -20,16 +20,31 @@
         "h":80,
         "isFill":true
     },
-    "BotonPrueba":{
-        "tipo":"tipo de desbloqueo (torre, skin o fondo)",
-        "coste":100,
-        "descripcion":"descripcion de compra",
-        "tieneImagen":true,
-        "imagen":"nombreImagen.png",
-        "tieneForma":true,
-        "tipoForma":"cuadrado, triangulo...",
-        "colorForma":"#FFFF0000",
-        "desbloqueo":"nombre variable en guardado",
-        "tipoDesbloqueo":"tipo de la variable(bool, string...)"
-    }
+    "Botones":[
+        {
+            "tipo":"tipo de desbloqueo (torre, skin o fondo)",
+            "coste":100,
+            "descripcion":"descripcion de compra",
+            "tieneImagen":true,
+            "imagen":"nombreImagen.png",
+            "tieneForma":true,
+            "tipoForma":"cuadrado, triangulo...",
+            "colorForma":"#FFFF0000",
+            "desbloqueo":"nombre variable en guardado",
+            "tipoDesbloqueo":"tipo de la variable(bool, string...)"
+        },
+        {
+            "tipo":"tipo de desbloqueo (torre, skin o fondo)",
+            "coste":100,
+            "descripcion":"descripcion de compra",
+            "tieneImagen":true,
+            "imagen":"nombreImagen.png",
+            "tieneForma":true,
+            "tipoForma":"cuadrado, triangulo...",
+            "colorForma":"#FFFF0000",
+            "desbloqueo":"nombre variable en guardado",
+            "tipoDesbloqueo":"tipo de la variable(bool, string...)"
+        }
+    ]
+
 }
