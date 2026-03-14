@@ -20,7 +20,7 @@
         "h":80,
         "isFill":true
     },
-    "Botones":[
+    "BotonesDesbloqueo":[
         {
             "tipo":"tipo de desbloqueo (torre, skin o fondo)",
             "coste":100,
@@ -30,8 +30,7 @@
             "tieneForma":true,
             "tipoForma":"cuadrado, triangulo...",
             "colorForma":"#FFFF0000",
-            "desbloqueo":"nombre variable en guardado",
-            "tipoDesbloqueo":"tipo de la variable(bool, string...)"
+            "desbloqueo":"nombre variable en guardado"
         },
         {
             "tipo":"tipo de desbloqueo (torre, skin o fondo)",
@@ -42,8 +41,29 @@
             "tieneForma":true,
             "tipoForma":"cuadrado, triangulo...",
             "colorForma":"#FFFF0000",
+            "desbloqueo":"nombre variable en guardado"
+        }
+    ],
+    "BotonesCambio":[
+        {
+            "tieneImagen":true,
+            "imagen":"nombreImagen.png",
+            "tieneForma":true,
+            "tipoForma":"cuadrado, triangulo...",
+            "colorForma":"#FFFF0000",
             "desbloqueo":"nombre variable en guardado",
-            "tipoDesbloqueo":"tipo de la variable(bool, string...)"
+            "guardado":"nombre de variable a guardar",
+            "datoGuardado":"que se guarda"
+        },
+        {
+            "tieneImagen":true,
+            "imagen":"nombreImagen.png",
+            "tieneForma":true,
+            "tipoForma":"cuadrado, triangulo...",
+            "colorForma":"#FFFF0000",
+            "desbloqueo":"nombre variable en guardado",
+            "guardado":"nombre de variable a guardar",
+            "datoGuardado":"que se guarda"
         }
     ]
 
