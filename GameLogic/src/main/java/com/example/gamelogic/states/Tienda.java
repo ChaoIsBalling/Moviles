@@ -6,10 +6,13 @@ import com.example.androidengine.State;
 import com.example.androidengine.TouchEvent;
 import java.util.*;
 import com.example.androidengine.AndroidAudio;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.Button;
+import com.example.gamelogic.figure.Circle;
 import com.example.gamelogic.figure.Hexagon;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.figure.Square;
@@ -125,6 +128,12 @@ public class Tienda implements State {
     }
 
     AndroidMobile mobile;
+
+    JSONObject datos2;
+
+    int x;
+    int initx;
+    int y;
     public Tienda(AndroidEngine engine,AndroidMobile mobile,JSONObject save){
         this.save =save;
         ScrollableText=new ArrayList<Text>();
@@ -132,9 +141,20 @@ public class Tienda implements State {
         this.engine=engine;
         this.mobile = mobile;
         this.datos =engine.readJsonFile("Tienda/style.json");
+        this.datos2 =engine.readJsonFile("Tienda/style2.json");
         try{
-        this.botonVolver = new Button(this.datos.getJSONObject("BotonVolver"));
-        this.cargarDatos();
+        this.botonVolver = new Button(this.datos2.getJSONObject("BotonVolver"));
+
+        this.textoDiamantes = new Text(this.datos2.getJSONObject("TextoDiamantes"));
+        this.textoDiamantes.setText("" + this.save.getInt("gems"));
+
+        this.fondoDes = new Square(500,300,300,400,true);
+        this.fondoDes.setColor("#ff00ffff");
+        this.coste = new Text(this.datos2.getJSONObject("TextoCoste"));
+        this.botonComprar = new Button(this.datos2.getJSONObject("BotonComprar"));
+        this.botonComprar.setText(new Text(this.datos2.getJSONObject("TextoComprar")));
+
+        /*this.cargarDatos();
 
         this.botonMini = new Button(this.datos.getJSONObject("BotonMini"));
         this.botonRayo = new Button(this.datos.getJSONObject("BotonRayo"));
@@ -152,7 +172,7 @@ public class Tienda implements State {
             this.botonRayo.setColor("#ff00ff00");
         }
         if(this.fuego){
-            this.botonFuego .setColor("#ff00ff00");
+            this.botonFuego.setColor("#ff00ff00");
         }
         if(this.hielo){
             this.botonHielo.setColor("#ff00ff00");
@@ -228,7 +248,7 @@ public class Tienda implements State {
         }
         if(this.azul){
             this.botonAzul.setColor("#ff00ff00");
-        }
+        }*/
     } catch (
     JSONException e) {
         throw new RuntimeException(e);
@@ -286,17 +306,25 @@ public class Tienda implements State {
 
         gr.EmpezarLimiteDibujado(0,0,600,400);
         gr.EmpezarLimiteDibujado(0,80,600,400);
-        this.botonRayo.Render(gr);
+
+        for (int i =0; i<this.ScrollableButtons.size();i++){
+            this.ScrollableButtons.get(i).Render(gr);
+        }
+        for (int i =0; i<this.ScrollableText.size();i++){
+            this.ScrollableText.get(i).Render(gr);
+        }
+
+        /*this.botonRayo.Render(gr);
         this.botonFuego.Render(gr);
         this.botonHielo.Render(gr);
         this.botonMini.Render(gr);
         this.CTorres.Render(gr);
-        this.CSkins.Render(gr);
+        this.CSkins.Render(gr);*/
         gr.TerminarLimiteDibujado();
         this.botonVolver.Render(gr);
         this.textoDiamantes.Render(gr);
         this.imagenDiamante.Render();
-        this.botonRojo.Render(gr);
+        /*this.botonRojo.Render(gr);
         this.botonAzul.Render(gr);
         this.CFondo.Render(gr);
         if(this.estado!=Estado.normal){
@@ -321,7 +349,7 @@ public class Tienda implements State {
             this.coste.Render(gr);
             this.botonComprar.Render(gr);
             }
-        }
+        }*/
         gr.TerminarLimiteDibujado();
     }
 
@@ -329,15 +357,88 @@ public class Tienda implements State {
     public void setGraphics(AndroidGraphics gr) {
         try{
             this.graphics=gr;
-            this.botonVolver.setImagen(new Image(datos.getJSONObject("ImagenVolver"),gr));
-            this.botonRayo.setImagen(new Image(datos.getJSONObject("ImagenRayo"),gr));
-            this.botonFuego.setImagen(new Image(datos.getJSONObject("ImagenFuego"),gr));
-            this.botonHielo.setImagen(new Image(datos.getJSONObject("ImagenHielo"),gr));
-            this.botonMini.setImagen(new Image(datos.getJSONObject("ImagenMini"),gr));
+            this.botonVolver.setImagen(new Image(datos2.getJSONObject("ImagenVolver"),gr));
             this.imagenDiamante = new Image(datos.getJSONObject("ImagenDiamante"),gr);
-            this.rayoS.setImagen(new Image(datos.getJSONObject("ImagenRayo"),gr));
-            this.fuegoS.setImagen(new Image(datos.getJSONObject("ImagenFuego"),gr));
-            this.hieloS.setImagen(new Image(datos.getJSONObject("ImagenHielo"),gr));
+            this.CTorres = new Text(this.datos.getJSONObject("TextoCTorres"));
+            ScrollableText.add(this.CTorres);
+
+            JSONArray botonesDT = datos2.getJSONArray("BotonesDesbloqueoTorre");
+            this.x = datos2.getJSONObject("EstandarBoton").getInt("x");
+            this.initx = datos2.getJSONObject("EstandarBoton").getInt("x");
+            this.y = datos2.getJSONObject("EstandarBoton").getInt("y");
+            generarBotones(botonesDT,gr);
+
+            this.CSkins = new Text(this.datos.getJSONObject("TextoCSkins"));
+            y +=80;
+            this.CSkins.setY(y);
+            ScrollableText.add(this.CSkins);
+            y+=100;
+
+            x = initx;
+            JSONArray botonesDS = datos2.getJSONArray("BotonesDesbloqueoSkin");
+            generarBotones(botonesDS,gr);
+
+            this.CFondo = new Text(this.datos.getJSONObject("TextoColores"));
+            y+=80;
+            this.CFondo.setY(y);
+            ScrollableText.add(CFondo);
+            y+=100;
+
+            x = initx;
+            JSONArray botonesDF = datos2.getJSONArray("BotonesDesbloqueoFondo");
+            generarBotones(botonesDF,gr);
+
+            this.minY=ScrollableText.get(0).getY();
+            this.maxY=400-ScrollableButtons.get(ScrollableButtons.size()-1).getHeight();
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void generarBotones(JSONArray array, AndroidGraphics gr){
+        try{
+            for(int i =0; i<array.length();i++){
+                Button boton = new Button(this.datos2.getJSONObject("EstandarBoton"));
+                boton.setX(x);
+                boton.setY(y);
+                if(array.getJSONObject(i).getBoolean("tieneImagen")){
+                    JSONObject image = datos2.getJSONObject("EstandarImagen");
+                    image.put("imagen",array.getJSONObject(i).getString("imagen"));
+                    boton.setImagen(new Image(image,gr));
+                }
+                if(array.getJSONObject(i).getBoolean("tieneForma")){
+                    if(array.getJSONObject(i).getString("tipoForma").equals("cuadrado")){
+                        Square br = new Square(0,0,datos2.getJSONObject("EstandarCuadrado").getInt("w"),datos2.getJSONObject("EstandarCuadrado").getInt("h"),datos2.getJSONObject("EstandarCuadrado").getBoolean("isFill"));
+                        br.setColor(array.getJSONObject(i).getString("colorForma"));
+                        boton.setFigura(br);
+                    }
+                    else if(array.getJSONObject(i).getString("tipoForma").equals("triangulo")){
+                        Triangle tr = new Triangle(0,0,datos2.getJSONObject("EstandarTriangulo").getInt("r"),datos2.getJSONObject("EstandarTriangulo").getBoolean("isFill"));
+                        tr.setColor(array.getJSONObject(i).getString("colorForma"));
+                        boton.setFigura(tr);
+                    }
+                    else if(array.getJSONObject(i).getString("tipoForma").equals("hexagono")){
+                        Hexagon hx = new Hexagon(0,0,datos2.getJSONObject("EstandarHexagono").getInt("r"),datos2.getJSONObject("EstandarHexagono").getBoolean("isFill"));
+                        hx.setColor(array.getJSONObject(i).getString("colorForma"));
+                        boton.setFigura(hx);
+                    }
+                    else if(array.getJSONObject(i).getString("tipoForma").equals("circulo")){
+                        Circle cr = new Circle(0,0,datos2.getJSONObject("EstandarCirculo").getInt("r"),datos2.getJSONObject("EstandarCirculo").getBoolean("isFill"));
+                        cr.setColor(array.getJSONObject(i).getString("colorForma"));
+                        boton.setFigura(cr);
+                    }
+                }
+                if(x == initx){
+                    x+=150;
+                }
+                else{
+                    x = initx;
+                    y+=150;
+                }
+                ScrollableButtons.add(boton);
+            }
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -353,7 +454,7 @@ public class Tienda implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     onTouchDown(e);
-                    this.gestionBotones(e);
+                    //this.gestionBotones(e);
                     break;
                 case TOUCH_UP:
                     onTouchUp();
