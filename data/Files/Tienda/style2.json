@@ -24,17 +24,17 @@
     },
     "EstandarTriangulo":    
     {   
-        "r":80,
+        "r":50,
         "isFill":true
     },
     "EstandarHexagono":    
     {   
-        "r":80,
+        "r":50,
         "isFill":true
     },
     "EstandarCirculo":    
     {   
-        "r":80,
+        "r":50,
         "isFill":true
     },
     "BotonesDesbloqueoTorre":[
@@ -95,26 +95,98 @@
     ],
     "BotonesCambio":[
         {
-            "tieneImagen":true,
-            "imagen":"nombreImagen.png",
+            "tieneImagen":false,
             "tieneForma":true,
-            "tipoForma":"cuadrado, triangulo...",
-            "colorForma":"#FFFF0000",
-            "desbloqueo":"nombre variable en guardado",
-            "guardado":"nombre de variable a guardar",
-            "datoGuardado":"que se guarda"
+            "tipoForma":"triangulo",
+            "colorForma":"#FF000000",
+            "desbloqueo":"rayo",
+            "guardado":"skinRayo",
+            "datoGuardado":"Figura"
         },
         {
             "tieneImagen":true,
-            "imagen":"nombreImagen.png",
+            "imagen":"TorreRayo.png",
+            "tieneForma":false,
+            "desbloqueo":"rayo",
+            "guardado":"skinRayo",
+            "datoGuardado":"TorreRayoCosmetico"
+        },
+        {
+            "tieneImagen":false,
             "tieneForma":true,
-            "tipoForma":"cuadrado, triangulo...",
+            "tipoForma":"hexagono",
             "colorForma":"#FFFF0000",
-            "desbloqueo":"nombre variable en guardado",
-            "guardado":"nombre de variable a guardar",
-            "datoGuardado":"que se guarda"
+            "desbloqueo":"fuego",
+            "guardado":"skinFuego",
+            "datoGuardado":"Figura"
+        },
+        {
+            "tieneImagen":true,
+            "imagen":"TorreFuego.png",
+            "tieneForma":false,
+            "desbloqueo":"fuego",
+            "guardado":"skinFuego",
+            "datoGuardado":"TorreFuegoCosmetico"
+        },
+        {
+            "tieneImagen":false,
+            "tieneForma":true,
+            "tipoForma":"cuadrado",
+            "colorForma":"#FFC8A2C8",
+            "desbloqueo":"hielo",
+            "guardado":"skinHielo",
+            "datoGuardado":"Figura"
+        },
+        {
+            "tieneImagen":true,
+            "imagen":"TorreHielo.png",
+            "tieneForma":false,
+            "desbloqueo":"hielo",
+            "guardado":"skinHielo",
+            "datoGuardado":"TorreHieloCosmetico"
+        },
+        {
+            "tieneImagen":false,
+            "tieneForma":true,
+            "tipoForma":"cuadrado",
+            "colorForma":"#FFFFFFFF",
+            "desbloqueo":"rojo",
+            "guardado":"fondo",
+            "datoGuardado":"#FFFFFFFF"
+        },
+        {
+            "tieneImagen":false,
+            "tieneForma":true,
+            "tipoForma":"cuadrado",
+            "colorForma":"#FFFF0000",
+            "desbloqueo":"rojo",
+            "guardado":"fondo",
+            "datoGuardado":"#FFFF0000"
+        },
+        {
+            "tieneImagen":false,
+            "tieneForma":true,
+            "tipoForma":"cuadrado",
+            "colorForma":"#FFFFFFFF",
+            "desbloqueo":"azul",
+            "guardado":"fondo",
+            "datoGuardado":"#FFFFFFFF"
+        },
+        {
+            "tieneImagen":false,
+            "tieneForma":true,
+            "tipoForma":"cuadrado",
+            "colorForma":"#FF0000FF",
+            "desbloqueo":"azul",
+            "guardado":"fondo",
+            "datoGuardado":"#FF0000FF"
         }
+        
     ],
+    "InitBotonCambio":{
+        "x":420,
+        "y":170
+    },
     "BotonVolver":    
     {   "x":30,
         "y":30,
