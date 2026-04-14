@@ -616,6 +616,26 @@ public class Tienda implements State {
             }catch (JSONException ex) {
                 throw new RuntimeException(ex);
             }
+
+            if(this.comprando != null){
+                boolean bct = false;
+                int i =0;
+                while (i<this.botonesCambio.size() && !bct){
+                    if(Objects.equals(this.botonesCambio.get(i).getDesbloqueo(), this.comprando.getDesbloqueo()) && this.botonesCambio.get(i).contains(e.x,e.y)){
+                        try {
+                            this.save.put(this.botonesCambio.get(i).getGuardado(),this.botonesCambio.get(i).getDatoGuardado());
+                            this.graphics.setColorClear(this.save.getString("fondo"));
+                        }catch (JSONException ex) {
+                            throw new RuntimeException(ex);
+                        }
+
+                        bct = true;
+                    }
+                    i++;
+                }
+            }
+
+
             boolean bct = false;
             int i =0;
             while (i<this.ScrollableButtons.size() && !bct){
