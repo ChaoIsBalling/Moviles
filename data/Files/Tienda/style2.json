@@ -183,10 +183,16 @@
         }
         
     ],
+    "InitBotonCompra":{
+        "x":100,
+        "y":200
+    },
     "InitBotonCambio":{
         "x":420,
         "y":170
     },
+    "CompraPorFila":2,
+    "CambioPorFila":2,
     "BotonVolver":    
     {   "x":30,
         "y":30,

@@ -139,12 +139,11 @@ public class Tienda implements State {
     int inity;
 
     ButtonComprar comprando;
-    private ArrayList<ButtonCambio> botonesCambio;
+
     public Tienda(AndroidEngine engine,AndroidMobile mobile,JSONObject save){
         this.save =save;
         ScrollableText=new ArrayList<Text>();
         ScrollableButtons=new ArrayList<ButtonComprar>();
-        botonesCambio=new ArrayList<ButtonCambio>();
         this.engine=engine;
         this.mobile = mobile;
         this.datos =engine.readJsonFile("Tienda/style.json");
@@ -344,11 +343,7 @@ public class Tienda implements State {
                     this.botonComprar.Render(gr);
                 }
                 else{
-                    for (int i =0; i<this.botonesCambio.size();i++){
-                        if(Objects.equals(this.botonesCambio.get(i).getDesbloqueo(), this.comprando.getDesbloqueo())){
-                            this.botonesCambio.get(i).Render(gr);
-                        }
-                    }
+                    this.comprando.RenderCambio(gr);
                 }
             }catch (JSONException e) {
                 throw new RuntimeException(e);
@@ -440,6 +435,9 @@ public class Tienda implements State {
                 ButtonComprar boton = new ButtonComprar(db);
                 boton.setX(x);
                 boton.setY(y);
+                if(this.save.getBoolean(boton.getDesbloqueo())){
+                    boton.setColor("#ff00ff00");
+                }
                 if(array.getJSONObject(i).getBoolean("tieneImagen")){
                     JSONObject image = datos2.getJSONObject("EstandarImagen");
                     image.put("imagen",array.getJSONObject(i).getString("imagen"));
@@ -498,6 +496,9 @@ public class Tienda implements State {
                 ultimo = boton;
                 boton.setX(x);
                 boton.setY(y);
+                if(this.save.get(boton.getGuardado()) == boton.getDatoGuardado()){
+                    boton.setColor("#ff00ff00");
+                }
                 if(array.getJSONObject(i).getBoolean("tieneImagen")){
                     JSONObject image = datos2.getJSONObject("EstandarImagen");
                     image.put("imagen",array.getJSONObject(i).getString("imagen"));
@@ -532,7 +533,15 @@ public class Tienda implements State {
                     x = initx;
                     y+=110;
                 }
-                botonesCambio.add(boton);
+                boolean encontrado = false;
+                int j =0;
+                while (j<this.ScrollableButtons.size() && !encontrado){
+                    if(Objects.equals(this.ScrollableButtons.get(j).getDesbloqueo(), boton.getDesbloqueo())){
+                        this.ScrollableButtons.get(j).addBotonCambio(boton);
+                        encontrado=true;
+                    }
+                    j++;
+                }
             }
 
         } catch (JSONException e) {
@@ -612,27 +621,35 @@ public class Tienda implements State {
                     this.save.put("gems",this.save.getInt("gems")-this.comprando.getCoste());
                     this.textoDiamantes.setText("" + this.save.getInt("gems"));
                     this.save.put(this.comprando.getDesbloqueo(),true);
+                    this.comprando.setColor("#ff00ff00");
                 }
             }catch (JSONException ex) {
                 throw new RuntimeException(ex);
             }
 
             if(this.comprando != null){
-                boolean bct = false;
-                int i =0;
-                while (i<this.botonesCambio.size() && !bct){
-                    if(Objects.equals(this.botonesCambio.get(i).getDesbloqueo(), this.comprando.getDesbloqueo()) && this.botonesCambio.get(i).contains(e.x,e.y)){
-                        try {
-                            this.save.put(this.botonesCambio.get(i).getGuardado(),this.botonesCambio.get(i).getDatoGuardado());
-                            this.graphics.setColorClear(this.save.getString("fondo"));
-                        }catch (JSONException ex) {
-                            throw new RuntimeException(ex);
-                        }
-
-                        bct = true;
-                    }
-                    i++;
+                try {
+                    this.comprando.pulsarCambio(e.x,e.y,this.save);
+                    this.graphics.setColorClear(this.save.getString("fondo"));
+                }catch (JSONException ex) {
+                    throw new RuntimeException(ex);
                 }
+
+//                boolean bct = false;
+//                int i =0;
+//                while (i<this.botonesCambio.size() && !bct){
+//                    if(Objects.equals(this.botonesCambio.get(i).getDesbloqueo(), this.comprando.getDesbloqueo()) && this.botonesCambio.get(i).contains(e.x,e.y)){
+//                        try {
+//                            this.save.put(this.botonesCambio.get(i).getGuardado(),this.botonesCambio.get(i).getDatoGuardado());
+//                            this.graphics.setColorClear(this.save.getString("fondo"));
+//                        }catch (JSONException ex) {
+//                            throw new RuntimeException(ex);
+//                        }
+//
+//                        bct = true;
+//                    }
+//                    i++;
+//                }
             }
 
 
