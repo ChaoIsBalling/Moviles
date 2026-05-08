@@ -23,7 +23,7 @@ public class Enemy {
     float y;
     Image imagen;
     //Tipo al que es resistente
-    Tipo tipo;
+    TipoTorre tipo;
 
     //Referencia a la escena de juego
     GameLogic gl;
@@ -46,7 +46,7 @@ public class Enemy {
     /**
      * Constructora de la clase Enemy con todos sus parámetros a inicializar
      */
-    public Enemy(float vida, float velocidad, float defensa, float resistencia, Tipo tipoRes, ArrayList<Vector2D>camino, GameLogic gl){
+    public Enemy(float vida, float velocidad, float defensa, float resistencia, TipoTorre tipoRes, ArrayList<Vector2D>camino, GameLogic gl){
         //Posicion inicial sacada del inicio del camino
         this.x=gl.getRealX(camino.get(0).getY());
         this.y=gl.getRealY(camino.get(0).getX());
@@ -76,8 +76,8 @@ public class Enemy {
     /**
      * Metodo que se llama cada vez que el enemigo sufre daño
      */
-    public void damage(float damage, Tipo tipo){
-        if(tipo == Tipo.hielo){//si es la torre de hielo reduce la velocidad
+    public void damage(float damage, TipoTorre tipo){
+        if(tipo == TipoTorre.HIELO){//si es la torre de hielo reduce la velocidad
             float dam = damage;
             if(this.tipo == tipo){
                 dam -= this.resistencia;

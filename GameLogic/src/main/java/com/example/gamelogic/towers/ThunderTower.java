@@ -5,7 +5,7 @@ import com.example.androidengine.AndroidSound;
 import com.example.androidengine.AndroidGraphics;
 import com.example.gamelogic.Enemy;
 import com.example.gamelogic.Image;
-import com.example.gamelogic.Tipo;
+import com.example.gamelogic.TipoTorre;
 import com.example.gamelogic.figure.Triangle;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class ThunderTower implements Tower{
     boolean disparo = false;
     Image imagen=null;
 
-    Tipo tipo = Tipo.rayo;
+    TipoTorre tipo = TipoTorre.RAYO;
 
     //Lista de enemigos que la torre puede atacar
     ArrayList<Enemy> enemigos;

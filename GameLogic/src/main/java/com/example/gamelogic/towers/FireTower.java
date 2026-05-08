@@ -6,7 +6,7 @@ import com.example.androidengine.AndroidSound;
 import com.example.gamelogic.Enemy;
 import com.example.gamelogic.figure.Hexagon;
 import com.example.gamelogic.Image;
-import com.example.gamelogic.Tipo;
+import com.example.gamelogic.TipoTorre;
 
 import java.util.ArrayList;
 
@@ -30,7 +30,7 @@ public class FireTower implements Tower {
     AndroidSound attack;
 
     //Tipo de la torre
-    Tipo tipo = Tipo.fuego;
+    TipoTorre tipo = TipoTorre.FUEGO;
 
     float x;
     float y;

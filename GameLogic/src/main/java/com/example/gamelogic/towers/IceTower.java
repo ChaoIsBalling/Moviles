@@ -6,7 +6,7 @@ import com.example.androidengine.AndroidSound;
 import com.example.gamelogic.Enemy;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.figure.Square;
-import com.example.gamelogic.Tipo;
+import com.example.gamelogic.TipoTorre;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,7 @@ public class IceTower implements Tower{
     Image image;
 
     //Tipo de la torre
-    Tipo tipo = Tipo.hielo;
+    TipoTorre tipo = TipoTorre.HIELO;
     //Lista de enemigos que detecta la torre
     ArrayList<Enemy> enemigos;
 

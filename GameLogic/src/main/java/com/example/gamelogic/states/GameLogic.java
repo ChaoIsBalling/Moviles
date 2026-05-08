@@ -8,6 +8,7 @@ import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.Button;
 import com.example.gamelogic.Casilla;
 import com.example.gamelogic.Enemy;
+import com.example.gamelogic.managers.WaveManager;
 import com.example.gamelogic.towers.FireTower;
 import com.example.gamelogic.figure.Hexagon;
 import com.example.gamelogic.towers.IceTower;
@@ -16,7 +17,7 @@ import com.example.gamelogic.towers.MiniThunderTower;
 import com.example.gamelogic.figure.Square;
 import com.example.gamelogic.Text;
 import com.example.gamelogic.towers.ThunderTower;
-import com.example.gamelogic.Tipo;
+import com.example.gamelogic.TipoTorre;
 import com.example.gamelogic.towers.Tower;
 import com.example.gamelogic.figure.Triangle;
 import com.example.gamelogic.Vector2D;
@@ -133,7 +134,7 @@ public class GameLogic implements State {
     int nivel;
     int mundo;
 
-      //Enumaerado que determina en que estado de juego estamos
+    //Enumaerado que determina en que estado de juego estamos
     private enum Estado {
         normal, botonRayo, botonFuego, botonHielo, torre, botonMini
     }
@@ -158,6 +159,9 @@ public class GameLogic implements State {
     //Generador de numeros aleatorios de java
     Random rnd;
 
+    //Manager de las oleadas de enemigos
+    private WaveManager wave;
+
        /**
      * Constructora del estado principal de juego en el modo normal
      * @param engine Motor
@@ -165,7 +169,6 @@ public class GameLogic implements State {
     public GameLogic(AndroidEngine engine, AndroidMobile mobile, Dificultad dificultad,JSONObject save){
         this.save = save;
         this.engine=engine;
-        this.init();
         this.dificultad = dificultad;
 
         //Elegimos un nivel entre un subcojunto de niveles de la carpeta Mapas
@@ -173,10 +176,15 @@ public class GameLogic implements State {
         rnd = new Random();
         int level = rnd.nextInt(l) + 1;
 
+        //Inicializar parámetros
+        this.init();
+
         //Inicializamos el nivel correspondiente
         this.inicializarNivel("Mapas/mapa" + level + ".json");
         this.mobile = mobile;
         this.mobile.setVisibleAdBanner(false);
+
+
     }
     /**
      * Constructora del estado principal de juego en el modo aventura a partir de la lectura del mapa del nivel
@@ -187,8 +195,8 @@ public class GameLogic implements State {
         this.dificultad = Dificultad.aventura;
         this.oleadasRestantes=0;
         this.isCompleted = isCompleted;
-        this.init();
         this.inicializarNivel(mapa);
+        this.init();
         this.mobile = mobile;
         this.mobile.setVisibleAdBanner(false);
         this.nivel=nivel;
@@ -199,13 +207,18 @@ public class GameLogic implements State {
         this.vida=10;
         this.dinero = 300;
         this.oleada =1;
-        this.textoOleadas = new Text("Inika-Regular.ttf","Oleada:" + this.oleada,60,15,25);
+        //Inicializamos listas de entidades
         this.torres = new ArrayList<Tower>();
-        this.enemigos=new ArrayList<Enemy>();
-        this.deadEnemies=new ArrayList<Enemy>();
+        this.enemigos = new ArrayList<Enemy>();
+        this.deadEnemies = new ArrayList<Enemy>();
         this.casillas = new ArrayList<ArrayList<Casilla>>();
+        this.caminoEnemigos = new ArrayList<Vector2D>();
+
+        //Esto hay que hacerlo en el UI Manager
+        this.textoOleadas = new Text("Inika-Regular.ttf","Oleada:" + this.oleada,60,15,25);
         this.franjaGris = new Square(300,370,600,100,true);
         this.franjaGris.setColor("#FF999999");
+
     }
  /**
      * Metodo que lee los datos del nivel desde un archivo json
@@ -213,6 +226,7 @@ public class GameLogic implements State {
      */
     private void inicializarNivel(String mapa)
     {
+        //Cargamos los datos del json del mapa
         this.cargarDatos();
         this.obj=engine.readJsonFile(mapa);
         JSONArray arr= null; //array del mapa
@@ -225,8 +239,7 @@ public class GameLogic implements State {
             throw new RuntimeException(e);
         }
 
-
-
+        //Oleadas que hay en total dependiendo del modo de juego
         switch(this.dificultad) {
             case corto:
                 this.oleadasRestantes = 3;
@@ -241,7 +254,9 @@ public class GameLogic implements State {
                 this.oleadasRestantes=this.oleadasDatos.length();
                 break;
         }
-        this.oleadaGenerar =0;
+
+        //Esto lo hace el waveManager
+        /*this.oleadaGenerar =0;
         this.oleadasT = this.oleadasDatos.length();
         try {
             this.enemigosGenerar = this.oleadasDatos.getJSONObject(this.oleadaGenerar).getInt("amount");
@@ -251,7 +266,7 @@ public class GameLogic implements State {
         this.tiempoOleada = 3*this.enemigosGenerar;
         this.tiempOl = this.tiempoOleada;
         this.tiempoEnGenerar = (float) 0.3;
-        this.tiempEnG =0;
+        this.tiempEnG =0;*/
 
         //dimensiones tablero
         this.fil=arr.length();
@@ -271,7 +286,6 @@ public class GameLogic implements State {
 
         //Vamos metiendo cada una de las coordenadas del
         //vector road del JSON al camino de enemigos en forma de coordenadas del tablero
-
         for(int i = 0; i<numPuntos;i++){
             JSONArray pair = null;
             int x=0; int y=0;
@@ -292,13 +306,20 @@ public class GameLogic implements State {
             ArrayList<Casilla> fila = new ArrayList<Casilla>();
             for(int j =0; j<this.col;j++){
                 Casilla casilla;
+                //Calculamos la posicion de la casilla
+                float posX = j * altoCasilla + this.offsetX;
+                float posY = i * anchoCasilla + this.offsetY;
+
                 try {
-                    if(arr.get(i).toString().charAt(j) == 'h'){
-                        //el fill lo pongo a true para que haya mayor contraste entre la casilla y las torres
-                         casilla = new Casilla((float)(j*this.anchoCasilla+this.offsetX),(float)(i*this.altoCasilla+this.offsetY),this.anchoCasilla,this.altoCasilla,false,false);
+                    char tipoCasilla = arr.get(i).toString().charAt(j);
+
+                    //Es caminable si en el json no es una h
+                    boolean caminable = (tipoCasilla != 'h');
+                    casilla = new Casilla(posX, posY, this.anchoCasilla, this.altoCasilla, caminable, caminable);
+
+                    if(tipoCasilla == 'h'){
                          casilla.setColor("#ff000000");
                     } else {
-                        casilla = new Casilla((float) (j * this.anchoCasilla + this.offsetX), (float) (i * this.altoCasilla + this.offsetY), this.anchoCasilla, this.altoCasilla, true, true);
                         casilla.setColor("#ff944d03");
                     }
                 } catch (JSONException e) {
@@ -309,6 +330,11 @@ public class GameLogic implements State {
             }
             this.casillas.add(fila);
         }
+
+        //Leemos el json de estilos de botones y elementos del juego
+        this.style =engine.readJsonFile("GameLogic/style.json");
+
+
     }
 
     //carga el progreso y comprueba que no ha sido modificado
@@ -324,10 +350,18 @@ public class GameLogic implements State {
     /**
      * Actualiza los contadores de tiempo de acuerdo al deltatime
      */
-    private void actualizarTiempos(double deltaTime){
+    /*private void actualizarTiempos(double deltaTime){
         this.tiempEnG -= deltaTime;
         this.tiempOl -= deltaTime;
-    }
+    }*/
+
+    /**
+     * Actualiza el hud de numero de oleadas
+     * @param oleada numero oleada
+     */
+    /*public void actualizaOleadas(int oleada){
+        this.hud.actualizaNumOleadas(oleada);
+    }*/
 
     /**
      * Actualiza la lista de torres
@@ -380,7 +414,8 @@ public class GameLogic implements State {
     private void comprobarFinal(){
         //si nos quedamos sin oleadas parar
         //En caso de que haya ganado, no habrá oleadas, enemigos y la vida es mayor a 0
-        if (this.oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()) {
+        int oleadasRestantes = wave.getNumOleadasRestantes();
+        if (oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()) {
             this.stopSoundTorres();
 
             //comprobamos si el nivel que hemos derrotado es un nivel nuevo
@@ -408,7 +443,7 @@ public class GameLogic implements State {
     /**
      * Metodo que gestiona la aparición de nuevas oleadas
      */
-    private void gestionarOleadas(){
+    /*private void gestionarOleadas(){
 
         if(oleadasRestantes==0)
             return;
@@ -440,12 +475,12 @@ public class GameLogic implements State {
             if(this.oleadasRestantes!=0)
                 this.textoOleadas.setText("Oleada:" + this.oleada);
         }
-    }
+    }*/
 
     /**
      * Metodo que determina cuando generar un nuevo enemigo
      */
-    private void generarEnemigo(){
+    /*private void generarEnemigo(){
 
         //Si no hay oleadas, no generamos enemigos
         if(this.oleadasRestantes == 0)
@@ -461,7 +496,7 @@ public class GameLogic implements State {
 
         //si el numero de enemigos generados es menor al numero de enemigos en su grupo
         if (this.numE < this.enemigosGenerar) {
-            Tipo tipo;
+            TipoTorre tipo;
             //dependiendo del tipo de enemigo tiene un tipo distinto
             String enemy = null;
             Image im;
@@ -469,15 +504,15 @@ public class GameLogic implements State {
                 enemy = this.oleadasDatos.getJSONObject(this.oleadaGenerar).getString("enemy");
 
                 if(enemy.equals("goblin")) {
-                    tipo = Tipo.rayo;
+                    tipo = TipoTorre.RAYO;
                     im=new Image(this.style.getJSONObject("ImagenGoblin"),this.gr);
                 }
                 else if(enemy.equals("imp")) {
-                    tipo = Tipo.fuego;
+                    tipo = TipoTorre.FUEGO;
                     im=new Image(this.style.getJSONObject("ImagenImp"),this.gr);
                 }
                 else {
-                    tipo = Tipo.hielo;
+                    tipo = TipoTorre.HIELO;
                     im=new Image(this.style.getJSONObject("ImagenOgre"),this.gr);
                 }
             } catch (JSONException e) {
@@ -498,9 +533,8 @@ public class GameLogic implements State {
             //Incrementamos número de grupo
             this.numE++;
         }
-
         this.tiempEnG = this.tiempoEnGenerar;//resetear tiempo entre enemigos
-    }
+    }*/
 
     /**
      * Bucle principal del estado de juego
@@ -508,12 +542,16 @@ public class GameLogic implements State {
      */
     @Override
     public void update(double deltaTime) {
+
+        //Actualizamos el gestor de oleadas
+        this.wave.update(deltaTime);
+
         //Primero gestionamos las oleadas y después los enemigos siempre y cuando haya oleadas
-        gestionarOleadas();
-        generarEnemigo();
+        //gestionarOleadas();
+        //generarEnemigo();
 
         //Actualizamos las variables y entidades necesarias
-        actualizarTiempos(deltaTime);
+        //actualizarTiempos(deltaTime);
         actualizarTorres(deltaTime);
         actualizarEnemigos(deltaTime);
 
@@ -613,7 +651,7 @@ public class GameLogic implements State {
      */
     public void inicializarUI() {
 
-        this.style =engine.readJsonFile("GameLogic/style.json");
+        //this.style =engine.readJsonFile("GameLogic/style.json");
         try {
             this.botonMejoraCuadrados = new Button(style.getJSONObject("BotonMejoraCuadrados"));
 
@@ -742,6 +780,9 @@ public class GameLogic implements State {
         }
         this.imagenFondo.setX((int)this.offsetX -17); this.imagenFondo.setY((int)this.offsetY -17);
         this.imagenFondo.setW(this.ancho); this.imagenFondo.setH(this.alto);
+
+        //Inicializamos manager de oleadas
+        this.wave = new WaveManager(this, this.oleadasRestantes, this.style, this.oleadasDatos,this.gr);
     }
 
     /**
@@ -970,6 +1011,31 @@ public class GameLogic implements State {
         for(int i =0; i < this.torres.size(); i++){
             this.torres.get(i).stopAudio();
         }
+    }
+
+    /**
+     * Metodo que utiliza el gestor de oleadas para comunicarse con gameLogic y añadir un nuevo enemigo
+     * @param v num vida enemigo
+     * @param vel velocidad
+     * @param def defensa
+     * @param res resistencia
+     */
+    public void nuevoEnemigo(float v, float vel, float def, float res, TipoTorre tipo, Image im){
+        // Añadimos el enemigo al GameLogic
+        Enemy nuevoEnemigo = new Enemy(v, vel, def, res,
+                tipo, this.caminoEnemigos, this);
+
+        nuevoEnemigo.setImagen(im);
+        this.enemigos.add(nuevoEnemigo);
+    }
+
+    /**
+     * Actualiza el hud de numero de oleadas
+     * @param oleada numero oleada
+     */
+    public void actualizaOleadas(int oleada){
+        //this.hud.actualizaNumOleadas(oleada);
+        this.textoOleadas.setText("Oleada:" + oleada);
     }
 }
 

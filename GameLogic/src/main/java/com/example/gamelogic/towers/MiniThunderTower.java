@@ -5,7 +5,7 @@ import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidSound;
 import com.example.gamelogic.Enemy;
 import com.example.gamelogic.Image;
-import com.example.gamelogic.Tipo;
+import com.example.gamelogic.TipoTorre;
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ public class MiniThunderTower implements Tower{
     boolean disparo = false;
     Image imagen;
 
-    Tipo tipo = Tipo.rayo;
+    TipoTorre tipo = TipoTorre.RAYO;
 
     //Lista de enemigos que la torre puede atacar
     ArrayList<Enemy> enemigos;
