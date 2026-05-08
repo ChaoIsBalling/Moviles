@@ -8,6 +8,7 @@ import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.Button;
 import com.example.gamelogic.Casilla;
 import com.example.gamelogic.Enemy;
+import com.example.gamelogic.managers.GameHUDManager;
 import com.example.gamelogic.managers.WaveManager;
 import com.example.gamelogic.towers.FireTower;
 import com.example.gamelogic.figure.Hexagon;
@@ -96,25 +97,8 @@ public class GameLogic implements State {
     float ranTorre = (float) 11.7;//mejora de rango
     float velTorre = (float) -0.2;//mejora de velocidad
 
-    float mejVidaEn = 2;//mejora de vida de enemigo
-    float mejVelEn = 2;//mejora de velocidad de enemigo
-    float mejDefEn = 1;//mejora de defensa de enemigo
-    float mejResEn = 1;//mejora de resistencia de enemigo
-
     int oleada;//numero oleada
     int oleadasRestantes;//oleadas restantes
-    int enemigosGenerar;//enemigos a generar
-    int oleadaGenerar;//oleada a generar del json
-    int oleadasT;//cantidad de oleadas del json
-
-    float tiempoOleada;//tiempo de espera entre oleadas
-
-    float tiempOl;//tiempo que falta para la nueva oleada
-
-    int numE = 0;//enemigos generados
-    float tiempoEnGenerar;//tiempo de espera entre enemigos
-    float tiempEnG;//tiempo que falta para generar un nuevo enemigo
-    int recompensas;//cantidad de gemas que consigues al terminar un nivel
     Text textoOleadas;//Numero de oleadas en texto
     private JSONObject save; //Archivo de Guardado del Juego
     JSONArray camino; //Array con el numero de puntos que debe recorrer el enemigo en JSON
@@ -135,9 +119,15 @@ public class GameLogic implements State {
     int mundo;
 
     //Enumaerado que determina en que estado de juego estamos
-    private enum Estado {
+    public enum Estado {
         normal, botonRayo, botonFuego, botonHielo, torre, botonMini
     }
+
+    //Enumaerado que determina en que estado de juego estamos
+    /*public enum Estado {
+        NORMAL, TORRE, CONSTRUCCION
+    }*/
+
 
     //Estado actual de juego
     private Estado estado = Estado.normal;
@@ -161,6 +151,9 @@ public class GameLogic implements State {
 
     //Manager de las oleadas de enemigos
     private WaveManager wave;
+
+    //Manager de la HUD del juego
+    private GameHUDManager hud;
 
        /**
      * Constructora del estado principal de juego en el modo normal
@@ -348,22 +341,6 @@ public class GameLogic implements State {
     }
 
     /**
-     * Actualiza los contadores de tiempo de acuerdo al deltatime
-     */
-    /*private void actualizarTiempos(double deltaTime){
-        this.tiempEnG -= deltaTime;
-        this.tiempOl -= deltaTime;
-    }*/
-
-    /**
-     * Actualiza el hud de numero de oleadas
-     * @param oleada numero oleada
-     */
-    /*public void actualizaOleadas(int oleada){
-        this.hud.actualizaNumOleadas(oleada);
-    }*/
-
-    /**
      * Actualiza la lista de torres
      */
     private void actualizarTorres(double deltaTime){
@@ -394,14 +371,14 @@ public class GameLogic implements State {
             //Si el enemigo llega a la casilla final
             if (this.enemigos.get(i).Win()) {
                 this.vida--;
-                this.textoV.setText(String.valueOf(this.vida));
+                this.hud.actualizaVidas(this.vida);
                 //Añadimos al enemigo en la lista de ganadores para que sea eliminado (se comprueba en el tercer if)
                 deadEnemies.add(this.enemigos.get(i));
             }
             if (this.enemigos.get(i).Dead()) { //En caso de morir nos da dinero y lo eliminamos
                 deadEnemies.add(this.enemigos.get(i));
                 this.dinero += 50;
-                this.textoD.setText(String.valueOf(this.dinero));
+                this.hud.actualizaDinero(this.dinero);
             }
         }
 
@@ -441,102 +418,6 @@ public class GameLogic implements State {
     }
 
     /**
-     * Metodo que gestiona la aparición de nuevas oleadas
-     */
-    /*private void gestionarOleadas(){
-
-        if(oleadasRestantes==0)
-            return;
-
-        if (this.tiempOl <= 0) {//si tiempo entre oleadas es menor o igual a 0
-            //siguiente oleada
-            this.oleada++;
-            this.oleadasRestantes--;
-
-            //para evitar que esto pete
-            if(this.oleadasRestantes!=0) {
-                this.oleadaGenerar = (this.oleada-1)%this.oleadasT;
-                try {
-                    this.enemigosGenerar = this.oleadasDatos.getJSONObject(this.oleadaGenerar).getInt("amount") + this.oleada/this.oleadasT;
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            //Resetear numero de enemigos generados
-            this.numE = 0;
-
-            this.tiempoOleada = 3*this.enemigosGenerar;//mas tiempo entre oleadas
-            this.tiempOl = this.tiempoOleada;//resetear tiempo entre oleadas
-
-            this.tiempEnG = 0;//que salga el primer enemigo de inmediato
-
-            //actualizar texto de oleadas
-            if(this.oleadasRestantes!=0)
-                this.textoOleadas.setText("Oleada:" + this.oleada);
-        }
-    }*/
-
-    /**
-     * Metodo que determina cuando generar un nuevo enemigo
-     */
-    /*private void generarEnemigo(){
-
-        //Si no hay oleadas, no generamos enemigos
-        if(this.oleadasRestantes == 0)
-            return;
-
-        //Si el tiempo que falta para un nuevo grupo es mayor a 0
-        //Si el número de grupos generado es mayor o igual al número total de grupos en la oleada
-        //Si el número para generar un nuevo enemigo en el grupo es mayor a 0
-
-        //No generamos más enemigos
-        if(this.tiempEnG > 0)
-            return;
-
-        //si el numero de enemigos generados es menor al numero de enemigos en su grupo
-        if (this.numE < this.enemigosGenerar) {
-            TipoTorre tipo;
-            //dependiendo del tipo de enemigo tiene un tipo distinto
-            String enemy = null;
-            Image im;
-            try {
-                enemy = this.oleadasDatos.getJSONObject(this.oleadaGenerar).getString("enemy");
-
-                if(enemy.equals("goblin")) {
-                    tipo = TipoTorre.RAYO;
-                    im=new Image(this.style.getJSONObject("ImagenGoblin"),this.gr);
-                }
-                else if(enemy.equals("imp")) {
-                    tipo = TipoTorre.FUEGO;
-                    im=new Image(this.style.getJSONObject("ImagenImp"),this.gr);
-                }
-                else {
-                    tipo = TipoTorre.HIELO;
-                    im=new Image(this.style.getJSONObject("ImagenOgre"),this.gr);
-                }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-
-            //Generamos enemigo
-            this.enemigos.add(new Enemy(
-                    8 + (this.mejVidaEn * (this.oleada/this.oleadasT)),
-                    30 + (this.mejVelEn * (this.oleada/this.oleadasT)),
-                    0 + (this.mejDefEn * (this.oleada/this.oleadasT)),
-                    0 + (this.mejResEn * (this.oleada/this.oleadasT)),
-                    tipo,
-                    this.caminoEnemigos,
-                    this));
-            this.enemigos.get(this.enemigos.size()-1).setImagen(im);
-
-            //Incrementamos número de grupo
-            this.numE++;
-        }
-        this.tiempEnG = this.tiempoEnGenerar;//resetear tiempo entre enemigos
-    }*/
-
-    /**
      * Bucle principal del estado de juego
      * @param deltaTime Tiempo trascurrido
      */
@@ -546,12 +427,7 @@ public class GameLogic implements State {
         //Actualizamos el gestor de oleadas
         this.wave.update(deltaTime);
 
-        //Primero gestionamos las oleadas y después los enemigos siempre y cuando haya oleadas
-        //gestionarOleadas();
-        //generarEnemigo();
-
         //Actualizamos las variables y entidades necesarias
-        //actualizarTiempos(deltaTime);
         actualizarTorres(deltaTime);
         actualizarEnemigos(deltaTime);
 
@@ -612,7 +488,7 @@ public class GameLogic implements State {
         //gr.setColor(0x00000000);
         gr.clear();
 
-        this.imagenFondo.RenderEscalado();
+        this.hud.renderizaFondo();
         for (int i = 0; i < this.fil; i++) {
             for (int j = 0; j < this.col; j++) {
                 this.casillas.get(i).get(j).Render(gr);
@@ -624,7 +500,9 @@ public class GameLogic implements State {
         for (int i = 0; i < this.torres.size(); i++) {
             this.torres.get(i).Render(gr);
         }
-        this.franjaGris.Render(gr);
+
+        this.hud.render(gr,estado,torreSeleccionada);
+
         if (this.estado != Estado.torre) {
             this.botonMejoraCuadrados.Render(gr);
             this.botonMejoraTriangulos.Render(gr);
@@ -638,13 +516,12 @@ public class GameLogic implements State {
             this.botonMejoraVelocidad.Render(gr);
             gr.pintarCirculo(this.torreSeleccionada.getX(), this.torreSeleccionada.getY(), this.torreSeleccionada.getRange());
         }
-        this.textoV.Render(gr);
+        /*this.textoV.Render(gr);
         this.textoD.Render(gr);
         this.imagenVida.Render();
         this.imagenDinero.Render();
-        this.textoOleadas.Render(gr);
+        this.textoOleadas.Render(gr);*/
     }
-
 
     /**
      * Metodo que inicializa todos los botones y otros elementos de la UI
@@ -704,10 +581,10 @@ public class GameLogic implements State {
         this.botonMejoraRango.setImagen(new Image(style.getJSONObject("ImagenRango"),this.gr));
         this.botonMejoraVelocidad.setImagen(new Image(style.getJSONObject("ImagenVelocidad"),this.gr));
 
-        this.textoV = new Text("Inika-Regular.ttf", String.valueOf(this.vida), 30, 340, 20);
-        this.textoD = new Text("Inika-Regular.ttf", String.valueOf(this.dinero), 30, 370, 20);
-        this.imagenVida = new Image( style.getJSONObject("ImagenVida"), this.gr);
-        this.imagenDinero = new Image(style.getJSONObject("ImagenDinero"), this.gr);
+        //this.textoV = new Text("Inika-Regular.ttf", String.valueOf(this.vida), 30, 340, 20);
+        //this.textoD = new Text("Inika-Regular.ttf", String.valueOf(this.dinero), 30, 370, 20);
+        //this.imagenVida = new Image( style.getJSONObject("ImagenVida"), this.gr);
+        //this.imagenDinero = new Image(style.getJSONObject("ImagenDinero"), this.gr);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -747,7 +624,6 @@ public class GameLogic implements State {
     @Override
     public void setAudio(AndroidAudio audio) {
         this.audio = audio;
-
         for (int i = 0; i < this.torres.size(); i++) {
             this.torres.get(i).setAudio(this.audio);
         }
@@ -773,16 +649,18 @@ public class GameLogic implements State {
         this.inicializarUI();
 
         //Inicializamos posicion y escalado del fondo
-        try {
+        /*try {
             this.imagenFondo=new Image(obj.getJSONObject("background"),this.gr); //Fondo del nivel
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
         this.imagenFondo.setX((int)this.offsetX -17); this.imagenFondo.setY((int)this.offsetY -17);
-        this.imagenFondo.setW(this.ancho); this.imagenFondo.setH(this.alto);
+        this.imagenFondo.setW(this.ancho); this.imagenFondo.setH(this.alto);*/
 
-        //Inicializamos manager de oleadas
+        //Inicializamos manager de oleadas (lo pongo aqui porque se debe iniclizar despues del setState)
         this.wave = new WaveManager(this, this.oleadasRestantes, this.style, this.oleadasDatos,this.gr);
+        this.hud = new GameHUDManager(gr, this.style, this.obj,this,
+                this.vida, this.dinero, this.oleada, this.ancho, this.alto, this.offsetX, this.offsetY);
     }
 
     /**
@@ -816,15 +694,18 @@ public class GameLogic implements State {
                 if (this.botonMejoraAtaque.contains(e.x, e.y) && this.dinero >= 75) {
                     this.torreSeleccionada.UpdateAttack(this.damTorre);
                     this.dinero -= 75;
-                    this.textoD.setText(String.valueOf(this.dinero));
+                    //this.textoD.setText(String.valueOf(this.dinero));
+                    this.hud.actualizaDinero(this.dinero);
                 } else if (this.botonMejoraRango.contains(e.x, e.y) && this.dinero >= 75) {
                     this.torreSeleccionada.UpdateRange(this.ranTorre);
                     this.dinero -= 75;
-                    this.textoD.setText(String.valueOf(this.dinero));
+                    //this.textoD.setText(String.valueOf(this.dinero));
+                    this.hud.actualizaDinero(this.dinero);
                 } else if (this.botonMejoraVelocidad.contains(e.x, e.y) && this.dinero >= 100) {
                     this.torreSeleccionada.UpdateFireRate(this.velTorre);
                     this.dinero -= 100;
-                    this.textoD.setText(String.valueOf(this.dinero));
+                    //this.textoD.setText(String.valueOf(this.dinero));
+                    this.hud.actualizaDinero(this.dinero);
                 } else if (casillaT.getX() < this.fil && casillaT.getY() < this.col && casillaT.getX() >= 0 && casillaT.getY() >= 0) {
                     Tower torre = this.casillas.get(casillaT.getX()).get(casillaT.getY()).getTorre();
                     if (torre != this.torreSeleccionada && torre != null) {
@@ -951,7 +832,8 @@ public class GameLogic implements State {
                 this.casillas.get(casillaR.getX()).get(casillaR.getY()).setTorre(torreR);
                 this.torres.add(torreR);
                 this.dinero -= precio;
-                this.textoD.setText(String.valueOf(this.dinero));
+                //this.textoD.setText(String.valueOf(this.dinero));
+                this.hud.actualizaDinero(this.dinero);
                 this.cambiarEstado(Estado.normal);
         } else {
             this.cambiarEstado(Estado.normal);
@@ -1034,8 +916,8 @@ public class GameLogic implements State {
      * @param oleada numero oleada
      */
     public void actualizaOleadas(int oleada){
-        //this.hud.actualizaNumOleadas(oleada);
-        this.textoOleadas.setText("Oleada:" + oleada);
+        this.hud.actualizaNumOleadas(oleada);
+        //this.textoOleadas.setText("Oleada:" + oleada);
     }
 }
 
