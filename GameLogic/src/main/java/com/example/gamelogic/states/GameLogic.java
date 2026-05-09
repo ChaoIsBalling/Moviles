@@ -5,7 +5,7 @@ import com.example.androidengine.TouchEvent;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidMobile;
-import com.example.gamelogic.Button;
+import com.example.gamelogic.button.Button;
 import com.example.gamelogic.Casilla;
 import com.example.gamelogic.Enemy;
 import com.example.gamelogic.managers.GameHUDManager;
@@ -489,11 +489,14 @@ public class GameLogic implements State {
         gr.clear();
 
         this.hud.renderizaFondo();
+
+        //Renderizado del mapa
         for (int i = 0; i < this.fil; i++) {
             for (int j = 0; j < this.col; j++) {
                 this.casillas.get(i).get(j).Render(gr);
             }
         }
+        //renderizado de enemigos y torres
         for (int i = 0; i < this.enemigos.size(); i++) {
             this.enemigos.get(i).Render(gr);
         }
@@ -501,6 +504,7 @@ public class GameLogic implements State {
             this.torres.get(i).Render(gr);
         }
 
+        //Renderizado de todos los elementos del HUD
         this.hud.render(gr,estado,torreSeleccionada);
 
         if (this.estado != Estado.torre) {
@@ -516,11 +520,6 @@ public class GameLogic implements State {
             this.botonMejoraVelocidad.Render(gr);
             gr.pintarCirculo(this.torreSeleccionada.getX(), this.torreSeleccionada.getY(), this.torreSeleccionada.getRange());
         }
-        /*this.textoV.Render(gr);
-        this.textoD.Render(gr);
-        this.imagenVida.Render();
-        this.imagenDinero.Render();
-        this.textoOleadas.Render(gr);*/
     }
 
     /**
@@ -604,7 +603,6 @@ public class GameLogic implements State {
      */
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
-
         for (TouchEvent e : list) {
             //Si es nulo no se procesa
             if (e == null || e.type == null) {
@@ -631,7 +629,7 @@ public class GameLogic implements State {
 
     @Override
     public void setMobile(AndroidMobile mobile) {
-            this.mobile = mobile;
+        this.mobile = mobile;
     }
 
     @Override
@@ -647,15 +645,6 @@ public class GameLogic implements State {
     public void setGraphics(AndroidGraphics gr) {
         this.gr = gr;
         this.inicializarUI();
-
-        //Inicializamos posicion y escalado del fondo
-        /*try {
-            this.imagenFondo=new Image(obj.getJSONObject("background"),this.gr); //Fondo del nivel
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-        this.imagenFondo.setX((int)this.offsetX -17); this.imagenFondo.setY((int)this.offsetY -17);
-        this.imagenFondo.setW(this.ancho); this.imagenFondo.setH(this.alto);*/
 
         //Inicializamos manager de oleadas (lo pongo aqui porque se debe iniclizar despues del setState)
         this.wave = new WaveManager(this, this.oleadasRestantes, this.style, this.oleadasDatos,this.gr);

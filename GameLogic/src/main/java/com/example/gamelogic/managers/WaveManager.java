@@ -57,11 +57,13 @@ public class WaveManager {
      * Constructor del Manager de oleadas del juego
      * @param gl Refrencia al gameLogic
      * @param oleadasTotales Numero de oleadas totales que debe manejar el Manager
+     * @param style JSON con el estilo de imagenes y botones
+     * @param olDatos JSON con los datos de la oleada
+     * @param gr Interfaz Gráfica de Android
      */
     public WaveManager(GameLogic gl, int oleadasTotales,
                        JSONObject style, JSONArray olDatos, AndroidGraphics gr){
         this.gl = gl;
-
         this.styleLevel = style;
         this.oleadasDatos = olDatos;
         this.gr = gr;
@@ -74,8 +76,15 @@ public class WaveManager {
         this.enemigosGenerados = 0;
 
         //Numero de enemigos en un grupo y total de grupos -> en la primera oleada
-        this.enemigosPorGrupo = 1;
+
+        //this.enemigosPorGrupo = 1;
         this.totalGrupos = 2;
+
+        try {
+            this.enemigosPorGrupo = this.oleadasDatos.getJSONObject(0).getInt("amount");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
         //Inicializamos timers
         this.timerEnemigo= tiempoEntreEnemigos;

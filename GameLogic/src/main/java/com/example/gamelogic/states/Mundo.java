@@ -8,7 +8,7 @@ import com.example.androidengine.AndroidAudio;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.example.androidengine.AndroidMobile;
-import com.example.gamelogic.Button;
+import com.example.gamelogic.button.Button;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.figure.Square;
 import com.example.gamelogic.Text;

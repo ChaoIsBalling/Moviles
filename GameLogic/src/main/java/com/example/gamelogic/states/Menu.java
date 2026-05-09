@@ -1,14 +1,12 @@
 package com.example.gamelogic.states;
 
-import android.os.Bundle;
-
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.State;
 import com.example.androidengine.TouchEvent;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidMobile;
-import com.example.gamelogic.Button;
+import com.example.gamelogic.button.Button;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.Text;
 

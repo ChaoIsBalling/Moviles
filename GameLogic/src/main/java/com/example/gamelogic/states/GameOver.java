@@ -8,13 +8,13 @@ import com.example.androidengine.TouchEvent;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidSound;
 import com.example.androidengine.AndroidMobile;
-import com.example.gamelogic.Button;
+import com.example.gamelogic.button.Button;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.Text;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.util.Log;
+
 import java.util.ArrayList;
 
 /**

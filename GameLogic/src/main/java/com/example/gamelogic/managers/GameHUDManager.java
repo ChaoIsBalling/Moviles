@@ -2,7 +2,7 @@ package com.example.gamelogic.managers;
 
 //import com.example.engine.Graphics;
 //import com.example.engine.TouchEvent;
-//import com.example.gamelogic.Button;
+//import com.example.gamelogic.button.Button;
 //import com.example.gamelogic.ButtonClickListener;
 import com.example.androidengine.AndroidGraphics;
 import com.example.gamelogic.Image;

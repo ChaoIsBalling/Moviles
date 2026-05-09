@@ -1,7 +1,11 @@
-package com.example.gamelogic;
+package com.example.gamelogic.button;
 
 import com.example.androidengine.AndroidGraphics;
+import com.example.gamelogic.Image;
+import com.example.gamelogic.Text;
 import com.example.gamelogic.figure.Figure;
+
+import com.example.androidengine.TouchEvent;
 
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -35,6 +39,9 @@ public class Button {
     String color; //Color por defecto
     Image imagen; //Imagen
     Figure figura; //Figura del botón
+
+    //Funcion callback asociada al boton
+    private ButtonClickListener onClickFunction;
 
     /**
      * Constructora del botón que inicializa su posición, dimensiones, y si es redondeado o no
@@ -141,6 +148,25 @@ public class Button {
 
         }
 
+    }
+
+    /**
+     * Metodo que ejecuta el metodo callback asociado al boton si es pulsado y devuelve true
+     * @param event evento de interacción con el usuario
+     * @return true si se ha pulsado y false si no se ha pulsado
+     */
+    public boolean handleInput(TouchEvent event){
+        //Si no hay ninguna funcion asociada al boton, devolvemos false inmediatamente
+        if(onClickFunction == null)
+            return false;
+
+        if(event.type == TouchEvent.TouchEventType.TOUCH_DOWN){
+            if(contains(event.x, event.y)){
+                onClickFunction.onClick();
+                return true;
+            }
+        }
+        return false;
     }
 
 }

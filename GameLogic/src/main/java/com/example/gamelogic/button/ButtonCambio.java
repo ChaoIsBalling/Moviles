@@ -1,9 +1,9 @@
-package com.example.gamelogic;
+package com.example.gamelogic.button;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ButtonCambio extends Button{
+public class ButtonCambio extends Button {
 
     String desbloqueo;
     String guardado;

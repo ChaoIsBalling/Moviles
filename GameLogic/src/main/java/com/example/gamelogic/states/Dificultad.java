@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidMobile;
-import com.example.gamelogic.Button;
+import com.example.gamelogic.button.Button;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.Text;
 
