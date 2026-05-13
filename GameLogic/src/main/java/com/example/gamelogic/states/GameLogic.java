@@ -32,14 +32,10 @@ import java.util.HashMap;
  */
 public class GameLogic implements State {
     private TowerFactory towerFactory = new TowerFactory();
-
     private HashMap<TipoTorre, String> skins = new HashMap<>();
 
     //IDs para elementos que queramos cambiar durante la partida
-    private final String BUT_RAYO_ID = "BUT_RAYO",
-            BUT_HIELO_ID = "BUT_HIELO",
-            BUT_FUEGO_ID = "BUT_FUEGO",
-            BUT_MINI_ID = "BUT_MINI";
+    private final String BUT_RAYO_ID = "BUT_RAYO", BUT_HIELO_ID = "BUT_HIELO", BUT_FUEGO_ID = "BUT_FUEGO", BUT_MINI_ID = "BUT_MINI";
     private final String TEXT_VIDA_ID = "TEXT_VIDA" , TEXT_DINERO_ID= "TEXT_DINERO", TEXT_OLEADA_ID = "TEXT_OLEADA";
 
     // IDs de los botones de mejora (añádelos a tus constantes)
@@ -51,7 +47,6 @@ public class GameLogic implements State {
 
     private int costeAtaque, costeRango, costeVelocidad;
 
-
     boolean mini = false;//si esta desbloqueada la nueva torre
 
     //Franja en la que están los botones
@@ -62,8 +57,7 @@ public class GameLogic implements State {
     int vida = 0, dinero = 0;
 
     //Las dimensiones de una casilla
-    float anchoCasilla = 35;
-    float altoCasilla = 35;
+    float anchoCasilla = 35, altoCasilla = 35;
 
     //Variable que indica en que nivel estamos
     int levelNumber;
@@ -491,7 +485,7 @@ public class GameLogic implements State {
      */
     public void inicializarUI() {
         //Leemos el json de estilos de botones y elementos del juego
-        this.style = engine.readJsonFile("GameLogic/style2.json");
+        this.style = engine.readJsonFile("GameLogic/style.json");
         //Inicializamos todos los elementos de la UI
         this.ui = new UIManager(this.style,this.engine, this.gr);
         this.aplicarSkins();
@@ -504,7 +498,6 @@ public class GameLogic implements State {
         this.ui.getTextUI(TEXT_DINERO_ID).setText(String.valueOf(this.dinero));
         this.ui.getTextUI(TEXT_VIDA_ID).setText(String.valueOf(this.vida));
         this.ui.getTextUI(TEXT_OLEADA_ID).setText("Oleada: " + String.valueOf(this.oleadasRestantes));
-
     }
 
     /**
@@ -544,7 +537,7 @@ public class GameLogic implements State {
         if(this.mini)
             this.ui.getButtonUI(BUT_MINI_ID).setOnClickListener(() -> this.prepararMini());
 
-
+        //Hacemos que los botones de construccion esten activados desde el principio
         cambiarEstadoBotones(botonesConstruccion, true);
         cambiarEstadoBotones(botonesMejora,false);
     }
@@ -859,5 +852,4 @@ public class GameLogic implements State {
     public void mejorarAtaque(){ prepararMejora(costeAtaque, TipoMejora.ATAQUE);}
     public void mejorarRango(){prepararMejora(costeRango, TipoMejora.RANGO);}
     public void mejorarVelocidad() {prepararMejora(costeVelocidad, TipoMejora.VELOCIDAD);}
-
 }

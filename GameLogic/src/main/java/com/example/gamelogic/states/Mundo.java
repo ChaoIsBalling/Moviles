@@ -248,13 +248,9 @@ public class Mundo implements State {
         }
     }
     @Override
-    public void setAudio(AndroidAudio audio) {
-    }
-
+    public void setAudio(AndroidAudio audio) {}
     @Override
-    public void setMobile(AndroidMobile mobile) {
-    }
-
+    public void setMobile(AndroidMobile mobile) {}
     @Override
     public JSONObject getSave() {
         return this.save;

@@ -9,6 +9,7 @@ import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.button.Button;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.Text;
+import com.example.gamelogic.managers.UIManager;
 
 import java.util.ArrayList;
 
@@ -19,23 +20,9 @@ import org.json.JSONObject;
  * Clase que implementa el menú inicial
  */
 public class Menu implements State {
-
-    //Boton y titulo inicial
-    private Button botonInicial;
-    private Text textoInicial;
-
-    private Button botonAventura;
-
-    private Button botonTienda;
-
-    private Text textoDiamantes;
-
-    private Image imagenDiamante;
-
     private String fondo;
     //El archivo de guardado del juego
     private JSONObject save;
-
 
     //Referencias al Audio Manager, al motor y a Graphics y a Mobile
     private AndroidAudio audio;
@@ -43,7 +30,10 @@ public class Menu implements State {
     AndroidGraphics gr;
     AndroidMobile mobile;
 
-    JSONObject botones;
+    //JSONObject botones;
+    JSONObject style;
+
+    UIManager ui;
 
     /**
      * Constructora del menú
@@ -52,7 +42,8 @@ public class Menu implements State {
         this.engine = engine;
         this.mobile = mobile;
         this.save=save;
-        botones=engine.readJsonFile("Menu/style.json");
+        //botones=engine.readJsonFile("Menu/style2.json");
+        /*
         try {
             this.botonInicial = new Button(botones.getJSONObject("BotonInicial"));
             this.botonInicial.setText(new Text(botones.getJSONObject("TextoBoton")));
@@ -76,15 +67,14 @@ public class Menu implements State {
             this.fondo = this.save.getString("fondo");
         } catch (JSONException e) {
             throw new RuntimeException(e);
-        }
+        }*/
 
 
         this.mobile.setVisibleAdBanner(true);
     }
 
     @Override
-    public void update(double deltaTime) {
-    }
+    public void update(double deltaTime) {}
 
     /**
      * Renderiza la UI
@@ -92,12 +82,7 @@ public class Menu implements State {
      */
     @Override
     public void render(AndroidGraphics gr) {
-        botonInicial.Render(gr);
-        textoInicial.Render(gr);
-        botonAventura.Render(gr);
-        botonTienda.Render(gr);
-        textoDiamantes.Render(gr);
-        this.imagenDiamante.Render();
+        this.ui.render(gr);
     }
 
     /**
@@ -107,8 +92,31 @@ public class Menu implements State {
     @Override
     public void setGraphics(AndroidGraphics gr) {
         this.gr=gr;
+        this.style = engine.readJsonFile("Menu/style.json");
+
+        this.ui = new UIManager(this.style , this.engine, this.gr);
+
+        //Seteamos los callbacks de los botones
+        this.ui.getButtonUI("BUT_INICIAL").setOnClickListener( () -> {
+            Dificultad dificultad = new Dificultad(this.engine,this.mobile,this.save);
+            this.engine.setState(dificultad);
+        });
+        this.ui.getButtonUI("BUT_AVENTURA").setOnClickListener( () -> {
+            Mundo mundo = new Mundo(this.engine,this.mobile,1,this.save);
+            this.engine.setState(mundo);
+        });
+
+        this.ui.getButtonUI("BUT_TIENDA").setOnClickListener( () -> {
+            Tienda tienda = new Tienda(this.engine,this.mobile,this.save);
+            this.engine.setState(tienda);
+        });
+
+        //Leemos valores guardados
+        this.fondo="#FFFFFFFF"; //Fondo por defecto
         try {
-            this.imagenDiamante = new Image(botones.getJSONObject("ImagenDiamante"),gr);
+            int numGemasGuardadas = this.save.getInt("gems");
+            this.ui.getTextUI("TEXT_DIAMANTES").setText(String.valueOf(numGemasGuardadas));
+            this.fondo = this.save.getString("fondo");
             this.gr.setColorClear(this.fondo);
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -129,26 +137,9 @@ public class Menu implements State {
             }
             switch (e.type){
                     case TOUCH_DOWN:
-                        if(this.botonInicial.contains(e.x,e.y)){
-                            Dificultad dificultad = new Dificultad(this.engine,this.mobile,this.save);
-                            this.engine.setState(dificultad);
-                        }
-                        else if(this.botonAventura.contains(e.x,e.y)){
-                            Mundo mundo = new Mundo(this.engine,this.mobile,1,this.save);
-                            this.engine.setState(mundo);
-                        }
-                        else if(this.botonTienda.contains(e.x,e.y)){
-                            Tienda tienda = new Tienda(this.engine,this.mobile,this.save);
-                            this.engine.setState(tienda);
-                            //this.engine.showNotificacion("Hola","TOnto");
-                        }
+                        this.ui.handleInput(e);
                         break;
-                    case TOUCH_UP:
-
-                        break;
-                    case TOUCH_MOVE:
-                        break;
-                }
+            }
 
         }
     }
@@ -158,21 +149,15 @@ public class Menu implements State {
      * @param audio Interfaz Audio
      */
     @Override
-    public void setAudio(AndroidAudio audio) {
-    this.audio=audio;
-    }
+    public void setAudio(AndroidAudio audio) { this.audio=audio; }
 
     /**
      * Inicializa Mobile
      * @param mobile Interfaz Mobile
      */
     @Override
-    public void setMobile(AndroidMobile mobile) {
-        this.mobile = mobile;
-    }
+    public void setMobile(AndroidMobile mobile) { this.mobile = mobile; }
 
     @Override
-    public JSONObject getSave() {
-        return this.save;
-    }
+    public JSONObject getSave() { return this.save; }
 }
