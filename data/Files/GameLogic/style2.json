@@ -80,6 +80,59 @@
          "visible": true
       }
     },
+
+    {
+      "id": "BUT_ATAQUE",
+      "x": 440, "y": 360, "w": 50, "h": 50,
+      "isRound": true, "ar": 20, "color": "#FFFFFFFF",
+      "text": {
+        "id": "costeMejoraAtaque",
+        "texto": "75", "font": "Inika-Regular.ttf",
+        "x": 0, "y": 15, "size": 15, "bold": true, "italic": true, "color": "#FF000000"
+      },
+      "icon" :{
+         "id": "Ataque",
+         "imagen": "Espada.png", 
+         "x": -15, "y": -20, 
+         "w": 30, "h": 30 ,
+         "visible": true
+      }
+    },
+    {
+      "id": "BUT_RANGO",
+      "x": 500, "y": 360, "w": 50, "h": 50,
+      "isRound": true, "ar": 20, "color": "#FFFFFFFF",
+      "text": {
+        "id": "costeMejoraRango",
+        "texto": "75", "font": "Inika-Regular.ttf",
+        "x": 0, "y": 15, "size": 15, "bold": true, "italic": true, "color": "#FF000000"
+      },
+      "icon" :{
+         "id": "Rango",
+         "imagen": "Arco.png", 
+         "x": -15, "y": -20, 
+         "w": 30, "h": 30,
+         "visible": true
+      }
+    },
+
+    {
+      "id": "BUT_VELOCIDAD",
+      "x": 560, "y": 360, "w": 50, "h": 50,
+      "isRound": true, "ar": 20, "color": "#FFFFFFFF",
+      "text": {
+        "id": "costeMejoraHexagonos",
+        "texto": "100", "font": "Inika-Regular.ttf",
+        "x": 0, "y": 15, "size": 15, "bold": true, "italic": true, "color": "#FF000000"
+      },
+      "icon" :{
+         "id": "Velocidad",
+         "imagen": "Reloj.png", 
+         "x": -15, "y": -20, 
+         "w": 30, "h": 30,
+         "visible": true
+      }
+    },
     {
       "id": "BUT_MINI",
       "x": 380, "y": 360, "w": 50, "h": 50,
@@ -103,10 +156,7 @@
     { "id": "Dinero", "imagen": "Dinero.png", "x": 60, "y": 360, "w": 30, "h": 30, "isHUD": true, "visible": true},
     { "id": "Imp", "imagen": "Imp.png", "x": -15, "y": -20, "w": 35, "h": 35, "isHUD": false, "visible": true },
     { "id": "Goblin", "imagen": "Goblin.png", "x": -15, "y": -20, "w": 35, "h": 35, "isHUD": false, "visible": true },
-    { "id": "Ogre", "imagen": "Ogre.png", "x": -15, "y": -20, "w": 35, "h": 35 , "isHUD": false, "visible": true},
-    { "id": "Ataque", "imagen": "Espada.png", "x": -15, "y": -20, "w": 30, "h": 30, "isHUD": false, "visible": true },
-    { "id": "Rango", "imagen": "Arco.png", "x": -15, "y": -20, "w": 30, "h": 30, "isHUD": false, "visible": true },
-    { "id": "Velocidad", "imagen": "Reloj.png", "x": -15, "y": -20, "w": 30, "h": 30, "isHUD": false, "visible": true }
+    { "id": "Ogre", "imagen": "Ogre.png", "x": -15, "y": -20, "w": 35, "h": 35 , "isHUD": false, "visible": true}
   ],
   "texts": [
     { "id": "TEXT_VIDA", "texto": "0","font": "Inika-Regular.ttf", "x": 30, "y": 340, "size": 20, "bold": true, "italic": true, "color": "#FF000000" },

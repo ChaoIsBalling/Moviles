@@ -7,7 +7,8 @@ public enum Color {
     VERDE("#FF00FF00"),
     AZUL("#FF0000FF"),
     AMARILLO_CLARO("#FFFFFB64"),
-    MARRON("#FF944D03");
+    MARRON("#FF944D03"),
+    GRIS("#FF999999");
 
     private final String hex;
 
