@@ -17,6 +17,9 @@ public class Image {
     int h;
     //Path de la imagen
     String imagen;
+
+    //Booleano que indica si es visible o no
+    private boolean visible;
     //Interfaz del motor
     AndroidImage im;
     //Graphics del motor
@@ -33,6 +36,7 @@ public class Image {
         this.h= h;
         this.gr = gr;
         this.im = this.gr.newImage(imagen,this.w,this.h);
+        this.visible = true;
     }
     public Image(String imagen, int x, int y, AndroidGraphics gr){
         this.imagen = imagen;
@@ -40,6 +44,7 @@ public class Image {
         this.y = y;
         this.gr = gr;
         this.im = this.gr.newImage(this.imagen);
+        this.visible = true;
     }
     public Image(JSONObject json,AndroidGraphics gr)
     {
@@ -49,6 +54,7 @@ public class Image {
         this.y= json.getInt("y");
         this.w= json.getInt("w");
         this.h=json.getInt("h");
+        this.visible = true;
     } catch (
     JSONException e) {
         throw new RuntimeException(e);
@@ -70,20 +76,27 @@ public class Image {
         this.h = h;
     }
 
+    public void setVisible(boolean c){
+        this.visible = c;
+    }
+
     /**
      * Renderiza la imagen con la referencia a Graphics
      */
     public void Render(){
-        this.gr.pintarImagen(this.im,this.x,this.y);
+        if(this.visible)
+            this.gr.pintarImagen(this.im,this.x,this.y);
     }
 
     public void RenderEscalado(){
-        this.gr.pintarImagenEscalada(this.im,this.x,this.y,this.w,this.h);
+        if(this.visible)
+            this.gr.pintarImagenEscalada(this.im,this.x,this.y,this.w,this.h);
     }
     /**
      * Reneriza la imagen de forma centrada con la referencia a Graphics
      */
     public void RenderCentrado(int x, int y){
-        this.gr.pintarImagen(this.im,x+this.x,y+this.y);
+        if(this.visible)
+            this.gr.pintarImagen(this.im,x+this.x,y+this.y);
     }
 }

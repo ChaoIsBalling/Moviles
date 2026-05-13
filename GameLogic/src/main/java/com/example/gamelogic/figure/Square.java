@@ -1,5 +1,9 @@
 package com.example.gamelogic.figure;
 import com.example.androidengine.AndroidGraphics;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Clase que representa un cuadrado e implementa los métodos de Figura
  */
@@ -19,6 +23,8 @@ public class Square implements Figure{
     //Determinan si esta relleno o redondeado
     private boolean isFill = false;
     private boolean isRound = false;
+    //Booleano que indica si es visible o no
+    private boolean visible;
 
     /**
      * Constructora del cuadrado con sus coordenadas, dimensiones y booleanos
@@ -29,6 +35,7 @@ public class Square implements Figure{
         this.w = w;
         this.h = h;
         this.isFill = isFill;
+        this.visible = true;
     }
     public Square(float x, float y, float w, float h, boolean isFill, boolean isRound, float ar){
         this.x = x;
@@ -38,6 +45,22 @@ public class Square implements Figure{
         this.isFill = isFill;
         this.isRound = isRound;
         this.arcRadius = ar;
+    }
+
+    public Square(JSONObject obj){
+        try {
+            this.x = obj.getInt("x");
+            this.y = obj.getInt("y");
+            this.w = obj.getInt("w");
+            this.h = obj.getInt("h");
+            this.isFill = obj.getBoolean("fill");
+            this.isRound = obj.getBoolean("round");
+            this.arcRadius = obj.getInt("r");
+            this.color = obj.getString("color");
+            this.visible = obj.getBoolean("visible");
+         } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
     public Square(float x, float y, float w, float h){
         this.x = x;
@@ -79,36 +102,45 @@ public class Square implements Figure{
         this.color = color;
     }
 
+    @Override
+    public void setVisible(boolean c) {
+        this.visible = c;
+    }
+
     /**
      * Renderiza el cuadrado con relleno o redondeado si asi quisieramos
      * @param gr Interfaz Graphics
      */
     @Override
     public void Render(AndroidGraphics gr) {
-        gr.setColor(this.color);
-        if(this.isFill && this.isRound)
-            gr.rellenarCuadradoRedondeado(this.x, this.y,this.w,this.h,this.arcRadius);
+        if(this.visible){
+            gr.setColor(this.color);
+            if(this.isFill && this.isRound)
+                gr.rellenarCuadradoRedondeado(this.x, this.y,this.w,this.h,this.arcRadius);
 
-        else if(this.isFill)
-            gr.rellenarCuadrado(this.x, this.y, this.w, this.h);
+            else if(this.isFill)
+                gr.rellenarCuadrado(this.x, this.y, this.w, this.h);
 
-        else
-            gr.pintarCuadrado(this.x,this.y,this.w,this.h);
+            else
+                gr.pintarCuadrado(this.x,this.y,this.w,this.h);
 
+        }
     }
 
     /**
      * Renderiza centrado
      */
     public void RenderCentrado(AndroidGraphics gr, float x, float y) {
-        gr.setColor(this.color);
-        if(this.isFill && this.isRound)
-            gr.rellenarCuadradoRedondeado(x+this.x, y+this.y,this.w,this.h,this.arcRadius);
+        if(this.visible){
+            gr.setColor(this.color);
+            if(this.isFill && this.isRound)
+                gr.rellenarCuadradoRedondeado(x+this.x, y+this.y,this.w,this.h,this.arcRadius);
 
-        else if(this.isFill)
-            gr.rellenarCuadrado(x+this.x, y+this.y, this.w, this.h);
+            else if(this.isFill)
+                gr.rellenarCuadrado(x+this.x, y+this.y, this.w, this.h);
 
-        else
-            gr.pintarCuadrado(x+this.x,y+this.y,this.w,this.h);
+            else
+                gr.pintarCuadrado(x+this.x,y+this.y,this.w,this.h);
+        }
     }
 }

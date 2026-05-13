@@ -1,11 +1,13 @@
 package com.example.gamelogic.figure;
 import com.example.androidengine.AndroidGraphics;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Clase que representa un Hexágono
  */
-public class Hexagon implements Figure{
-
-
+public class Hexagon implements Figure {
     //Centro de la figura
     private float cx;
     private float cy;
@@ -18,6 +20,8 @@ public class Hexagon implements Figure{
 
     //Indica si es relleno o no
     private boolean isFill;
+    //Booleano que indica si es visible o no
+    private boolean visible;
 
     /**
      * Constructora de la clase Hexagono con su coordenada x,y, su radio y si esta relleno o no
@@ -27,6 +31,22 @@ public class Hexagon implements Figure{
         this.cy = y;
         this.r = r;
         this.isFill = isFill;
+        this.visible = true;
+    }
+
+    public Hexagon(JSONObject obj){
+        try {
+            this.cx = obj.getInt("x");
+            this.cy = obj.getInt("y");
+            this.r = obj.getInt("r");
+            this.isFill = obj.getBoolean("fill");
+            this.color = obj.getString("color");
+            this.visible = obj.getBoolean("visible");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
     Hexagon(float x, float y, float r){
         this.cx = x;
@@ -59,6 +79,11 @@ public class Hexagon implements Figure{
     }
 
     @Override
+    public void setVisible(boolean c) {
+        this.visible = c;
+    }
+
+    @Override
     public void setX(float x) {
         this.cx = x;
     }
@@ -74,13 +99,16 @@ public class Hexagon implements Figure{
      */
     @Override
     public void Render(AndroidGraphics gr) {
-        gr.setColor(this.color);
-        if(isFill){
-            gr.rellenarHexagono(this.cx, this.cy,this.r);
+        if(this.visible){
+            gr.setColor(this.color);
+            if(isFill){
+                gr.rellenarHexagono(this.cx, this.cy,this.r);
+            }
+            else {
+                gr.rellenarHexagono(this.cx, this.cy,this.r);
+            }
         }
-        else {
-            gr.rellenarHexagono(this.cx, this.cy,this.r);
-        }
+
     }
 
     /**
@@ -88,12 +116,13 @@ public class Hexagon implements Figure{
      */
     @Override
     public void RenderCentrado(AndroidGraphics gr, float x, float y) {
-        gr.setColor(this.color);
-        if(isFill){
-            gr.rellenarHexagono(x+this.cx, y+ this.cy,this.r);
-        }
-        else {
-            gr.rellenarHexagono(x + this.cx, y+ this.cy,this.r);
+        if(this.visible) {
+            gr.setColor(this.color);
+            if (isFill) {
+                gr.rellenarHexagono(x + this.cx, y + this.cy, this.r);
+            } else {
+                gr.rellenarHexagono(x + this.cx, y + this.cy, this.r);
+            }
         }
     }
 }

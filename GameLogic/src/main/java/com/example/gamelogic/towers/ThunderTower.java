@@ -43,7 +43,6 @@ public class ThunderTower implements Tower{
      * Constructora de la torre de rayo con sus coordenadas
      */
     public ThunderTower(float x, float y){
-
         this.x=x;
         this.y=y;
         this.triangulo = new Triangle(x,y,15,true);

@@ -39,6 +39,12 @@ public interface Figure {
     void setColor(String color);
 
     /**
+     * Lo vuelve invisble o visble segun el parametro
+     * @param c booleano
+     */
+    void setVisible(boolean c);
+
+    /**
      * Renderiza la figura
      * @param gr Interfaz Graphics
      */

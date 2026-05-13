@@ -52,6 +52,9 @@ public class WaveManager {
     //Referencia al graphics de Android
     private AndroidGraphics gr;
 
+    //Para acceder al repertorio de imagenes que puede renderizar
+    private UIManager ui;
+
 
     /**
      * Constructor del Manager de oleadas del juego
@@ -91,7 +94,7 @@ public class WaveManager {
         this.timerGrupo = tiempoEntreGrupos;
         this.timerOleada = this.timerGrupo * this.totalGrupos;
 
-
+        this.ui = this.gl.getManagerUI();
     }
 
     /**
@@ -177,6 +180,7 @@ public class WaveManager {
 
 
 
+
     /**
      * Genera un único enemigo con las estadísticas escaladas
      */
@@ -188,17 +192,22 @@ public class WaveManager {
             //Los indices van de 0 a numOleadas-1
             enemy = this.oleadasDatos.getJSONObject(this.oleadaActual - 1).getString("enemy");
 
+
+
             if(enemy.equals("goblin")) {
                 tipo = TipoTorre.RAYO;
-                im=new Image(this.styleLevel.getJSONObject("ImagenGoblin"),gr);
+                im = this.ui.getImageUI("Goblin");
+                //im=new Image(this.ui.getImageUI("Goblin"),gr);
             }
             else if(enemy.equals("imp")) {
                 tipo = TipoTorre.FUEGO;
-                im=new Image(this.styleLevel.getJSONObject("ImagenImp"),gr);
+                im = this.ui.getImageUI("Imp");
+                //im=new Image(this.styleLevel.getJSONObject("ImagenImp"),gr);
             }
             else {
                 tipo = TipoTorre.HIELO;
-                im=new Image(this.styleLevel.getJSONObject("ImagenOgre"),gr);
+                im = this.ui.getImageUI("Ogre");
+                //im=new Image(this.styleLevel.getJSONObject("ImagenOgre"),gr);
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);

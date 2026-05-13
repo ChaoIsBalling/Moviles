@@ -6,6 +6,9 @@ import com.example.gamelogic.Text;
 import com.example.gamelogic.figure.Figure;
 
 import com.example.androidengine.TouchEvent;
+import com.example.gamelogic.figure.Hexagon;
+import com.example.gamelogic.figure.Square;
+import com.example.gamelogic.figure.Triangle;
 
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -35,7 +38,6 @@ public class Button {
 
     //Texto del boton
     Text text;
-
     String color; //Color por defecto
     Image imagen; //Imagen
     Figure figura; //Figura del botón
@@ -65,13 +67,63 @@ public class Button {
     {
         try {
             this.x = json.getInt("x");
-        this.y= json.getInt("y");
-        this.w= json.getInt("w");
-        this.h=json.getInt("h");
-        this.isRound=json.getBoolean("isRound");
-        if(isRound)
-            this.arcRadius=json.getInt("ar");
-        this.color=json.getString("color");
+            this.y= json.getInt("y");
+            this.w= json.getInt("w");
+            this.h=json.getInt("h");
+            this.isRound=json.getBoolean("isRound");
+            if(isRound)
+                this.arcRadius=json.getInt("ar");
+
+            this.color=json.getString("color");
+
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //Constructora que te crea un boton a partir de un Json con mas parametros
+    //Quitar el booleano luego, es solo para hacer otra constrctora
+    public Button(JSONObject json, AndroidGraphics gr)
+    {
+        try {
+            this.x = json.getInt("x");
+            this.y= json.getInt("y");
+            this.w= json.getInt("w");
+            this.h=json.getInt("h");
+            this.isRound=json.getBoolean("isRound");
+            if(isRound)
+                this.arcRadius=json.getInt("ar");
+
+            this.color=json.getString("color");
+
+            //Ahora cargamos los elementos que haya en el boton
+
+            JSONObject textData = json.optJSONObject("text");
+            if(textData != null)
+                this.text = new Text(textData);
+
+            JSONObject figData = json.optJSONObject("figure");
+            if(figData != null){
+                String form = figData.getString("form");
+                switch (form){
+                    case "triangle":
+                        this.figura = new Triangle(figData);
+                        break;
+                    case "square":
+                        this.figura = new Square(figData);
+                        break;
+                    case "hexagon":
+                        this.figura = new Hexagon(figData);
+                        break;
+                }
+            }
+
+            JSONObject iconData = json.optJSONObject("icon");
+            if(iconData != null){
+                this.imagen = new Image(iconData,gr);
+            }
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -92,21 +144,27 @@ public class Button {
     }
 
     //setters
-    public void setColor(String color){
-        this.color = color;
-    }
-    public void setFigura(Figure fig){this.figura = fig;}
+    public void setColor(String color){ this.color = color; }
+    public void setFigura(Figure fig){ this.figura = fig; }
     public void setImagen(Image img){this.imagen = img;}
     public void setEnabled(boolean enabled){this.isEnable = enabled;}
     public void setVisible(boolean visible){this.isVisible = visible;}
+
+    // Setter para asignar el callback
+    public void setOnClickListener(ButtonClickListener listener) {this.onClickFunction = listener;}
 
     //getter de los parametros de tamaño y posicion
     public float getWidth(){return this.w;}
     public float getHeight(){return this.h;}
     public float getX(){return this.x;}
     public float getY(){return this.y;}
-    public boolean isEnable(){return this.isEnable;}
-    public  boolean isVisible(){return  this.isVisible;}
+
+    public Text getTextButton(){ return this.text; }
+
+    public Image getImgButton(){ return this.imagen; }
+    public Figure getFigButton(){ return this.figura; }
+    public boolean isEnable(){ return this.isEnable; }
+    public  boolean isVisible(){ return this.isVisible; }
     /**
      * Comprueba si la coordenada x,y está dentro del botón
      */
@@ -156,12 +214,8 @@ public class Button {
      * @return true si se ha pulsado y false si no se ha pulsado
      */
     public boolean handleInput(TouchEvent event){
-        //Si no hay ninguna funcion asociada al boton, devolvemos false inmediatamente
-        if(onClickFunction == null)
-            return false;
-
         if(event.type == TouchEvent.TouchEventType.TOUCH_DOWN){
-            if(contains(event.x, event.y)){
+            if(contains(event.x, event.y) && this.isEnable && onClickFunction != null){
                 onClickFunction.onClick();
                 return true;
             }

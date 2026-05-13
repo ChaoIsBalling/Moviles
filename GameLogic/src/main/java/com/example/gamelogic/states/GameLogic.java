@@ -5,13 +5,13 @@ import com.example.androidengine.TouchEvent;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidMobile;
+import com.example.gamelogic.Color;
 import com.example.gamelogic.button.Button;
 import com.example.gamelogic.Casilla;
 import com.example.gamelogic.Enemy;
-import com.example.gamelogic.managers.GameHUDManager;
+import com.example.gamelogic.managers.UIManager;
 import com.example.gamelogic.managers.WaveManager;
 import com.example.gamelogic.towers.FireTower;
-import com.example.gamelogic.figure.Hexagon;
 import com.example.gamelogic.towers.IceTower;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.towers.MiniThunderTower;
@@ -20,8 +20,8 @@ import com.example.gamelogic.Text;
 import com.example.gamelogic.towers.ThunderTower;
 import com.example.gamelogic.TipoTorre;
 import com.example.gamelogic.towers.Tower;
-import com.example.gamelogic.figure.Triangle;
 import com.example.gamelogic.Vector2D;
+import com.example.gamelogic.towers.TowerFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +29,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
+import java.util.HashMap;
 
 
 
@@ -42,17 +43,20 @@ public class GameLogic implements State {
     private Button botonMejoraHexagonos;
     private Button botonMejoraMini;
 
+    private TowerFactory towerFactory = new TowerFactory();
+
+    private HashMap<TipoTorre, String> skins = new HashMap<>();
+
+    //IDs para elementos que queramos cambiar durante la partida
+    private final String BUT_RAYO_ID = "BUT_RAYO", BUT_HIELO_ID = "BUT_HIELO", BUT_FUEGO_ID = "BUT_FUEGO", BUT_MINI_ID = "BUT_MINI";
+    private final String TEXT_VIDA_ID = "TEXT_VIDA" , TEXT_DINERO_ID= "TEXT_DINERO", TEXT_OLEADA_ID = "TEXT_OLEADA";
+
+
     boolean mini = false;//si esta desbloqueada la nueva torre
 
     private Button botonMejoraAtaque;
     private Button botonMejoraRango;
     private Button botonMejoraVelocidad;
-
-    //Imagen de los stats
-    private Image imagenVida;
-    private Image imagenDinero;
-
-    private Image imagenFondo;
 
     //Franja en la que están los botones
     private Square franjaGris;
@@ -71,12 +75,11 @@ public class GameLogic implements State {
     //Variable que indica en que nivel estamos
     int levelNumber;
 
-    //Json que maneja el estilo del nivel
+    //Json que maneja el estilo de los botones y textos
     JSONObject style;
 
     //Arrays de casillas, torres y enemigos
     ArrayList<ArrayList<Casilla>> casillas;
-
     ArrayList<Tower> torres;
     ArrayList<Enemy> enemigos;
     ArrayList<Enemy> deadEnemies;
@@ -100,6 +103,7 @@ public class GameLogic implements State {
     int oleada;//numero oleada
     int oleadasRestantes;//oleadas restantes
     Text textoOleadas;//Numero de oleadas en texto
+
     private JSONObject save; //Archivo de Guardado del Juego
     JSONArray camino; //Array con el numero de puntos que debe recorrer el enemigo en JSON
     ArrayList<Vector2D> caminoEnemigos;//el camino que recorren los enemigos
@@ -118,9 +122,15 @@ public class GameLogic implements State {
     int nivel;
     int mundo;
 
+    private int precioAPagar;
+    private TipoTorre tipoTorreSeleccionado;
+    private int costeRayo, costeHielo, costeFuego,costeMini;
+
+    private String CURRENT_BUT_ID = " ";
+
     //Enumaerado que determina en que estado de juego estamos
     public enum Estado {
-        normal, botonRayo, botonFuego, botonHielo, torre, botonMini
+        NORMAL, botonRayo, botonFuego, botonHielo, TORRE, botonMini, CONSTRUCCION
     }
 
     //Enumaerado que determina en que estado de juego estamos
@@ -130,14 +140,13 @@ public class GameLogic implements State {
 
 
     //Estado actual de juego
-    private Estado estado = Estado.normal;
+    private Estado estado = Estado.NORMAL;
 
     private AndroidMobile mobile;
 
     public enum Dificultad {//si estamos en la aventura, partida corta, partida larga o modo infinito
         corto, largo, infinito, aventura
     }
-
     private Dificultad dificultad;
     //JSONArray que gestiona las oleadas en el juego
     JSONArray oleadasDatos;
@@ -153,9 +162,12 @@ public class GameLogic implements State {
     private WaveManager wave;
 
     //Manager de la HUD del juego
-    private GameHUDManager hud;
+    //private GameHUDManager hud;
 
-       /**
+
+    private UIManager ui;
+
+    /**
      * Constructora del estado principal de juego en el modo normal
      * @param engine Motor
      */
@@ -176,8 +188,6 @@ public class GameLogic implements State {
         this.inicializarNivel("Mapas/mapa" + level + ".json");
         this.mobile = mobile;
         this.mobile.setVisibleAdBanner(false);
-
-
     }
     /**
      * Constructora del estado principal de juego en el modo aventura a partir de la lectura del mapa del nivel
@@ -208,7 +218,7 @@ public class GameLogic implements State {
         this.caminoEnemigos = new ArrayList<Vector2D>();
 
         //Esto hay que hacerlo en el UI Manager
-        this.textoOleadas = new Text("Inika-Regular.ttf","Oleada:" + this.oleada,60,15,25);
+        //this.textoOleadas = new Text("Inika-Regular.ttf","Oleada:" + this.oleada,60,15,25);
         this.franjaGris = new Square(300,370,600,100,true);
         this.franjaGris.setColor("#FF999999");
 
@@ -279,7 +289,7 @@ public class GameLogic implements State {
 
         //Vamos metiendo cada una de las coordenadas del
         //vector road del JSON al camino de enemigos en forma de coordenadas del tablero
-        for(int i = 0; i<numPuntos;i++){
+        for(int i = 0; i < numPuntos;i++){
             JSONArray pair = null;
             int x=0; int y=0;
 
@@ -310,11 +320,10 @@ public class GameLogic implements State {
                     boolean caminable = (tipoCasilla != 'h');
                     casilla = new Casilla(posX, posY, this.anchoCasilla, this.altoCasilla, caminable, caminable);
 
-                    if(tipoCasilla == 'h'){
-                         casilla.setColor("#ff000000");
-                    } else {
-                        casilla.setColor("#ff944d03");
-                    }
+                    if(tipoCasilla == 'h')
+                         casilla.setColor(Color.NEGRO.getHex());
+                    else
+                        casilla.setColor(Color.MARRON.getHex());
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -323,18 +332,24 @@ public class GameLogic implements State {
             }
             this.casillas.add(fila);
         }
-
-        //Leemos el json de estilos de botones y elementos del juego
-        this.style =engine.readJsonFile("GameLogic/style.json");
-
-
     }
 
     //carga el progreso y comprueba que no ha sido modificado
     private void cargarDatos(){
         try {
-            this.mini = this.save.getBoolean("mini");
             this.fondo = this.save.getString("fondo");
+            this.mini = true;
+            // this.mini = this.save.getBoolean("mini");
+
+            //Leemos los valores de las skins del juego
+            String skin = this.save.getString("skinRayo");
+            skins.put(TipoTorre.RAYO, skin);
+
+            skin = this.save.getString("skinHielo");
+            skins.put(TipoTorre.HIELO,skin);
+
+            skin = this.save.getString("skinFuego");
+            skins.put(TipoTorre.FUEGO,skin);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -371,14 +386,16 @@ public class GameLogic implements State {
             //Si el enemigo llega a la casilla final
             if (this.enemigos.get(i).Win()) {
                 this.vida--;
-                this.hud.actualizaVidas(this.vida);
+                //this.hud.actualizaVidas(this.vida);
+                this.ui.setTextUI(TEXT_VIDA_ID, String.valueOf(this.vida));
                 //Añadimos al enemigo en la lista de ganadores para que sea eliminado (se comprueba en el tercer if)
                 deadEnemies.add(this.enemigos.get(i));
             }
             if (this.enemigos.get(i).Dead()) { //En caso de morir nos da dinero y lo eliminamos
                 deadEnemies.add(this.enemigos.get(i));
                 this.dinero += 50;
-                this.hud.actualizaDinero(this.dinero);
+                this.ui.setTextUI(TEXT_DINERO_ID, String.valueOf(this.dinero));
+                //this.hud.actualizaDinero(this.dinero);
             }
         }
 
@@ -488,8 +505,7 @@ public class GameLogic implements State {
         //gr.setColor(0x00000000);
         gr.clear();
 
-        this.hud.renderizaFondo();
-
+        this.franjaGris.Render(gr);
         //Renderizado del mapa
         for (int i = 0; i < this.fil; i++) {
             for (int j = 0; j < this.col; j++) {
@@ -505,95 +521,89 @@ public class GameLogic implements State {
         }
 
         //Renderizado de todos los elementos del HUD
-        this.hud.render(gr,estado,torreSeleccionada);
-
-        if (this.estado != Estado.torre) {
-            this.botonMejoraCuadrados.Render(gr);
-            this.botonMejoraTriangulos.Render(gr);
-            this.botonMejoraHexagonos.Render(gr);
-            if(this.mini){
-                this.botonMejoraMini.Render(gr);
-            }
-        } else {
-            this.botonMejoraAtaque.Render(gr);
-            this.botonMejoraRango.Render(gr);
-            this.botonMejoraVelocidad.Render(gr);
-            gr.pintarCirculo(this.torreSeleccionada.getX(), this.torreSeleccionada.getY(), this.torreSeleccionada.getRange());
-        }
+        this.ui.render(gr);
     }
 
     /**
      * Metodo que inicializa todos los botones y otros elementos de la UI
      */
     public void inicializarUI() {
+        //Leemos el json de estilos de botones y elementos del juego
+        this.style = engine.readJsonFile("GameLogic/style2.json");
+        //Inicializamos todos los elementos de la UI
+        this.ui = new UIManager(this.style,this.engine, this.gr);
+        this.aplicarSkins();
+        this.aplicarCompras();
+        this.inicializarBotones();
+    }
 
-        //this.style =engine.readJsonFile("GameLogic/style.json");
-        try {
-            this.botonMejoraCuadrados = new Button(style.getJSONObject("BotonMejoraCuadrados"));
+    /**
+     * Metodo que inicaliza los botones de la UI asignandole su correspondiente callback
+     */
+    void inicializarBotones(){
+        //Primero leemos el valor del texto de los botones (es el precio)
+        this.costeRayo = Integer.parseInt(this.ui.getButtonUIText(BUT_RAYO_ID));
+        this.costeHielo = Integer.parseInt(this.ui.getButtonUIText(BUT_HIELO_ID));
+        this.costeFuego = Integer.parseInt(this.ui.getButtonUIText(BUT_FUEGO_ID));
 
-        this.botonMejoraTriangulos = new Button(style.getJSONObject("BotonMejoraTriangulos"));
-        this.botonMejoraHexagonos = new Button(style.getJSONObject("BotonMejoraHexagonos"));
-        this.botonMejoraMini = new Button(style.getJSONObject("BotonMejoraMini"));
+        if(this.mini)
+            this.costeMini = Integer.parseInt(this.ui.getButtonUIText(BUT_MINI_ID));
 
-        //Los botones de cuadrado triangulos y hexagonos usan los mismos valores de apariencia
-        //que los botones de ataque rango y velocidad
-        this.botonMejoraAtaque = new Button(style.getJSONObject("BotonMejoraTriangulos"));
-        this.botonMejoraRango = new Button(style.getJSONObject("BotonMejoraCuadrados"));
-        this.botonMejoraVelocidad = new Button(style.getJSONObject("BotonMejoraHexagonos"));
+        //Una vez hemos leido los valores, seteamos los listeners con el valor de los precios
+        this.ui.getButtonUI(BUT_RAYO_ID).setOnClickListener(() -> this.prepararRayo());
+        this.ui.getButtonUI(BUT_HIELO_ID).setOnClickListener(() -> this.prepararHielo());
+        this.ui.getButtonUI(BUT_FUEGO_ID).setOnClickListener(() -> this.prepararFuego());
+
+        //la torre esta desbloqueada...
+        if(this.mini)
+            this.ui.getButtonUI(BUT_MINI_ID).setOnClickListener(() -> this.prepararMini());
+
+    }
+
+    /**
+     * Metodo que se encarga de comprobar si el jugador ha comprado skin, y si es así, aplicarla
+     */
+    public void aplicarSkins(){
         //depende de la skin el boton es figura o skin seleccionada
-        if(!Objects.equals(save.getString("skinRayo"), "Figura")){
-            this.botonMejoraTriangulos.setImagen(new Image(style.getJSONObject(save.getString("skinRayo")),this.gr));
+        Button b = this.ui.getButtonUI(BUT_RAYO_ID);
+        if (!Objects.equals(skins.get(TipoTorre.RAYO), "Figura")) {
+            b.getImgButton().setVisible(true);
+            b.getFigButton().setVisible(false);
+        } else {
+            b.getImgButton().setVisible(false);
+            b.getFigButton().setVisible(true);
         }
-        else{
-            Triangle tri = new Triangle(0,0,15,true);
-            tri.setColor("#FF000000");
-            this.botonMejoraTriangulos.setFigura(tri);
-        }
-        if(!Objects.equals(save.getString("skinFuego"), "Figura")){
-            this.botonMejoraHexagonos.setImagen(new Image(style.getJSONObject(save.getString("skinFuego")),this.gr));
-        }
-        else{
-            Hexagon hex = new Hexagon(0,-5,15,true);
-            hex.setColor("#FFFF0000");
-            this.botonMejoraHexagonos.setFigura(hex);
-        }
-        if(!Objects.equals(save.getString("skinHielo"), "Figura")){
-            this.botonMejoraCuadrados.setImagen(new Image(style.getJSONObject(save.getString("skinHielo")),this.gr));
-        }
-        else{
-            Square sq = new Square(0,-5,30,30,true);
-            sq.setColor("#FFC8A2C8");
-            this.botonMejoraCuadrados.setFigura(sq);
-        }
-        this.botonMejoraMini.setImagen(new Image(style.getJSONObject("TorreMini"),this.gr));
+        //b.getImgButton().setVisible(true);
+        //b.getFigButton().setVisible(false);
 
-        this.botonMejoraCuadrados.setText(new Text(style.getJSONObject("CosteMejoraCuadrados")));
-        this.botonMejoraTriangulos.setText(new Text(style.getJSONObject("CosteMejoraTriangulos")));
-        this.botonMejoraHexagonos.setText(new Text(style.getJSONObject("CosteMejoraHexagonos")));
-        this.botonMejoraMini.setText(new Text(style.getJSONObject("CosteMejoraMini")));
-
-        this.botonMejoraAtaque.setText(new Text(style.getJSONObject("CosteMejoraAtaques")));
-        this.botonMejoraRango.setText(new Text(style.getJSONObject("CosteMejoraAtaques")));
-        this.botonMejoraVelocidad.setText(new Text(style.getJSONObject("CosteMejoraTriangulos")));
-
-        this.botonMejoraAtaque.setImagen(new Image(style.getJSONObject("ImagenAtaque"),this.gr));
-        this.botonMejoraRango.setImagen(new Image(style.getJSONObject("ImagenRango"),this.gr));
-        this.botonMejoraVelocidad.setImagen(new Image(style.getJSONObject("ImagenVelocidad"),this.gr));
-
-        //this.textoV = new Text("Inika-Regular.ttf", String.valueOf(this.vida), 30, 340, 20);
-        //this.textoD = new Text("Inika-Regular.ttf", String.valueOf(this.dinero), 30, 370, 20);
-        //this.imagenVida = new Image( style.getJSONObject("ImagenVida"), this.gr);
-        //this.imagenDinero = new Image(style.getJSONObject("ImagenDinero"), this.gr);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
+        b= this.ui.getButtonUI(BUT_FUEGO_ID);
+        if (!Objects.equals(skins.get(TipoTorre.FUEGO), "Figura")) {
+            b.getImgButton().setVisible(true);
+            b.getFigButton().setVisible(false);
+        } else {
+            b.getImgButton().setVisible(false);
+            b.getFigButton().setVisible(true);
         }
-        this.botonMejoraTriangulos.setColor(this.fondo);
-        this.botonMejoraCuadrados.setColor(this.fondo);
-        this.botonMejoraHexagonos.setColor(this.fondo);
-        this.botonMejoraMini.setColor(this.fondo);
-        this.botonMejoraAtaque.setColor(this.fondo);
-        this.botonMejoraRango.setColor(this.fondo);
-        this.botonMejoraVelocidad.setColor(this.fondo);
+        b=  this.ui.getButtonUI(BUT_HIELO_ID);
+        if (!Objects.equals(skins.get(TipoTorre.HIELO), "Figura")) {
+            b.getImgButton().setVisible(true);
+            b.getFigButton().setVisible(false);
+        } else {
+            b.getImgButton().setVisible(false);
+            b.getFigButton().setVisible(true);
+        }
+    }
+
+    /**
+     * Metodo que comprueba si el jugador ha comprado alguna torre nueva en la tienda y si es asi la habilita
+     */
+    private void aplicarCompras(){
+        //Si no tiene mas cosas de la tienda, como la torre mini... se desactiva
+        if(!this.mini){
+            this.ui.getButtonUI(BUT_MINI_ID).setVisible(false);
+            this.ui.getButtonUI(BUT_MINI_ID).setEnabled(false);
+        }
+
     }
 
     /**
@@ -648,8 +658,6 @@ public class GameLogic implements State {
 
         //Inicializamos manager de oleadas (lo pongo aqui porque se debe iniclizar despues del setState)
         this.wave = new WaveManager(this, this.oleadasRestantes, this.style, this.oleadasDatos,this.gr);
-        this.hud = new GameHUDManager(gr, this.style, this.obj,this,
-                this.vida, this.dinero, this.oleada, this.ancho, this.alto, this.offsetX, this.offsetY);
     }
 
     /**
@@ -657,68 +665,112 @@ public class GameLogic implements State {
      */
     private void gestionEstadosJuego(TouchEvent e) //maneja los estados del juego cuando pulsas botones o las torres
     {
-        switch (this.estado) {
-            case normal://cuando ningun boton o torre está seleccionado
-                if (this.botonMejoraTriangulos.contains(e.x, e.y)) {
-                    this.cambiarEstado(Estado.botonRayo);
-                } else if (this.botonMejoraHexagonos.contains(e.x, e.y)) {
-                    this.cambiarEstado(Estado.botonFuego);
-                } else if (this.botonMejoraCuadrados.contains(e.x, e.y)) {
-                    this.cambiarEstado(Estado.botonHielo);
-                }else if (this.botonMejoraMini.contains(e.x, e.y) && this.mini) {
-                    this.cambiarEstado(Estado.botonMini);
-                } else {
-                    Vector2D casilla = this.determinaCasillaRaton(e.x, e.y);
-                    if (casilla.getX() < this.fil && casilla.getY() < this.col && casilla.getX() >= 0 && casilla.getY() >= 0) {
-                        Tower torre = this.casillas.get(casilla.getX()).get(casilla.getY()).getTorre();
-                        if (torre != null) {
-                            this.torreSeleccionada = torre;
-                            this.cambiarEstado(Estado.torre);
-                        }
-                    }
-                }
-                break;
-            case torre://esta seleccionada una torre en el mapa
-                Vector2D casillaT = this.determinaCasillaRaton(e.x, e.y);
-                if (this.botonMejoraAtaque.contains(e.x, e.y) && this.dinero >= 75) {
-                    this.torreSeleccionada.UpdateAttack(this.damTorre);
-                    this.dinero -= 75;
-                    //this.textoD.setText(String.valueOf(this.dinero));
-                    this.hud.actualizaDinero(this.dinero);
-                } else if (this.botonMejoraRango.contains(e.x, e.y) && this.dinero >= 75) {
-                    this.torreSeleccionada.UpdateRange(this.ranTorre);
-                    this.dinero -= 75;
-                    //this.textoD.setText(String.valueOf(this.dinero));
-                    this.hud.actualizaDinero(this.dinero);
-                } else if (this.botonMejoraVelocidad.contains(e.x, e.y) && this.dinero >= 100) {
-                    this.torreSeleccionada.UpdateFireRate(this.velTorre);
-                    this.dinero -= 100;
-                    //this.textoD.setText(String.valueOf(this.dinero));
-                    this.hud.actualizaDinero(this.dinero);
-                } else if (casillaT.getX() < this.fil && casillaT.getY() < this.col && casillaT.getX() >= 0 && casillaT.getY() >= 0) {
-                    Tower torre = this.casillas.get(casillaT.getX()).get(casillaT.getY()).getTorre();
-                    if (torre != this.torreSeleccionada && torre != null) {
-                        this.torreSeleccionada = torre;
-                    } else {
-                        this.cambiarEstado(Estado.normal);
-                    }
-                } else {
-                    this.cambiarEstado(Estado.normal);
-                }
-                break;
-            case botonRayo://has tocado el boton para crear una torre de rayo
-                pulsarBotones(e, 100);
-                break;
-            case botonFuego://has tocado el boton para crear una torre de fuego
-                pulsarBotones(e, 200);
-                break;
-            case botonHielo://has tocado el boton para crear una torre de hielo
-                pulsarBotones(e, 150);
-                break;
-            case botonMini://has tocado el boton para crear una torre de hielo
-                pulsarBotones(e, 50);
-                break;
+        if(this.ui.handleInput(e))
+            return;
+
+        //Determinamos si la casilla que hemos pulsado es valida
+        Vector2D casillaCoor = this.determinaCasillaRaton(e.x, e.y);
+
+        //Si no es valida, entonces no se devuelve nada y volvemos al estado Normal del juego
+        if(!casillaValida(casillaCoor.getX(), casillaCoor.getY())){
+            resetearEstado();
+            return;
         }
+
+        //Como la casilla es valida, ahora compruebo si en esa casilla había una torre o no
+        Casilla casillaActual = this.casillas.get(casillaCoor.getX()).get(casillaCoor.getY());
+        Tower torreEnCasilla = casillaActual.getTorre();
+
+        //Si la habia -> modo torre
+        //Si no la habia y estoy en modo construccion -> la intento construir
+        if(torreEnCasilla != null){
+            this.torreSeleccionada = torreEnCasilla;
+            this.estado = Estado.TORRE;
+        }else if(this.estado == Estado.CONSTRUCCION) {
+            comprarTorre(casillaActual, e);
+        }
+    }
+
+    /**
+     * Metodo que maneja la logica cuando tocas un boton de torre
+     * @param e touch event
+     */
+    private void comprarTorre(Casilla casillaObjetivo, TouchEvent e)
+    {
+        // Ver si la skin de la torre está activa
+        Image skin = null;
+        if (!Objects.equals(skins.get(tipoTorreSeleccionado), "Figura"))
+            skin = this.ui.getButtonImage(CURRENT_BUT_ID);
+
+
+        // Decimos a la factoría que fabrique la torre
+        Tower torreR = towerFactory.getTower(
+                tipoTorreSeleccionado,
+                casillaObjetivo.getX(),
+                casillaObjetivo.getY(),
+                skin
+        );
+
+        // Ponemos la torre en la posicion que corresponda
+        if (torreR != null) {
+            ponerTorre(casillaObjetivo, torreR);
+            this.dinero -= precioAPagar;
+            this.ui.getTextUI(TEXT_DINERO_ID).setText(String.valueOf(dinero));
+            resetearEstado();
+        }
+    }
+
+    /**
+     * Metodo que construye la torre del tipo que quieras
+     * @param tipo Tipo del que sera la torre
+     * @param cx coordenada x
+     * @param cy coordanada y
+     * @param buttonID string de la ID del boton
+     * @return
+     */
+    /*private Tower construirTorre(TipoTorre tipo,float cx, float cy, String buttonID){
+        Image skin = null;
+        if(!Objects.equals(skins.get(tipo), "Figura")){
+            skin = this.ui.getButtonImage(buttonID);
+
+            return new ThunderTower(cx, cy,skin);
+        }else
+            return new ThunderTower(cx,cy);
+    }*/
+
+    /**
+     * Metodo que se encarga de instanciar una torre en el tablero
+     * @param c casilla en la que la queremos poner
+     * @param torre la torre que vamos a poner
+     */
+    private void ponerTorre(Casilla c, Tower torre){
+        torre.setListaEnemigos(this.enemigos);
+        torre.setAudio(this.audio);
+        this.casillas.get(c.getCoor().getX()).get(c.getCoor().getY()).setTorre(torre);
+        this.torres.add(torre);
+    }
+
+    /**
+     * Metodo que devuelve al juego a su estado base, es decir, al estado normal y sin ninguna torre seleccionada
+     */
+    private void resetearEstado(){
+        this.estado = Estado.NORMAL;
+        this.tipoTorreSeleccionado = null;
+        if(this.ui.getButtonUI(CURRENT_BUT_ID) != null) {
+            this.ui.getButtonUI(CURRENT_BUT_ID).setColor(Color.BLANCO.getHex());
+            CURRENT_BUT_ID = " ";
+        }
+    }
+
+    /**
+     * Metodo que determina si la casilla que hemos clicado no se sale de los limites del mapa
+     * @param cx coordenada x de la casilla
+     * @param cy coordenada y de la casilla
+     * @return
+     */
+    public boolean casillaValida(int cx, int cy){
+        return (cx < this.fil && cy < this.col
+                && cx >= 0 && cy >= 0);
     }
 
     /**
@@ -739,7 +791,7 @@ public class GameLogic implements State {
                 Tower torre = this.casillas.get(casilla.getX()).get(casilla.getY()).getTorre();
                 if (torre != null) {
                     this.torreSeleccionada = torre;
-                    this.cambiarEstado(Estado.torre);
+                    this.cambiarEstado(Estado.TORRE);
                 } else {
                     this.crearTorres(e, precio);
                 }
@@ -822,10 +874,10 @@ public class GameLogic implements State {
                 this.torres.add(torreR);
                 this.dinero -= precio;
                 //this.textoD.setText(String.valueOf(this.dinero));
-                this.hud.actualizaDinero(this.dinero);
-                this.cambiarEstado(Estado.normal);
+                //this.hud.actualizaDinero(this.dinero);
+                this.cambiarEstado(Estado.NORMAL);
         } else {
-            this.cambiarEstado(Estado.normal);
+            this.cambiarEstado(Estado.NORMAL);
         }
     }
 
@@ -835,14 +887,14 @@ public class GameLogic implements State {
      */
     private void cambiarEstado(Estado nuevoEstado) {
         switch (nuevoEstado) {
-            case normal:
+            case NORMAL:
                 this.botonMejoraTriangulos.setColor(this.fondo);
                 this.botonMejoraHexagonos.setColor(this.fondo);
                 this.botonMejoraCuadrados.setColor(this.fondo);
                 this.botonMejoraMini.setColor(this.fondo);
                 this.estado = nuevoEstado;
                 break;
-            case torre:
+            case TORRE:
                 this.estado = nuevoEstado;
                 break;
             case botonRayo:
@@ -905,9 +957,46 @@ public class GameLogic implements State {
      * @param oleada numero oleada
      */
     public void actualizaOleadas(int oleada){
-        this.hud.actualizaNumOleadas(oleada);
-        //this.textoOleadas.setText("Oleada:" + oleada);
+        this.ui.setTextUI(TEXT_OLEADA_ID, "Oleada: " + String.valueOf(oleada));
     }
+
+     public UIManager getManagerUI(){
+        return this.ui;
+    }
+
+    /**
+     * Metodo que pone el juego en modo construccion y setea los valores para posteriormente, internar comprar una torre
+     * @param precio precio que cuesta la torre que queremos construir
+     * @param tipoTorre el tipo de la torre
+     * @param id el indice del boton en el UIManager
+     */
+    public void prepararConstruccion(int precio, TipoTorre tipoTorre, String id){
+        this.estado = Estado.CONSTRUCCION;
+        this.precioAPagar = precio;
+        this.tipoTorreSeleccionado = tipoTorre;
+
+        //Cambiamos el color a Amarillo del boton correspondiente
+        this.ui.getButtonUI(id).setColor(Color.AMARILLO_CLARO.getHex());
+        this.CURRENT_BUT_ID = id;
+    }
+
+    // Estos métodos son los que "disparan" los botones del HUD
+    public void prepararRayo() { prepararConstruccion(costeRayo, TipoTorre.RAYO, BUT_RAYO_ID);
+        System.out.println("Boton rayo pulsado");}
+    public void prepararHielo() { prepararConstruccion(costeHielo, TipoTorre.HIELO, BUT_HIELO_ID);
+        System.out.println("Boton hielo pulsado");}
+    public void prepararFuego() { prepararConstruccion(costeFuego, TipoTorre.FUEGO, BUT_FUEGO_ID);
+        System.out.println("Boton fuego pulsado");}
+
+    public void prepararMini() {
+        prepararConstruccion(costeMini,TipoTorre.MINI, BUT_MINI_ID);
+    }
+
+    /*
+    public void mejorarAtaque(){ prepararMejora(costeMejoraAtaque, TipoMejora.ATAQUE);}
+    public void mejorarRango(){prepararMejora(costeMejoraRango, TipoMejora.RANGO);}
+    public void mejorarVelocidad() {prepararMejora(costeMejoraVelocidad, TipoMejora.VELOCIDAD);}
+    */
 }
 
 

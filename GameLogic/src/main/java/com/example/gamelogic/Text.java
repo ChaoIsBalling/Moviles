@@ -66,18 +66,18 @@ public class Text {
     public Text(JSONObject json)
     {
         try{
-        String text= json.getString("texto");
-        this.myArray=text.split("\n");
-        this.font=json.getString("font");
-        this.x=json.getInt("x");
-        this.y=json.getInt("y");
-        this.size=json.getInt("size");
-        this.bold= json.getBoolean("bold");
-        this.italic =json.getBoolean("italic");
-        this.color=json.getString("color");
-    } catch (JSONException e) {
-        throw new RuntimeException(e);
-    }
+            String text= json.getString("texto");
+            this.myArray=text.split("\n");
+            this.font=json.getString("font");
+            this.x=json.getInt("x");
+            this.y=json.getInt("y");
+            this.size=json.getInt("size");
+            this.bold= json.getBoolean("bold");
+            this.italic =json.getBoolean("italic");
+            this.color=json.getString("color");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
     /**
      * Setters
@@ -90,6 +90,10 @@ public class Text {
     }
     public void setY(float y){this.y=y;}
     public void setX(float x){this.x=x;}
+
+    public String getText(){
+        return String.join("\n", this.myArray);
+    }
 
     /**
      * Renderiza el texto (con y sin centrado) con la fuente y color deseados
@@ -109,7 +113,7 @@ public class Text {
         gr.setColor(this.color);
         gr.setFont(fuente);
         for(int i=0;i<myArray.length;i++)
-        gr.pintarTextoCentrado(myArray[i], x+this.x,y+this.y+i*size);
+            gr.pintarTextoCentrado(myArray[i], x+this.x,y+this.y+i*size);
     }
     /**
      * Getters

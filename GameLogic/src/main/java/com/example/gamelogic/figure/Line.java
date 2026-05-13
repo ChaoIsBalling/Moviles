@@ -67,6 +67,11 @@ public class Line implements Figure {
         this.color = color;
     }
 
+    @Override
+    public void setVisible(boolean c) {
+
+    }
+
     /**
      * Reneriza la linea de forma normal o centrada
      * @param gr Interfaz Graphics

@@ -10,6 +10,7 @@ public class Circle implements Figure{
     private float r; //radio
     private String color;
     private boolean isFill; //Si esta relleno o no
+    private boolean visible;
 
     /**
      * Constructora con su posición, radio y si esta relleno o no
@@ -19,6 +20,7 @@ public class Circle implements Figure{
         this.y = y;
         this.r = r;
         this.isFill = isFill;
+        this.visible = true;
     }
 
     public Circle(float x, float y, float r){
@@ -60,6 +62,11 @@ public class Circle implements Figure{
     @Override
     public void setColor(String color) {
         this.color = color;
+    }
+
+    @Override
+    public void setVisible(boolean c) {
+        this.visible = c;
     }
 
     /**

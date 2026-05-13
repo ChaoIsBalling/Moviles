@@ -6,7 +6,7 @@ import java.util.Random;
  * Enumerado que representa un tipo de torre al que es resistente un enemigo
  */
 public enum TipoTorre {
-    RAYO, FUEGO, HIELO;
+    RAYO, FUEGO, HIELO, MINI;
     /**
      * Metodo que devuelve un tipo random a la hora de inicializar el tipo al que es resistente un enemigo
      */

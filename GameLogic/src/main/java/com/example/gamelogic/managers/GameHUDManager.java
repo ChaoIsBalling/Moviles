@@ -1,9 +1,8 @@
 package com.example.gamelogic.managers;
 
-//import com.example.engine.Graphics;
-//import com.example.engine.TouchEvent;
-//import com.example.gamelogic.button.Button;
-//import com.example.gamelogic.ButtonClickListener;
+import com.example.androidengine.TouchEvent;
+import com.example.gamelogic.button.Button;
+import com.example.gamelogic.button.ButtonClickListener;
 import com.example.androidengine.AndroidGraphics;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.Text;
@@ -18,12 +17,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GameHUDManager {
     // Botones de compra de torres
-    //ArrayList<Button> botonesTorres = new ArrayList<>();
+    ArrayList<Button> botonesTorres = new ArrayList<>();
     // Botones de mejora de torre
-    //ArrayList<Button> botonesMejoras = new ArrayList<>();
+    ArrayList<Button> botonesMejoras = new ArrayList<>();
     // Figuras y Textos
     private Square franjaGris;
     private Text textoV, textoD, textoOleadas;
@@ -38,15 +38,20 @@ public class GameHUDManager {
     private final float OFFSET_BUTTONS_X = 60;
     private final float START_BUTTONS_Y = 360;
 
+    private final int NUM_BOTONES = 3;
+
     GameLogic gl;
 
+    //Referencia al modulo Graphics de Android
     AndroidGraphics gr;
 
-    //Json que contiene los estilos de cada texto, imagen y boton
+    //Json que contiene los estilos de cada texto, imagen y boton de la escena correspondiente
     JSONObject style;
 
     //Json que contiene los datos del mapa (para acceder a la imagen de fondo)
     JSONObject mapObj;
+
+    //JSONObject save;
 
     public GameHUDManager(AndroidGraphics gr, JSONObject style, JSONObject mapObj, GameLogic gl,
                           int vidas, float dinero, int oleadas,
@@ -66,7 +71,7 @@ public class GameHUDManager {
         initTextAndImages(this.gr, vidas, dinero, oleadas);
 
         // Inicialización de botones interactuables
-        //initBuyTowerButtons();
+        initBuyTowerButtons();
         //initUpgradeButtons(gr);
     }
 
@@ -144,14 +149,94 @@ public class GameHUDManager {
     /**
      * Crea los botones de compra de torres usando un metodo de ayuda
      */
-    /*private void initBuyTowerButtons() {
-        this.createTowerButton(START_BUTTONS_X, START_BUTTONS_Y,"100",
+    private void initBuyTowerButtons() {
+        /*this.createTowerButton(START_BUTTONS_X, START_BUTTONS_Y,"100",
                 new Triangle(1, 1, 15, true),() -> gl.prepararRayo());
         this.createTowerButton(START_BUTTONS_X, START_BUTTONS_Y,"150",
                 new Square(1, -5, 30, 30, true, 0xFFC8A2C8), () -> gl.prepararHielo());
         this.createTowerButton(START_BUTTONS_X, START_BUTTONS_Y,"200",
-                new Hexagon(1, -5, 15, true, 0xFFFF0000), () -> gl.prepararFuego());
-    }*/
+                new Hexagon(1, -5, 15, true, 0xFFFF0000), () -> gl.prepararFuego());*/
+
+
+        //Incializamos el numero de botones de compra de torres
+//        for (int i = 0; i < NUM_BOTONES; i++){
+//            try{
+//                Button b = new Button(style.getJSONObject("Boton"))
+//            }
+//
+//
+//        }
+
+//        //this.style =engine.readJsonFile("GameLogic/style.json");
+//        try {
+//            this.botonMejoraCuadrados = new Button(style.getJSONObject("BotonMejoraCuadrados"));
+//            this.botonMejoraTriangulos = new Button(style.getJSONObject("BotonMejoraTriangulos"));
+//            this.botonMejoraHexagonos = new Button(style.getJSONObject("BotonMejoraHexagonos"));
+//            this.botonMejoraMini = new Button(style.getJSONObject("BotonMejoraMini"));
+//
+//            //Los botones de cuadrado triangulos y hexagonos usan los mismos valores de apariencia
+//            //que los botones de ataque rango y velocidad
+//            this.botonMejoraAtaque = new Button(style.getJSONObject("BotonMejoraTriangulos"));
+//            this.botonMejoraRango = new Button(style.getJSONObject("BotonMejoraCuadrados"));
+//            this.botonMejoraVelocidad = new Button(style.getJSONObject("BotonMejoraHexagonos"));
+//            //depende de la skin el boton es figura o skin seleccionada
+//            if(!Objects.equals(save.getString("skinRayo"), "Figura")){
+//                this.botonMejoraTriangulos.setImagen(new Image(style.getJSONObject(save.getString("skinRayo")),this.gr));
+//            }
+//            else{
+//                Triangle tri = new Triangle(0,0,15,true);
+//                tri.setColor("#FF000000");
+//                this.botonMejoraTriangulos.setFigura(tri);
+//            }
+//            if(!Objects.equals(save.getString("skinFuego"), "Figura")){
+//                this.botonMejoraHexagonos.setImagen(new Image(style.getJSONObject(save.getString("skinFuego")),this.gr));
+//            }
+//            else{
+//                Hexagon hex = new Hexagon(0,-5,15,true);
+//                hex.setColor("#FFFF0000");
+//                this.botonMejoraHexagonos.setFigura(hex);
+//            }
+//            if(!Objects.equals(save.getString("skinHielo"), "Figura")){
+//                this.botonMejoraCuadrados.setImagen(new Image(style.getJSONObject(save.getString("skinHielo")),this.gr));
+//            }
+//            else{
+//                Square sq = new Square(0,-5,30,30,true);
+//                sq.setColor("#FFC8A2C8");
+//                this.botonMejoraCuadrados.setFigura(sq);
+//            }
+//            this.botonMejoraMini.setImagen(new Image(style.getJSONObject("TorreMini"),this.gr));
+//
+//            this.botonMejoraCuadrados.setText(new Text(style.getJSONObject("CosteMejoraCuadrados")));
+//            this.botonMejoraTriangulos.setText(new Text(style.getJSONObject("CosteMejoraTriangulos")));
+//            this.botonMejoraHexagonos.setText(new Text(style.getJSONObject("CosteMejoraHexagonos")));
+//            this.botonMejoraMini.setText(new Text(style.getJSONObject("CosteMejoraMini")));
+//
+//            this.botonMejoraAtaque.setText(new Text(style.getJSONObject("CosteMejoraAtaques")));
+//            this.botonMejoraRango.setText(new Text(style.getJSONObject("CosteMejoraAtaques")));
+//            this.botonMejoraVelocidad.setText(new Text(style.getJSONObject("CosteMejoraTriangulos")));
+//
+//            this.botonMejoraAtaque.setImagen(new Image(style.getJSONObject("ImagenAtaque"),this.gr));
+//            this.botonMejoraRango.setImagen(new Image(style.getJSONObject("ImagenRango"),this.gr));
+//            this.botonMejoraVelocidad.setImagen(new Image(style.getJSONObject("ImagenVelocidad"),this.gr));
+//
+//            //this.textoV = new Text("Inika-Regular.ttf", String.valueOf(this.vida), 30, 340, 20);
+//            //this.textoD = new Text("Inika-Regular.ttf", String.valueOf(this.dinero), 30, 370, 20);
+//            //this.imagenVida = new Image( style.getJSONObject("ImagenVida"), this.gr);
+//            //this.imagenDinero = new Image(style.getJSONObject("ImagenDinero"), this.gr);
+//        } catch (JSONException e) {
+//            throw new RuntimeException(e);
+//        }
+//        this.botonMejoraTriangulos.setColor(this.fondo);
+//        this.botonMejoraCuadrados.setColor(this.fondo);
+//        this.botonMejoraHexagonos.setColor(this.fondo);
+//        this.botonMejoraMini.setColor(this.fondo);
+//        this.botonMejoraAtaque.setColor(this.fondo);
+//        this.botonMejoraRango.setColor(this.fondo);
+//        this.botonMejoraVelocidad.setColor(this.fondo);
+
+
+
+    }
 
     /**
      * Crea los botones de mejora de torre usando un metodo de ayuda

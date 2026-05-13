@@ -1,5 +1,9 @@
 package com.example.gamelogic.figure;
 import com.example.androidengine.AndroidGraphics;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Clase que representa un traingulo e implementa los métodos de Figura
  */
@@ -16,6 +20,8 @@ public class Triangle implements Figure {
     //Indica si esta relleno o no
     private boolean isFill;
 
+    private boolean visible;
+
 
     /**
      * Constructora del triangulo con su posición, radio y booleano de rellenado
@@ -25,11 +31,22 @@ public class Triangle implements Figure {
         this.cy = y;
         this.r = r;
         this.isFill = isFill;
+        this.visible = true;
     }
-    Triangle(float x, float y, float r){
-        this.cx = x;
-        this.cy = y;
-        this.r = r;
+
+    public Triangle(JSONObject obj){
+        try {
+            this.cx = obj.getInt("x");
+            this.cy = obj.getInt("y");
+            this.r = obj.getInt("r");
+            this.isFill = obj.getBoolean("fill");
+            this.color = obj.getString("color");
+            this.visible = obj.getBoolean("visible");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     /**
@@ -65,28 +82,38 @@ public class Triangle implements Figure {
         this.color = color;
     }
 
+    @Override
+    public void setVisible(boolean c) {
+        this.visible = c;
+    }
+
+
     /**
      * Renderiza el triangulo de forma centrada o no
      * @param gr Interfaz Graphics
      */
     @Override
     public void Render(AndroidGraphics gr) {
-        gr.setColor(this.color);
-        if(isFill){
-            gr.rellenarPoligono(this.cx,this.cy,this.r, 3);
-        }
-        else {
-            gr.pintarPoligono(this.cx,this.cy,this.r, 3);
+        if(this.visible){
+            gr.setColor(this.color);
+            if(isFill){
+                gr.rellenarPoligono(this.cx,this.cy,this.r, 3);
+            }
+            else {
+                gr.pintarPoligono(this.cx,this.cy,this.r, 3);
+            }
         }
     }
     @Override
     public void RenderCentrado(AndroidGraphics gr, float x, float y) {
-        gr.setColor(this.color);
-        if(isFill){
-            gr.rellenarPoligono(x+ this.cx,y + this.cy,this.r, 3);
-        }
-        else {
-            gr.pintarPoligono(x + this.cx,y + this.cy,this.r, 3);
+        if(this.visible){
+            gr.setColor(this.color);
+            if(isFill){
+                gr.rellenarPoligono(x+ this.cx,y + this.cy,this.r, 3);
+            }
+            else {
+                gr.pintarPoligono(x + this.cx,y + this.cy,this.r, 3);
+            }
         }
     }
 }
