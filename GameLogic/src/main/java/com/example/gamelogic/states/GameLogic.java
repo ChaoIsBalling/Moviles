@@ -162,8 +162,8 @@ public class GameLogic implements State {
         this.dificultad = Dificultad.aventura;
         this.oleadasRestantes=0;
         this.isCompleted = isCompleted;
-        this.inicializarNivel(mapa);
         this.init();
+        this.inicializarNivel(mapa);
         this.mobile = mobile;
         this.mobile.setVisibleAdBanner(false);
         this.nivel=nivel;
@@ -208,7 +208,8 @@ public class GameLogic implements State {
         //Oleadas que hay en total dependiendo del modo de juego
         switch(this.dificultad) {
             case corto:
-                this.oleadasRestantes = 3;
+                //this.oleadasRestantes = 3
+                this.oleadasRestantes = 0;
                 break;
             case largo:
                 this.oleadasRestantes=7;
@@ -455,7 +456,6 @@ public class GameLogic implements State {
         gr.clear();
 
         //Renderizar el fondo de pantalla
-
         this.franjaGris.Render(gr);
         //Renderizado del mapa
         for (int i = 0; i < this.fil; i++) {
@@ -494,10 +494,13 @@ public class GameLogic implements State {
         this.inicializarContadores();
     }
 
+    /**
+     * Metodo que inicializa los contadores que tengamos en la UI
+     */
     private void inicializarContadores() {
         this.ui.getTextUI(TEXT_DINERO_ID).setText(String.valueOf(this.dinero));
         this.ui.getTextUI(TEXT_VIDA_ID).setText(String.valueOf(this.vida));
-        this.ui.getTextUI(TEXT_OLEADA_ID).setText("Oleada: " + String.valueOf(this.oleadasRestantes));
+        this.ui.getTextUI(TEXT_OLEADA_ID).setText("Oleada: " + String.valueOf(this.oleada));
     }
 
     /**
@@ -634,14 +637,10 @@ public class GameLogic implements State {
     }
 
     @Override
-    public void setMobile(AndroidMobile mobile) {
-        this.mobile = mobile;
-    }
+    public void setMobile(AndroidMobile mobile) { this.mobile = mobile;}
 
     @Override
-    public JSONObject getSave() {
-        return this.save;
-    }
+    public JSONObject getSave() { return this.save; }
 
     /**
      * Inicializa graphics y la UI
@@ -661,6 +660,7 @@ public class GameLogic implements State {
      */
     private void gestionEstadosJuego(TouchEvent e) //maneja los estados del juego cuando pulsas botones o las torres
     {
+        //Si detecta que hemos pulsado un boton, ponemos prioridad a la accion de ese boton devolviendo return vacio
         if(this.ui.handleInput(e))
             return;
 
@@ -704,7 +704,7 @@ public class GameLogic implements State {
             if (!Objects.equals(skins.get(tipoTorreSeleccionado), "Figura"))
                 skin = this.ui.getButtonImage(CURRENT_BUT_ID);
 
-            // Decimos a la factoría que fabrique la torre
+            // Decimos a la factoría que fabrique la torre del tipo que queremos
             Tower torreR = towerFactory.getTower(
                     tipoTorreSeleccionado,
                     casillaObjetivo.getX(),

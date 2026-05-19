@@ -83,6 +83,12 @@ public class WaveManager {
         //this.enemigosPorGrupo = 1;
         this.totalGrupos = 2;
 
+        //Si no hay ningun enemigo, paramos la incializacion
+        if(this.oleadasDatos.length() == 0) {
+            this.enemigosPorGrupo = 0;
+            return;
+        }
+
         try {
             this.enemigosPorGrupo = this.oleadasDatos.getJSONObject(0).getInt("amount");
         } catch (JSONException e) {

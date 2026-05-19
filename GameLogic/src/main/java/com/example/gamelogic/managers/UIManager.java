@@ -19,9 +19,10 @@ public class UIManager {
     // Hash Maps donde vamos a guardar los elementos de la UI de la escena
     private HashMap<String, Button> botones = new HashMap<>();
     private HashMap<String, Text> textos = new HashMap<>();
+    //Aqui se guardan las imagenes que sirven como prefab y no se renderizan todo el rato
     private HashMap<String, Image> imagenes = new HashMap<>();
 
-    private ArrayList<Image> imagenesHUD = new ArrayList<>(); // Solo para render automático
+    private HashMap<String, Image> imagenesHUD = new HashMap<>(); // Solo para render automático
 
     public UIManager(JSONObject sceneJson, AndroidEngine engine, AndroidGraphics gr) {
         // Limpiamos lo anterior para cargar la nueva escena
@@ -61,7 +62,7 @@ public class UIManager {
 
                     // Si el JSON dice que es HUD, la añadimos a la lista de renderizado
                     if (imageData.optBoolean("isHUD", false)) {
-                        imagenesHUD.add(img);
+                        imagenesHUD.put(imageData.getString("id"),img);
                     }
                 }
             }
@@ -79,6 +80,40 @@ public class UIManager {
             Text t = textos.get(id);
             if(t != null)
                 t.setText(value);
+        }
+    }
+
+    /**
+     * Cambia la visibilidad de un texto de la UI
+     * @param id ID del texto en el UIManager
+     * @param c Condicion
+     */
+    public void setTextUIVisibity(String id, Boolean c){
+        if(textos.containsKey(id)){
+            textos.get(id).setVisible(c);
+        }
+    }
+
+    /**
+     * Metodo que cambia la visibilidad de una imagen estatica del HUD
+     * @param id ID de la imagen
+     * @param c condicion
+     */
+    public void setImageUIVisibility(String id, Boolean c){
+        if(imagenesHUD.containsKey(id)){
+            imagenesHUD.get(id).setVisible(c);
+        }
+    }
+
+    /**
+     * Metodo de deshabilta/habilita el boton
+     * @param id ID del boton en el manager de la UI
+     * @param c condicion
+     */
+    public void buttonEnabled(String id, boolean c){
+        if(botones.containsKey(id)){
+            botones.get(id).setEnabled(c);
+            botones.get(id).setVisible(c);
         }
     }
 
@@ -131,7 +166,7 @@ public class UIManager {
      */
     public void render(AndroidGraphics gr){
         for (Button b : botones.values()) b.Render(gr);
-        for (Image img : imagenesHUD) img.Render();
+        for (Image img : imagenesHUD.values()) img.Render();
         for (Text txt : textos.values()) txt.Render(gr);
     }
 

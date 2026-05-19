@@ -76,9 +76,7 @@ public class Image {
         this.h = h;
     }
 
-    public void setVisible(boolean c){
-        this.visible = c;
-    }
+    public void setVisible(boolean c){ this.visible = c; }
 
     /**
      * Renderiza la imagen con la referencia a Graphics

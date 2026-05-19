@@ -8,9 +8,7 @@ import com.example.androidengine.TouchEvent;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidSound;
 import com.example.androidengine.AndroidMobile;
-import com.example.gamelogic.button.Button;
-import com.example.gamelogic.Image;
-import com.example.gamelogic.Text;
+import com.example.gamelogic.managers.UIManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,21 +19,6 @@ import java.util.ArrayList;
  * Clase que representa el estado de final de partida
  */
 public class GameOver implements State {
-
-    //Botones de retorno al menú y al menú de dificultad
-    private Button botonMenu;
-    private Button botonReintentar;
-
-    //Boton de retorno al mapa de mundos del modo aventura
-    private Button botonVolverMundo;
-
-    //Botones de ver anuncio recompensado y compartir en redes sociales
-    private Button botonRecompensaAd;
-    private Button botonCompartir;
-
-    //Texto de resultado
-    private Text textoInicial;
-
     //Sonidos de victoria y derrota
     private AndroidSound victory;
     private AndroidSound lose;
@@ -44,6 +27,7 @@ public class GameOver implements State {
     private AndroidAudio audio;
     AndroidEngine engine;
     AndroidMobile mobile;
+    private AndroidGraphics gr;
 
     //Determina si el jugador ha ganado
     boolean win;
@@ -56,116 +40,171 @@ public class GameOver implements State {
     //determina si el jugador completó el nivel con anterioridad en el modo aventura
     boolean isCompleted;
     int numDiamantes; //la cantidad total de diamantes que tiene el jugador antes de retirar la recompensa
-    Text textoDiamantes; //Representa la cantidad de diamantes
-    Text textoRecompensa; //la recompensa ganada tras superar el nivel
 
-    JSONObject botones;
     //archivo de guardado de JSON
     private JSONObject save;
     //Recompensa que ganará el jugador
     int recompensa = 0;
 
-    Image imagenDiamantes;
-
     //Dificultad con la que se ha superado el nivel (Para saber el modo de juego)
     GameLogic.Dificultad dificultad;
+    //Manager de la interfaz
+    UIManager ui;
+    //JSON Object que contiene el estilo de los elementos de la UI
+    JSONObject style;
     public GameOver(AndroidEngine engine, AndroidAudio audio, AndroidMobile mobile, GameLogic.Dificultad dificultad ,boolean win, boolean isCompleted, int nivel, int mundo, int oleada,JSONObject save)
     {
         //Inicializamos los botones y textos
         this.save=save;
         this.engine = engine;
-        this.botones=engine.readJsonFile("GameOver/style.json");
         this.win=win;
         this.dificultad = dificultad;
+
         this.setAudio(audio);
         this.audio = audio;
         this.mobile = mobile;
-        this.nivel=nivel;
-        this.mundo=mundo;
-        this.oleada = oleada;
+        this.nivel=nivel; this.mundo=mundo; this.oleada = oleada;
 
         //si estamos en modo aventura, se detectara si el nivel se completó, en modo normal será true por defecto
         this.isCompleted =
                 (this.dificultad == GameLogic.Dificultad.aventura) ? isCompleted : true;
 
+        this.mobile.setVisibleAdBanner(true);
 
-        //Botones comunes de ambos modos
-        try {
-            botonMenu = new Button(botones.getJSONObject("BotonMenu"));
-            botonCompartir =new Button(botones.getJSONObject("BotonIntent"));
-            botonCompartir.setImagen(new Image(botones.getJSONObject( "ImagenCompartir"),this.engine.getGraphics()));
-            botonMenu.setText(new Text(botones.getJSONObject("TextoBoton")));
+        //Si no se ha completado el nivel la recompensa será de 10 diamantes
+        if(!isCompleted)
+            this.recompensa = 10;
+        else
+            this.recompensa = 0;
+    }
+    private void configurarUI() {
 
+        configurarBotonesComunes();
 
-
-        //botones exclusivos del modo normal y del modo aventura
-        if(dificultad != GameLogic.Dificultad.aventura) {
-            botonReintentar = new Button(botones.getJSONObject("BotonReintentar"));
-            botonReintentar.setText(new Text(botones.getJSONObject("TextoReintentar")));
-        }
-        else{
-            botonVolverMundo = new Button(botones.getJSONObject("BotonVolverMundo"));
-            botonVolverMundo.setText(new Text(botones.getJSONObject("TextoVolverMundo")));
-
-            botonRecompensaAd = new Button(botones.getJSONObject("BotonRecompensaAd"));
-            botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAdx2")));
-
-            //Diamantes que tenemos ahora mismo
-            this.numDiamantes = this.save.getInt("gems");
-            this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantesActuales"));
-            this.textoDiamantes.setText(String.valueOf(this.numDiamantes));
-
-            this.textoRecompensa = new Text(botones.getJSONObject("TextoRecompensaAd"));
-
+        switch (dificultad) {
+            case aventura:
+                configurarUIAventura();
+                break;
+            default:
+                configurarUIClasica();
+                break;
         }
 
-        //Dependiendo del resultado de la partida reproducimos un sonido distinto
-        if(win) {
-            textoInicial = new Text(botones.getJSONObject("TextoWin"));
-            this.victory = this.audio.newSound("victory_trumpet.wav");
-            this.audio.playSound(this.victory);
+        if (win)
+            configurarVictoria();
+        else
+            configurarDerrota();
 
-            if(dificultad == GameLogic.Dificultad.aventura){
-                //Si el nivel no estaba completado, añadimos 10 de recompensa
-                if(!isCompleted){
-                    this.recompensa = 10;
-                    this.numDiamantes += this.recompensa;
-                    this.save.put("gems",this.numDiamantes);
-                }
-                //si ya estaba completado, el jugador solo puede ganar 10 si ve el anuncio
-                else{
-                    this.botonRecompensaAd.setText(new Text(botones.getJSONObject("TextoAd")));
-                    this.recompensa = 0;
-                }
+    }
+
+    private void configurarVictoria() {
+        //Sonido
+        victory = audio.newSound("victory_trumpet.wav");
+        audio.playSound(victory);
+
+        //Logica exclusiva del modo aventura
+        if (dificultad == GameLogic.Dificultad.aventura) {
+            gestionarRecompensaVictoria();
+        }
+    }
+
+    private void gestionarRecompensaVictoria() {
+        //Si el nivel no estaba completado
+        if (!isCompleted) {
+            recompensa = 10;
+            numDiamantes += recompensa;
+
+            try {
+                save.put("gems", numDiamantes);
             }
+            catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
+            ui.setTextUI(
+                    "TEXT_DIAMANTES_ACTUALES",
+                    String.valueOf(numDiamantes)
+            );
+
+            ui.setTextUI(
+                    "TEXT_RECOMPENSA_AD",
+                    "+10"
+            );
         }
         else {
-            //Si perdemos, simplemente no se deja optar por una recompensa por anuncio
-            textoInicial = new Text(botones.getJSONObject("TextoLose"));
-            this.lose = this.audio.newSound("death_sound.wav");
-            this.recompensa = 0;
-            this.audio.playSound(this.lose);
-
-            if(dificultad == GameLogic.Dificultad.aventura){
-                //Si ha perdido, no habra recompensa
-                inhabilitarBoton(this.botonRecompensaAd);
-                ocultarTexto(this.textoDiamantes);
-                ocultarTexto(this.textoRecompensa);
-                this.recompensa = 0;
-            }
+            recompensa = 0;
+            //Solo puede ganar viendo anuncio
+            ui.setTextUI("TEXT_RECOMPENSA_AD", "+10");
         }
+    }
 
-        //Se muestra el banner
-        this.mobile.setVisibleAdBanner(true);
+    private void configurarDerrota() {
+        //Sonido de derrota
+        lose = audio.newSound("death_sound.wav");
+        audio.playSound(lose);
+    }
+
+    private void configurarUIClasica() {
+        //Listener del boton reintentar
+        ui.getButtonUI("BUT_REINTENTAR")
+                .setOnClickListener(() -> {
+
+                    Dificultad dificultad =
+                            new Dificultad(engine, mobile, save);
+
+                    engine.setState(dificultad);
+                });
+    }
+
+    private void configurarUIAventura() {
+
+        try {
+            this.numDiamantes = this.save.getInt("gems");
         } catch (JSONException e) {
-        throw new RuntimeException(e);
+            throw new RuntimeException(e);
+        }
+        ui.setTextUI("TEXT_DIAMANTES_ACTUALES", String.valueOf(this.numDiamantes));
+
+
+        ui.getButtonUI("BUT_VOLVER_MUNDO")
+                .setOnClickListener(() -> {
+                    Mundo mundo = new Mundo(engine, mobile, 1, save);
+                    engine.setState(mundo);
+                });
+        //Solo si se gana se activa el boton de recompensa
+        if(this.win)
+            ui.getButtonUI("BUT_RECOMPENSA_AD")
+                .setOnClickListener(this::reclamarRecompensaDuplicada);
     }
 
-}
+    private void configurarBotonesComunes() {
+        //Estos botones son comunes para ambos modos
+        ui.getButtonUI("BUT_MENU").setOnClickListener(() -> {
+            Menu menu= new Menu(this.engine,this.mobile,this.save);
+            this.engine.setState(menu);});
+
+        ui.getButtonUI("BUT_INTENT").setOnClickListener(
+                () -> this.compartirMensaje());
+    }
+
+
+    /**
+     * Metodo que determina la ruta del estilo de menú JSON a leer
+     * @param dif dificultad con la que se supero el nivel
+     * @return ruta del JSON con el estilo del menú
+     */
+    private String determinarUI(GameLogic.Dificultad dif){
+        //Si el modo de juego es el de aventura...
+        if(dif == GameLogic.Dificultad.aventura){
+            return this.win ? "GameOver/style_gameover_aventura_win.json" :
+                    "GameOver/style_gameover_aventura_lose.json";
+        }
+        //si es el modo normal
+        return this.win ? "GameOver/style_gameover_clasico_win.json"
+                : "GameOver/style_gameover_clasico_lose.json";
+    }
     @Override
-    public void update(double deltaTime) {
-
-    }
+    public void update(double deltaTime) { }
 
     /**
      * Renderiza los elementos de la UI
@@ -174,34 +213,22 @@ public class GameOver implements State {
     @Override
     public void render(AndroidGraphics gr) {
         gr.setColor(0x00000000);
-
-        //botones y texto coumunes de ambos modos de juego
-        textoInicial.Render(gr);
-        botonCompartir.Render(gr);
-
-        if(this.dificultad!= GameLogic.Dificultad.aventura){
-            botonMenu.Render(gr);
-            botonReintentar.Render(gr);
-        }else{
-            botonMenu.Render(gr);
-            botonRecompensaAd.Render(gr);
-            botonVolverMundo.Render(gr);
-            textoDiamantes.Render(gr);
-            textoRecompensa.Render(gr);
-            if(win){
-                try {
-                    this.imagenDiamantes = new Image(botones.getJSONObject("ImagenDiamante"),gr);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-                this.imagenDiamantes.Render();
-            }
-        }
+        this.ui.render(gr);
     }
 
     @Override
     public void setGraphics(AndroidGraphics gr) {
+        this.gr = gr;
 
+        //Determinamos que UI Setear
+        String uiPath = determinarUI(this.dificultad);
+        this.style = engine.readJsonFile(uiPath);
+
+        //Incializamos la UI
+        this.ui = new UIManager(this.style , this.engine, this.gr);
+
+        //Configuramos la UI dependiendo del resultado
+        configurarUI();
     }
 
     /**
@@ -218,56 +245,39 @@ public class GameOver implements State {
             }
             switch (e.type){
                 case TOUCH_DOWN:
-                    if(canClickButton(botonMenu,e.x,e.y)){
-                        Menu menu= new Menu(this.engine,this.mobile,this.save);
-                        this.engine.setState(menu);
-                    }
-                    if(canClickButton(botonReintentar,e.x,e.y)){
-                        Dificultad dificultad = new Dificultad(this.engine,this.mobile,this.save);
-                        this.engine.setState(dificultad);
-                    }
-                    if(canClickButton(botonRecompensaAd,e.x,e.y) && this.botonRecompensaAd.isEnable()){
-                        reclamarRecompensaDuplicada();
-                    }
-                    if(canClickButton(botonCompartir,e.x,e.y))
-                    {
-                        String message;
-                        if(this.win)
-                        {
-                            if(this.dificultad == GameLogic.Dificultad.corto){
-                                message = "Mira lo bueno que soy me he pasado una partida corta del mejor tower defense de todos los tiempos";
-                            }
-                            else if(this.dificultad == GameLogic.Dificultad.largo){
-                                message = "Mira lo bueno que soy me he pasado una partida larga del mejor tower defense de todos los tiempos";
-                            }
-                            else {
-                                message = "Mira lo bueno que soy me he pasado el nivel " + this.nivel + " del mundo " + this.mundo + " del mejor tower defense de todos los tiempos";
-                            }
-                        }
-                        else
-                        {
-                            if(this.dificultad == GameLogic.Dificultad.infinito){
-                                message = "Mira lo bueno que soy me he llegado a la oleada "+this.oleada+" del modo infinito del mejor tower defense de todos los tiempos";
-                            }
-                            else {
-                                message = "Soy una desgracia >:(";
-                            }
-                        }
-                        this.engine.luanchShareIntent(message); //intent
-                    }
-                    if(canClickButton(botonVolverMundo,e.x,e.y)){
-                        Mundo mundo = new Mundo(this.engine,this.mobile,1,this.save);
-                        this.engine.setState(mundo);
-                    }
-
+                    this.ui.handleInput(e);
                     break;
                 case TOUCH_UP:
-
                     break;
                 case TOUCH_MOVE:
                     break;
             }
         }
+    }
+
+    private void compartirMensaje(){
+        String message;
+        if(this.win) {
+            if(this.dificultad == GameLogic.Dificultad.corto){
+                message = "Mira lo bueno que soy me he pasado una partida corta del mejor tower defense de todos los tiempos";
+            }
+            else if(this.dificultad == GameLogic.Dificultad.largo){
+                message = "Mira lo bueno que soy me he pasado una partida larga del mejor tower defense de todos los tiempos";
+            }
+            else {
+                message = "Mira lo bueno que soy me he pasado el nivel " + this.nivel + " del mundo " + this.mundo + " del mejor tower defense de todos los tiempos";
+            }
+        }
+        else
+        {
+            if(this.dificultad == GameLogic.Dificultad.infinito){
+                message = "Mira lo bueno que soy me he llegado a la oleada "+this.oleada+" del modo infinito del mejor tower defense de todos los tiempos";
+            }
+            else {
+                message = "Soy una desgracia >:(";
+            }
+        }
+        this.engine.luanchShareIntent(message); //intent
     }
 
     /**
@@ -278,22 +288,13 @@ public class GameOver implements State {
     public void setAudio(AndroidAudio audio) {
         this.audio=audio;
     }
-
     @Override
     public void setMobile(AndroidMobile mobile) {
         this.mobile = mobile;
     }
-
     @Override
     public JSONObject getSave() {
         return this.save;
-    }
-
-    /**
-     * Metodo que determina si se puede interactuar con el boton o no
-     */
-    private boolean canClickButton(Button boton,float x, float y){
-        return boton != null && boton.contains(x, y);
     }
 
     /**
@@ -316,10 +317,10 @@ public class GameOver implements State {
                     throw new RuntimeException(e);
                 }
                 //Escondemos e inhabilitamos el boton
-                inhabilitarBoton(botonRecompensaAd);
-                //Actualizamos el texto de Game Over del numero de diamantes
-                textoDiamantes.setText(String.valueOf(numDiamantes));
-                ocultarTexto(textoRecompensa);//quitamos la cantidad de la recompensa
+
+                inhabilitarBotonRecompensa();
+                actualizarTextoDiamantes(numDiamantes);  //Actualizamos el texto de Game Over del numero de diamantes
+                ocultarTextoRecompensa();//quitamos la cantidad de la recompensa
             }
 
         }); //vemos el anuncio y si se acaba de ver, damos recompensa
@@ -328,15 +329,21 @@ public class GameOver implements State {
     /**
      * Este metodo hace que un boton no se vea y que quede inutilizable
      */
-    private void inhabilitarBoton(Button button){
-        button.setEnabled(false);
-        button.setVisible(false);
+    private void inhabilitarBotonRecompensa(){
+        this.ui.buttonEnabled("BUT_RECOMPENSA_AD", false);
     }
 
     /**
      * Oculta el texto poniendo una cadena vacía
      */
-    private void ocultarTexto(Text text){
-        text.setText(" ");//quitamos el contenido
+    private void ocultarTextoRecompensa(){
+        this.ui.setTextUIVisibity("TEXT_RECOMPENSA_AD", false);
+    }
+
+    /**
+     * Oculta el texto poniendo una cadena vacía
+     */
+    private void actualizarTextoDiamantes(int numDiamantes){
+        this.ui.setTextUI("TEXT_DIAMANTES_ACTUALES", String.valueOf(numDiamantes));
     }
 }

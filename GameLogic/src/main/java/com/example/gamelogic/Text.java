@@ -18,6 +18,9 @@ public class Text {
     //Indican si es en negrita o italica
     boolean bold;
     boolean italic;
+
+    //Booleano que determina si se puede imprimir el texto o no
+    boolean visible;
     //color del texto
     String color = "#FF000000";
 
@@ -53,6 +56,7 @@ public class Text {
         this.size=size;
         this.bold=false;
         this.italic=false;
+        this.visible = true;
     }
     public Text(String font, String text, float x, float y,float size,boolean bold){
         this.font=font;
@@ -75,6 +79,7 @@ public class Text {
             this.bold= json.getBoolean("bold");
             this.italic =json.getBoolean("italic");
             this.color=json.getString("color");
+            this.visible = true;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -91,6 +96,7 @@ public class Text {
     public void setY(float y){this.y=y;}
     public void setX(float x){this.x=x;}
 
+    public void setVisible(boolean c){ this.visible = c; }
     public String getText(){
         return String.join("\n", this.myArray);
     }
@@ -100,20 +106,24 @@ public class Text {
      * @param gr
      */
     public void Render(AndroidGraphics gr){
-        if(this.y>=-size) {
-            AndroidFont fuente = gr.newFont(this.font, this.size, this.bold, this.italic);
-            gr.setColor(this.color);
-            gr.setFont(fuente);
-            for (int i = 0; i < myArray.length; i++)
-                gr.pintarTextoCentrado(myArray[i], this.x, this.y + i * size);
+        if(this.visible){
+            if(this.y>=-size) {
+                AndroidFont fuente = gr.newFont(this.font, this.size, this.bold, this.italic);
+                gr.setColor(this.color);
+                gr.setFont(fuente);
+                for (int i = 0; i < myArray.length; i++)
+                    gr.pintarTextoCentrado(myArray[i], this.x, this.y + i * size);
+            }
         }
     }
     public void RenderCentrado(AndroidGraphics gr,float x, float y){
-        AndroidFont fuente = gr.newFont(this.font,this.size,this.bold,this.italic);
-        gr.setColor(this.color);
-        gr.setFont(fuente);
-        for(int i=0;i<myArray.length;i++)
-            gr.pintarTextoCentrado(myArray[i], x+this.x,y+this.y+i*size);
+        if(this.visible){
+            AndroidFont fuente = gr.newFont(this.font,this.size,this.bold,this.italic);
+            gr.setColor(this.color);
+            gr.setFont(fuente);
+            for(int i=0;i<myArray.length;i++)
+                gr.pintarTextoCentrado(myArray[i], x+this.x,y+this.y+i*size);
+        }
     }
     /**
      * Getters

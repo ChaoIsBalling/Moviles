@@ -70,7 +70,7 @@
     },
     "ImagenSiguiente":
     {
-        "imagen":"Flecha.png",
+        "imagen":"Volver.png",
         "x":-25,
         "y":-25,
         "w":50,
@@ -78,7 +78,7 @@
     },
     "ImagenAnterior":
     {
-        "imagen":"Flecha.png",
+        "imagen":"Volver.png",
         "x":-25,
         "y":-25,
         "w":-50,
