@@ -78,7 +78,6 @@ public class GameOver implements State {
             this.recompensa = 0;
     }
     private void configurarUI() {
-
         configurarBotonesComunes();
 
         switch (dificultad) {
@@ -111,16 +110,13 @@ public class GameOver implements State {
     private void gestionarRecompensaVictoria() {
         //Si el nivel no estaba completado
         if (!isCompleted) {
-            recompensa = 10;
             numDiamantes += recompensa;
-
             try {
                 save.put("gems", numDiamantes);
             }
             catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-
             ui.setTextUI(
                     "TEXT_DIAMANTES_ACTUALES",
                     String.valueOf(numDiamantes)
@@ -157,7 +153,6 @@ public class GameOver implements State {
     }
 
     private void configurarUIAventura() {
-
         try {
             this.numDiamantes = this.save.getInt("gems");
         } catch (JSONException e) {
@@ -177,8 +172,10 @@ public class GameOver implements State {
                 .setOnClickListener(this::reclamarRecompensaDuplicada);
     }
 
+    /**
+     * Este metodo configura los botones son comunes para ambos modos
+     */
     private void configurarBotonesComunes() {
-        //Estos botones son comunes para ambos modos
         ui.getButtonUI("BUT_MENU").setOnClickListener(() -> {
             Menu menu= new Menu(this.engine,this.mobile,this.save);
             this.engine.setState(menu);});

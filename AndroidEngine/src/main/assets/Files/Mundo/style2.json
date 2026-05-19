@@ -1,0 +1,84 @@
+{
+  "buttons": [
+    {
+      "id": "BUT_SIGUIENTE_MUNDO",
+      "x": 490,
+      "y": 50,
+      "w": 50,
+      "h": 50,
+      "isRound": true,
+      "ar": 30,
+      "color": "#FFFFFFFF",
+      "icon": {
+        "id": "ICON_SIGUIENTE",
+        "imagen": "Volver.png",
+        "x": -25,
+        "y": -25,
+        "w": 50,
+        "h": 50,
+        "visible": true
+      }
+    },
+
+    {
+      "id": "BUT_ANTERIOR_MUNDO",
+      "x": 110,
+      "y": 50,
+      "w": 50,
+      "h": 50,
+      "isRound": true,
+      "ar": 30,
+      "color": "#FFFFFFFF",
+      "icon": {
+        "id": "ICON_ANTERIOR",
+        "imagen": "Volver.png",
+        "x": -25,
+        "y": -25,
+        "w": -50,
+        "h": 50,
+        "visible": true
+      }
+    },
+
+    {
+      "id": "BUT_VOLVER",
+      "x": 30,
+      "y": 50,
+      "w": 30,
+      "h": 30,
+      "isRound": true,
+      "ar": 15,
+      "color": "#FFFFFFFF",
+      "icon": {
+        "id": "ICON_VOLVER",
+        "imagen": "Volver.png",
+        "x": -15,
+        "y": -15,
+        "w": -30,
+        "h": 30,
+        "visible": true
+      }
+    }
+  ],
+
+  "images": [],
+
+  "texts": [
+    {
+      "id": "TEXT_MUNDO",
+      "texto": "Mundo X",
+      "font": "Inika-Regular.ttf",
+      "x": 300,
+      "y": 50,
+      "size": 40,
+      "bold": true,
+      "italic": true,
+      "color": "#FF000000"
+    }
+  ],
+
+  "colors": {
+    "completed": "#FF399847",
+    "locked": "#FFA1BF37"
+  }
+}

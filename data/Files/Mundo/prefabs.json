@@ -1,0 +1,23 @@
+{
+    "NivelMundo":     
+    {
+      "x":300,
+        "y":150,
+        "w":300,
+        "h":70,
+        "isRound":false,
+        "ar":20,
+        "color":"#FFA1BF37",
+       "text": {
+        "id": "TEXTO_NIVEL",
+        "texto":"X",
+        "font":"Inika-Regular.ttf",
+        "x":0,
+        "y":0,
+        "size":40,
+        "bold":true,
+        "italic":true,
+        "color":"#FF000000"
+      }
+    }
+}

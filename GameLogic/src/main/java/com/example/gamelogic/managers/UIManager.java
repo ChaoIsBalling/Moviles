@@ -9,7 +9,6 @@ import com.example.gamelogic.button.Button;
 import com.example.gamelogic.Text;
 
 import java.util.HashMap;
-import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -157,6 +156,19 @@ public class UIManager {
         if(imagenes.containsKey(id))
             return imagenes.get(id);
         return null;
+    }
+
+    public void addButtonUI(String id, Button b){
+        botones.put(id,b);
+    }
+
+    /**
+     * Borra un boton de la lista
+     * @param id ID del boton
+     */
+    public void deleteButtonUI(String id){
+        if(botones.containsKey(id))
+            botones.remove(id);
     }
 
 
