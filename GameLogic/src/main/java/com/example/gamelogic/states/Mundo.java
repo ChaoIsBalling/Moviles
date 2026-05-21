@@ -175,11 +175,10 @@ public class Mundo implements State {
         for(int i=0;i<niveles.size();i++)
             niveles.get(i).Render(gr);
         gr.TerminarLimiteDibujado();
+        this.fondoTexto.Render(gr);
 
         this.ui.render(gr);
-
-        /*this.fondoTexto.Render(gr);
-        this.textoMundo.Render(gr);
+        /*this.textoMundo.Render(gr);
         if(this.next)
             this.siguienteMundo.Render(gr);
         if(this.previous)
@@ -218,9 +217,7 @@ public class Mundo implements State {
                     onTouchMove(e);
                     break;
             }
-
         }
-
     }
 
     /**
@@ -293,7 +290,7 @@ public class Mundo implements State {
 
     private void crearConfigurarNiveles(){
         //inicialización de todos los botones de niveles
-        for(int i=0;i<this.numNiveles;i++) {
+        for(int i = 0;i < this.numNiveles; i++) {
             //Seteamos a todos con una x y un color gris
             Button nivelMundo = null;
             try {
@@ -311,7 +308,7 @@ public class Mundo implements State {
             //this.ui.addButtonUI("WORLD_" + this.mundo + "_" + (i + 1), nivelMundo);
             int ind = i;
             //this.ui.getButtonUI("WORLD_" + this.mundo + "_" + (i + 1)).setOnClickListener(() -> iniciarNivel(ind + 1));
-            nivelMundo.setOnClickListener(() -> iniciarNivel(ind + 1));
+            //nivelMundo.setOnClickListener(() -> iniciarNivel(ind + 1));
             this.niveles.add(nivelMundo);
         }
 
@@ -324,14 +321,18 @@ public class Mundo implements State {
             //this.ui.getButtonUI("WORLD_" + this.mundo +"_" + (i+1)).changeText(String.valueOf(i+1));
             niveles.get(i).setColor(colorCompleted);
             niveles.get(i).changeText(String.valueOf(i+1));
+            int ind = i;
+            niveles.get(i).setOnClickListener(() -> iniciarNivel(ind));
         }
 
         //Este es el nivel que tengo sin pasar ahora de ESTE mundo, primero comprobamos que exista
         if(nivelesCompletadosEnMundo >= 0 &&
-                nivelesCompletadosEnMundo < niveles.size())
+                nivelesCompletadosEnMundo < niveles.size()){
             //Coloreamos con color de nivel bloqueado
             //this.ui.getButtonUI("WORLD_" + this.mundo +"_" + nivelesCompletadosEnMundo).setColor(colorLocked);
             niveles.get(nivelesCompletadosEnMundo).setColor(colorLocked);
+            niveles.get(nivelesCompletadosEnMundo).setOnClickListener(() -> iniciarNivel(nivelesCompletadosEnMundo));
+        }
 
     }
 
@@ -355,18 +356,22 @@ public class Mundo implements State {
             irAMundo(this.mundo - 1);
         });
 
+        this.ui.getButtonUI("BUT_VOLVER").setOnClickListener( () -> {
+            Menu menu = new Menu(this.engine, this.mobile,this.save);
+            this.engine.setState(menu);
+        });
+
         //Se desactivan los botones por defecto
-        this.ui.getButtonUI("BUT_SIGUIENTE_MUNDO").setEnabled(false);
-        this.ui.getButtonUI("BUT_ANTERIOR_MUNDO").setEnabled(false);
+        this.ui.buttonEnabled("BUT_SIGUIENTE_MUNDO", false);
+        this.ui.buttonEnabled("BUT_ANTERIOR_MUNDO", false);
         //en caso de que hava un siguiente o anterior mundo inicializamos los botones correspondientes
         if(this.next) {
-            this.ui.getButtonUI("BUT_SIGUIENTE_MUNDO").setEnabled(true);
+            this.ui.buttonEnabled("BUT_SIGUIENTE_MUNDO", true);
             //this.ui.getButtonUI("BUT_ANTERIOR_MUNDO").setEnabled();
-
             //this.siguienteMundo = new Button(prefabs.getJSONObject("SiguienteMundo"));
         }
         if(this.previous) {
-            this.ui.getButtonUI("BUT_ANTERIOR_MUNDO").setEnabled(true);
+            this.ui.buttonEnabled("BUT_ANTERIOR_MUNDO", true);
             //this.ui.getButtonUI("BUT_ANTERIOR_MUNDO").setOnClickListener();
             //this.anteriorMundo = new Button(prefabs.getJSONObject("AnteriorMundo"));
         }

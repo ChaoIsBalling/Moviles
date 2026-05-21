@@ -1,0 +1,70 @@
+{
+  "buttons": [
+    {
+      "id": "BUT_VOLVER",
+      "x": 30,
+      "y": 30,
+      "w": 30,
+      "h": 30,
+      "isRound": true,
+      "ar": 30,
+      "color": "#FFFFFFFF",
+      "icon": {
+        "id": "ICON_VOLVER",
+        "imagen": "Volver.png",
+        "x": -25,
+        "y": -25,
+        "w": 50,
+        "h": 50,
+        "visible": true
+      }
+    },
+
+    {
+      "id": "BUT_COMPRAR",
+      "x": 110,
+      "y": 50,
+      "w": 50,
+      "h": 50,
+      "isRound": true,
+      "ar": 30,
+      "color": "#FFFFFFFF",
+      "icon": {
+        "id": "ICON_ANTERIOR",
+        "imagen": "Volver.png",
+        "x": -25,
+        "y": -25,
+        "w": -50,
+        "h": 50,
+        "visible": true
+      }
+    }
+  ],
+
+  "images": [
+    {
+      "id": "IMG_DIAMANTE",
+      "imagen": "Diamante.png",
+      "x": 230,
+      "y": 25,
+      "w": 50,
+      "h": 50,
+      "isHUD": true,
+      "visible": true
+    }
+  ],
+
+  "texts": [
+    {
+      "id": "TEXT_DIAMANTES",
+      "texto": "0",
+      "font": "Inika-Regular.ttf",
+      "x": 300,
+      "y": 50,
+      "size": 40,
+      "bold": true,
+      "italic": true,
+      "color": "#FF00FFFF"
+    }
+  ]
+}

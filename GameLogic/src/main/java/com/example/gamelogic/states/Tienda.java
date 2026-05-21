@@ -24,70 +24,24 @@ import com.example.gamelogic.figure.Triangle;
 import java.util.ArrayList;
 
 public class Tienda implements State {
-
     private Button botonVolver;
-
     private AndroidEngine engine;
-
     private AndroidGraphics graphics;
-
     private Text textoDiamantes;
-    private int diamantes;
-
-    private Button botonRayo;
-    private Button botonFuego;
-    private Button botonHielo;
-
-    private Button botonMini;
-
-    private Button rayoF;
-    private Button fuegoF;
-    private Button hieloF;
-
-    private Button rayoS;
-    private Button fuegoS;
-    private Button hieloS;
-
     private Text coste;
     private Button botonComprar;
-
     private Square fondoDes;
-
-    private boolean rayo;
-    private boolean fuego;
-    private boolean hielo;
-
-    private boolean mini;
-
-    private String skinRayo;
-    private String skinFuego;
-    private String skinHielo;
-
     private Text CTorres;
     private Text CSkins;
-
-    private Button botonRojo;
-    private Button botonAzul;
-    private Button botonBlancoF;
-    private Button botonRojoF;
-    private Button botonAzulF;
-
-    private boolean rojo;
-    private boolean azul;
-
     private Text CFondo;
-
-    private String fondo;
-
+    private Image imagenDiamante;
     //El archivo de guardado del juego
     private JSONObject save;
     //ArrayList de elementos de la tienda que pueden hacer scroll
     private ArrayList<ButtonComprar> ScrollableButtons;
     private ArrayList<Text>ScrollableText;
 
-    private Image imagenDiamante;
-
-    private enum Estado{
+    private enum Estado {
         normal, botonRayo, botonFuego, botonHielo, botonMini, botonRojo, botonAzul
     }
     //Ultima cordenada Y tocada
@@ -100,81 +54,45 @@ public class Tienda implements State {
     float minY;
     //La posición minima que puede tener el promer boton de la lista en la posicion y
     float maxY;
-    JSONObject datos;
-    private Estado estado;
-    //Comparadores que ordenan los elementos de la lista de mas altos a mas bajos
-    //en la representacion
-    class ButtonComparator implements Comparator<Button> {
-        // Function to compare
-        public int compare(Button c1, Button c2)
-        {
-            if (c1.getY() == c2.getY())
-                return 0;
-            else if (c1.getY() > c2.getY())
-                return 1;
-            else
-                return -1;
-        }
-    }
-    class TextComparator implements Comparator<Text> {
-        // Function to compare
-        public int compare(Text c1, Text c2)
-        {
-            if (c1.getY() == c2.getY())
-                return 0;
-            else if (c1.getY() > c2.getY())
-                return 1;
-            else
-                return -1;
-        }
-    }
-
+    //JSONObject datos;
+    //private Estado estado;
     AndroidMobile mobile;
-
     JSONObject datos2;
-
-    int x;
-    int initx;
-    int y;
-    int inity;
-
+    int x, y;
+    int initX, initY;
     ButtonComprar comprando;
 
     public Tienda(AndroidEngine engine,AndroidMobile mobile,JSONObject save){
         this.save =save;
-        ScrollableText=new ArrayList<Text>();
-        ScrollableButtons=new ArrayList<ButtonComprar>();
+        ScrollableText = new ArrayList<Text>();
+        ScrollableButtons = new ArrayList<ButtonComprar>();
         this.engine=engine;
         this.mobile = mobile;
-        this.datos =engine.readJsonFile("Tienda/style.json");
+
         this.datos2 =engine.readJsonFile("Tienda/style2.json");
         try{
-        this.botonVolver = new Button(this.datos2.getJSONObject("BotonVolver"));
+            this.botonVolver = new Button(this.datos2.getJSONObject("BotonVolver"));
 
-        this.textoDiamantes = new Text(this.datos2.getJSONObject("TextoDiamantes"));
-        this.textoDiamantes.setText("" + this.save.getInt("gems"));
+            this.textoDiamantes = new Text(this.datos2.getJSONObject("TextoDiamantes"));
+            this.textoDiamantes.setText("" + this.save.getInt("gems"));
 
-        this.fondoDes = new Square(500,300,300,400,true);
-        this.fondoDes.setColor("#ff00ffff");
-        this.coste = new Text(this.datos2.getJSONObject("TextoCoste"));
-        this.botonComprar = new Button(this.datos2.getJSONObject("BotonComprar"));
-        this.botonComprar.setText(new Text(this.datos2.getJSONObject("TextoComprar")));
-
-        this.comprando = null;
-    } catch (
-    JSONException e) {
-        throw new RuntimeException(e);
-    }
+            this.fondoDes = new Square(500,300,300,400,true);
+            this.fondoDes.setColor("#ff00ffff");
+            this.coste = new Text(this.datos2.getJSONObject("TextoCoste"));
+            this.botonComprar = new Button(this.datos2.getJSONObject("BotonComprar"));
+            this.botonComprar.setText(new Text(this.datos2.getJSONObject("TextoComprar")));
+            this.comprando = null;
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
     @Override
-    public void update(double deltatime) {
-    }
+    public void update(double deltatime) {}
 
     @Override
     public void render(AndroidGraphics gr) {
-
         gr.EmpezarLimiteDibujado(0,0,600,400);
         gr.EmpezarLimiteDibujado(0,80,600,400);
 
@@ -185,6 +103,7 @@ public class Tienda implements State {
             this.ScrollableText.get(i).Render(gr);
         }
         gr.TerminarLimiteDibujado();
+
         this.botonVolver.Render(gr);
         this.textoDiamantes.Render(gr);
         this.imagenDiamante.Render();
@@ -209,36 +128,38 @@ public class Tienda implements State {
 
     @Override
     public void setGraphics(AndroidGraphics gr) {
+        this.graphics=gr;
         try{
-            this.graphics=gr;
             this.botonVolver.setImagen(new Image(datos2.getJSONObject("ImagenVolver"),gr));
-            this.imagenDiamante = new Image(datos.getJSONObject("ImagenDiamante"),gr);
-            this.CTorres = new Text(this.datos.getJSONObject("TextoCTorres"));
+            this.imagenDiamante = new Image(datos2.getJSONObject("ImagenDiamante"),gr);
+            this.CTorres = new Text(this.datos2.getJSONObject("TextoCTorres"));
             ScrollableText.add(this.CTorres);
 
+
+            //Generamos los botones de compra
             JSONArray botonesDT = datos2.getJSONArray("BotonesDesbloqueoTorre");
             this.x = datos2.getJSONObject("EstandarBoton").getInt("x");
-            this.initx = datos2.getJSONObject("EstandarBoton").getInt("x");
+            this.initX = datos2.getJSONObject("EstandarBoton").getInt("x");
             this.y = datos2.getJSONObject("EstandarBoton").getInt("y");
             generarBotonesComprar(botonesDT,gr);
 
-            this.CSkins = new Text(this.datos.getJSONObject("TextoCSkins"));
+            this.CSkins = new Text(this.datos2.getJSONObject("TextoCSkins"));
             y +=80;
             this.CSkins.setY(y);
             ScrollableText.add(this.CSkins);
             y+=100;
 
-            x = initx;
+            x = initX;
             JSONArray botonesDS = datos2.getJSONArray("BotonesDesbloqueoSkin");
             generarBotonesComprar(botonesDS,gr);
 
-            this.CFondo = new Text(this.datos.getJSONObject("TextoColores"));
+            this.CFondo = new Text(this.datos2.getJSONObject("TextoColores"));
             y+=80;
             this.CFondo.setY(y);
             ScrollableText.add(CFondo);
             y+=100;
 
-            x = initx;
+            x = initX;
             JSONArray botonesDF = datos2.getJSONArray("BotonesDesbloqueoFondo");
             generarBotonesComprar(botonesDF,gr);
 
@@ -246,9 +167,9 @@ public class Tienda implements State {
             this.maxY=400-ScrollableButtons.get(ScrollableButtons.size()-1).getHeight();
 
             x = datos2.getJSONObject("InitBotonCambio").getInt("x");
-            initx = datos2.getJSONObject("InitBotonCambio").getInt("x");
+            initX = datos2.getJSONObject("InitBotonCambio").getInt("x");
             y = datos2.getJSONObject("InitBotonCambio").getInt("y");
-            inity = datos2.getJSONObject("InitBotonCambio").getInt("y");
+            initY = datos2.getJSONObject("InitBotonCambio").getInt("y");
             JSONArray botonesC = datos2.getJSONArray("BotonesCambio");
             generarBotonesCambio(botonesC,gr);
 
@@ -297,11 +218,11 @@ public class Tienda implements State {
                         boton.setFigura(cr);
                     }
                 }
-                if(x == initx){
+                if(x == initX){
                     x+=150;
                 }
                 else{
-                    x = initx;
+                    x = initX;
                     y+=150;
                 }
                 ScrollableButtons.add(boton);
@@ -322,12 +243,11 @@ public class Tienda implements State {
                 db.put("datoGuardado",array.getJSONObject(i).getString("datoGuardado"));
                 ButtonCambio boton = new ButtonCambio(db);
                 if(ultimo != null && !Objects.equals(ultimo.getDesbloqueo(), boton.getDesbloqueo())){
-                    x = initx;
-                    y = inity;
+                    x = initX;
+                    y = initY;
                 }
                 ultimo = boton;
-                boton.setX(x);
-                boton.setY(y);
+                boton.setX(x); boton.setY(y);
                 if(this.save.get(boton.getGuardado()) == boton.getDatoGuardado()){
                     boton.setColor("#ff00ff00");
                 }
@@ -358,11 +278,11 @@ public class Tienda implements State {
                         boton.setFigura(cr);
                     }
                 }
-                if(x == initx){
+                if(x == initX){
                     x+=110;
                 }
                 else{
-                    x = initx;
+                    x = initX;
                     y+=110;
                 }
                 boolean encontrado = false;
@@ -482,20 +402,12 @@ public class Tienda implements State {
             if(!bct){
                 this.comprando = null;
             }
-
         }
-
     }
     @Override
-    public void setAudio(AndroidAudio audio) {
-
-    }
-
+    public void setAudio(AndroidAudio audio) {}
     @Override
-    public void setMobile(AndroidMobile mobile) {
-
-    }
-
+    public void setMobile(AndroidMobile mobile) {}
     @Override
     public JSONObject getSave() {
         return this.save;
