@@ -50,7 +50,7 @@ public class GameLogic implements State {
     boolean mini = false;//si esta desbloqueada la nueva torre
 
     //Franja en la que están los botones
-    private Square franjaGris;
+    private Square placeGrey;
 
     //Numero de filas y columnas
     int fil, col;
@@ -119,9 +119,13 @@ public class GameLogic implements State {
     //JSONArray que gestiona las oleadas en el juego
     JSONArray oleadasDatos;
     //Para leer el mapa
-    JSONObject obj;
+    JSONObject mapaObj;
 
+    //Fondo del usuario
     private String fondo;
+
+    //Fondo del propio nivel
+    private Image fondoNivel;
 
     //Generador de numeros aleatorios de java
     Random rnd;
@@ -180,11 +184,6 @@ public class GameLogic implements State {
         this.deadEnemies = new ArrayList<Enemy>();
         this.casillas = new ArrayList<ArrayList<Casilla>>();
         this.caminoEnemigos = new ArrayList<Vector2D>();
-
-        //Esto hay que hacerlo en el UI Manager
-        //this.textoOleadas = new Text("Inika-Regular.ttf","Oleada:" + this.oleada,60,15,25);
-        this.franjaGris = new Square(300,370,600,100,true);
-        this.franjaGris.setColor(Color.GRIS.getHex());
     }
  /**
      * Metodo que lee los datos del nivel desde un archivo json
@@ -194,13 +193,13 @@ public class GameLogic implements State {
     {
         //Cargamos los datos del json del mapa
         this.cargarDatos();
-        this.obj=engine.readJsonFile(mapa);
+        this.mapaObj =engine.readJsonFile(mapa);
         JSONArray arr= null; //array del mapa
         try {
-            arr = obj.getJSONArray("mapa");
-            this.levelNumber=obj.getInt("level"); //numero de nivel
-            this.oleadasDatos =obj.getJSONArray("waves"); //oleadas de enemigos
-            this.camino = obj.getJSONArray("road"); //camino de puntos de los enemigos
+            arr = mapaObj.getJSONArray("mapa");
+            this.levelNumber= mapaObj.getInt("level"); //numero de nivel
+            this.oleadasDatos = mapaObj.getJSONArray("waves"); //oleadas de enemigos
+            this.camino = mapaObj.getJSONArray("road"); //camino de puntos de los enemigos
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -208,8 +207,7 @@ public class GameLogic implements State {
         //Oleadas que hay en total dependiendo del modo de juego
         switch(this.dificultad) {
             case corto:
-                //this.oleadasRestantes = 3
-                this.oleadasRestantes = 0;
+                this.oleadasRestantes = 3;
                 break;
             case largo:
                 this.oleadasRestantes=7;
@@ -456,7 +454,11 @@ public class GameLogic implements State {
         gr.clear();
 
         //Renderizar el fondo de pantalla
-        this.franjaGris.Render(gr);
+        this.fondoNivel.RenderEscalado();
+
+        this.placeGrey.Render(gr);
+
+
         //Renderizado del mapa
         for (int i = 0; i < this.fil; i++) {
             for (int j = 0; j < this.col; j++) {
@@ -475,6 +477,7 @@ public class GameLogic implements State {
         this.ui.render(gr);
 
 
+        //Si el juego esta en modo torre, pintamos un circulo con su rango
         if(this.estado == Estado.TORRE){
             gr.pintarCirculo(torreSeleccionada.getX(), torreSeleccionada.getY(),torreSeleccionada.getRange());
         }
@@ -492,6 +495,27 @@ public class GameLogic implements State {
         this.aplicarCompras();
         this.inicializarBotones();
         this.inicializarContadores();
+        this.cargarFondoNivel();
+    }
+
+    /**
+     * Metodo que carga el fondo del nivel y la franja donde se situan los botones
+     */
+    private void cargarFondoNivel() {
+        try {
+            this.fondoNivel = new Image(mapaObj.getJSONObject("background"), this.gr);
+
+            //Seteamos las dimensiones y el comienzo donde se renderiza la imagen
+            this.fondoNivel.setX((int) (this.offsetX - (this.anchoCasilla/2)));
+            this.fondoNivel.setY((int) (this.offsetY - (this.altoCasilla/2)));
+            this.fondoNivel.setW(this.ancho); this.fondoNivel.setH(this.alto);
+
+            //Franja gris donde se situan los botones
+            this.placeGrey = new Square(300,370,600,100,true);
+            this.placeGrey.setColor(Color.GRIS.getHex());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -573,8 +597,6 @@ public class GameLogic implements State {
             b.getImgButton().setVisible(false);
             b.getFigButton().setVisible(true);
         }
-        //b.getImgButton().setVisible(true);
-        //b.getFigButton().setVisible(false);
 
         b= this.ui.getButtonUI(BUT_FUEGO_ID);
         if (!Objects.equals(skins.get(TipoTorre.FUEGO), "Figura")) {
@@ -652,7 +674,7 @@ public class GameLogic implements State {
         this.inicializarUI();
 
         //Inicializamos manager de oleadas (lo pongo aqui porque se debe iniclizar despues del setState)
-        this.wave = new WaveManager(this, this.oleadasRestantes, this.style, this.oleadasDatos,this.gr);
+        this.wave = new WaveManager(this, this.engine, this.oleadasRestantes, this.oleadasDatos,this.gr);
     }
 
     /**
@@ -813,6 +835,12 @@ public class GameLogic implements State {
         this.estado = Estado.CONSTRUCCION;
         this.precioAPagar = precio;
         this.tipoTorreSeleccionado = tipoTorre;
+
+        //Primero coloreamos todos los botones de torres en blanco
+        String[] botonesTorres = {BUT_RAYO_ID,BUT_HIELO_ID, BUT_FUEGO_ID};
+        for(int i = 0; i< botonesTorres.length;i++){
+            this.ui.getButtonUI(botonesTorres[i]).setColor(Color.BLANCO.getHex());
+        }
 
         //Cambiamos el color a Amarillo del boton correspondiente
         this.ui.getButtonUI(id).setColor(Color.AMARILLO_CLARO.getHex());

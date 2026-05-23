@@ -1,5 +1,7 @@
 package com.example.gamelogic.states;
 
+import android.util.Log;
+
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.State;
@@ -71,7 +73,7 @@ public class GameOver implements State {
 
         this.mobile.setVisibleAdBanner(true);
 
-        //Si no se ha completado el nivel la recompensa será de 10 diamantes
+        //Si no se ha completado el nivel la recompensa será de 10 diamantes de base
         if(!isCompleted)
             this.recompensa = 10;
         else
@@ -107,20 +109,28 @@ public class GameOver implements State {
         }
     }
 
+    /**
+     * Metodo que gestiona la recompensacion por la victoria
+     */
     private void gestionarRecompensaVictoria() {
         //Si el nivel no estaba completado
         if (!isCompleted) {
+            //Texto con la cantidad de diamantes actuales (sin recompensa)
+            ui.setTextUI(
+                    "TEXT_DIAMANTES_ACTUALES",
+                    String.valueOf(numDiamantes)
+            );
             numDiamantes += recompensa;
+
+            //Guardamos los diamantes por si acaso el usuario no ve el anuncio
             try {
                 save.put("gems", numDiamantes);
             }
             catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            ui.setTextUI(
-                    "TEXT_DIAMANTES_ACTUALES",
-                    String.valueOf(numDiamantes)
-            );
+
+
 
             ui.setTextUI(
                     "TEXT_RECOMPENSA_AD",
@@ -144,7 +154,6 @@ public class GameOver implements State {
         //Listener del boton reintentar
         ui.getButtonUI("BUT_REINTENTAR")
                 .setOnClickListener(() -> {
-
                     Dificultad dificultad =
                             new Dificultad(engine, mobile, save);
 
@@ -158,18 +167,23 @@ public class GameOver implements State {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+        //texto con los diamantes actuales
         ui.setTextUI("TEXT_DIAMANTES_ACTUALES", String.valueOf(this.numDiamantes));
 
-
+        //Boton de volver al menu de seleccion de mundo
         ui.getButtonUI("BUT_VOLVER_MUNDO")
                 .setOnClickListener(() -> {
-                    Mundo mundo = new Mundo(engine, mobile, 1, save);
+                    Mundo mundo = new Mundo(engine, mobile, this.mundo, save);
                     engine.setState(mundo);
                 });
         //Solo si se gana se activa el boton de recompensa
         if(this.win)
             ui.getButtonUI("BUT_RECOMPENSA_AD")
                 .setOnClickListener(this::reclamarRecompensaDuplicada);
+
+        //Si el nivel ya estaba completado NO se duplica la recompensa, se dará 10 diamantes solamente
+        if(this.isCompleted)
+            ui.getButtonUI("BUT_RECOMPENSA_AD").changeText("AD");
     }
 
     /**
@@ -299,27 +313,31 @@ public class GameOver implements State {
      * u obtener más recompensas
      */
     private void reclamarRecompensaDuplicada(){
-
         //Llamamos a la interfaz mobile con un callback para
         //que se encargue de la gestión de recompensas una vez ya se ha reproducido el anuncio
         this.mobile.showRewardedAd(new RewardCallback() {
             @Override
             public void onReward() {
-                recompensa = 10;
+
+                //Se duplica la recompensa
+                if(!isCompleted)
+                    recompensa *= 2;
+                else recompensa = 10; //10 de recompensa por defecto
+
                 //Modificamos la cantidad actual de diamantes en el texto
-                numDiamantes += recompensa;
+                numDiamantes = numDiamantes + recompensa;
                 try {
-                    save.put("gems",numDiamantes);
+                    save.put("gems", numDiamantes);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
                 //Escondemos e inhabilitamos el boton
 
+                System.out.println("has ganado en total " + recompensa + "diamantes");
                 inhabilitarBotonRecompensa();
                 actualizarTextoDiamantes(numDiamantes);  //Actualizamos el texto de Game Over del numero de diamantes
                 ocultarTextoRecompensa();//quitamos la cantidad de la recompensa
             }
-
         }); //vemos el anuncio y si se acaba de ver, damos recompensa
     }
 

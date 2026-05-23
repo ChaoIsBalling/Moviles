@@ -18,10 +18,10 @@ public class UIManager {
     // Hash Maps donde vamos a guardar los elementos de la UI de la escena
     private HashMap<String, Button> botones = new HashMap<>();
     private HashMap<String, Text> textos = new HashMap<>();
-    //Aqui se guardan las imagenes que sirven como prefab y no se renderizan todo el rato
+    //Aqui se guardan las imagenes que sirven como HUD y que se queden todo el tiempo en pantalla
     private HashMap<String, Image> imagenes = new HashMap<>();
 
-    private HashMap<String, Image> imagenesHUD = new HashMap<>(); // Solo para render automático
+    //private HashMap<String, Image> imagenesHUD = new HashMap<>(); // Solo para render automático
 
     public UIManager(JSONObject sceneJson, AndroidEngine engine, AndroidGraphics gr) {
         // Limpiamos lo anterior para cargar la nueva escena
@@ -60,9 +60,9 @@ public class UIManager {
                     imagenes.put(imageData.getString("id"), img);
 
                     // Si el JSON dice que es HUD, la añadimos a la lista de renderizado
-                    if (imageData.optBoolean("isHUD", false)) {
-                        imagenesHUD.put(imageData.getString("id"),img);
-                    }
+                    //if (imageData.optBoolean("isHUD", false)) {
+                        //imagenesHUD.put(imageData.getString("id"),img);
+                    //}
                 }
             }
         } catch (JSONException e) {
@@ -98,11 +98,11 @@ public class UIManager {
      * @param id ID de la imagen
      * @param c condicion
      */
-    public void setImageUIVisibility(String id, Boolean c){
-        if(imagenesHUD.containsKey(id)){
-            imagenesHUD.get(id).setVisible(c);
+    /*public void setImageUIVisibility(String id, Boolean c){
+        if(imagenes.containsKey(id)){
+            imagenes.get(id).setVisible(c);
         }
-    }
+    }*/
 
     /**
      * Metodo de deshabilta/habilita el boton
@@ -158,18 +158,18 @@ public class UIManager {
         return null;
     }
 
-    public void addButtonUI(String id, Button b){
+    /*public void addButtonUI(String id, Button b){
         botones.put(id,b);
-    }
+    }*/
 
     /**
      * Borra un boton de la lista
      * @param id ID del boton
      */
-    public void deleteButtonUI(String id){
+    /*public void deleteButtonUI(String id){
         if(botones.containsKey(id))
             botones.remove(id);
-    }
+    }*/
 
 
     /**
@@ -178,7 +178,7 @@ public class UIManager {
      */
     public void render(AndroidGraphics gr){
         for (Button b : botones.values()) b.Render(gr);
-        for (Image img : imagenesHUD.values()) img.Render();
+        for (Image img : imagenes.values()) img.Render();
         for (Text txt : textos.values()) txt.Render(gr);
     }
 

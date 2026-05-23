@@ -54,11 +54,15 @@ public class Image {
         this.y= json.getInt("y");
         this.w= json.getInt("w");
         this.h=json.getInt("h");
-        this.visible = true;
+
+        if(json.has("visible"))
+            this.visible = json.getBoolean("visible");
+        else this.visible = true;
     } catch (
     JSONException e) {
         throw new RuntimeException(e);
     }
+
         this.gr=gr;
         this.im = this.gr.newImage(this.imagen,this.w,this.h);
     }

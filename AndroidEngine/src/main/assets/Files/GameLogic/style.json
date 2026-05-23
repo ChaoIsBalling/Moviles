@@ -152,11 +152,8 @@
     }
   ],
   "images" : [
-    { "id": "Vida", "imagen": "Vida.png", "x": 60, "y": 330, "w": 30, "h": 30, "isHUD": true,"visible": true  },
-    { "id": "Dinero", "imagen": "Dinero.png", "x": 60, "y": 360, "w": 30, "h": 30, "isHUD": true, "visible": true},
-    { "id": "Imp", "imagen": "Imp.png", "x": -15, "y": -20, "w": 35, "h": 35, "isHUD": false, "visible": true },
-    { "id": "Goblin", "imagen": "Goblin.png", "x": -15, "y": -20, "w": 35, "h": 35, "isHUD": false, "visible": true },
-    { "id": "Ogre", "imagen": "Ogre.png", "x": -15, "y": -20, "w": 35, "h": 35 , "isHUD": false, "visible": true}
+    { "id": "Vida", "imagen": "Vida.png", "x": 60, "y": 330, "w": 30, "h": 30, "visible": false  },
+    { "id": "Dinero", "imagen": "Dinero.png", "x": 60, "y": 360, "w": 30, "h": 30, "visible": true}
   ],
   "texts": [
     { "id": "TEXT_VIDA", "texto": "0","font": "Inika-Regular.ttf", "x": 30, "y": 340, "size": 20, "bold": true, "italic": true, "color": "#FF000000" },
