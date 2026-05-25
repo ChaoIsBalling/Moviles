@@ -319,10 +319,8 @@ public class GameOver implements State {
             @Override
             public void onReward() {
 
-                //Se duplica la recompensa
-                if(!isCompleted)
-                    recompensa *= 2;
-                else recompensa = 10; //10 de recompensa por defecto
+                //Se dan 10 diamantes más
+                recompensa = 10;
 
                 //Modificamos la cantidad actual de diamantes en el texto
                 numDiamantes = numDiamantes + recompensa;

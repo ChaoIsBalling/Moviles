@@ -11,7 +11,7 @@
       "color": "#FFFFFFFF",
       "icon": {
         "id": "ICON_SIGUIENTE",
-        "imagen": "Volver.png",
+        "imagen": "Flecha.png",
         "x": -25,
         "y": -25,
         "w": 50,
@@ -31,7 +31,7 @@
       "color": "#FFFFFFFF",
       "icon": {
         "id": "ICON_ANTERIOR",
-        "imagen": "Volver.png",
+        "imagen": "Flecha.png",
         "x": -25,
         "y": -25,
         "w": -50,

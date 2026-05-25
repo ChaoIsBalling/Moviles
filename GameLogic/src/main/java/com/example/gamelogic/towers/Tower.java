@@ -34,6 +34,11 @@ public interface Tower {
     public void setListaEnemigos(ArrayList<Enemy> enemigos);
 
     /**
+     * Metodo en el que implementar la logica de disparo de cada tipo de torre
+     */
+    //public void Shoot();
+
+    /**
      * Actualiza el comportamiento de la torre
      * @param deltaTime tiempo trascurrido
      */

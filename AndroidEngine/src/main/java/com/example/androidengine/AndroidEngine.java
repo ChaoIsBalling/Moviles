@@ -1,17 +1,12 @@
 package com.example.androidengine;
 
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.view.SurfaceView;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
@@ -21,7 +16,6 @@ import androidx.work.WorkRequest;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,7 +29,6 @@ import org.json.JSONException;
 //import androidx.work.Worker;
 //import androidx.work.WorkerParameters;
 import android.content.Intent;
-import android.net.Uri;
 
 /**
  * Clase que implementa el motor principal del juego para Android.
@@ -243,6 +236,8 @@ public class AndroidEngine implements Runnable {
         try {
            os=  this.sView.getContext().openFileOutput(file, this.sView.getContext().MODE_PRIVATE);
            os.write(output.getBytes());
+           os.flush();
+           os.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -308,7 +303,7 @@ public class AndroidEngine implements Runnable {
         if(!checkFileExists("hash"))
             return false;
         else{
-        String a=readFile2("hash");
+        String a= readFileString("hash");
         if (!hash.equals(a))
             return false;
         }
@@ -330,7 +325,7 @@ public class AndroidEngine implements Runnable {
      * @return String con los datos
      */
 
-    public String readFile2(String file) {
+    public String readFileString(String file) {
         String obj ="";
         try {
             FileInputStream fis = this.sView.getContext().openFileInput(file);

@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Si es por hacer click a la notifiación por bonificación, regalamos diamantes al jugador
         if(intent != null && intent.getBooleanExtra("REWARD_NOTIFICATION",false)){
-            int numDiamantes=0;
+            int numDiamantes = 0;
             //incrementamos el numero de diamantes en el archivo de guardado del juego
             try {
                 numDiamantes=this.save.getInt("gems");
