@@ -9,6 +9,7 @@ import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -146,6 +147,22 @@ public class AndroidGraphics{
      */
     public void TerminarLimiteDibujado(){
         this.canvas.restore();
+    }
+
+    public Bitmap takeScreenshot()
+    {
+        Bitmap viewBitmap = Bitmap.createBitmap(sView.getWidth(), sView.getHeight(), Bitmap.Config.RGB_565);
+        Canvas viewCanvas = new Canvas(viewBitmap);
+        Drawable backgroundDrawable = sView.getBackground();
+
+        if(backgroundDrawable != null){
+            backgroundDrawable.draw(viewCanvas);
+        }
+        else{
+            viewCanvas.drawColor(Color.GREEN);
+            sView.draw(viewCanvas);
+        }
+        return viewBitmap;
     }
 
     /**

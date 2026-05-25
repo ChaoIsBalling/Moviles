@@ -1,6 +1,8 @@
 package com.example.androidengine;
 
-
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.res.AssetManager;
@@ -159,11 +161,16 @@ public class AndroidEngine implements Runnable {
      */
     public void luanchShareIntent(String message)
     {
-
+        Bitmap bitmap =getGraphics().takeScreenshot();
+        String imageUri = MediaStore.Images.Media.insertImage(this.sView.getContext().getContentResolver(), bitmap,
+            "Description" , null);
+        Uri uri = Uri.parse(imageUri) ;
         Intent shareIntent = new Intent(Intent. ACTION_SEND);
-        shareIntent.setType("plain/text");
+        shareIntent.setType( "image/*" );
         shareIntent.putExtra(Intent.EXTRA_TEXT, message );
-        this.sView.getContext().startActivity(Intent. createChooser(shareIntent , "Share Text" ));
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        this.sView.getContext().startActivity(Intent. createChooser(shareIntent , "Share Image" ));
+
     }
 
     /**
