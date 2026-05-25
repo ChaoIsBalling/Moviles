@@ -9,6 +9,11 @@ import com.example.gamelogic.TipoTorre;
 
 import java.util.ArrayList;
 
+/**
+ * Clase que implementa una nueva torre: La torre de rayo mini
+ * Es una torre de rayo normal pero con color de Rayo y frecuencia de disparo distinta
+ * Por ello hereda de ThunderTower
+ */
 public class MiniThunderTower extends ThunderTower{
     /**
      * Constructora de la torre de rayo con sus coordenadas
@@ -23,11 +28,18 @@ public class MiniThunderTower extends ThunderTower{
         this.rayo = this.frecuenciaRayo;
     }
 
+    /**
+     * Logica de disparo de MiniThunderTower
+     */
     @Override
     public void Shoot() {
         super.Shoot();
     }
 
+    /**
+     * Es el mismo sonido que el ThunderTower padre
+     * @param audio interfaz de audio
+     */
     @Override
     public void setAudio(AndroidAudio audio) {
         super.setAudio(audio);

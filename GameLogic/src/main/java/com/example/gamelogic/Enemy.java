@@ -8,7 +8,6 @@ import java.util.ArrayList;
  * Clase que representa un enemigo en el juego
  */
 public class Enemy {
-
     //vida del enemigo
     float vida;
     //Determina si ha llegado al final del camino sin morir
@@ -16,14 +15,18 @@ public class Enemy {
     //Direccion a la que se mueve
     Vector2D direccion;
     //stats
-    float velocidad = 100;
+    float velocidad;
     float defensa;
     float resistencia;
-    float x;
-    float y;
+    float x, y;
+
+
+    //Minimo a lo que se puede ajustar los daños al enemigo
+    float damMinimo = 2;
+    float ralentizacionMinima = 7;
     Image imagen;
     //Tipo al que es resistente
-    TipoTorre tipo;
+    TipoTorre tipoTorreResistente;
 
     //Referencia a la escena de juego
     GameLogic gl;
@@ -50,13 +53,16 @@ public class Enemy {
         //Posicion inicial sacada del inicio del camino
         this.x=gl.getRealX(camino.get(0).getY());
         this.y=gl.getRealY(camino.get(0).getX());
+
         this.vida=vida; //Vida
         this.direccion = new Vector2D(1,0); //Direccion representado por un Vector2D
         this.velocidad = velocidad; //Velocidad con la que se mueve
         this.defensa = defensa; //Defensa
         this.resistencia = resistencia; //Daño infligido con resistencia activada
-        this.tipo = tipoRes; //El tipo del ataque al que resiste
+        this.tipoTorreResistente = tipoRes; //El tipo del ataque al que resiste
+
         this.gl = gl; //Instancia del gameLogic
+
         //Obtenemos casilla actual a partir de sus coordenadas
         this.coor = gl.determinaCasilla(this.y, this.x);
         this.casillaInicial = this.gl.getCasillas().get(this.coor.getX()).get(this.coor.getY());
@@ -66,9 +72,7 @@ public class Enemy {
     /**
      * Getter de las coordenadas x e y
      */
-    public float getX(){
-        return this.x;
-    }
+    public float getX(){ return this.x; }
     public float getY(){
         return this.y;
     }
@@ -76,29 +80,22 @@ public class Enemy {
     /**
      * Metodo que se llama cada vez que el enemigo sufre daño
      */
-    public void damage(float damage, TipoTorre tipo){
-        if(tipo == TipoTorre.HIELO){//si es la torre de hielo reduce la velocidad
-            float dam = damage;
-            if(this.tipo == tipo){
-                dam -= this.resistencia;
-            }
-            if(dam < 7){//la velocidad se reduce en 7 como minimo
-                dam = 7;
-            }
-            if(this.ralentizar < dam){//si hay varias torres solo surge efecto la que mas realentice
-                this.ralentizar = dam;
-            }
-        }
-        else{
-            float dam = damage - this.defensa;
-            if(this.tipo == tipo){
-                dam -= this.resistencia;
-            }
-            if(dam <1){//daño minimo 1
-                dam = 2;
-            }
-            this.vida -= dam;
-        }
+    public void damage(float damage, TipoTorre tipoTorre){
+        //Cuanto valdra la reduccion de daño (si la hay)
+        float reduccion = 0f;
+
+        //Aplicamos la defensa al enemigo si es resistente al tipo de la torre
+        if(this.tipoTorreResistente == tipoTorre)
+            reduccion = this.defensa;
+
+        //daño total al enemigo
+        float damEfectivo = damage - reduccion;
+
+        if(tipoTorre == TipoTorre.HIELO) //solo ralentizamos si la torre es de hielo
+            this.ralentizar = Math.max(ralentizacionMinima, damEfectivo);
+        else // quitamos vida
+            this.vida -= Math.max(damMinimo, damEfectivo);
+
         //System.out.println("("+damage+","+tipo+")");
         //System.out.println(this.vida);
     }
@@ -110,7 +107,6 @@ public class Enemy {
      * @param deltaTime tiempo trascurrido
      */
     public void Update(double deltaTime){
-
         //vamos recorriendo mientras haya puntos por los que el enemigo pueda ir
         if(puntoIndex >= puntosCamino.size()){
             this.win = true;
@@ -120,32 +116,40 @@ public class Enemy {
         //Proximo punto al que irá el enemigo
         Vector2D objetivo = puntosCamino.get(puntoIndex);
 
-        //calculamos direccion
-        float dirX = gl.getRealX(objetivo.getY());
-        float dirY = gl.getRealY(objetivo.getX());
-        //System.out.println(dirX + ","+dirY);
-        dirX -= this.x;
-        dirY -=this.y;
-        //Distancia que queda para que llegue al objetivo
-        float distancia = (float) Math.sqrt((dirX*dirX) +(dirY*dirY));
+        //Posicion a la que queremos llegar
+        float targetX = gl.getRealX(objetivo.getY());
+        float targetY = gl.getRealY(objetivo.getX());
+        //System.out.println(targetX + ","+ targetY);
 
-        //Si llegamos al punto objetivo, pasamos al siguiente
-        if(distancia < 1.0f){
-            puntoIndex++;
-            return;
-        }
+        //Direccion a la que debemos ir
+        float dirX = targetX - this.x;
+        float dirY =  targetY - this.y;
+        //Distancia que queda para que llegue al objetivo
+        float distancia = (float) Math.sqrt((dirX * dirX) + (dirY * dirY));
 
         //Direccion normalizada
         float nx = dirX/distancia;
         float ny = dirY/distancia;
 
-        float mov = velocidad - ralentizar;
+        //Velocidad resultante
+        float velRes = velocidad - ralentizar;
 
-        // Mover suavemente aplicando deltatime
-        this.x += nx * mov * deltaTime;
-        this.y += ny * mov * deltaTime;
+        // Cálculo del movimiento deseado
+        float movimiento = (float)(velRes * deltaTime);
 
-        ralentizar = 0;
+        //Si el movimiento es mayor que la distancia, nos quedamos en el punto exacto
+        //Esto evita oscilaciones a la hora de pasar a otro punto
+        if (movimiento >= distancia) {
+            this.x = targetX;
+            this.y = targetY;
+            puntoIndex++; // Saltamos al siguiente punto
+        } else {
+            //movimiento normal (suave)
+            this.x += nx * movimiento;
+            this.y += ny * movimiento;
+        }
+
+        this.ralentizar = 0;
     }
 
     /**
