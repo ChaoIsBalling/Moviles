@@ -479,7 +479,7 @@ public class GameLogic implements State {
 
         //Si el juego esta en modo torre, pintamos un circulo con su rango
         if(this.estado == Estado.TORRE){
-            gr.pintarCirculo(torreSeleccionada.getX(), torreSeleccionada.getY(),torreSeleccionada.getRange());
+            gr.pintarCirculo(torreSeleccionada.getPosX(), torreSeleccionada.getPosY(),torreSeleccionada.getRange());
         }
     }
 

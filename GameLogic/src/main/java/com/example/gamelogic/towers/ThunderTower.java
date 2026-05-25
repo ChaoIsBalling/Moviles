@@ -1,14 +1,11 @@
 package com.example.gamelogic.towers;
 
 import com.example.androidengine.AndroidAudio;
-import com.example.androidengine.AndroidSound;
 import com.example.androidengine.AndroidGraphics;
 import com.example.gamelogic.Enemy;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.TipoTorre;
 import com.example.gamelogic.figure.Triangle;
-
-import java.util.ArrayList;
 
 /**
  * Clase que representa la torre de Rayo e implementa la interfaz Tower
@@ -16,80 +13,52 @@ import java.util.ArrayList;
 public class ThunderTower extends BaseTower{
     //figura de la torre
     Triangle triangulo;
-    //stats de la torre de Rayo
-    //float ataque=4;
-    //float rango= 70;
-    //float velocidad = (float )1.6;
-    //float enfriamiento = 0;
-    float rayo = 1;
-    float x;
-    float y;
-    //Referencia al audio manager y el sonido de ataque
-    //AndroidAudio audio;
-    //AndroidSound attack;
+
+    //Timer de renderizado del rayo
+    float rayo;
+
+    //Cada cuanto se renderiza el rayo
+    float frecuenciaRayo = 1;
 
     //Determina si está disparando
     boolean disparo = false;
-    Image imagen=null;
-
-     //TipoTorre tipoTorre = TipoTorre.RAYO;
-
-    //Lista de enemigos que la torre puede atacar
-    //ArrayList<Enemy> enemigos;
+    Image imagen = null;
     //Enemigo a atacar
     Enemy enemigo;
+
+    //Color del rayo
+    String colorRayo = "#FF00FFFF";
 
     /**
      * Constructora de la torre de rayo con sus coordenadas
      */
     public ThunderTower(float x, float y){
-        super(4,70,1.6f);
-        this.enfriamiento = 0;
-        this.x=x;
-        this.y=y;
+        super(x,y,4,70,1.6f, TipoTorre.RAYO);
         this.triangulo = new Triangle(x,y,15,true);
         this.triangulo.setColor("#FF000000");
-
-
+        this.rayo = this.frecuenciaRayo;
     }
     public ThunderTower(float x, float y, Image im){
-        super(4,70,1.6f);
-        this.enfriamiento = 0;
+        super(x,y,4,70,1.6f, TipoTorre.RAYO);
         this.imagen=im;
-        this.x=x;
-        this.y=y;
+        this.rayo = this.frecuenciaRayo;
     }
-
-    /**
-     * Mejoras de estadísticas de la torre de rayo
-     * @param mejora canitdad de mejora del atributo
-     */
-    /*@Override
-    public void UpdateAttack(float mejora) {
-        this.ataque += mejora;
-    }
-    @Override
-    public void UpdateRange(float mejora) {
-        this.rango += mejora;
-    }
-    @Override
-    public void UpdateFireRate(float mejora) {
-        if(this.velocidad > 0.5){
-            this.velocidad += mejora;
-        }
-    }*/
-
-    /**
-     * Setters
-     */
-    /*@Override
-    public void setListaEnemigos(ArrayList<Enemy> enemigos) {
-        this.enemigos = enemigos;
-    }*/
     @Override
     public void setAudio(AndroidAudio audio) {
         this.audio=audio;
         this.soundAttack=audio.newSound("laser.wav");
+    }
+
+    /**
+     * Metodo con la logica de disparo de la torre de rayo. Se ejecuta solo si ha encontrado un enemigo
+     */
+    @Override
+    public void Shoot(){
+        this.enemigo.damage(this.ataque,this.tipoTorre);
+        this.enfriamiento = this.velocidad;
+        this.disparo = true;
+        this.audio.playSound(this.soundAttack);
+        this.rayo = this.frecuenciaRayo;
     }
 
     /**
@@ -98,49 +67,17 @@ public class ThunderTower extends BaseTower{
      */
     @Override
     public void Update(double deltaTime) {
-
-        if (this.enfriamiento <= 0){
-            int enemigo = -1;
-            double distanciaC = -1;
-            for (int i = 0; i < this.enemigos.size(); i++){
-                float x = this.enemigos.get(i).getX();
-                float y = this.enemigos.get(i).getY();
-                //Distancia hasta el enemigo
-                double a = x-this.x;
-                double b = y-this.y;
-                a = Math.pow(a,2);
-                b = Math.pow(b,2);
-                double distancia = Math.sqrt(a+b);
-                //Si esta en el rango
-                if(distancia <= this.rango){
-                    if(distanciaC == -1){
-                        enemigo = i;
-                        distanciaC = distancia;
-                        this.enemigo = this.enemigos.get(i);
-                    }
-                    else if(distancia < distanciaC){
-                        enemigo = i;
-                        distanciaC = distancia;
-                        this.enemigo = this.enemigos.get(i);
-                    }
-                }
-            }
-            if(enemigo != -1){
-                this.enemigo.damage(this.ataque,this.tipoTorre);
-                this.enfriamiento = this.velocidad;
-                this.disparo = true;
-                this.audio.playSound(this.soundAttack);
-                this.rayo = 1;
-            }
-
+        if(this.enfriamiento <= 0){
+            this.enemigo = buscarEnemigoMasCercano();
+            if(enemigo != null)
+                Shoot();
         }
         else{
+            //actualizamos cooldown
             this.enfriamiento -= deltaTime;
             this.rayo -= deltaTime;
         }
-
     }
-
 
     /**
      * Reneriza la torre y, si está disparando un rayo, también la linea
@@ -149,38 +86,13 @@ public class ThunderTower extends BaseTower{
     @Override
     public void Render(AndroidGraphics gr) {
         if(this.imagen!=null)
-            this.imagen.RenderCentrado((int)this.x,(int)this.y);
+            this.imagen.RenderCentrado((int)this.getPosX(),(int)this.getPosY());
         else
             this.triangulo.Render(gr);
-        if(this.disparo && this.rayo > 0){
-            gr.setColor(0xff00ffff);
-            gr.pintarLinea(this.x,this.y,this.enemigo.getX(),this.enemigo.getY(),5);
+
+        if(this.disparo && this.rayo > 0 && this.enemigo != null){
+            gr.setColor(colorRayo);
+            gr.pintarLinea(this.getPosX(),this.getPosY(),this.enemigo.getX(),this.enemigo.getY(),5);
         }
     }
-
-    /**
-     * Getters
-     */
-    @Override
-    public float getRange() {
-        return this.rango;
-    }
-
-    @Override
-    public float getX() {
-        return this.x;
-    }
-
-    @Override
-    public float getY() {
-        return this.y;
-    }
-
-    /**
-     * Deteiene el sonido de ataque
-     */
-    /*@Override
-    public void stopAudio() {
-        this.audio.stopSound(this.soundAttack);
-    }*/
 }

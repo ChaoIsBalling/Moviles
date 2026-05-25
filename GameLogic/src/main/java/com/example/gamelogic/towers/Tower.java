@@ -36,7 +36,7 @@ public interface Tower {
     /**
      * Metodo en el que implementar la logica de disparo de cada tipo de torre
      */
-    //public void Shoot();
+    public void Shoot();
 
     /**
      * Actualiza el comportamiento de la torre
@@ -61,8 +61,8 @@ public interface Tower {
      * @return
      */
     public float getRange();
-    public float getX();
-    public float getY();
+    public float getPosX();
+    public float getPosY();
 
     /**
      * Para detener el audio asociado a la torre

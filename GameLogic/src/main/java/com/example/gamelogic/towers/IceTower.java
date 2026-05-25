@@ -2,100 +2,55 @@ package com.example.gamelogic.towers;
 
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
-import com.example.androidengine.AndroidSound;
 import com.example.gamelogic.Enemy;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.figure.Square;
 import com.example.gamelogic.TipoTorre;
 
-import java.util.ArrayList;
-
 /**
  *  Clase que representa la torre de Hielo e implementa la interfaz Tower
  */
-public class IceTower implements Tower{
+public class IceTower extends BaseTower {
     Square cuadrado;
-    //stats de la torre de Hielo
-    float ataque=10;
-    float rango= 70;
-    float velocidad = 4;
-
-    //Referencia al audio manager y el sonido de ataque
-    AndroidAudio audio;
-    AndroidSound attack;
-    float x;
-    float y;
+    //Determina si el audio ya ha sido loopeado o no
+    boolean loopAudio;
+    //Determina si aun hay enemigos en el area de ataque
+    boolean hayEnemigos;
     Image image;
-
-    //Tipo de la torre
-    TipoTorre tipo = TipoTorre.HIELO;
-    //Lista de enemigos que detecta la torre
-    ArrayList<Enemy> enemigos;
-
-    //Determina si hay enemigos en rango
-    boolean enRango;
 
     /**
      * Constructora de la torre de hielo con su coordenada x,y
      */
     public IceTower(float x, float y){
-        this.x=x;
-        this.y=y;
+        super(x,y,10,70,4, TipoTorre.HIELO);
         this.cuadrado = new Square(x,y,20,20,true);
         this.cuadrado.setColor("#FFC8A2C8");
     }
     public IceTower(float x, float y,Image im){
-        this.x=x;
-        this.y=y;
+        super(x,y,10,70,4, TipoTorre.HIELO);
         this.image=im;
+
+    }
+    @Override
+    public void Shoot() {
+        hayEnemigos = false;
+        for(Enemy e: enemigos){
+            double dis = distancia(this.getPosX(),this.getPosY(), e.getX(), e.getY());
+            if(dis <= rango){
+                hayEnemigos = true;
+                if (!this.loopAudio) {
+                    this.audio.loopSound(this.soundAttack);
+                    this.loopAudio = true;
+                }
+                e.damage(this.ataque, this.tipoTorre);
+            }
+        }
     }
 
-    /**
-     * Mejoras de estadísticas de la torre de hielo
-     * @param mejora canitdad de mejora del atributo
-     */
-    @Override
-    public void UpdateAttack(float mejora) {
-        this.ataque += mejora;
-    }
-
-    @Override
-    public void UpdateRange(float mejora) {
-        this.rango += mejora;
-    }
-
-    @Override
-    public void UpdateFireRate(float mejora) {
-        this.velocidad += mejora;
-    }
-
-    /**
-     * getters
-     */
-    @Override
-    public float getRange() {
-        return this.rango;
-    }
-    @Override
-    public float getX() {
-        return this.x;
-    }
-    @Override
-    public float getY() {
-        return this.y;
-    }
-
-    /**
-     * setters
-     */
-    @Override
-    public void setListaEnemigos(ArrayList<Enemy> enemigos) {
-        this.enemigos = enemigos;
-    }
     @Override
     public void setAudio(AndroidAudio audio) {
         this.audio=audio;
-        this.attack=audio.newSound("ice.wav");
+        this.soundAttack=audio.newSound("ice.wav");
     }
 
     /**
@@ -103,27 +58,13 @@ public class IceTower implements Tower{
      */
     @Override
     public void Update(double deltaTime) {
-        boolean encontrar = false;
-        for (int i = 0; i < this.enemigos.size(); i++) {
-            float x = this.enemigos.get(i).getX();
-            float y = this.enemigos.get(i).getY();
-            double a = x - this.x;
-            double b = y - this.y;
-            a = Math.pow(a, 2);
-            b = Math.pow(b, 2);
-            double distancia = Math.sqrt(a + b);
-            if (distancia <= this.rango) {
-                encontrar = true;
-                if (!this.enRango) {
-                    this.audio.loopSound(this.attack);
-                    this.enRango = true;
-                }
-                this.enemigos.get(i).damage(this.ataque, this.tipo);
-            }
-        }
-        if (!encontrar && this.enRango) {
-            this.enRango = false;
-            this.audio.stopSound(this.attack);
+        //Intentamos hacer el disparo
+        Shoot();
+
+        //Manejamos el audio de la torre en caso de que ya no haya enemigos
+        if (!hayEnemigos && this.loopAudio) {
+            this.loopAudio = false;
+            this.stopAudio(); //Se para el audio
         }
     }
 
@@ -134,16 +75,8 @@ public class IceTower implements Tower{
     @Override
     public void Render(AndroidGraphics gr) {
         if(this.image!=null)
-        this.image.RenderCentrado((int)this.x,(int)this.y);
+        this.image.RenderCentrado((int)this.getPosX(),(int)this.getPosY());
         else
             cuadrado.Render(gr);
-    }
-
-    /**
-     * Deteiene el sonido de ataque
-     */
-    @Override
-    public void stopAudio() {
-        this.audio.stopSound(this.attack);
     }
 }

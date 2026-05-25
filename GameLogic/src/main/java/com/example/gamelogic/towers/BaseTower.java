@@ -17,6 +17,9 @@ public abstract class BaseTower implements Tower {
     //Stats comunes de las torres
     protected float ataque, rango, velocidad, enfriamiento;
 
+    //Coordenadas de posicion
+    protected float posX, posY;
+
     //Referencia al audio manager y el sonido de ataque
     protected AndroidAudio audio;
     protected AndroidSound soundAttack;
@@ -27,10 +30,14 @@ public abstract class BaseTower implements Tower {
     //Tipo de ataque de la torre
     protected TipoTorre tipoTorre;
 
-    public BaseTower(float ataque, float rango, float velocidad){
+    public BaseTower(float x, float y, float ataque, float rango, float velocidad, TipoTorre tipo){
+        this.posX = x;
+        this.posY = y;
         this.ataque = ataque;
         this.rango = rango;
         this.velocidad = velocidad;
+        this.tipoTorre = tipo;
+        this.enfriamiento = 0;
     }
 
     /**
@@ -53,6 +60,15 @@ public abstract class BaseTower implements Tower {
      * @return
      */
     @Override public float getRange() { return this.rango; }
+    /**
+     * getters
+     * @return
+     */
+    @Override
+    public float getPosX() { return this.posX; }
+
+    @Override
+    public float getPosY() { return this.posY; }
     /**
      * Deteiene el sonido de ataque asociado a la torre
      */
@@ -81,7 +97,7 @@ public abstract class BaseTower implements Tower {
         double mejorDist = Double.MAX_VALUE;
 
         for (Enemy e : enemigos) {
-            double dist = distancia(getX(), getY(), e.getX(), e.getY());
+            double dist = distancia(getPosX(), getPosY(), e.getX(), e.getY());
             if (dist <= rango && dist < mejorDist) {
                 mejorDist = dist;
                 masCercano = e;
