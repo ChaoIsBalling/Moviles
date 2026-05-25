@@ -42,32 +42,6 @@ public class Menu implements State {
         this.engine = engine;
         this.mobile = mobile;
         this.save=save;
-        //botones=engine.readJsonFile("Menu/style2.json");
-        /*
-        try {
-            this.botonInicial = new Button(botones.getJSONObject("BotonInicial"));
-            this.botonInicial.setText(new Text(botones.getJSONObject("TextoBoton")));
-
-            this.textoInicial = new Text(botones.getJSONObject("TextoInicial"));
-
-            this.botonAventura = new Button(botones.getJSONObject("BotonAventura"));
-            this.botonAventura.setText( new Text(botones.getJSONObject("TextoAventura")));
-
-            this.botonTienda = new Button(botones.getJSONObject("BotonTienda"));
-            this.botonTienda.setText( new Text(botones.getJSONObject("TextoTienda")));
-
-            //cambiamos el numero de gemas dependiendo de cuanto dinero hemos ganado
-            this.textoDiamantes = new Text(botones.getJSONObject("TextoDiamantes"));
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-        this.fondo="#FFFFFFFF";
-        try {
-            this.textoDiamantes.setText(String.valueOf(this.save.getInt("gems")));
-            this.fondo = this.save.getString("fondo");
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }*/
 
 
         this.mobile.setVisibleAdBanner(true);
