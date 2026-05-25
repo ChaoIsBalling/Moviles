@@ -38,7 +38,7 @@ public class TowerFactory {
 
         creators.put(TipoTorre.MINI, (cx, cy, skin) -> {
              return new MiniThunderTower(cx, cy, skin);
-        }); // La mini siempre suele llevar skin
+        }); // La mini siempre lleva skin
     }
 
     public Tower getTower(TipoTorre tipo, float cx, float cy, Image skin) {

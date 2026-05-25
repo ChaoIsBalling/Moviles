@@ -13,29 +13,29 @@ import java.util.ArrayList;
 /**
  * Clase que representa la torre de Rayo e implementa la interfaz Tower
  */
-public class ThunderTower implements Tower{
+public class ThunderTower extends BaseTower{
     //figura de la torre
     Triangle triangulo;
     //stats de la torre de Rayo
-    float ataque=4;
-    float rango= 70;
-    float velocidad = (float )1.6;
-    float enfriamiento = 0;
-    float rayo =1;
+    //float ataque=4;
+    //float rango= 70;
+    //float velocidad = (float )1.6;
+    //float enfriamiento = 0;
+    float rayo = 1;
     float x;
     float y;
     //Referencia al audio manager y el sonido de ataque
-    AndroidAudio audio;
-    AndroidSound attack;
+    //AndroidAudio audio;
+    //AndroidSound attack;
 
     //Determina si está disparando
     boolean disparo = false;
     Image imagen=null;
 
-    TipoTorre tipo = TipoTorre.RAYO;
+     //TipoTorre tipoTorre = TipoTorre.RAYO;
 
     //Lista de enemigos que la torre puede atacar
-    ArrayList<Enemy> enemigos;
+    //ArrayList<Enemy> enemigos;
     //Enemigo a atacar
     Enemy enemigo;
 
@@ -43,12 +43,18 @@ public class ThunderTower implements Tower{
      * Constructora de la torre de rayo con sus coordenadas
      */
     public ThunderTower(float x, float y){
+        super(4,70,1.6f);
+        this.enfriamiento = 0;
         this.x=x;
         this.y=y;
         this.triangulo = new Triangle(x,y,15,true);
         this.triangulo.setColor("#FF000000");
+
+
     }
     public ThunderTower(float x, float y, Image im){
+        super(4,70,1.6f);
+        this.enfriamiento = 0;
         this.imagen=im;
         this.x=x;
         this.y=y;
@@ -58,7 +64,7 @@ public class ThunderTower implements Tower{
      * Mejoras de estadísticas de la torre de rayo
      * @param mejora canitdad de mejora del atributo
      */
-    @Override
+    /*@Override
     public void UpdateAttack(float mejora) {
         this.ataque += mejora;
     }
@@ -71,19 +77,19 @@ public class ThunderTower implements Tower{
         if(this.velocidad > 0.5){
             this.velocidad += mejora;
         }
-    }
+    }*/
 
     /**
      * Setters
      */
-    @Override
+    /*@Override
     public void setListaEnemigos(ArrayList<Enemy> enemigos) {
         this.enemigos = enemigos;
-    }
+    }*/
     @Override
     public void setAudio(AndroidAudio audio) {
         this.audio=audio;
-        this.attack=audio.newSound("laser.wav");
+        this.soundAttack=audio.newSound("laser.wav");
     }
 
     /**
@@ -120,10 +126,10 @@ public class ThunderTower implements Tower{
                 }
             }
             if(enemigo != -1){
-                this.enemigo.damage(this.ataque,this.tipo);
+                this.enemigo.damage(this.ataque,this.tipoTorre);
                 this.enfriamiento = this.velocidad;
                 this.disparo = true;
-                this.audio.playSound(this.attack);
+                this.audio.playSound(this.soundAttack);
                 this.rayo = 1;
             }
 
@@ -173,8 +179,8 @@ public class ThunderTower implements Tower{
     /**
      * Deteiene el sonido de ataque
      */
-    @Override
+    /*@Override
     public void stopAudio() {
-        this.audio.stopSound(this.attack);
-    }
+        this.audio.stopSound(this.soundAttack);
+    }*/
 }
