@@ -2,6 +2,7 @@ package com.example.androidengine;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -22,6 +23,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.io.File;
 
@@ -154,6 +158,23 @@ public class AndroidEngine implements Runnable {
 
 
     }
+    public Uri takeScreenshot()
+    {
+        Bitmap viewBitmap=getGraphics().takeScreenshot();
+        String fileStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        OutputStream outputStream = null;
+        File imgFile=null;
+        try{
+            imgFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileStamp + ".png");
+            outputStream = new FileOutputStream(imgFile);
+            viewBitmap.compress(Bitmap.CompressFormat.PNG, 40, outputStream);
+            outputStream.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return Uri.parse(imgFile.getPath());
+    }
 
     /**
      * Metodo que lanza un intent que comparte un mensaje de texto
@@ -161,10 +182,7 @@ public class AndroidEngine implements Runnable {
      */
     public void luanchShareIntent(String message)
     {
-        Bitmap bitmap =getGraphics().takeScreenshot();
-        String imageUri = MediaStore.Images.Media.insertImage(this.sView.getContext().getContentResolver(), bitmap,
-            "Description" , null);
-        Uri uri = Uri.parse(imageUri) ;
+        Uri uri = takeScreenshot();
         Intent shareIntent = new Intent(Intent. ACTION_SEND);
         shareIntent.setType( "image/*" );
         shareIntent.putExtra(Intent.EXTRA_TEXT, message );
