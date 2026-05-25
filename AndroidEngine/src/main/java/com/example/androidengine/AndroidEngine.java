@@ -1,5 +1,6 @@
 package com.example.androidengine;
 
+import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
@@ -16,6 +17,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -26,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.io.File;
 
@@ -160,20 +163,11 @@ public class AndroidEngine implements Runnable {
     }
     public Uri takeScreenshot()
     {
-        Bitmap viewBitmap=getGraphics().takeScreenshot();
-        String fileStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        OutputStream outputStream = null;
-        File imgFile=null;
-        try{
-            imgFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileStamp + ".png");
-            outputStream = new FileOutputStream(imgFile);
-            viewBitmap.compress(Bitmap.CompressFormat.PNG, 40, outputStream);
-            outputStream.close();
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        return Uri.parse(imgFile.getPath());
+        Bitmap bitmap=getGraphics().takeScreenshot();
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(sView.getContext().getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
     }
 
     /**

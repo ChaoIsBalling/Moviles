@@ -5,14 +5,24 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.hardware.display.DisplayManager;
+import android.media.projection.MediaProjection;
+import android.provider.MediaStore;
+import android.util.DisplayMetrics;
+import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import android.graphics.BitmapFactory;
 import android.content.res.AssetManager;
 import android.content.Context;
@@ -85,13 +95,13 @@ public class AndroidGraphics{
     protected void startFrame(){
         while(!this.holder.getSurface().isValid());
         this.canvas = this.holder.lockHardwareCanvas();
+
         calculateTransforms();
         this.clear();
         this.trasladar(this.offsetX,this.offsetY);
         this.escalar(this.scale,this.scale);
-
-
     }
+
 
     /**
      * Metodo que calcula la escala y desplazamientos para centrar el area de juego en la ventana
@@ -151,19 +161,13 @@ public class AndroidGraphics{
 
     public Bitmap takeScreenshot()
     {
-        Bitmap viewBitmap = Bitmap.createBitmap(sView.getWidth(), sView.getHeight(), Bitmap.Config.RGB_565);
-        Canvas viewCanvas = new Canvas(viewBitmap);
-        Drawable backgroundDrawable = sView.getBackground();
-
-        if(backgroundDrawable != null){
-            backgroundDrawable.draw(viewCanvas);
-        }
-        else{
-            viewCanvas.drawColor(Color.GREEN);
-            sView.draw(viewCanvas);
-        }
-        return viewBitmap;
+        Bitmap bitmap = Bitmap.createBitmap(sView.getWidth(), sView.getHeight(), Bitmap.Config.RGB_565);
+        Canvas canvas= new Canvas(bitmap);
+        sView.draw(canvas);
+        return bitmap;
     }
+
+
 
     /**
      * Metodo que limpia y pinta el texto
