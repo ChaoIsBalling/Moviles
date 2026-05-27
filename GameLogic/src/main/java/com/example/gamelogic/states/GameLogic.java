@@ -532,20 +532,22 @@ public class GameLogic implements State {
         String slice="BUT_";
         for (Button b : this.ui.getAllButtonsOfType("tower")) {
             String processed=b.getId().replace(slice,"");
-            b.setOnClickListener(()-> this.prepararConstruccion(Integer.parseInt(b.getTextButton().getText()),TipoTorre.valueOf(processed),b.getId()));
+            try {
+                if(this.save.getJSONObject("torres").getJSONObject(processed).getBoolean("active")) {
+                    b.setOnClickListener(() -> this.prepararConstruccion(Integer.parseInt(b.getTextButton().getText()), TipoTorre.valueOf(processed), b.getId()));
+                }
+                else
+                {
+                    this.ui.unloadButtonOfType("tower",b);
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
         }
-
         for (Button b : this.ui.getAllButtonsOfType("upgrade")) {
             String processed=b.getId().replace(slice,"");
             b.setOnClickListener(()-> this.prepararMejora(Integer.parseInt(b.getTextButton().getText()),TipoMejora.valueOf(processed)));
         }
-
-        if(this.mini)
-            this.costeMini = Integer.parseInt(this.ui.getButtonUIText(BUT_MINI_ID));
-
-        //la torre esta desbloqueada...
-        if(this.mini)
-            this.ui.getButtonUI(BUT_MINI_ID).setOnClickListener(() -> this.prepararMini());
 
         //Hacemos que los botones de construccion esten activados desde el principio
         cambiarEstadoBotones("tower", true);

@@ -15,6 +15,7 @@ import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.states.Menu;
 //de Java
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -82,6 +83,30 @@ public class MainActivity extends AppCompatActivity {
             obj.put("fuego",false);
             obj.put("hielo",false);
             obj.put("mini",false);
+
+            JSONObject torres=new JSONObject();
+            JSONObject torre = new JSONObject();
+            torre.put("id", "BUT_RAYO");
+            torre.put("skin", "Figura");
+            torre.put("active",true);
+            torres.put("RAYO",torre);
+            torre = new JSONObject();
+            torre.put("id", "BUT_HIELO");
+            torre.put("skin", "Figura");
+            torre.put("active",true);
+            torres.put("HIELO",torre);
+            torre = new JSONObject();
+            torre.put("id", "BUT_FUEGO");
+            torre.put("skin", "Figura");
+            torre.put("active",true);
+            torres.put("FUEGO",torre);
+            torre = new JSONObject();
+            torre.put("id", "BUT_MINI");
+            torre.put("skin", "Figura");
+            torre.put("active",false);
+            torres.put("MINI",torre);
+            obj.put("torres",torres);
+
             obj.put("skinRayo","Figura");
             obj.put("skinFuego","Figura");
             obj.put("skinHielo","Figura");

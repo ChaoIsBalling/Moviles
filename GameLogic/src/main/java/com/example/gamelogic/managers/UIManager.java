@@ -91,7 +91,10 @@ public class UIManager {
                 t.setText(value);
         }
     }
-
+    public void unloadButtonOfType(String type, Button b)
+    {
+        buttonTypes.get(type).remove(b);
+    }
     public ArrayList<Button> getAllButtonsOfType(String type)
     {
       return buttonTypes.get(type);
