@@ -1,9 +1,7 @@
 package com.example.androidengine;
 
-import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -25,10 +23,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.io.File;
 
@@ -174,7 +168,7 @@ public class AndroidEngine implements Runnable {
      * Metodo que lanza un intent que comparte un mensaje de texto
      * @param message Mensaje que se quiere mandar
      */
-    public void luanchShareIntent(String message)
+    public void launchShareIntent(String message)
     {
         Uri uri = takeScreenshot();
         Intent shareIntent = new Intent(Intent. ACTION_SEND);

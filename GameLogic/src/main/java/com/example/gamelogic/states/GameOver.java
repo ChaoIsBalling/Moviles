@@ -1,7 +1,5 @@
 package com.example.gamelogic.states;
 
-import android.util.Log;
-
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.State;
@@ -288,7 +286,7 @@ public class GameOver implements State {
                 message = "Soy una desgracia >:(";
             }
         }
-        this.engine.luanchShareIntent(message); //intent
+        this.engine.launchShareIntent(message); //intent
     }
 
     /**
