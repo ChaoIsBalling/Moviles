@@ -388,7 +388,6 @@ public class Tienda implements State {
                 }
 
             }
-
             boolean bct = false;
             int i =0;
             while (i<this.ScrollableButtons.size() && !bct){

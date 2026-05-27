@@ -29,8 +29,6 @@ import java.io.File;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-//import androidx.work.Worker;
-//import androidx.work.WorkerParameters;
 import android.content.Intent;
 
 /**
@@ -155,6 +153,9 @@ public class AndroidEngine implements Runnable {
 
 
     }
+    /**
+     * Metodo que llama a AndroidGraphics para conseguir el bitmap de la captura de pantalla, guradandolo y pasandolo a Uri
+     */
     public Uri takeScreenshot()
     {
         Bitmap bitmap=getGraphics().takeScreenshot();

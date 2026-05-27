@@ -153,15 +153,16 @@ public class AndroidGraphics{
         this.canvas.restore();
     }
 
+
+    /**
+     * Metodo que copia los pixeles que hay en pantalla a un bitmap para crear una captura de pantalla
+     */
     public Bitmap takeScreenshot()
     {
         final Bitmap[] bitmap = {Bitmap.createBitmap(sView.getWidth(), sView.getHeight(), Bitmap.Config.RGB_565)};
-        Canvas canvas= new Canvas(bitmap[0]);
         PixelCopy.request(sView, bitmap[0],(copyResult)->{
-            if (copyResult == PixelCopy.SUCCESS) {
-
-            }
-            else {
+            if (copyResult != PixelCopy.SUCCESS) {
+                //Esto es para debuggear y ver si ha sido un exito
                bitmap[0] =newImage("asgore.png").getBitmap();
             }
         }, new Handler(Looper.getMainLooper()));
