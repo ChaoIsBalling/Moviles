@@ -18,33 +18,18 @@ import com.example.gamelogic.TipoTorre;
 import com.example.gamelogic.towers.Tower;
 import com.example.gamelogic.Vector2D;
 import com.example.gamelogic.towers.TowerFactory;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Random;
-import java.util.HashMap;
 
 /**
  * Clase que representa la interfaz principal de juego, donde se desarrolla toda su lógica de gameplay
  */
 public class GameLogic implements State {
     private TowerFactory towerFactory = new TowerFactory();
-    private HashMap<TipoTorre, String> skins = new HashMap<>();
-
-    //IDs para elementos que queramos cambiar durante la partida
-    private final String BUT_RAYO_ID = "BUT_RAYO", BUT_HIELO_ID = "BUT_HIELO", BUT_FUEGO_ID = "BUT_FUEGO", BUT_MINI_ID = "BUT_MINI";
     private final String TEXT_VIDA_ID = "TEXT_VIDA" , TEXT_DINERO_ID= "TEXT_DINERO", TEXT_OLEADA_ID = "TEXT_OLEADA";
-
-    // IDs de los botones de mejora (añádelos a tus constantes)
-    private final String BUT_UP_DMG = "BUT_ATAQUE", BUT_UP_RAN = "BUT_RANGO", BUT_UP_VEL = "BUT_VELOCIDAD";
-
-    private int costeAtaque, costeRango, costeVelocidad;
-
-    boolean mini = false;//si esta desbloqueada la nueva torre
-
     //Franja en la que están los botones
     private Square placeGrey;
 
@@ -284,19 +269,6 @@ public class GameLogic implements State {
     private void cargarDatos(){
         try {
             this.fondo = this.save.getString("fondo");
-            //this.mini = true;
-            this.mini = this.save.getBoolean("mini");
-
-            //Leemos los valores de las skins del juego
-            String skin = this.save.getString("skinRayo");
-            skins.put(TipoTorre.RAYO, skin);
-
-            skin = this.save.getString("skinHielo");
-            skins.put(TipoTorre.HIELO,skin);
-
-            skin = this.save.getString("skinFuego");
-            skins.put(TipoTorre.FUEGO,skin);
-
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -408,7 +380,6 @@ public class GameLogic implements State {
         int i = (int) ((y - this.offsetY) / this.altoCasilla);
 
         Vector2D c = new Vector2D(i, j);
-        //System.out.println("("+c.getX()+","+c.getY()+")");
         return c;
     }
 
@@ -424,8 +395,6 @@ public class GameLogic implements State {
         int i = (int) (((y + (this.altoCasilla / 2) - this.offsetY)) / this.altoCasilla);
 
         Vector2D c = new Vector2D(i, j);
-        //System.out.println("("+c.getX()+","+c.getY()+")");
-
         return c;
     }
 
@@ -452,9 +421,7 @@ public class GameLogic implements State {
 
         //Renderizar el fondo de pantalla
         this.fondoNivel.RenderEscalado();
-
         this.placeGrey.Render(gr);
-
 
         //Renderizado del mapa
         for (int i = 0; i < this.fil; i++) {
@@ -473,7 +440,6 @@ public class GameLogic implements State {
         //Renderizado de todos los elementos del HUD
         this.ui.render(gr);
 
-
         //Si el juego esta en modo torre, pintamos un circulo con su rango
         if(this.estado == Estado.TORRE){
             gr.pintarCirculo(torreSeleccionada.getPosX(), torreSeleccionada.getPosY(),torreSeleccionada.getRange());
@@ -488,8 +454,6 @@ public class GameLogic implements State {
         this.style = engine.readJsonFile("GameLogic/style.json");
         //Inicializamos todos los elementos de la UI
         this.ui = new UIManager(this.style,this.engine, this.gr);
-        this.aplicarSkins();
-        this.aplicarCompras();
         this.inicializarBotones();
         this.inicializarContadores();
         this.cargarFondoNivel();
@@ -533,11 +497,15 @@ public class GameLogic implements State {
         for (Button b : this.ui.getAllButtonsOfType("tower")) {
             String processed=b.getId().replace(slice,"");
             try {
-                if(this.save.getJSONObject("torres").getJSONObject(processed).getBoolean("active")) {
+                JSONObject torre=this.save.getJSONObject("torres").getJSONObject(processed);
+                if(torre.getBoolean("active")) {
                     b.setOnClickListener(() -> this.prepararConstruccion(Integer.parseInt(b.getTextButton().getText()), TipoTorre.valueOf(processed), b.getId()));
+                    setButtonSkin(torre.getString("skin"),b);
                 }
                 else
                 {
+                    b.setEnabled(false);
+                    b.setVisible(false);
                     this.ui.unloadButtonOfType("tower",b);
                 }
             } catch (JSONException e) {
@@ -553,6 +521,24 @@ public class GameLogic implements State {
         cambiarEstadoBotones("tower", true);
         cambiarEstadoBotones("upgrade",false);
     }
+    /**
+     * Metodo que gestiona la aplicacion de skins en las torres
+     * @param skin El String que indica si la torre tiene una skin o no
+     * @param b El boton al que aplicamos la skin
+     */
+    private void setButtonSkin(String skin,Button b)
+    {
+        if (!skin.equals("Figura"))
+        {
+            b.getImgButton().setVisible(true);
+            b.getFigButton().setVisible(false);
+        }
+        else {
+            b.getImgButton().setVisible(false);
+            b.setImagen(null);
+            b.getFigButton().setVisible(true);
+        }
+    }
 
     /**
      * Metodo que activa/desactiva el grupo de botones que corresponda
@@ -563,48 +549,6 @@ public class GameLogic implements State {
         for (Button b : this.ui.getAllButtonsOfType(type)) {
                 b.setVisible(active);
                 b.setEnabled(active);
-        }
-    }
-
-    /**
-     * Metodo que se encarga de comprobar si el jugador ha comprado skin, y si es así, aplicarla
-     */
-    public void aplicarSkins(){
-        //depende de la skin el boton es figura o skin seleccionada
-        Button b = this.ui.getButtonUI(BUT_RAYO_ID);
-        if (!Objects.equals(skins.get(TipoTorre.RAYO), "Figura")) {
-            b.getImgButton().setVisible(true);
-            b.getFigButton().setVisible(false);
-        } else {
-            b.getImgButton().setVisible(false);
-            b.getFigButton().setVisible(true);
-        }
-        b= this.ui.getButtonUI(BUT_FUEGO_ID);
-        if (!Objects.equals(skins.get(TipoTorre.FUEGO), "Figura")) {
-            b.getImgButton().setVisible(true);
-            b.getFigButton().setVisible(false);
-        } else {
-            b.getImgButton().setVisible(false);
-            b.getFigButton().setVisible(true);
-        }
-        b=  this.ui.getButtonUI(BUT_HIELO_ID);
-        if (!Objects.equals(skins.get(TipoTorre.HIELO), "Figura")) {
-            b.getImgButton().setVisible(true);
-            b.getFigButton().setVisible(false);
-        } else {
-            b.getImgButton().setVisible(false);
-            b.getFigButton().setVisible(true);
-        }
-    }
-
-    /**
-     * Metodo que comprueba si el jugador ha comprado alguna torre nueva en la tienda y si es asi la habilita
-     */
-    private void aplicarCompras(){
-        //Si no tiene mas cosas de la tienda, como la torre mini... se desactiva
-        if(!this.mini){
-            this.ui.getButtonUI(BUT_MINI_ID).setVisible(false);
-            this.ui.getButtonUI(BUT_MINI_ID).setEnabled(false);
         }
     }
 
@@ -704,9 +648,7 @@ public class GameLogic implements State {
                 !casillaObjetivo.esCamino()){
             // Ver si la skin de la torre está activa
             Image skin = null;
-            if (!Objects.equals(skins.get(tipoTorreSeleccionado), "Figura"))
-                skin = this.ui.getButtonImage(CURRENT_BUT_ID);
-
+            skin = this.ui.getButtonImage(CURRENT_BUT_ID);
             // Decimos a la factoría que fabrique la torre del tipo que queremos
             Tower torreR = towerFactory.getTower(
                     tipoTorreSeleccionado,
@@ -818,11 +760,9 @@ public class GameLogic implements State {
         this.tipoTorreSeleccionado = tipoTorre;
 
         //Primero coloreamos todos los botones de torres en blanco
-        String[] botonesTorres = {BUT_RAYO_ID,BUT_HIELO_ID, BUT_FUEGO_ID};
-        for(int i = 0; i< botonesTorres.length;i++){
-            this.ui.getButtonUI(botonesTorres[i]).setColor(Color.BLANCO.getHex());
+        for (Button b : this.ui.getAllButtonsOfType("tower")) {
+            b.setColor(Color.BLANCO.getHex());
         }
-
         //Cambiamos el color a Amarillo del boton correspondiente
         this.ui.getButtonUI(id).setColor(Color.AMARILLO_CLARO.getHex());
         this.CURRENT_BUT_ID = id;
@@ -852,13 +792,4 @@ public class GameLogic implements State {
             this.resetearEstado(); //Se vuelve al estado normal
         }
     }
-
-    // Estos métodos son los que "disparan" los botones del HUD
-    public void prepararRayo() { prepararConstruccion(costeRayo, TipoTorre.RAYO, BUT_RAYO_ID); }
-    public void prepararHielo() { prepararConstruccion(costeHielo, TipoTorre.HIELO, BUT_HIELO_ID); }
-    public void prepararFuego() { prepararConstruccion(costeFuego, TipoTorre.FUEGO, BUT_FUEGO_ID); }
-    public void prepararMini() { prepararConstruccion(costeMini, TipoTorre.MINI, BUT_MINI_ID); }
-    public void mejorarAtaque(){ prepararMejora(costeAtaque, TipoMejora.ATAQUE);}
-    public void mejorarRango(){prepararMejora(costeRango, TipoMejora.RANGO);}
-    public void mejorarVelocidad() {prepararMejora(costeVelocidad, TipoMejora.VELOCIDAD);}
 }
