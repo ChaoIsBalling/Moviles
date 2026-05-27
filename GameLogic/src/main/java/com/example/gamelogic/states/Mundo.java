@@ -432,34 +432,6 @@ public class Mundo implements State {
         for(Button b : niveles){
             b.handleInput(e);
         }
-
-        /*if (this.botonVolver.contains(e.x, e.y)) {
-            Menu menu = new Menu(this.engine, this.mobile,this.save);
-            this.engine.setState(menu);
-        } else {
-            for (int i = 0; i < niveles.size(); i++) {
-                if (niveles.get(i).contains(e.x, e.y) && i <= this.completed - this.nivelesHastaAhora) {
-                    //(i == this.completed - this.nivelesHastaAhora) -> Ultimo nivel sin completar
-                    //(i <                                         ) -> Nivel completado
-                    boolean isLevelCompleted = (i == this.completed - this.nivelesHastaAhora) ? false: true;
-                    //System.out.println(isLevelCompleted);
-                    GameLogic gameLogic = new GameLogic(this.engine, this.mobile, "Mundo/World" + this.mundo + "/Level" + (i + 1) + ".json",isLevelCompleted, i+1,this.mundo,this.save);
-                    this.engine.setState(gameLogic);
-                }
-            }
-            if (this.previous) {
-                if (this.anteriorMundo.contains(e.x, e.y)) {
-                    Mundo mundoAnterior = new Mundo(this.engine, this.mobile, this.mundo - 1,this.save);
-                    this.engine.setState(mundoAnterior);
-                }
-            }
-            if (this.next) {
-                if (siguienteMundo.contains(e.x, e.y)) {
-                    Mundo mundoNext = new Mundo(this.engine, this.mobile, this.mundo + 1,this.save);
-                    this.engine.setState(mundoNext);
-                }
-            }
-        }*/
     }
 
     @Override

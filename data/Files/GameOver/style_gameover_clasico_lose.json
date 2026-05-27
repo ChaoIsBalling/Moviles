@@ -2,6 +2,7 @@
   "buttons": [
     {
       "id": "BUT_MENU",
+         "type":"ui",
       "x": 120,
       "y": 350,
       "w": 200,
@@ -23,6 +24,7 @@
     },
     {
       "id": "BUT_REINTENTAR",
+         "type":"ui",
       "x": 480,
       "y": 350,
       "w": 200,
@@ -44,6 +46,7 @@
     },
     {
       "id": "BUT_INTENT",
+         "type":"ui",
       "x": 300,
       "y": 350,
       "w": 50,

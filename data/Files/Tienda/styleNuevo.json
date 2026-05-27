@@ -2,6 +2,7 @@
   "buttons": [
     {
       "id": "BUT_VOLVER",
+      "type":"ui",
       "x": 30,
       "y": 30,
       "w": 30,
@@ -22,6 +23,7 @@
 
     {
       "id": "BUT_COMPRAR",
+      "type":"ui",
       "x": 110,
       "y": 50,
       "w": 50,

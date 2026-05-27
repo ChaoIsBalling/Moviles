@@ -8,6 +8,7 @@ import com.example.gamelogic.Image;
 import com.example.gamelogic.button.Button;
 import com.example.gamelogic.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.JSONArray;
@@ -18,6 +19,7 @@ public class UIManager {
     // Hash Maps donde vamos a guardar los elementos de la UI de la escena
     private HashMap<String, Button> botones = new HashMap<>();
     private HashMap<String, Text> textos = new HashMap<>();
+    private HashMap<String, ArrayList<Button>> buttonTypes =new HashMap<>();
     //Aqui se guardan las imagenes que sirven como HUD y que se queden todo el tiempo en pantalla
     private HashMap<String, Image> imagenes = new HashMap<>();
 
@@ -34,9 +36,17 @@ public class UIManager {
             if (sceneJson.has("buttons")) {
                 JSONArray array = sceneJson.getJSONArray("buttons");
                 for (int i = 0; i < array.length(); i++) {
+                    String type= new String();
                     JSONObject bData = array.getJSONObject(i);
+                    type=bData.getString("type");
                     Button b = new Button(bData,gr);
                     botones.put(bData.getString("id"), b);
+                    if(!buttonTypes.containsKey(type))
+                    {
+                        buttonTypes.put(type,new ArrayList<Button>());
+                    }
+                    buttonTypes.get(type).add(b);
+
                 }
             }
 
@@ -80,6 +90,11 @@ public class UIManager {
             if(t != null)
                 t.setText(value);
         }
+    }
+
+    public ArrayList<Button> getAllButtonsOfType(String type)
+    {
+      return buttonTypes.get(type);
     }
 
     /**

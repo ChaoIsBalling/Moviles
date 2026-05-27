@@ -41,10 +41,6 @@ public class GameLogic implements State {
     // IDs de los botones de mejora (añádelos a tus constantes)
     private final String BUT_UP_DMG = "BUT_ATAQUE", BUT_UP_RAN = "BUT_RANGO", BUT_UP_VEL = "BUT_VELOCIDAD";
 
-    // Listas para agrupar los IDs y renderizarlos y habilitarlos cuando corresponda
-    private ArrayList<String> botonesConstruccion = new ArrayList<>();
-    private ArrayList<String> botonesMejora = new ArrayList<>();
-
     private int costeAtaque, costeRango, costeVelocidad;
 
     boolean mini = false;//si esta desbloqueada la nueva torre
@@ -203,6 +199,7 @@ public class GameLogic implements State {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
 
         //Oleadas que hay en total dependiendo del modo de juego
         switch(this.dificultad) {
@@ -532,55 +529,38 @@ public class GameLogic implements State {
      */
     void inicializarBotones(){
         //Primero leemos el valor del texto de los botones (es el precio de construir la torre)
-        this.costeRayo = Integer.parseInt(this.ui.getButtonUIText(BUT_RAYO_ID));
-        this.costeHielo = Integer.parseInt(this.ui.getButtonUIText(BUT_HIELO_ID));
-        this.costeFuego = Integer.parseInt(this.ui.getButtonUIText(BUT_FUEGO_ID));
+        String slice="BUT_";
+        for (Button b : this.ui.getAllButtonsOfType("tower")) {
+            String processed=b.getId().replace(slice,"");
+            b.setOnClickListener(()-> this.prepararConstruccion(Integer.parseInt(b.getTextButton().getText()),TipoTorre.valueOf(processed),b.getId()));
+        }
 
-        this.costeAtaque = Integer.parseInt(this.ui.getButtonUIText(BUT_UP_DMG));
-        this.costeRango = Integer.parseInt(this.ui.getButtonUIText(BUT_UP_RAN));
-        this.costeVelocidad = Integer.parseInt(this.ui.getButtonUIText(BUT_UP_VEL));
+        for (Button b : this.ui.getAllButtonsOfType("upgrade")) {
+            String processed=b.getId().replace(slice,"");
+            b.setOnClickListener(()-> this.prepararMejora(Integer.parseInt(b.getTextButton().getText()),TipoMejora.valueOf(processed)));
+        }
 
         if(this.mini)
             this.costeMini = Integer.parseInt(this.ui.getButtonUIText(BUT_MINI_ID));
-
-        //Una vez hemos leido los valores, seteamos los listeners con el valor de los precios
-        this.ui.getButtonUI(BUT_RAYO_ID).setOnClickListener(() -> this.prepararRayo());
-        this.ui.getButtonUI(BUT_HIELO_ID).setOnClickListener(() -> this.prepararHielo());
-        this.ui.getButtonUI(BUT_FUEGO_ID).setOnClickListener(() -> this.prepararFuego());
-
-        this.botonesConstruccion.add(BUT_RAYO_ID);
-        this.botonesConstruccion.add(BUT_HIELO_ID);
-        this.botonesConstruccion.add(BUT_FUEGO_ID);
-
-        this.ui.getButtonUI(BUT_UP_DMG).setOnClickListener(() ->this.mejorarAtaque());
-        this.ui.getButtonUI(BUT_UP_RAN).setOnClickListener(() -> this.mejorarRango());
-        this.ui.getButtonUI(BUT_UP_VEL).setOnClickListener(() -> this.mejorarVelocidad());
-
-        this.botonesMejora.add(BUT_UP_DMG);
-        this.botonesMejora.add(BUT_UP_RAN);
-        this.botonesMejora.add(BUT_UP_VEL);
 
         //la torre esta desbloqueada...
         if(this.mini)
             this.ui.getButtonUI(BUT_MINI_ID).setOnClickListener(() -> this.prepararMini());
 
         //Hacemos que los botones de construccion esten activados desde el principio
-        cambiarEstadoBotones(botonesConstruccion, true);
-        cambiarEstadoBotones(botonesMejora,false);
+        cambiarEstadoBotones("tower", true);
+        cambiarEstadoBotones("upgrade",false);
     }
 
     /**
      * Metodo que activa/desactiva el grupo de botones que corresponda
-     * @param buttonGroup Grupo de botones que queremos activar/desactivar
+     * @param type El tipo de boton que queremos activar/desactivar
      * @param active true si se activa, false si se desactiva
      */
-    public void cambiarEstadoBotones(ArrayList<String> buttonGroup, boolean active) {
-        for (String id : buttonGroup) {
-            Button b = this.ui.getButtonUI(id);
-            if (b != null) {
+    public void cambiarEstadoBotones(String type, boolean active) {
+        for (Button b : this.ui.getAllButtonsOfType(type)) {
                 b.setVisible(active);
                 b.setEnabled(active);
-            }
         }
     }
 
@@ -597,7 +577,6 @@ public class GameLogic implements State {
             b.getImgButton().setVisible(false);
             b.getFigButton().setVisible(true);
         }
-
         b= this.ui.getButtonUI(BUT_FUEGO_ID);
         if (!Objects.equals(skins.get(TipoTorre.FUEGO), "Figura")) {
             b.getImgButton().setVisible(true);
@@ -705,8 +684,8 @@ public class GameLogic implements State {
             //Modo Mejora
             this.torreSeleccionada = torreEnCasilla;
             this.estado = Estado.TORRE;
-            this.cambiarEstadoBotones(botonesMejora,true);
-            this.cambiarEstadoBotones(botonesConstruccion, false);
+            this.cambiarEstadoBotones("upgrade",true);
+            this.cambiarEstadoBotones("tower", false);
 
         }else if(this.estado == Estado.CONSTRUCCION) {
             comprarTorre(casillaActual, e);
@@ -764,8 +743,8 @@ public class GameLogic implements State {
         this.tipoTorreSeleccionado = null;
 
         //Se vuelven a activar los botones de contruccion
-        cambiarEstadoBotones(botonesConstruccion, true);
-        cambiarEstadoBotones(botonesMejora,false);
+        cambiarEstadoBotones("tower", true);
+        cambiarEstadoBotones("upgrade",false);
 
         if(this.ui.getButtonUI(CURRENT_BUT_ID) != null) {
             this.ui.getButtonUI(CURRENT_BUT_ID).setColor(Color.BLANCO.getHex());

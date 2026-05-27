@@ -2,6 +2,7 @@
   "buttons": [
     {
       "id": "BUT_CORTA",
+      "type":"ui",
       "x":300,"y":100,"w":220,"h":50,"isRound":true,
         "ar":20,
       "color":"#FF999999",
@@ -19,6 +20,7 @@
     },
     {
       "id": "BUT_LARGA",
+      "type":"ui",
       "x":300,
         "y":200,
         "w":220,
@@ -40,6 +42,7 @@
     },
     {
       "id": "BUT_INFINITO",
+      "type":"ui",
      "x":300,
         "y":300,
         "w":220,
@@ -61,6 +64,7 @@
     },
     {
       "id": "BUT_VOLVER",
+      "type":"ui",
       "x":30, "y":30, "w":30,"h":30,
       "isRound":true,"ar":15, "color":"#FFFFffff",
       "icon" :{

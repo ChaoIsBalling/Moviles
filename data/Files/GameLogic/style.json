@@ -2,6 +2,7 @@
   "buttons": [
     {
       "id": "BUT_RAYO",
+      "type": "tower",
       "x": 440, "y": 360, "w": 50, "h": 50,
       "isRound": true, "ar": 20, "color": "#FFFFFFFF",
       "text": {
@@ -28,6 +29,7 @@
     },
     {
       "id": "BUT_HIELO",
+      "type":"tower",
       "x": 500, "y": 360, "w": 50, "h": 50,
       "isRound": true, "ar": 20, "color": "#FFFFFFFF",
       "text": {
@@ -56,6 +58,7 @@
     },
     {
       "id": "BUT_FUEGO",
+      "type":"tower",
       "x": 560, "y": 360, "w": 50, "h": 50,
       "isRound": true, "ar": 20, "color": "#FFFFFFFF",
       "text": {
@@ -83,6 +86,7 @@
 
     {
       "id": "BUT_ATAQUE",
+      "type":"upgrade",
       "x": 440, "y": 360, "w": 50, "h": 50,
       "isRound": true, "ar": 20, "color": "#FFFFFFFF",
       "text": {
@@ -100,6 +104,7 @@
     },
     {
       "id": "BUT_RANGO",
+      "type":"upgrade",
       "x": 500, "y": 360, "w": 50, "h": 50,
       "isRound": true, "ar": 20, "color": "#FFFFFFFF",
       "text": {
@@ -118,6 +123,7 @@
 
     {
       "id": "BUT_VELOCIDAD",
+      "type":"upgrade",
       "x": 560, "y": 360, "w": 50, "h": 50,
       "isRound": true, "ar": 20, "color": "#FFFFFFFF",
       "text": {
@@ -135,6 +141,7 @@
     },
     {
       "id": "BUT_MINI",
+       "type":"tower",
       "x": 380, "y": 360, "w": 50, "h": 50,
       "isRound": true, "ar": 20, "color": "#FFFFFFFF",
       "text": {

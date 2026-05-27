@@ -38,6 +38,8 @@ public class Button {
 
     //Texto del boton
     Text text;
+    //id del boton
+    String id;
     String color; //Color por defecto
     Image imagen; //Imagen
     Figure figura; //Figura del botón
@@ -87,6 +89,7 @@ public class Button {
     public Button(JSONObject json, AndroidGraphics gr)
     {
         try {
+            this.id=json.getString("id");
             this.x = json.getInt("x");
             this.y= json.getInt("y");
             this.w= json.getInt("w");
@@ -160,6 +163,8 @@ public class Button {
     public float getY(){return this.y;}
 
     public Text getTextButton(){ return this.text; }
+
+    public String getId(){return this.id;}
 
     public Image getImgButton(){ return this.imagen; }
     public Figure getFigButton(){ return this.figura; }

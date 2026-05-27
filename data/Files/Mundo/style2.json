@@ -2,6 +2,7 @@
   "buttons": [
     {
       "id": "BUT_SIGUIENTE_MUNDO",
+      "type":"ui",
       "x": 490,
       "y": 50,
       "w": 50,
@@ -22,6 +23,7 @@
 
     {
       "id": "BUT_ANTERIOR_MUNDO",
+      "type":"ui",
       "x": 110,
       "y": 50,
       "w": 50,
@@ -42,6 +44,7 @@
 
     {
       "id": "BUT_VOLVER",
+      "type":"ui",
       "x": 30,
       "y": 50,
       "w": 30,

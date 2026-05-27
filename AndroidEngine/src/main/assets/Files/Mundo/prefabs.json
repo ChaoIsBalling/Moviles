@@ -1,10 +1,12 @@
 {
     "NivelMundo":     
     {
+        "id":"BUT_LEVEL",
         "x":300,
         "y":150,
         "w":300,
         "h":70,
+        "type":"level",
         "isRound":false,
         "ar":20,
         "color":"#FFA1BF37",

@@ -2,6 +2,7 @@
   "buttons": [
     {
       "id": "BUT_INICIAL",
+      "type":"ui",
       "x": 150,
       "y": 250,
       "w": 200,
@@ -23,6 +24,7 @@
     },
     {
       "id": "BUT_AVENTURA",
+      "type":"ui",
       "x": 450,
       "y": 250,
       "w": 200,
@@ -44,6 +46,7 @@
     },
     {
       "id": "BUT_TIENDA",
+      "type":"ui",
       "x": 150,
       "y": 350,
       "w": 200,
