@@ -128,8 +128,6 @@ public class GameOver implements State {
                 throw new RuntimeException(e);
             }
 
-
-
             ui.setTextUI(
                     "TEXT_RECOMPENSA_AD",
                     "+10"
@@ -274,7 +272,7 @@ public class GameOver implements State {
                 message = "Mira lo bueno que soy me he pasado una partida larga del mejor tower defense de todos los tiempos";
             }
             else {
-                message = "Mira lo bueno que soy me he pasado el nivel " + this.nivel + " del mundo " + this.mundo + " del mejor tower defense de todos los tiempos";
+                message = "Por fin me he pasado el nivel " + this.nivel + " del mundo " + this.mundo + " del mejor tower defense de todos los tiempos";
             }
         }
         else
