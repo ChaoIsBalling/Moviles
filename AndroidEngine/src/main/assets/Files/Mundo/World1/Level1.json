@@ -1,22 +1,6 @@
 {
     "level":1,
     "waves": [
-   {
-     "enemy": "goblin",
-     "amount":3        
-    }, 
-    {
-      "enemy":"orc",
-      "amount": 2
-    }, 
-    { 
-     "enemy": "imp",
-     "amount":3   
-    },
-    {
-      "enemy":"orc",
-      "amount": 2
-    }
     ],
     "mapa":["hhhhhhhhhhhhhh", 
             "cccccccchhhhhh", 

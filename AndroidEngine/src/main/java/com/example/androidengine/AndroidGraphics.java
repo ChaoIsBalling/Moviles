@@ -5,29 +5,23 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.hardware.display.DisplayManager;
-import android.media.projection.MediaProjection;
-import android.provider.MediaStore;
-import android.util.DisplayMetrics;
-import android.view.Surface;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import android.graphics.BitmapFactory;
 import android.content.res.AssetManager;
 import android.content.Context;
 import android.graphics.Path;
 import android.graphics.PorterDuff.Mode;
+import android.view.PixelCopy;
+
 
 
 /**
@@ -161,10 +155,17 @@ public class AndroidGraphics{
 
     public Bitmap takeScreenshot()
     {
-        Bitmap bitmap = Bitmap.createBitmap(sView.getWidth(), sView.getHeight(), Bitmap.Config.RGB_565);
-        Canvas canvas= new Canvas(bitmap);
-        sView.draw(canvas);
-        return bitmap;
+        final Bitmap[] bitmap = {Bitmap.createBitmap(sView.getWidth(), sView.getHeight(), Bitmap.Config.RGB_565)};
+        Canvas canvas= new Canvas(bitmap[0]);
+        PixelCopy.request(sView, bitmap[0],(copyResult)->{
+            if (copyResult == PixelCopy.SUCCESS) {
+
+            }
+            else {
+               bitmap[0] =newImage("asgore.png").getBitmap();
+            }
+        }, new Handler(Looper.getMainLooper()));
+        return bitmap[0];
     }
 
 
