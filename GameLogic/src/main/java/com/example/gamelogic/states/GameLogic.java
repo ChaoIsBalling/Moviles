@@ -74,8 +74,6 @@ public class GameLogic implements State {
     float offsetX = 30, offsetY = 50;
 
     int ancho = 0, alto = 0;
-    //Indica si el nivel se ha completado en el modo aventura
-    boolean isCompleted;
     //nivel y mundo actual
     int nivel, mundo;
     private int precioAPagar;
@@ -134,12 +132,11 @@ public class GameLogic implements State {
     /**
      * Constructora del estado principal de juego en el modo aventura a partir de la lectura del mapa del nivel
      */
-    public GameLogic(AndroidEngine engine, AndroidMobile mobile, String mapa, boolean isCompleted, int nivel, int mundo,JSONObject save){
+    public GameLogic(AndroidEngine engine, AndroidMobile mobile, String mapa, int nivel, int mundo,JSONObject save){
         this.save=save;
         this.engine=engine;
         this.dificultad = Dificultad.aventura;
         this.oleadasRestantes=0;
-        this.isCompleted = isCompleted;
         this.init();
         this.inicializarNivel(mapa);
         this.mobile = mobile;
@@ -307,27 +304,27 @@ public class GameLogic implements State {
         //si nos quedamos sin oleadas parar
         //En caso de que haya ganado, no habrá oleadas, enemigos y la vida es mayor a 0
         int oleadasRestantes = wave.getNumOleadasRestantes();
+        boolean isCompleted=true;
         if (oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()) {
             this.stopSoundTorres();
 
             //comprobamos si el nivel que hemos derrotado es un nivel nuevo
             try {
-                if(this.levelNumber>save.getInt("completed"))
-                {
+                if(this.levelNumber>save.getInt("completed")) {
                     save.put("completed",this.levelNumber);
+                    isCompleted=false;
                 }
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
             //Vamos al estado de GameOver
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true, this.isCompleted, this.nivel, this.mundo, this.wave.getNumOleadas(),this.save);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true, isCompleted, this.nivel, this.mundo, this.wave.getNumOleadas(),this.save);
             this.engine.setState(gameOver);
         }
-
         //En caso de que haya perdido
         if (this.vida <= 0) {
             this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false, this.isCompleted, this.nivel, this.mundo, this.wave.getNumOleadas(),this.save);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false, isCompleted, this.nivel, this.mundo, this.wave.getNumOleadas(),this.save);
             this.engine.setState(gameOver);
         }
     }

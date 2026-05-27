@@ -279,10 +279,9 @@ public class Mundo implements State {
         if (index <= this.completed - this.nivelesHastaAhora) {
             //(i == this.completed - this.nivelesHastaAhora) -> Ultimo nivel sin completar
             //(i <                                         ) -> Nivel completado
-            boolean isLevelCompleted = (index == this.completed - this.nivelesHastaAhora) ? false: true;
             //System.out.println(isLevelCompleted);
             GameLogic gameLogic = new GameLogic(this.engine, this.mobile, "Mundo/World" +
-                    this.mundo + "/Level" + (index + 1) + ".json",isLevelCompleted, index+1,this.mundo,this.save);
+                    this.mundo + "/Level" + (index + 1) + ".json", index+1,this.mundo,this.save);
             this.engine.setState(gameLogic);
         }
 
