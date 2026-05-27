@@ -108,7 +108,6 @@ public class WaveManager {
         //Si el juego ya no hay más oleadas, el WaveManager se desactiva.
         if (oleadasRestantes <= 0) return;
 
-
         //Si aun no hemos generado todos los enemigos del grupo...
         if(enemigosGenerados < enemigosPorGrupo){
             prepararSiguienteEnemigo();
@@ -121,7 +120,6 @@ public class WaveManager {
         else{
             prepararSiguienteOleada();
         }
-
         //Actualizamos los temporizadores
         actualizarTemporizadores(deltaTime);
     }
@@ -264,4 +262,9 @@ public class WaveManager {
     public int getNumOleadasRestantes(){
         return this.oleadasRestantes;
     }
+    /**
+     * Getter del numero de oleadas actuales
+     * @return oleadas actuales
+     */
+    public int getNumOleadas(){return this.oleadaActual;}
 }

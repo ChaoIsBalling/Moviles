@@ -64,7 +64,6 @@ public class GameLogic implements State {
     float ranTorre = (float) 11.7;//mejora de rango
     float velTorre = (float) -0.2;//mejora de velocidad
 
-    int oleada;//numero oleada
     int oleadasRestantes;//oleadas restantes
 
     private JSONObject save; //Archivo de Guardado del Juego
@@ -79,11 +78,8 @@ public class GameLogic implements State {
     boolean isCompleted;
     //nivel y mundo actual
     int nivel, mundo;
-
     private int precioAPagar;
     private TipoTorre tipoTorreSeleccionado;
-    private int costeRayo, costeHielo, costeFuego,costeMini;
-
     private String CURRENT_BUT_ID = " ";
 
     //Enumaerado que determina en que estado de juego estamos
@@ -101,9 +97,6 @@ public class GameLogic implements State {
     JSONArray oleadasDatos;
     //Para leer el mapa
     JSONObject mapaObj;
-
-    //Fondo del usuario
-    private String fondo;
 
     //Fondo del propio nivel
     private Image fondoNivel;
@@ -158,7 +151,6 @@ public class GameLogic implements State {
     private void init() {
         this.vida=10;
         this.dinero = 300;
-        this.oleada =1;
         //Inicializamos listas de entidades
         this.torres = new ArrayList<Tower>();
         this.enemigos = new ArrayList<Enemy>();
@@ -172,8 +164,6 @@ public class GameLogic implements State {
      */
     private void inicializarNivel(String mapa)
     {
-        //Cargamos los datos del json del mapa
-        this.cargarDatos();
         this.mapaObj =engine.readJsonFile(mapa);
         JSONArray arr= null; //array del mapa
         try {
@@ -184,7 +174,6 @@ public class GameLogic implements State {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
 
         //Oleadas que hay en total dependiendo del modo de juego
         switch(this.dificultad) {
@@ -265,15 +254,6 @@ public class GameLogic implements State {
         }
     }
 
-    //carga el progreso y comprueba que no ha sido modificado
-    private void cargarDatos(){
-        try {
-            this.fondo = this.save.getString("fondo");
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     /**
      * Actualiza la lista de torres
      */
@@ -340,14 +320,14 @@ public class GameLogic implements State {
                 throw new RuntimeException(e);
             }
             //Vamos al estado de GameOver
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true, this.isCompleted, this.nivel, this.mundo, this.oleada,this.save);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true, this.isCompleted, this.nivel, this.mundo, this.wave.getNumOleadas(),this.save);
             this.engine.setState(gameOver);
         }
 
         //En caso de que haya perdido
         if (this.vida <= 0) {
             this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false, this.isCompleted, this.nivel, this.mundo, this.oleada,this.save);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false, this.isCompleted, this.nivel, this.mundo, this.wave.getNumOleadas(),this.save);
             this.engine.setState(gameOver);
         }
     }
@@ -485,32 +465,31 @@ public class GameLogic implements State {
     private void inicializarContadores() {
         this.ui.getTextUI(TEXT_DINERO_ID).setText(String.valueOf(this.dinero));
         this.ui.getTextUI(TEXT_VIDA_ID).setText(String.valueOf(this.vida));
-        this.ui.getTextUI(TEXT_OLEADA_ID).setText("Oleada: " + String.valueOf(this.oleada));
+        this.ui.getTextUI(TEXT_OLEADA_ID).setText("Oleada: " + String.valueOf(1));
     }
-
     /**
      * Metodo que inicaliza los botones de la UI asignandole su correspondiente callback
      */
     void inicializarBotones(){
         //Primero leemos el valor del texto de los botones (es el precio de construir la torre)
         String slice="BUT_";
-        for (Button b : this.ui.getAllButtonsOfType("tower")) {
-            String processed=b.getId().replace(slice,"");
-            try {
-                JSONObject torre=this.save.getJSONObject("torres").getJSONObject(processed);
-                if(torre.getBoolean("active")) {
-                    b.setOnClickListener(() -> this.prepararConstruccion(Integer.parseInt(b.getTextButton().getText()), TipoTorre.valueOf(processed), b.getId()));
-                    setButtonSkin(torre.getString("skin"),b);
-                }
-                else
-                {
-                    b.setEnabled(false);
-                    b.setVisible(false);
-                    this.ui.unloadButtonOfType("tower",b);
-                }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
+        try {
+            for (Button b : this.ui.getAllButtonsOfType("tower")) {
+                String processed=b.getId().replace(slice,"");
+                    JSONObject torre=this.save.getJSONObject("torres").getJSONObject(processed);
+                    if(torre.getBoolean("active")) {
+                        b.setOnClickListener(() -> this.prepararConstruccion(Integer.parseInt(b.getTextButton().getText()), TipoTorre.valueOf(processed), b.getId()));
+                        setButtonSkin(torre.getString("skin"),b);
+                    }
+                    else {
+                        b.setEnabled(false);
+                        b.setVisible(false);
+                        this.ui.unloadButtonOfType("tower",b);
+                    }
             }
+        }
+        catch (JSONException e) {
+            throw new RuntimeException(e);
         }
         for (Button b : this.ui.getAllButtonsOfType("upgrade")) {
             String processed=b.getId().replace(slice,"");
@@ -528,8 +507,7 @@ public class GameLogic implements State {
      */
     private void setButtonSkin(String skin,Button b)
     {
-        if (!skin.equals("Figura"))
-        {
+        if (!skin.equals("Figura")){
             b.getImgButton().setVisible(true);
             b.getFigButton().setVisible(false);
         }
@@ -644,11 +622,9 @@ public class GameLogic implements State {
      */
     private void comprarTorre(Casilla casillaObjetivo, TouchEvent e)
     {
-        if (this.dinero >= precioAPagar &&
-                !casillaObjetivo.esCamino()){
+        if (this.dinero >= precioAPagar && !casillaObjetivo.esCamino()){
             // Ver si la skin de la torre está activa
-            Image skin = null;
-            skin = this.ui.getButtonImage(CURRENT_BUT_ID);
+            Image skin = this.ui.getButtonImage(CURRENT_BUT_ID);
             // Decimos a la factoría que fabrique la torre del tipo que queremos
             Tower torreR = towerFactory.getTower(
                     tipoTorreSeleccionado,
@@ -744,9 +720,7 @@ public class GameLogic implements State {
      * Getter del UIManager
      * @return UIManager
      */
-     public UIManager getManagerUI(){
-        return this.ui;
-    }
+     public UIManager getManagerUI(){return this.ui;}
 
     /**
      * Metodo que pone el juego en modo construccion y setea los valores para posteriormente, internar comprar una torre
