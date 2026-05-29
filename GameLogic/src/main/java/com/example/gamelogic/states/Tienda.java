@@ -41,9 +41,6 @@ public class Tienda implements State {
     private ArrayList<ButtonComprar> ScrollableButtons;
     private ArrayList<Text>ScrollableText;
 
-    private enum Estado {
-        normal, botonRayo, botonFuego, botonHielo, botonMini, botonRojo, botonAzul
-    }
     //Ultima cordenada Y tocada
     float lastTouchedY;
 

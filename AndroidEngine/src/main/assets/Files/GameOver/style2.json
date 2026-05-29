@@ -23,7 +23,7 @@
       }
     },
     {
-      "id": "BUT_REINTENTAR",
+      "id": "BUT_VOLVER",
       "type":"ui",
       "x": 480,
       "y": 350,
@@ -33,52 +33,8 @@
       "ar": 20,
       "color": "#FF999999",
       "text": {
-        "id": "TEXT_REINTENTAR",
-        "texto": "Reintentar",
-        "font": "Inika-Regular.ttf",
-        "x": 0,
-        "y": 0,
-        "size": 30,
-        "bold": true,
-        "italic": true,
-        "color": "#FF000000"
-      }
-    },
-    {
-      "id": "BUT_VOLVER_MUNDO",
-      "type":"ui",
-      "x": 480,
-      "y": 350,
-      "w": 200,
-      "h": 50,
-      "isRound": true,
-      "ar": 20,
-      "color": "#FF999999",
-      "text": {
-        "id": "TEXT_VOLVER_MUNDO",
-        "texto": "Volver al mundo",
-        "font": "Inika-Regular.ttf",
-        "x": 0,
-        "y": 0,
-        "size": 25,
-        "bold": true,
-        "italic": true,
-        "color": "#FF000000"
-      }
-    },
-    {
-      "id": "BUT_RECOMPENSA_AD",
-      "type":"ui",
-      "x": 400,
-      "y": 250,
-      "w": 100,
-      "h": 50,
-      "isRound": true,
-      "ar": 20,
-      "color": "#FF999999",
-      "text": {
-        "id": "TEXT_AD_X2",
-        "texto": "AD x2",
+        "id": "TEXT_VOLVER",
+        "texto": "Volver",
         "font": "Inika-Regular.ttf",
         "x": 0,
         "y": 0,
@@ -98,17 +54,6 @@
       "isRound": true,
       "ar": 20,
       "color": "#FF00FFFF",
-      "text": {
-        "id": "TEXT_AD",
-        "texto": "AD",
-        "font": "Inika-Regular.ttf",
-        "x": 0,
-        "y": 0,
-        "size": 30,
-        "bold": true,
-        "italic": true,
-        "color": "#FF000000"
-      },
       "icon": {
         "id": "ICON_COMPARTIR",
         "imagen": "Compartir.png",
@@ -121,19 +66,9 @@
     }
   ],
 
-  "images": [
-    {
-      "id": "IMG_DIAMANTE",
-      "imagen": "Diamante.png",
-      "x": 120,
-      "y": 230,
-      "w": 50,
-      "h": 50,
-      "isHUD": true,
-      "visible": true
-    }
-  ],
 
+  "Win":
+  {
   "texts": [
     {
       "id": "TEXT_WIN",
@@ -145,7 +80,11 @@
       "bold": true,
       "italic": true,
       "color": "#FF000000"
-    },
+    }]
+  },
+  "Lose":
+  {
+      "texts": [
     {
       "id": "TEXT_LOSE",
       "texto": "DERROTA",
@@ -156,8 +95,36 @@
       "bold": true,
       "italic": true,
       "color": "#FF000000"
-    },
-    {
+    }]
+  },
+  "AdventureWin":
+  {
+      "buttons": [
+         {
+      "id": "BUT_RECOMPENSA_AD",
+      "type":"ui",
+      "x": 400,
+      "y": 250,
+      "w": 100,
+      "h": 50,
+      "isRound": true,
+      "ar": 20,
+      "color": "#FF999999",
+      "text": {
+        "id": "TEXT_AD_X2",
+        "texto": "AD x2",
+        "font": "Inika-Regular.ttf",
+        "x": 0,
+        "y": 0,
+        "size": 30,
+        "bold": true,
+        "italic": true,
+        "color": "#FF000000"
+        }
+        }
+      ],
+        "texts": [
+       {
       "id": "TEXT_DIAMANTES_ACTUALES",
       "texto": "",
       "font": "Inika-Regular.ttf",
@@ -179,5 +146,18 @@
       "italic": true,
       "color": "#FF00FFFF"
     }
+  ], "images": [
+    {
+      "id": "IMG_DIAMANTE",
+      "imagen": "Diamante.png",
+      "x": 120,
+      "y": 230,
+      "w": 50,
+      "h": 50,
+      "isHUD": true,
+      "visible": true
+    }
   ]
+  }
+
 }

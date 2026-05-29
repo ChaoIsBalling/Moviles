@@ -80,7 +80,6 @@ public class Dificultad implements State {
         this.engine.setState(menu);
     }
 
-
     /**
      * Dependiendo del modo elegido, iremos al estado GameLogic
      * @param list Lista de eventos

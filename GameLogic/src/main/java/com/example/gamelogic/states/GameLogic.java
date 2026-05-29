@@ -112,40 +112,33 @@ public class GameLogic implements State {
      * @param engine Motor
      */
     public GameLogic(AndroidEngine engine, AndroidMobile mobile, Dificultad dificultad,JSONObject save){
-        this.save = save;
-        this.engine=engine;
         this.dificultad = dificultad;
-
         //Elegimos un nivel entre un subcojunto de niveles de la carpeta Mapas
+        this.init(engine,mobile,save);
         int l = this.engine.getDirectoryLenght("Mapas");
         rnd = new Random();
         int level = rnd.nextInt(l) + 1;
-
         //Inicializar parámetros
-        this.init();
 
         //Inicializamos el nivel correspondiente
         this.inicializarNivel("Mapas/mapa" + level + ".json");
-        this.mobile = mobile;
-        this.mobile.setVisibleAdBanner(false);
     }
     /**
      * Constructora del estado principal de juego en el modo aventura a partir de la lectura del mapa del nivel
      */
     public GameLogic(AndroidEngine engine, AndroidMobile mobile, String mapa, int nivel, int mundo,JSONObject save){
-        this.save=save;
-        this.engine=engine;
         this.dificultad = Dificultad.aventura;
         this.oleadasRestantes=0;
-        this.init();
+        this.init(engine,mobile,save);
         this.inicializarNivel(mapa);
-        this.mobile = mobile;
-        this.mobile.setVisibleAdBanner(false);
+
         this.nivel=nivel;
         this.mundo=mundo;
     }
     //inicializa parametros
-    private void init() {
+    private void init(AndroidEngine engine, AndroidMobile mobile,JSONObject save) {
+        this.save=save;
+        this.engine=engine;
         this.vida=10;
         this.dinero = 300;
         //Inicializamos listas de entidades
@@ -154,6 +147,9 @@ public class GameLogic implements State {
         this.deadEnemies = new ArrayList<Enemy>();
         this.casillas = new ArrayList<ArrayList<Casilla>>();
         this.caminoEnemigos = new ArrayList<Vector2D>();
+        this.mobile = mobile;
+        this.mobile.setVisibleAdBanner(false);
+
     }
  /**
      * Metodo que lee los datos del nivel desde un archivo json
@@ -318,13 +314,15 @@ public class GameLogic implements State {
                 throw new RuntimeException(e);
             }
             //Vamos al estado de GameOver
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true, isCompleted, this.nivel, this.mundo, this.wave.getNumOleadas(),this.save);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true,
+                    isCompleted, this.nivel, this.mundo, this.wave.getNumOleadas(),this.save);
             this.engine.setState(gameOver);
         }
         //En caso de que haya perdido
         if (this.vida <= 0) {
             this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false, isCompleted, this.nivel, this.mundo, this.wave.getNumOleadas(),this.save);
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false,
+                    isCompleted, this.nivel, this.mundo, this.wave.getNumOleadas(),this.save);
             this.engine.setState(gameOver);
         }
     }
@@ -712,12 +710,6 @@ public class GameLogic implements State {
     public void actualizaOleadas(int oleada){
         this.ui.setTextUI(TEXT_OLEADA_ID, "Oleada: " + String.valueOf(oleada));
     }
-
-    /**
-     * Getter del UIManager
-     * @return UIManager
-     */
-     public UIManager getManagerUI(){return this.ui;}
 
     /**
      * Metodo que pone el juego en modo construccion y setea los valores para posteriormente, internar comprar una torre

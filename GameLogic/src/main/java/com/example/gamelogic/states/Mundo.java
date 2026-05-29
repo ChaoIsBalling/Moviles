@@ -16,12 +16,7 @@ import com.example.gamelogic.managers.UIManager;
 import java.util.ArrayList;
 
 public class Mundo implements State {
-    private Text textoMundo;
     private Square fondoTexto;
-
-    private Button siguienteMundo;
-    private Button anteriorMundo;
-    private Button botonVolver;
     private ArrayList<Button> niveles;
     private AndroidEngine engine;
 
@@ -80,87 +75,6 @@ public class Mundo implements State {
 
         this.mobile.setVisibleAdBanner(false);
 
-        /*try {
-            this.completed= this.save.getInt("completed");
-
-            botones=engine.readJsonFile("Mundo/style.json");
-            JSONObject mundoInfo=engine.readJsonFile("Mundo/World"+this.mundo+"/World"+this.mundo+".json");
-
-            //esto calcula cuantos niveles han habido hasta este mundo
-            for(int i=1;i<this.mundo;i++)
-            {
-                JSONObject obj=engine.readJsonFile("Mundo/World"+i+"/World"+i+".json");
-                this.nivelesHastaAhora+=obj.getInt("niveles");
-            }
-
-            //Numero de niveles del mundo actual
-            this.numNiveles=mundoInfo.getInt("niveles");
-
-            //Booleanos que indican si hay nivel antes o despues del mundo actual
-            this.next=mundoInfo.getBoolean("next");
-            this.previous=mundoInfo.getBoolean("previous");
-
-            //Array donde guardamos los botones de niveles
-            niveles=new ArrayList<Button>();
-
-            //Color para colorear los niveles completados y no completados
-            String colorCompleted = mundoInfo.getString("colorCompleted");
-            String colorLocked = mundoInfo.getString("colorLocked");
-
-            //Los botones deben estar entre estas dos posiciones
-            //Posicion más alta permitida para el scroll alrededor de Y
-            this.minY=(float)botones.getJSONObject("NivelMundo").getInt("y");
-            //Posicion más baja permitaida para el scroll
-            this.maxY=this.tamScroll - botones.getJSONObject("NivelMundo").getInt("h");
-
-            //inicialización de todos los botones de niveles
-            for(int i=0;i<this.numNiveles;i++)
-            {
-                //Seteamos a todos con una x y un color gris
-                Button nivelMundo = new Button(botones.getJSONObject("NivelMundo"));
-                Text nivel = new Text(botones.getJSONObject("TextoNivel"));
-                nivel.setText("X");
-                nivelMundo.setText(nivel);
-                nivelMundo.setY(nivelMundo.getY()+nivelMundo.getHeight()*(float)i*1.5f);
-                nivelMundo.setColor("#FFABABAC");
-                niveles.add(nivelMundo);
-            }
-
-            //determina que niveles de ESTE mundo se han completado
-            int nivelesCompletadosEnMundo = this.completed-this.nivelesHastaAhora;
-            int rangoNivelesPasados = Math.min(niveles.size()-1, nivelesCompletadosEnMundo);
-
-            //Ahora determinamos cuales son los niveles completados
-            for(int i=0; i <= rangoNivelesPasados; i++)
-            {
-                niveles.get(i).setColor(colorCompleted);
-                niveles.get(i).changeText(String.valueOf(i+1));
-            }
-
-            //Este es el nivel que tengo sin pasar ahora de ESTE mundo, primero comprobamos que exista
-            if(nivelesCompletadosEnMundo >= 0 &&
-                    nivelesCompletadosEnMundo < niveles.size())
-                //Coloreamos con color de nivel bloqueado
-                niveles.get(nivelesCompletadosEnMundo).setColor(colorLocked);
-
-            this.textoMundo = new Text(botones.getJSONObject("TextoMundo"));
-            this.textoMundo.setText("Mundo "+this.mundo);
-            this.fondoTexto = new Square(300,50,300,70,true);
-            this.fondoTexto.setColor("#ffDAB628");
-
-            //en caso de que hava un siguiente o anterior mundo inicializamos los botones correspondientes
-            if(this.next) {
-                this.siguienteMundo = new Button(botones.getJSONObject("SiguienteMundo"));
-            }
-            if(this.previous) {
-                this.anteriorMundo = new Button(botones.getJSONObject("AnteriorMundo"));
-            }
-            this.botonVolver = new Button(botones.getJSONObject("BotonVolver"));
-
-
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }*/
     }
 
     @Override
@@ -176,14 +90,7 @@ public class Mundo implements State {
             niveles.get(i).Render(gr);
         gr.TerminarLimiteDibujado();
         this.fondoTexto.Render(gr);
-
         this.ui.render(gr);
-        /*this.textoMundo.Render(gr);
-        if(this.next)
-            this.siguienteMundo.Render(gr);
-        if(this.previous)
-            this.anteriorMundo.Render(gr);
-        this.botonVolver.Render(gr);*/
     }
 
     @Override
@@ -279,7 +186,6 @@ public class Mundo implements State {
         if (index <= this.completed - this.nivelesHastaAhora) {
             //(i == this.completed - this.nivelesHastaAhora) -> Ultimo nivel sin completar
             //(i <                                         ) -> Nivel completado
-            //System.out.println(isLevelCompleted);
             GameLogic gameLogic = new GameLogic(this.engine, this.mobile, "Mundo/World" +
                     this.mundo + "/Level" + (index + 1) + ".json", index+1,this.mundo,this.save);
             this.engine.setState(gameLogic);
@@ -298,16 +204,8 @@ public class Mundo implements State {
                 throw new RuntimeException(e);
             }
             //Ya se hace en el json
-            //Text nivel = new Text(prefabs.getJSONObject("TextoNivel"));
-            //nivel.setText("X");
-            //nivelMundo.setText(nivel);
             nivelMundo.setY(nivelMundo.getY() + nivelMundo.getHeight() * (float) i * 1.5f);
             nivelMundo.setColor("#FFABABAC");
-            //niveles.add(nivelMundo);
-            //this.ui.addButtonUI("WORLD_" + this.mundo + "_" + (i + 1), nivelMundo);
-            int ind = i;
-            //this.ui.getButtonUI("WORLD_" + this.mundo + "_" + (i + 1)).setOnClickListener(() -> iniciarNivel(ind + 1));
-            //nivelMundo.setOnClickListener(() -> iniciarNivel(ind + 1));
             this.niveles.add(nivelMundo);
         }
 
@@ -316,8 +214,6 @@ public class Mundo implements State {
         //Ahora determinamos cuales son los niveles completados
         for(int i=0; i <= rangoNivelesPasados; i++)
         {
-            //this.ui.getButtonUI("WORLD_" + this.mundo +"_" + (i+1)).setColor(colorCompleted);
-            //this.ui.getButtonUI("WORLD_" + this.mundo +"_" + (i+1)).changeText(String.valueOf(i+1));
             niveles.get(i).setColor(colorCompleted);
             niveles.get(i).changeText(String.valueOf(i+1));
             int ind = i;
@@ -328,7 +224,6 @@ public class Mundo implements State {
         if(nivelesCompletadosEnMundo >= 0 &&
                 nivelesCompletadosEnMundo < niveles.size()){
             //Coloreamos con color de nivel bloqueado
-            //this.ui.getButtonUI("WORLD_" + this.mundo +"_" + nivelesCompletadosEnMundo).setColor(colorLocked);
             niveles.get(nivelesCompletadosEnMundo).setColor(colorLocked);
             niveles.get(nivelesCompletadosEnMundo).setOnClickListener(() -> iniciarNivel(nivelesCompletadosEnMundo));
         }
@@ -341,8 +236,7 @@ public class Mundo implements State {
     }
 
     private void crearUIElems(){
-        //this.textoMundo = new Text(prefabs.getJSONObject("TextoMundo"));
-        //this.textoMundo.setText("Mundo "+this.mundo);
+
         this.fondoTexto = new Square(300,50,300,70,true);
         this.fondoTexto.setColor("#ffDAB628");
 
@@ -366,15 +260,10 @@ public class Mundo implements State {
         //en caso de que hava un siguiente o anterior mundo inicializamos los botones correspondientes
         if(this.next) {
             this.ui.buttonEnabled("BUT_SIGUIENTE_MUNDO", true);
-            //this.ui.getButtonUI("BUT_ANTERIOR_MUNDO").setEnabled();
-            //this.siguienteMundo = new Button(prefabs.getJSONObject("SiguienteMundo"));
         }
         if(this.previous) {
             this.ui.buttonEnabled("BUT_ANTERIOR_MUNDO", true);
-            //this.ui.getButtonUI("BUT_ANTERIOR_MUNDO").setOnClickListener();
-            //this.anteriorMundo = new Button(prefabs.getJSONObject("AnteriorMundo"));
         }
-        //this.botonVolver = new Button(prefabs.getJSONObject("BotonVolver"));
     }
 
     private void inicializarUI(){

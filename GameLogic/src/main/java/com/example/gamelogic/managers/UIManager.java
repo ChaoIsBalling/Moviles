@@ -20,6 +20,8 @@ public class UIManager {
     private HashMap<String, Button> botones = new HashMap<>();
     private HashMap<String, Text> textos = new HashMap<>();
     private HashMap<String, ArrayList<Button>> buttonTypes =new HashMap<>();
+    private AndroidEngine engine;
+    private AndroidGraphics gr;
     //Aqui se guardan las imagenes que sirven como HUD y que se queden todo el tiempo en pantalla
     private HashMap<String, Image> imagenes = new HashMap<>();
 
@@ -30,7 +32,12 @@ public class UIManager {
         botones.clear();
         textos.clear();
         imagenes.clear();
-
+        this.engine=engine;
+        this.gr=gr;
+        loadUIFromJson(sceneJson);
+    }
+    public void loadUIFromJson(JSONObject sceneJson)
+    {
         try {
             //Cargar Botones
             if (sceneJson.has("buttons")) {
@@ -71,7 +78,7 @@ public class UIManager {
 
                     // Si el JSON dice que es HUD, la añadimos a la lista de renderizado
                     //if (imageData.optBoolean("isHUD", false)) {
-                        //imagenesHUD.put(imageData.getString("id"),img);
+                    //imagenesHUD.put(imageData.getString("id"),img);
                     //}
                 }
             }

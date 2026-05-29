@@ -127,7 +127,6 @@ public class GameOver implements State {
             catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-
             ui.setTextUI(
                     "TEXT_RECOMPENSA_AD",
                     "+10"
@@ -139,20 +138,17 @@ public class GameOver implements State {
             ui.setTextUI("TEXT_RECOMPENSA_AD", "+10");
         }
     }
-
     private void configurarDerrota() {
         //Sonido de derrota
         lose = audio.newSound("death_sound.wav");
         audio.playSound(lose);
     }
-
     private void configurarUIClasica() {
         //Listener del boton reintentar
-        ui.getButtonUI("BUT_REINTENTAR")
+        ui.getButtonUI("BUT_VOLVER")
                 .setOnClickListener(() -> {
                     Dificultad dificultad =
                             new Dificultad(engine, mobile, save);
-
                     engine.setState(dificultad);
                 });
     }
@@ -167,7 +163,7 @@ public class GameOver implements State {
         ui.setTextUI("TEXT_DIAMANTES_ACTUALES", String.valueOf(this.numDiamantes));
 
         //Boton de volver al menu de seleccion de mundo
-        ui.getButtonUI("BUT_VOLVER_MUNDO")
+        ui.getButtonUI("BUT_VOLVER")
                 .setOnClickListener(() -> {
                     Mundo mundo = new Mundo(engine, mobile, this.mundo, save);
                     engine.setState(mundo);
@@ -178,7 +174,7 @@ public class GameOver implements State {
                 .setOnClickListener(this::reclamarRecompensaDuplicada);
 
         //Si el nivel ya estaba completado NO se duplica la recompensa, se dará 10 diamantes solamente
-        if(this.isCompleted)
+        if(this.isCompleted&&this.win)
             ui.getButtonUI("BUT_RECOMPENSA_AD").changeText("AD");
     }
 
@@ -196,19 +192,21 @@ public class GameOver implements State {
 
 
     /**
-     * Metodo que determina la ruta del estilo de menú JSON a leer
-     * @param dif dificultad con la que se supero el nivel
-     * @return ruta del JSON con el estilo del menú
+     * Metodo que determina el tipo de UI que se va a usar
      */
-    private String determinarUI(GameLogic.Dificultad dif){
-        //Si el modo de juego es el de aventura...
-        if(dif == GameLogic.Dificultad.aventura){
-            return this.win ? "GameOver/style_gameover_aventura_win.json" :
-                    "GameOver/style_gameover_aventura_lose.json";
+    private void determinarUI(){
+        try {
+        if(this.win) {
+            this.ui.loadUIFromJson(this.style.getJSONObject("Win"));
+            //Si el modo de juego es el de aventura...
+            if(this.dificultad == GameLogic.Dificultad.aventura)
+                this.ui.loadUIFromJson(this.style.getJSONObject( "AdventureWin"));
         }
-        //si es el modo normal
-        return this.win ? "GameOver/style_gameover_clasico_win.json"
-                : "GameOver/style_gameover_clasico_lose.json";
+        else
+            this.ui.loadUIFromJson(this.style.getJSONObject("Lose"));
+        } catch (JSONException e) {
+        throw new RuntimeException(e);
+        }
     }
     @Override
     public void update(double deltaTime) { }
@@ -228,12 +226,11 @@ public class GameOver implements State {
         this.gr = gr;
 
         //Determinamos que UI Setear
-        String uiPath = determinarUI(this.dificultad);
+        String uiPath = "GameOver/style.json";
         this.style = engine.readJsonFile(uiPath);
-
         //Incializamos la UI
         this.ui = new UIManager(this.style , this.engine, this.gr);
-
+        determinarUI();
         //Configuramos la UI dependiendo del resultado
         configurarUI();
     }
