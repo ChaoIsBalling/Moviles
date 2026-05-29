@@ -384,7 +384,7 @@ public class GameLogic implements State {
 
     public float getRealY(int filCoor){ return this.casillas.get(filCoor).get(0).getY(); }
 
-    public  ArrayList<ArrayList<Casilla>> getCasillas(){return this.casillas;}
+    public ArrayList<ArrayList<Casilla>> getCasillas(){return this.casillas;}
 
     /**
      * Metodo que renderiza el tablero, entidades y botones
@@ -470,7 +470,7 @@ public class GameLogic implements State {
         String slice="BUT_";
         try {
             for (Button b : this.ui.getAllButtonsOfType("tower")) {
-                String processed=b.getId().replace(slice,"");
+                    String processed=b.getId().replace(slice,"");
                     JSONObject torre=this.save.getJSONObject("torres").getJSONObject(processed);
                     if(torre.getBoolean("active")) {
                         b.setOnClickListener(() -> this.prepararConstruccion(Integer.parseInt(b.getTextButton().getText()), TipoTorre.valueOf(processed), b.getId()));
@@ -503,13 +503,13 @@ public class GameLogic implements State {
     private void setButtonSkin(String skin,Button b)
     {
         if (!skin.equals("Figura")){
-            b.getImgButton().setVisible(true);
-            b.getFigButton().setVisible(false);
+            b.getImgButton(0).setVisible(true);
+            b.getFigButton(0).setVisible(false);
         }
         else {
-            b.getImgButton().setVisible(false);
-            b.setImagen(null);
-            b.getFigButton().setVisible(true);
+            b.getImgButton(0).setVisible(false);
+            b.cleanImages();
+            b.getFigButton(0).setVisible(true);
         }
     }
 
@@ -619,7 +619,7 @@ public class GameLogic implements State {
     {
         if (this.dinero >= precioAPagar && !casillaObjetivo.esCamino()){
             // Ver si la skin de la torre está activa
-            Image skin = this.ui.getButtonImage(CURRENT_BUT_ID);
+            Image skin = this.ui.getButtonImage(CURRENT_BUT_ID, 0);
             // Decimos a la factoría que fabrique la torre del tipo que queremos
             Tower torreR = towerFactory.getTower(
                     tipoTorreSeleccionado,

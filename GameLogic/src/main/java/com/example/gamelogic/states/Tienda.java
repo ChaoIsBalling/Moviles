@@ -129,7 +129,7 @@ public class Tienda implements State {
     public void setGraphics(AndroidGraphics gr) {
         this.graphics=gr;
         try{
-            this.botonVolver.setImagen(new Image(datos2.getJSONObject("ImagenVolver"),gr));
+            this.botonVolver.setImages(new Image(datos2.getJSONObject("ImagenVolver"),gr));
             this.imagenDiamante = new Image(datos2.getJSONObject("ImagenDiamante"),gr);
             this.CTorres = new Text(this.datos2.getJSONObject("TextoCTorres"));
             ScrollableText.add(this.CTorres);
@@ -193,28 +193,28 @@ public class Tienda implements State {
                 if(array.getJSONObject(i).getBoolean("tieneImagen")){
                     JSONObject image = datos2.getJSONObject("EstandarImagen");
                     image.put("imagen",array.getJSONObject(i).getString("imagen"));
-                    boton.setImagen(new Image(image,gr));
+                    boton.setImages(new Image(image,gr));
                 }
                 if(array.getJSONObject(i).getBoolean("tieneForma")){
                     if(array.getJSONObject(i).getString("tipoForma").equals("cuadrado")){
                         Square br = new Square(0,0,datos2.getJSONObject("EstandarCuadrado").getInt("w"),datos2.getJSONObject("EstandarCuadrado").getInt("h"),datos2.getJSONObject("EstandarCuadrado").getBoolean("isFill"));
                         br.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigura(br);
+                        boton.setFigures(br);
                     }
                     else if(array.getJSONObject(i).getString("tipoForma").equals("triangulo")){
                         Triangle tr = new Triangle(0,0,datos2.getJSONObject("EstandarTriangulo").getInt("r"),datos2.getJSONObject("EstandarTriangulo").getBoolean("isFill"));
                         tr.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigura(tr);
+                        boton.setFigures(tr);
                     }
                     else if(array.getJSONObject(i).getString("tipoForma").equals("hexagono")){
                         Hexagon hx = new Hexagon(0,0,datos2.getJSONObject("EstandarHexagono").getInt("r"),datos2.getJSONObject("EstandarHexagono").getBoolean("isFill"));
                         hx.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigura(hx);
+                        boton.setFigures(hx);
                     }
                     else if(array.getJSONObject(i).getString("tipoForma").equals("circulo")){
                         Circle cr = new Circle(0,0,datos2.getJSONObject("EstandarCirculo").getInt("r"),datos2.getJSONObject("EstandarCirculo").getBoolean("isFill"));
                         cr.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigura(cr);
+                        boton.setFigures(cr);
                     }
                 }
                 if(x == initX){
@@ -253,28 +253,28 @@ public class Tienda implements State {
                 if(array.getJSONObject(i).getBoolean("tieneImagen")){
                     JSONObject image = datos2.getJSONObject("EstandarImagen");
                     image.put("imagen",array.getJSONObject(i).getString("imagen"));
-                    boton.setImagen(new Image(image,gr));
+                    boton.setImages(new Image(image,gr));
                 }
                 if(array.getJSONObject(i).getBoolean("tieneForma")){
                     if(array.getJSONObject(i).getString("tipoForma").equals("cuadrado")){
                         Square br = new Square(0,0,datos2.getJSONObject("EstandarCuadrado").getInt("w"),datos2.getJSONObject("EstandarCuadrado").getInt("h"),datos2.getJSONObject("EstandarCuadrado").getBoolean("isFill"));
                         br.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigura(br);
+                        boton.setFigures(br);
                     }
                     else if(array.getJSONObject(i).getString("tipoForma").equals("triangulo")){
                         Triangle tr = new Triangle(0,0,datos2.getJSONObject("EstandarTriangulo").getInt("r"),datos2.getJSONObject("EstandarTriangulo").getBoolean("isFill"));
                         tr.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigura(tr);
+                        boton.setFigures(tr);
                     }
                     else if(array.getJSONObject(i).getString("tipoForma").equals("hexagono")){
                         Hexagon hx = new Hexagon(0,0,datos2.getJSONObject("EstandarHexagono").getInt("r"),datos2.getJSONObject("EstandarHexagono").getBoolean("isFill"));
                         hx.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigura(hx);
+                        boton.setFigures(hx);
                     }
                     else if(array.getJSONObject(i).getString("tipoForma").equals("circulo")){
                         Circle cr = new Circle(0,0,datos2.getJSONObject("EstandarCirculo").getInt("r"),datos2.getJSONObject("EstandarCirculo").getBoolean("isFill"));
                         cr.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigura(cr);
+                        boton.setFigures(cr);
                     }
                 }
                 if(x == initX){

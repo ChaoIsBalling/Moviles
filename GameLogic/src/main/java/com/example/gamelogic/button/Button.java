@@ -13,6 +13,8 @@ import com.example.gamelogic.figure.Triangle;
 import org.json.JSONObject;
 import org.json.JSONException;
 
+import java.util.ArrayList;
+
 /**
  * Clase que representa un boton en la interfaz del juego
  */
@@ -38,8 +40,8 @@ public class Button {
     //id del boton
     String id;
     String color; //Color por defecto
-    Image imagen; //Imagen
-    Figure figura; //Figura del botón
+    ArrayList<Image> images = new ArrayList<Image>(); //Imagen
+    ArrayList<Figure> figures = new ArrayList<Figure>(); //Figura del botón
 
     //Funcion callback asociada al boton
     private ButtonClickListener onClickFunction;
@@ -108,20 +110,20 @@ public class Button {
                 String form = figData.getString("form");
                 switch (form){
                     case "triangle":
-                        this.figura = new Triangle(figData);
+                        this.figures.add(new Triangle(figData));
                         break;
                     case "square":
-                        this.figura = new Square(figData);
+                        this.figures.add(new Square(figData));
                         break;
                     case "hexagon":
-                        this.figura = new Hexagon(figData);
+                        this.figures.add(new Hexagon(figData));
                         break;
                 }
             }
 
             JSONObject iconData = json.optJSONObject("icon");
             if(iconData != null){
-                this.imagen = new Image(iconData,gr);
+                this.images.add(new Image(iconData,gr));
             }
 
         } catch (JSONException e) {
@@ -145,8 +147,10 @@ public class Button {
 
     //setters
     public void setColor(String color){ this.color = color; }
-    public void setFigura(Figure fig){ this.figura = fig; }
-    public void setImagen(Image img){this.imagen = img;}
+    public void setFigures(Figure fig){ this.figures.add(fig); }
+    public void setImages(Image img){this.images.add(img);}
+
+    public void cleanImages(){this.images.clear();}
     public void setEnabled(boolean enabled){this.isEnable = enabled;}
     public void setVisible(boolean visible){this.isVisible = visible;}
 
@@ -163,8 +167,12 @@ public class Button {
 
     public String getId(){return this.id;}
 
-    public Image getImgButton(){ return this.imagen; }
-    public Figure getFigButton(){ return this.figura; }
+    public Image getImgButton(int i){ return this.images.get(i); }
+    public Figure getFigButton(int i){ return this.figures.get(i); }
+
+    public boolean isEmptyImages(){
+        return images.isEmpty();
+    }
     public boolean isEnable(){ return this.isEnable; }
     public  boolean isVisible(){ return this.isVisible; }
     /**
@@ -192,13 +200,19 @@ public class Button {
                 gr.rellenarCuadrado(this.x,this.y,this.w,this.h);
 
             //Renderizamos imagen si la tiene
-            if(this.imagen != null){
-                this.imagen.RenderCentrado((int)this.x,(int)this.y);
+            if(!this.images.isEmpty()){
+                for(Image i : images){
+                    if(i != null)
+                        i.RenderCentrado((int)this.x,(int)this.y);
+                }
             }
 
-            //Renderizamos figura centrada
-            if(this.figura != null){
-                this.figura.RenderCentrado(gr,this.x,this.y);
+            //Renderizamos figuras si las tiene
+            if(!this.figures.isEmpty()){
+                for(Figure f : figures){
+                    if(f != null)
+                        f.RenderCentrado(gr, (int)this.x,(int)this.y);
+                }
             }
 
             //Renderizamos texto centrado

@@ -159,7 +159,7 @@
     }
   ],
   "images" : [
-    { "id": "Vida", "imagen": "Vida.png", "x": 60, "y": 330, "w": 30, "h": 30, "visible": false  },
+    { "id": "Vida", "imagen": "Vida.png", "x": 60, "y": 330, "w": 30, "h": 30, "visible": true  },
     { "id": "Dinero", "imagen": "Dinero.png", "x": 60, "y": 360, "w": 30, "h": 30, "visible": true}
   ],
   "texts": [

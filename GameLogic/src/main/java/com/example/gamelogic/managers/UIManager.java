@@ -164,15 +164,9 @@ public class UIManager {
         return null;
     }
 
-    public String getButtonUIText(String id){
-        if (botones.containsKey(id) && botones.get(id).getTextButton() != null)
-            return botones.get(id).getTextButton().getText();
-        return null;
-    }
-
-    public Image getButtonImage(String id){
-        if(botones.containsKey(id) && botones.get(id).getImgButton() != null){
-            return botones.get(id).getImgButton();
+    public Image getButtonImage(String id,int i){
+        if(botones.containsKey(id) && !botones.get(id).isEmptyImages()){
+            return botones.get(id).getImgButton(i);
         }
         return null;
     }
@@ -202,7 +196,10 @@ public class UIManager {
      * @param gr Referencia al gestor de gráficos de Android
      */
     public void render(AndroidGraphics gr){
-        for (Button b : botones.values()) b.Render(gr);
+        for (Button b : botones.values()) {
+            //System.out.println(b.getImgButton(0));
+            b.Render(gr);
+        }
         for (Image img : imagenes.values()) img.Render();
         for (Text txt : textos.values()) txt.Render(gr);
     }
