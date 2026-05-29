@@ -8,18 +8,7 @@ public class ButtonCambio extends Button {
     String desbloqueo;
     String guardado;
     String datoGuardado;
-    public ButtonCambio(float x, float y, float w, float h, boolean isRound, float ar, String desbloqueo, String guardado, String datoGuardado) {
-        super(x, y, w, h, isRound, ar);
-        this.desbloqueo=desbloqueo;
-        this.guardado=guardado;
-        this.datoGuardado=datoGuardado;
-    }
-    public ButtonCambio(float x, float y, float w, float h, String desbloqueo, String guardado, String datoGuardado){
-        super(x,y,w,h);
-        this.desbloqueo=desbloqueo;
-        this.guardado=guardado;
-        this.datoGuardado=datoGuardado;
-    }
+
     //Constructora que te crea un boton a partir de un Json
     public ButtonCambio(JSONObject json)
     {

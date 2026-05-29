@@ -19,10 +19,7 @@ import org.json.JSONException;
 public class Button {
 
     //Atributos del botón
-    private float x;
-    private float y;
-    private float w;
-    private float h;
+    private float x,y,w,h;
 
     //Determina si tiene esquinas redondeadas
     private boolean isRound = false;

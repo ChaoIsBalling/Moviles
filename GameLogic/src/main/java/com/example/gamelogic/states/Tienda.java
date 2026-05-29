@@ -20,6 +20,7 @@ import com.example.gamelogic.Image;
 import com.example.gamelogic.figure.Square;
 import com.example.gamelogic.Text;
 import com.example.gamelogic.figure.Triangle;
+import com.example.gamelogic.managers.UIManager;
 
 import java.util.ArrayList;
 
@@ -58,6 +59,7 @@ public class Tienda implements State {
     int x, y;
     int initX, initY;
     ButtonComprar comprando;
+    private UIManager ui;
 
     public Tienda(AndroidEngine engine,AndroidMobile mobile,JSONObject save){
         this.save =save;
@@ -292,7 +294,6 @@ public class Tienda implements State {
                     j++;
                 }
             }
-
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

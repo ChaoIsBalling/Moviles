@@ -12,20 +12,6 @@ public class ButtonComprar extends Button {
     String descripcion;
     String desbloqueo;
     private ArrayList<ButtonCambio> botonesCambio;
-    public ButtonComprar(float x, float y, float w, float h, boolean isRound, float ar, int coste, String descripcion, String desbloqueo) {
-        super(x, y, w, h, isRound, ar);
-        this.coste=coste;
-        this.descripcion=descripcion;
-        this.desbloqueo=desbloqueo;
-        this.botonesCambio = new ArrayList<ButtonCambio>();
-    }
-    public ButtonComprar(float x, float y, float w, float h, int coste, String descripcion, String desbloqueo){
-        super(x,y,w,h);
-        this.coste=coste;
-        this.descripcion=descripcion;
-        this.desbloqueo=desbloqueo;
-        this.botonesCambio = new ArrayList<ButtonCambio>();
-    }
     //Constructora que te crea un boton a partir de un Json
     public ButtonComprar(JSONObject json)
     {
