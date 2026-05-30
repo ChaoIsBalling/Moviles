@@ -16,6 +16,11 @@
         "bold":true,
         "italic":true,
         "color":"#FF000000"
+      },
+      "callback":
+      {
+          "method":"setCallbackButtonPlay",
+          "dificultad":"corto"
       }
     },
     {
@@ -38,6 +43,11 @@
         "bold":true,
         "italic":true,
         "color":"#FF000000"
+      },
+      "callback":
+      {
+          "method":"setCallbackButtonPlay",
+          "dificultad":"largo"
       }
     },
     {
@@ -60,6 +70,11 @@
         "bold":true,
         "italic":true,
         "color":"#FF000000"
+      },
+      "callback":
+      {
+          "method":"setCallbackButtonPlay",
+          "dificultad":"infinito"    
       }
     },
     {
@@ -73,6 +88,10 @@
          "x": -15, "y": -15, 
          "w": -30, "h": 30 ,
          "visible": true
+      },
+      "callback":
+      {
+          "method":"setCallbackButtonReturn"
       }
     }
 ],  

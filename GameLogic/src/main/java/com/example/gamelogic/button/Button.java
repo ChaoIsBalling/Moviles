@@ -1,6 +1,7 @@
 package com.example.gamelogic.button;
 
 import com.example.androidengine.AndroidGraphics;
+import com.example.androidengine.State;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.Text;
 import com.example.gamelogic.figure.Figure;
@@ -9,6 +10,8 @@ import com.example.androidengine.TouchEvent;
 import com.example.gamelogic.figure.Hexagon;
 import com.example.gamelogic.figure.Square;
 import com.example.gamelogic.figure.Triangle;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -33,6 +36,7 @@ public class Button {
 
     //Determina si el boton esta visible
     private boolean isVisible = true;
+    private State currentState;
 
 
     //Texto del boton
@@ -42,6 +46,8 @@ public class Button {
     String color; //Color por defecto
     ArrayList<Image> images = new ArrayList<Image>(); //Imagen
     ArrayList<Figure> figures = new ArrayList<Figure>(); //Figura del botón
+
+    private JSONObject callback;
 
     //Funcion callback asociada al boton
     private ButtonClickListener onClickFunction;
@@ -67,6 +73,7 @@ public class Button {
     public Button(JSONObject json)
     {
         try {
+
             this.x = json.getInt("x");
             this.y= json.getInt("y");
             this.w= json.getInt("w");
@@ -98,6 +105,7 @@ public class Button {
                 this.arcRadius=json.getInt("ar");
 
             this.color=json.getString("color");
+            this.callback=json.getJSONObject("callback");
 
             //Ahora cargamos los elementos que haya en el boton
 
@@ -157,6 +165,23 @@ public class Button {
     // Setter para asignar el callback
     public void setOnClickListener(ButtonClickListener listener) {this.onClickFunction = listener;}
 
+    // Setter para asignar el callback
+    public void setCallback(State state) {
+        try {
+            callback.getString("method");
+            Method method =state.getClass().getMethod(callback.getString("method"), Button.class);
+            method.invoke(state,this);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     //getter de los parametros de tamaño y posicion
     public float getWidth(){return this.w;}
     public float getHeight(){return this.h;}
@@ -170,6 +195,7 @@ public class Button {
     public Image getImgButton(int i){ return this.images.get(i); }
     public Figure getFigButton(int i){ return this.figures.get(i); }
 
+    public JSONObject getCallback(){return this.callback;}
     public boolean isEmptyImages(){
         return images.isEmpty();
     }

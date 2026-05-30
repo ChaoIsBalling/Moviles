@@ -18,6 +18,10 @@
         "w": 50,
         "h": 50,
         "visible": true
+      },
+      "callback":
+      {
+          
       }
     },
 
@@ -39,6 +43,10 @@
         "w": -50,
         "h": 50,
         "visible": true
+      },
+      "callback":
+      {
+          
       }
     }
   ],

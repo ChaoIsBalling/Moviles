@@ -3,13 +3,15 @@ package com.example.gamelogic.states;
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.State;
 import com.example.androidengine.TouchEvent;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.managers.UIManager;
-
+import com.example.gamelogic.button.Button;
 /**
  * Clase que representa el menú de seleccción de dificultad
  */
@@ -55,29 +57,37 @@ public class Dificultad implements State {
     public void setGraphics(AndroidGraphics gr) {
         this.gr=gr;
         this.ui = new UIManager(this.style,this.engine,gr);
-
-        //Seteamos los callback de los botones una vez leidos
-        this.ui.getButtonUI("BUT_CORTA").setOnClickListener( () -> play(GameLogic.Dificultad.corto));
-        this.ui.getButtonUI("BUT_LARGA").setOnClickListener( () -> play(GameLogic.Dificultad.largo));
-        this.ui.getButtonUI("BUT_INFINITO").setOnClickListener( () -> play(GameLogic.Dificultad.infinito));
-        this.ui.getButtonUI("BUT_VOLVER").setOnClickListener(() -> returnMenu());
+        this.ui.setAllCallbacks();
     }
 
     /**
-     * Metodo para ir a la pantalla de juego con la dificultad correspondiente
-     * @param dif la dificultad de la proxima partida
+     * Metodo para setear el callback ir a la pantalla de juego con la dificultad correspondiente
+     * @param b el boton al que le pasamos el callback
      */
-    void play(GameLogic.Dificultad dif){
-        GameLogic gameLogic = new GameLogic(this.engine,this.mobile, dif,this.save);
-        this.engine.setState(gameLogic);
-    }
 
+    public void setCallbackButtonPlay(Button b)
+    {
+        JSONObject callback =b.getCallback();
+        try {
+            GameLogic.Dificultad dif= GameLogic.Dificultad.valueOf(callback.getString("dificultad"));
+            b.setOnClickListener( () -> {
+                GameLogic gameLogic = new GameLogic(this.engine,this.mobile, dif,this.save);
+                this.engine.setState(gameLogic);
+            });
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
-     * Metodo para volver al menu inicial
+     * Metodo para setear el callback de volver a la pantalla anterior
+     * @param b el boton al que le pasamos el callback
      */
-    void returnMenu(){
-        Menu menu = new Menu(this.engine,this.mobile,this.save);
-        this.engine.setState(menu);
+    public void setCallbackButtonReturn(Button b)
+    {
+        b.setOnClickListener( () -> {
+            Menu menu = new Menu(this.engine,this.mobile,this.save);
+            this.engine.setState(menu);
+            });
     }
 
     /**

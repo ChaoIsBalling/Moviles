@@ -86,6 +86,13 @@ public class UIManager {
             e.printStackTrace();
         }
     }
+    public void setAllCallbacks()
+    {
+        botones.forEach((k, v) ->
+        {
+            v.setCallback(this.engine.getState());
+        });
+    }
     /**
      * Metodo para cambiar el valor de un Texto
      * @param id nombre de identificacion en el JSON

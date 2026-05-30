@@ -7,8 +7,6 @@ import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.button.Button;
-import com.example.gamelogic.Image;
-import com.example.gamelogic.Text;
 import com.example.gamelogic.managers.UIManager;
 
 import java.util.ArrayList;
@@ -69,22 +67,7 @@ public class Menu implements State {
         this.style = engine.readJsonFile("Menu/style.json");
 
         this.ui = new UIManager(this.style , this.engine, this.gr);
-
-        //Seteamos los callbacks de los botones
-        this.ui.getButtonUI("BUT_INICIAL").setOnClickListener( () -> {
-            Dificultad dificultad = new Dificultad(this.engine,this.mobile,this.save);
-            this.engine.setState(dificultad);
-        });
-        this.ui.getButtonUI("BUT_AVENTURA").setOnClickListener( () -> {
-            Mundo mundo = new Mundo(this.engine,this.mobile,1,this.save);
-            this.engine.setState(mundo);
-        });
-
-        this.ui.getButtonUI("BUT_TIENDA").setOnClickListener( () -> {
-            Tienda tienda = new Tienda(this.engine,this.mobile,this.save);
-            this.engine.setState(tienda);
-        });
-
+        this.ui.setAllCallbacks();
         //Leemos valores guardados
         this.fondo="#FFFFFFFF"; //Fondo por defecto
         try {
@@ -95,6 +78,36 @@ public class Menu implements State {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+    /**
+     * Metodo para setear el callback de volver a la pantalla de dificultad
+     * @param b el boton al que le pasamos el callback
+     */
+    public void setCallbackButtonInicial(Button b) {
+        b.setOnClickListener(() -> {
+            Dificultad dificultad = new Dificultad(this.engine, this.mobile, this.save);
+            this.engine.setState(dificultad);
+        });
+    }
+    /**
+     * Metodo para setear el callback del modo aventura
+     * @param b el boton al que le pasamos el callback
+     */
+    public void setCallbackButtonAventura(Button b) {
+        b.setOnClickListener(() -> {
+            Mundo mundo = new Mundo(this.engine,this.mobile,1,this.save);
+            this.engine.setState(mundo);
+        });
+    }
+    /**
+     * Metodo para setear el callback de ir a la tienda
+     * @param b el boton al que le pasamos el callback
+     */
+    public void setCallbackButtonTienda(Button b) {
+        b.setOnClickListener(() -> {
+            Tienda tienda = new Tienda(this.engine,this.mobile,this.save);
+            this.engine.setState(tienda);
+        });
     }
 
     /**
@@ -114,7 +127,6 @@ public class Menu implements State {
                         this.ui.handleInput(e);
                         break;
             }
-
         }
     }
 

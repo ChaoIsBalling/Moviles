@@ -25,6 +25,11 @@
          "x": -15, "y": -20, 
          "w": 35, "h": 35 ,
          "visible": true
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonTower",
+        "TipoTorre":"RAYO"
       }
     },
     {
@@ -54,6 +59,11 @@
          "x": -15, "y": -20, 
          "w": 35, "h": 35,
          "visible": true
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonTower",
+        "TipoTorre":"HIELO"
       }
     },
     {
@@ -81,6 +91,11 @@
          "x": -15, "y": -20, 
          "w": 35, "h": 35,
          "visible": true
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonTower",
+        "TipoTorre":"FUEGO"         
       }
     },
 
@@ -100,6 +115,11 @@
          "x": -15, "y": -20, 
          "w": 30, "h": 30 ,
          "visible": true
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonUpgrade",
+        "TipoMejora":"ATAQUE"            
       }
     },
     {
@@ -118,6 +138,11 @@
          "x": -15, "y": -20, 
          "w": 30, "h": 30,
          "visible": true
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonUpgrade",
+        "TipoMejora":"RANGO"             
       }
     },
 
@@ -137,6 +162,11 @@
          "x": -15, "y": -20, 
          "w": 30, "h": 30,
          "visible": true
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonUpgrade",
+        "TipoMejora":"VELOCIDAD"          
       }
     },
     {
@@ -155,6 +185,11 @@
         "x": -15, "y": -20, 
         "w": 35, "h": 35,
         "visible": true
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonTower",
+        "TipoTorre":"MINI"              
       }
     }
   ],

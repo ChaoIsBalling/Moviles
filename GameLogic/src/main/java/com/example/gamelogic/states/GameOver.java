@@ -8,6 +8,7 @@ import com.example.androidengine.TouchEvent;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidSound;
 import com.example.androidengine.AndroidMobile;
+import com.example.gamelogic.button.Button;
 import com.example.gamelogic.managers.UIManager;
 
 import org.json.JSONException;
@@ -78,17 +79,8 @@ public class GameOver implements State {
             this.recompensa = 0;
     }
     private void configurarUI() {
-        configurarBotonesComunes();
-
-        switch (dificultad) {
-            case aventura:
+        if (dificultad==GameLogic.Dificultad.aventura)
                 configurarUIAventura();
-                break;
-            default:
-                configurarUIClasica();
-                break;
-        }
-
         if (win)
             configurarVictoria();
         else
@@ -143,14 +135,32 @@ public class GameOver implements State {
         lose = audio.newSound("death_sound.wav");
         audio.playSound(lose);
     }
-    private void configurarUIClasica() {
-        //Listener del boton reintentar
-        ui.getButtonUI("BUT_VOLVER")
-                .setOnClickListener(() -> {
-                    Dificultad dificultad =
-                            new Dificultad(engine, mobile, save);
-                    engine.setState(dificultad);
-                });
+
+    public void setCallbackButtonReturn(Button b) {
+        if (dificultad != GameLogic.Dificultad.aventura) {
+        b.setOnClickListener(() -> {
+            Dificultad dificultad = new Dificultad(engine, mobile, save);
+            engine.setState(dificultad);});
+        }
+        else {
+        b.setOnClickListener(() -> {
+            Mundo mundo = new Mundo(engine, mobile, this.mundo, save);
+            engine.setState(mundo);});
+        }
+    }
+    public void setCallbackButtonMenu(Button b) {
+        b.setOnClickListener(() -> {
+        Menu menu= new Menu(this.engine,this.mobile,this.save);
+        this.engine.setState(menu);});
+    }
+    public void setCallbackButtonIntent(Button b) {
+        b.setOnClickListener(() -> this.compartirMensaje());
+    }
+    public void setCallbackButtonWinAd(Button b) {
+        b.setOnClickListener(this::reclamarRecompensaDuplicada);
+        //Si el nivel ya estaba completado NO se duplica la recompensa, se dará 10 diamantes solamente
+        if (this.isCompleted)
+            b.changeText("AD");
     }
 
     private void configurarUIAventura() {
@@ -161,35 +171,7 @@ public class GameOver implements State {
         }
         //texto con los diamantes actuales
         ui.setTextUI("TEXT_DIAMANTES_ACTUALES", String.valueOf(this.numDiamantes));
-
-        //Boton de volver al menu de seleccion de mundo
-        ui.getButtonUI("BUT_VOLVER")
-                .setOnClickListener(() -> {
-                    Mundo mundo = new Mundo(engine, mobile, this.mundo, save);
-                    engine.setState(mundo);
-                });
-        //Solo si se gana se activa el boton de recompensa
-        if(this.win)
-            ui.getButtonUI("BUT_RECOMPENSA_AD")
-                .setOnClickListener(this::reclamarRecompensaDuplicada);
-
-        //Si el nivel ya estaba completado NO se duplica la recompensa, se dará 10 diamantes solamente
-        if(this.isCompleted&&this.win)
-            ui.getButtonUI("BUT_RECOMPENSA_AD").changeText("AD");
     }
-
-    /**
-     * Este metodo configura los botones son comunes para ambos modos
-     */
-    private void configurarBotonesComunes() {
-        ui.getButtonUI("BUT_MENU").setOnClickListener(() -> {
-            Menu menu= new Menu(this.engine,this.mobile,this.save);
-            this.engine.setState(menu);});
-
-        ui.getButtonUI("BUT_INTENT").setOnClickListener(
-                () -> this.compartirMensaje());
-    }
-
 
     /**
      * Metodo que determina el tipo de UI que se va a usar
@@ -230,6 +212,7 @@ public class GameOver implements State {
         this.style = engine.readJsonFile(uiPath);
         //Incializamos la UI
         this.ui = new UIManager(this.style , this.engine, this.gr);
+        this.ui.setAllCallbacks();
         determinarUI();
         //Configuramos la UI dependiendo del resultado
         configurarUI();

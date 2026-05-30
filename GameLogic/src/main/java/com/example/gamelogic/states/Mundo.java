@@ -78,13 +78,10 @@ public class Mundo implements State {
     }
 
     @Override
-    public void update(double deltatime) {
-
-    }
+    public void update(double deltatime) {}
     //renderización de todos los botones y texto
     @Override
     public void render(AndroidGraphics gr) {
-
         gr.EmpezarLimiteDibujado(0,100,600,400);
         for(int i=0;i<niveles.size();i++)
             niveles.get(i).Render(gr);
@@ -96,12 +93,9 @@ public class Mundo implements State {
     @Override
     public void setGraphics(AndroidGraphics gr) {
         this.gr = gr;
-
-        this.style = engine.readJsonFile("Mundo/style2.json");
+        this.style = engine.readJsonFile("Mundo/style.json");
         this.prefabs = engine.readJsonFile("Mundo/prefabs.json");
-
         inicializarUI();
-
     }
 
     @Override
@@ -162,7 +156,6 @@ public class Mundo implements State {
                 JSONObject obj=engine.readJsonFile("Mundo/World"+i+"/World"+i+".json");
                 this.nivelesHastaAhora+=obj.getInt("niveles");
             }
-
             //determina que niveles de ESTE mundo se han completado
             this.nivelesCompletadosEnMundo = this.completed-this.nivelesHastaAhora;
         } catch (JSONException e) {
@@ -229,49 +222,53 @@ public class Mundo implements State {
         }
 
     }
-
-    private void irAMundo(int m){
-        Mundo mundoDestino = new Mundo(this.engine, this.mobile, m,this.save);
-        this.engine.setState(mundoDestino);
+    /**
+     * Metodo para setear el callback de los botones de siguiente y anterior mundo
+     * @param b el boton al que le pasamos el callback
+     */
+    public void setCallbackButtonMundo(Button b) {
+        JSONObject callback = b.getCallback();
+        try {
+            boolean nextWorld=callback.getBoolean("nextWorld");
+            if((nextWorld&&!this.next)||(!nextWorld&&!this.previous)) {
+                b.setVisible(false);
+                b.setEnabled(false);
+            }
+            else {
+                int targetWorld=(nextWorld)? 1:-1;
+                b.setOnClickListener(  ()->{
+                    Mundo mundoDestino = new Mundo(this.engine, this.mobile, this.mundo +targetWorld,this.save);
+                    this.engine.setState(mundoDestino);});
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    /**
+     * Metodo para setear el callback de volver a la pantalla anterior
+     * @param b el boton al que le pasamos el callback
+     */
+    public void setCallbackButtonReturn(Button b)
+    {
+        b.setOnClickListener( () -> {
+            Menu menu = new Menu(this.engine,this.mobile,this.save);
+            this.engine.setState(menu);
+        });
     }
 
     private void crearUIElems(){
 
         this.fondoTexto = new Square(300,50,300,70,true);
         this.fondoTexto.setColor("#ffDAB628");
-
         this.ui.getTextUI("TEXT_MUNDO").setText("Mundo " + this.mundo);
-
-        this.ui.getButtonUI("BUT_SIGUIENTE_MUNDO").setOnClickListener(() -> {
-            irAMundo(this.mundo + 1);
-        });
-        this.ui.getButtonUI("BUT_ANTERIOR_MUNDO").setOnClickListener(() -> {
-            irAMundo(this.mundo - 1);
-        });
-
-        this.ui.getButtonUI("BUT_VOLVER").setOnClickListener( () -> {
-            Menu menu = new Menu(this.engine, this.mobile,this.save);
-            this.engine.setState(menu);
-        });
-
-        //Se desactivan los botones por defecto
-        this.ui.buttonEnabled("BUT_SIGUIENTE_MUNDO", false);
-        this.ui.buttonEnabled("BUT_ANTERIOR_MUNDO", false);
-        //en caso de que hava un siguiente o anterior mundo inicializamos los botones correspondientes
-        if(this.next) {
-            this.ui.buttonEnabled("BUT_SIGUIENTE_MUNDO", true);
-        }
-        if(this.previous) {
-            this.ui.buttonEnabled("BUT_ANTERIOR_MUNDO", true);
-        }
     }
 
     private void inicializarUI(){
+        cargarDatosMundo();
         //Array donde guardamos los botones de niveles
         niveles=new ArrayList<Button>();
         this.ui = new UIManager(this.style,this.engine,this.gr);
-
-        cargarDatosMundo();
+        this.ui.setAllCallbacks();
         calcularProgreso();
         configurarLimitesScroll();
         crearConfigurarNiveles();

@@ -20,6 +20,10 @@
         "bold": true,
         "italic": true,
         "color": "#FF00FFFF"
+      },
+      "callback":
+      {
+           "method":"setCallbackButtonMenu"
       }
     },
     {
@@ -42,6 +46,10 @@
         "bold": true,
         "italic": true,
         "color": "#FF000000"
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonReturn"
       }
     },
     {
@@ -62,6 +70,10 @@
         "w": 35,
         "h": 35,
         "visible": true
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonIntent"     
       }
     }
   ],
@@ -120,7 +132,11 @@
         "bold": true,
         "italic": true,
         "color": "#FF000000"
-        }
+        },
+      "callback":
+      {
+          "method":"setCallbackButtonWinAd"
+      }
         }
       ],
         "texts": [

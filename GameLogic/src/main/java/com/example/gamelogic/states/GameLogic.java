@@ -429,7 +429,10 @@ public class GameLogic implements State {
         this.style = engine.readJsonFile("GameLogic/style.json");
         //Inicializamos todos los elementos de la UI
         this.ui = new UIManager(this.style,this.engine, this.gr);
-        this.inicializarBotones();
+        this.ui.setAllCallbacks();
+        //Hacemos que los botones de construccion esten activados desde el principio
+        cambiarEstadoBotones("tower", true);
+        cambiarEstadoBotones("upgrade",false);
         this.inicializarContadores();
         this.cargarFondoNivel();
     }
@@ -462,38 +465,37 @@ public class GameLogic implements State {
         this.ui.getTextUI(TEXT_VIDA_ID).setText(String.valueOf(this.vida));
         this.ui.getTextUI(TEXT_OLEADA_ID).setText("Oleada: " + String.valueOf(1));
     }
-    /**
-     * Metodo que inicaliza los botones de la UI asignandole su correspondiente callback
-     */
-    void inicializarBotones(){
-        //Primero leemos el valor del texto de los botones (es el precio de construir la torre)
-        String slice="BUT_";
+
+    public void setCallbackButtonUpgrade(Button b)
+    {
+        JSONObject callback= b.getCallback();
         try {
-            for (Button b : this.ui.getAllButtonsOfType("tower")) {
-                    String processed=b.getId().replace(slice,"");
-                    JSONObject torre=this.save.getJSONObject("torres").getJSONObject(processed);
-                    if(torre.getBoolean("active")) {
-                        b.setOnClickListener(() -> this.prepararConstruccion(Integer.parseInt(b.getTextButton().getText()), TipoTorre.valueOf(processed), b.getId()));
-                        setButtonSkin(torre.getString("skin"),b);
-                    }
-                    else {
-                        b.setEnabled(false);
-                        b.setVisible(false);
-                        this.ui.unloadButtonOfType("tower",b);
-                    }
-            }
-        }
-        catch (JSONException e) {
+            TipoMejora tipo = TipoMejora.valueOf(callback.getString("TipoMejora"));
+            b.setOnClickListener(()-> this.prepararMejora(Integer.parseInt(b.getTextButton().getText()),tipo));
+        } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        for (Button b : this.ui.getAllButtonsOfType("upgrade")) {
-            String processed=b.getId().replace(slice,"");
-            b.setOnClickListener(()-> this.prepararMejora(Integer.parseInt(b.getTextButton().getText()),TipoMejora.valueOf(processed)));
+    }
+    public void setCallbackButtonTower(Button b)
+    {
+        JSONObject callback= b.getCallback();
+        try {
+            TipoTorre tipo = TipoTorre.valueOf(callback.getString("TipoTorre"));
+            JSONObject torre=this.save.getJSONObject("torres").getJSONObject(tipo.toString());
+            if(torre.getBoolean("active")) {
+                b.setOnClickListener(() ->
+                        this.prepararConstruccion(Integer.parseInt(b.getTextButton().getText()), tipo, b.getId()));
+                setButtonSkin(torre.getString("skin"),b);
+            }
+            else {
+                b.setEnabled(false);
+                b.setVisible(false);
+                this.ui.unloadButtonOfType("tower",b);
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
 
-        //Hacemos que los botones de construccion esten activados desde el principio
-        cambiarEstadoBotones("tower", true);
-        cambiarEstadoBotones("upgrade",false);
     }
     /**
      * Metodo que gestiona la aplicacion de skins en las torres
