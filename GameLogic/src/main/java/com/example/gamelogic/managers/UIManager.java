@@ -7,6 +7,10 @@ import com.example.androidengine.TouchEvent;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.button.Button;
 import com.example.gamelogic.Text;
+import com.example.gamelogic.figure.Figure;
+import com.example.gamelogic.figure.Hexagon;
+import com.example.gamelogic.figure.Square;
+import com.example.gamelogic.figure.Triangle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,14 +20,28 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class UIManager {
+    //Ultima cordenada Y tocada
+    float lastTouchedY;
+    //bool que nos dice si estamos haciendo scroll de pantalla
+    boolean scroll;
+    //La posición minima que puede tener el promer boton de la lista en la posicion y
+    float minY;
+    //La posición minima que puede tener el promer boton de la lista en la posicion y
+    float maxY;
+    //Altura de la ventana de scroll de niveles
+    float tamScroll = 400;
     // Hash Maps donde vamos a guardar los elementos de la UI de la escena
     private HashMap<String, Button> botones = new HashMap<>();
+    private ArrayList<Button> scrollables =new ArrayList<>();
     private HashMap<String, Text> textos = new HashMap<>();
     private HashMap<String, ArrayList<Button>> buttonTypes =new HashMap<>();
     private AndroidEngine engine;
     private AndroidGraphics gr;
     //Aqui se guardan las imagenes que sirven como HUD y que se queden todo el tiempo en pantalla
     private HashMap<String, Image> imagenes = new HashMap<>();
+
+    //Aqui se guardan las figuras que podrian servir como elementos de HUD
+    private HashMap<String, Figure> figures = new HashMap<>();
 
     //private HashMap<String, Image> imagenesHUD = new HashMap<>(); // Solo para render automático
 
@@ -42,14 +60,13 @@ public class UIManager {
             //Cargar Botones
             if (sceneJson.has("buttons")) {
                 JSONArray array = sceneJson.getJSONArray("buttons");
+                String type= new String();
                 for (int i = 0; i < array.length(); i++) {
-                    String type= new String();
                     JSONObject bData = array.getJSONObject(i);
                     type=bData.getString("type");
                     Button b = new Button(bData,gr);
                     botones.put(bData.getString("id"), b);
-                    if(!buttonTypes.containsKey(type))
-                    {
+                    if(!buttonTypes.containsKey(type)) {
                         buttonTypes.put(type,new ArrayList<Button>());
                     }
                     buttonTypes.get(type).add(b);
@@ -80,6 +97,26 @@ public class UIManager {
                     //if (imageData.optBoolean("isHUD", false)) {
                     //imagenesHUD.put(imageData.getString("id"),img);
                     //}
+                }
+            }
+            if(sceneJson.has("figures")){
+                JSONArray array = sceneJson.getJSONArray("figures");
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject figureData = array.getJSONObject(i);
+                    String form = figureData.getString("form");
+                    Figure fig=null;
+                    switch (form){
+                        case "triangle":
+                            fig=new Triangle(figureData);
+                            break;
+                        case "square":
+                            fig=new Square(figureData);
+                            break;
+                        case "hexagon":
+                            fig=new Hexagon(figureData);
+                            break;
+                    }
+                    figures.put(figureData.getString("id"),fig);
                 }
             }
         } catch (JSONException e) {
@@ -183,6 +220,13 @@ public class UIManager {
             return imagenes.get(id);
         return null;
     }
+    public Figure getFigureUI(String id){
+        if(figures.containsKey(id))
+            return figures.get(id);
+        return null;
+    }
+
+
 
     /*public void addButtonUI(String id, Button b){
         botones.put(id,b);
@@ -208,9 +252,72 @@ public class UIManager {
             b.Render(gr);
         }
         for (Image img : imagenes.values()) img.Render();
+        for (Figure fig:figures.values()) fig.Render(gr);
         for (Text txt : textos.values()) txt.Render(gr);
     }
 
+    public void createPrefabs(JSONObject prefab, int amount)
+    {   Button prefabButton = null;
+        String type= new String();
+        for (int i =0;i<amount;i++)
+        {
+            prefabButton = new Button(prefab, this.gr);
+            prefabButton.setY(prefabButton.getY() + prefabButton.getHeight() * (float) i * 1.5f);
+            try {
+                botones.put(prefab.getString("id")+i, prefabButton);
+                type=prefab.getString("type");
+                if(!buttonTypes.containsKey(type)) {
+                    buttonTypes.put(type,new ArrayList<Button>());
+                }
+                buttonTypes.get(type).add(prefabButton);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            prefabButton.setCallback(this.engine.getState());
+        }
+    }
+    public void configurarLimitesScroll() {
+        //Los botones deben estar entre estas dos posiciones
+        //Posicion más alta permitida para el scroll alrededor de Y
+            this.minY = buttonTypes.get("scrollable").get(0).getY();
+            //Posicion más baja permitaida para el scroll
+            this.maxY = this.tamScroll - buttonTypes.get("scrollable").get(0).getHeight();
+
+    }
+    //si es de tipo touchmove manejamos el scroll del juego
+    public void onTouchMove(TouchEvent e)
+    {
+        if(!scroll)
+            return;
+
+        float destY=e.y-lastTouchedY;
+        lastTouchedY=e.y;
+        boolean canScroll=true;
+        //checkeamos si los extremeos de los objetos scrolleables (el mas alto y el mas bajo)
+        //estan entre el minimo y maximo Y que hemos definido
+        //Si es asi, ya no podemos scrollear mas
+        if((buttonTypes.get("scrollable").get(0).getY() > minY && destY>0)
+                ||(buttonTypes.get("scrollable").get(buttonTypes.get("scrollable").size()-1).getY() < maxY && destY<0))
+            canScroll=false;
+
+        //Renderizo los botones en la nueva posicion y sumandole el desplazamiento
+        if(canScroll) {
+            for (int i = 0; i < buttonTypes.get("scrollable").size(); i++) {
+                float newY = buttonTypes.get("scrollable").get(i).getY() + destY;
+                buttonTypes.get("scrollable").get(i).setY(newY);
+            }
+        }
+
+    }
+    //si el evento es de tipo TouchDown guardamos el ultimo valor de la Y y ponemo a true el scroll
+    public void onTouchDown(TouchEvent e){
+        lastTouchedY=e.y;
+        scroll=true;
+    }
+    //si es de tipo touch up el scroll se pone a false
+    public void onTouchUp(){
+        scroll = false;
+    }
     /**
      * Recorremos el array de botones y
      * @param event

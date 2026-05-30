@@ -176,7 +176,17 @@ public class Tienda implements State {
             throw new RuntimeException(e);
         }
     }
-
+    /**
+     * Metodo para setear el callback de volver a la pantalla anterior
+     * @param b el boton al que le pasamos el callback
+     */
+    public void setCallbackButtonReturn(Button b)
+    {
+        b.setOnClickListener( () -> {
+            Menu menu = new Menu(this.engine,this.mobile,this.save);
+            this.engine.setState(menu);
+        });
+    }
     private void generarBotonesComprar(JSONArray array, AndroidGraphics gr){
         try{
             for(int i =0; i<array.length();i++){

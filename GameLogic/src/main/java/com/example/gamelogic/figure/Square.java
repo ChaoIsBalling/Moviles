@@ -117,10 +117,8 @@ public class Square implements Figure{
             gr.setColor(this.color);
             if(this.isFill && this.isRound)
                 gr.rellenarCuadradoRedondeado(this.x, this.y,this.w,this.h,this.arcRadius);
-
             else if(this.isFill)
                 gr.rellenarCuadrado(this.x, this.y, this.w, this.h);
-
             else
                 gr.pintarCuadrado(this.x,this.y,this.w,this.h);
 

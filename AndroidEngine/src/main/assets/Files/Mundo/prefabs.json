@@ -6,10 +6,10 @@
         "y":150,
         "w":300,
         "h":70,
-        "type":"level",
+        "type":"scrollable",
         "isRound":false,
         "ar":20,
-        "color":"#FFA1BF37",
+        "color":"#FFABABAC",
        "text": {
         "id": "TEXTO_NIVEL",
         "texto":"X",
@@ -23,7 +23,7 @@
       },
       "callback":
       {
-          
+        "method":"setCallbackButtonLevel"
       }
     }
 }

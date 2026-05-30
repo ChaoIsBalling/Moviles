@@ -16,8 +16,6 @@ import com.example.gamelogic.managers.UIManager;
 import java.util.ArrayList;
 
 public class Mundo implements State {
-    private Square fondoTexto;
-    private ArrayList<Button> niveles;
     private AndroidEngine engine;
 
     private AndroidMobile mobile;
@@ -28,6 +26,8 @@ public class Mundo implements State {
     private boolean previous;
 
     private int numNiveles;
+    //contador de niveles del mundo usado por el callback de niveles
+    private int nivelesCount=0;
 
     //en que mundo estamos ahora
     private int mundo;
@@ -35,8 +35,6 @@ public class Mundo implements State {
     //El archivo de guardado del juego
     private JSONObject save;
 
-    //cuantos niveles han habido hasta ahora de cada mundo
-    private int nivelesHastaAhora = 0;
 
     //variable que inspecciona cuantos niveles hemos derrotado
     int completed;
@@ -45,20 +43,6 @@ public class Mundo implements State {
 
     //JSON en el que se van a almacenar todos los estilos para botones y textos
     JSONObject style;
-
-    //Ultima cordenada Y tocada
-    float lastTouchedY;
-
-    //bool que nos dice si estamos haciendo scroll de pantalla
-    boolean scroll;
-
-    //La posición minima que puede tener el promer boton de la lista en la posicion y
-    float minY;
-    //La posición minima que puede tener el promer boton de la lista en la posicion y
-    float maxY;
-
-    //Altura de la ventana de scroll de niveles
-    float tamScroll = 400;
 
     //Ui Manager que gestiona el funcionamiento de los botones
     UIManager ui;
@@ -83,10 +67,7 @@ public class Mundo implements State {
     @Override
     public void render(AndroidGraphics gr) {
         gr.EmpezarLimiteDibujado(0,100,600,400);
-        for(int i=0;i<niveles.size();i++)
-            niveles.get(i).Render(gr);
         gr.TerminarLimiteDibujado();
-        this.fondoTexto.Render(gr);
         this.ui.render(gr);
     }
 
@@ -94,7 +75,11 @@ public class Mundo implements State {
     public void setGraphics(AndroidGraphics gr) {
         this.gr = gr;
         this.style = engine.readJsonFile("Mundo/style.json");
-        this.prefabs = engine.readJsonFile("Mundo/prefabs.json");
+        try {
+            this.prefabs = engine.readJsonFile("Mundo/prefabs.json").getJSONObject("NivelMundo");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
         inicializarUI();
     }
 
@@ -108,14 +93,14 @@ public class Mundo implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                 this.ui.handleInput(e);
-                gestionBotones(e);
-                onTouchDown(e);
+                //gestionBotones(e);
+                this.ui.onTouchDown(e);
                 break;
                 case TOUCH_UP:
-                    onTouchUp();
+                    this.ui.onTouchUp();
                     break;
                 case TOUCH_MOVE:
-                    onTouchMove(e);
+                    this.ui.onTouchMove(e);
                     break;
             }
         }
@@ -150,76 +135,37 @@ public class Mundo implements State {
         try {
             this.completed= this.save.getInt("completed");
 
+            int nivelesHastaAhora =0;
             //esto calcula cuantos niveles han habido hasta este mundo
             for(int i = 1; i < this.mundo; i++)
             {
                 JSONObject obj=engine.readJsonFile("Mundo/World"+i+"/World"+i+".json");
-                this.nivelesHastaAhora+=obj.getInt("niveles");
+                nivelesHastaAhora+=obj.getInt("niveles");
             }
             //determina que niveles de ESTE mundo se han completado
-            this.nivelesCompletadosEnMundo = this.completed-this.nivelesHastaAhora;
+            this.nivelesCompletadosEnMundo = this.completed-nivelesHastaAhora;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
-
-    private void configurarLimitesScroll() {
-        //Los botones deben estar entre estas dos posiciones
-        //Posicion más alta permitida para el scroll alrededor de Y
-        try {
-            this.minY = (float) prefabs.getJSONObject("NivelMundo").getInt("y");
-            //Posicion más baja permitaida para el scroll
-            this.maxY = this.tamScroll - (float) prefabs.getJSONObject("NivelMundo").getInt("h");
-        }
-        catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
     private void iniciarNivel(int index){
-        if (index <= this.completed - this.nivelesHastaAhora) {
-            //(i == this.completed - this.nivelesHastaAhora) -> Ultimo nivel sin completar
-            //(i <                                         ) -> Nivel completado
             GameLogic gameLogic = new GameLogic(this.engine, this.mobile, "Mundo/World" +
                     this.mundo + "/Level" + (index + 1) + ".json", index+1,this.mundo,this.save);
             this.engine.setState(gameLogic);
-        }
-
     }
 
-    private void crearConfigurarNiveles(){
-        //inicialización de todos los botones de niveles
-        for(int i = 0;i < this.numNiveles; i++) {
-            //Seteamos a todos con una x y un color gris
-            Button nivelMundo = null;
-            try {
-                nivelMundo = new Button(prefabs.getJSONObject("NivelMundo"), this.gr);
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-            //Ya se hace en el json
-            nivelMundo.setY(nivelMundo.getY() + nivelMundo.getHeight() * (float) i * 1.5f);
-            nivelMundo.setColor("#FFABABAC");
-            this.niveles.add(nivelMundo);
-        }
 
-        int rangoNivelesPasados = Math.min(niveles.size() - 1, nivelesCompletadosEnMundo);
-
-        //Ahora determinamos cuales son los niveles completados
-        for(int i=0; i <= rangoNivelesPasados; i++)
-        {
-            niveles.get(i).setColor(colorCompleted);
-            niveles.get(i).changeText(String.valueOf(i+1));
-            int ind = i;
-            niveles.get(i).setOnClickListener(() -> iniciarNivel(ind));
+    public void setCallbackButtonLevel(Button b)
+    {
+        if(this.nivelesCount<=Math.min(this.numNiveles - 1, nivelesCompletadosEnMundo)) {
+            b.setColor(colorCompleted);
+            if(this.nivelesCount==nivelesCompletadosEnMundo)
+                b.setColor(colorLocked);
+            b.changeText(String.valueOf(this.nivelesCount+1));
+            int ind=this.nivelesCount;
+            b.setOnClickListener(() -> iniciarNivel(ind));
         }
-
-        //Este es el nivel que tengo sin pasar ahora de ESTE mundo, primero comprobamos que exista
-        if(nivelesCompletadosEnMundo >= 0 &&
-                nivelesCompletadosEnMundo < niveles.size()){
-            //Coloreamos con color de nivel bloqueado
-            niveles.get(nivelesCompletadosEnMundo).setColor(colorLocked);
-            niveles.get(nivelesCompletadosEnMundo).setOnClickListener(() -> iniciarNivel(nivelesCompletadosEnMundo));
-        }
+        this.nivelesCount++;
 
     }
     /**
@@ -255,68 +201,15 @@ public class Mundo implements State {
             this.engine.setState(menu);
         });
     }
-
-    private void crearUIElems(){
-
-        this.fondoTexto = new Square(300,50,300,70,true);
-        this.fondoTexto.setColor("#ffDAB628");
-        this.ui.getTextUI("TEXT_MUNDO").setText("Mundo " + this.mundo);
-    }
-
     private void inicializarUI(){
         cargarDatosMundo();
         //Array donde guardamos los botones de niveles
-        niveles=new ArrayList<Button>();
         this.ui = new UIManager(this.style,this.engine,this.gr);
         this.ui.setAllCallbacks();
         calcularProgreso();
-        configurarLimitesScroll();
-        crearConfigurarNiveles();
-        crearUIElems();
-    }
-
-    //si el evento es de tipo TouchDown guardamos el ultimo valor de la Y y ponemo a true el scroll
-    private void onTouchDown(TouchEvent e){
-        lastTouchedY=e.y;
-        scroll=true;
-    }
-    //si es de tipo touch up el scroll se pone a false
-    private void onTouchUp(){
-        scroll = false;
-    }
-    //si es de tipo touchmove manejamos el scroll del juego
-    private void onTouchMove(TouchEvent e)
-    {
-        if(!scroll)
-            return;
-
-        //Desplazamiento entre el punto de origen del toque
-        //y la ultima y
-        float destY=e.y-lastTouchedY;
-        //Actualizamos la última coordenada y tocada
-        lastTouchedY=e.y;
-        boolean canScroll=true;
-        //checkeamos si los extremeos de los objetos scrolleables (el mas alto y el mas bajo)
-        //estan entre el minimo y maximo Y que hemos definido
-        //Si es asi, ya no podemos scrollear mas
-        if((niveles.get(0).getY() > minY && destY>0)
-                ||(niveles.get(niveles.size()-1).getY() < maxY && destY<0))
-            canScroll=false;
-
-        //Renderizo los botones en la nueva posicion y sumandole el desplazamiento
-        if(canScroll) {
-            for (int i = 0; i < niveles.size(); i++) {
-                float newY = niveles.get(i).getY() + destY;
-                niveles.get(i).setY(newY);
-            }
-        }
-    }
-
-    //metodo que gestiono lo que se hace si se presiona sobre cualquier boton de la escena
-    private void gestionBotones(TouchEvent e) {
-        for(Button b : niveles){
-            b.handleInput(e);
-        }
+        this.ui.createPrefabs(prefabs,this.numNiveles);
+        this.ui.configurarLimitesScroll();
+        this.ui.getTextUI("TEXT_MUNDO").setText("Mundo " + this.mundo);
     }
 
     @Override

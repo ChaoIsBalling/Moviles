@@ -77,7 +77,19 @@
       }
     }
   ],
-
+"figures":[
+    {
+      "id": "FIGURE_TEXT_BG",
+      "form": "square",
+      "x": 300, "y": 50,
+      "w": 300, "h": 70,
+      "color": "#ffDAB628",
+      "fill": true,
+      "round": false,
+      "r": 0,
+      "visible": true
+    }
+  ],
   "images": [],
 
   "texts": [
