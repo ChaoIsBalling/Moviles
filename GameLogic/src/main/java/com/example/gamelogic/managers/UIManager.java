@@ -14,6 +14,7 @@ import com.example.gamelogic.figure.Square;
 import com.example.gamelogic.figure.Triangle;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import org.json.JSONArray;
@@ -81,13 +82,12 @@ public class UIManager {
                 JSONArray array = sceneJson.getJSONArray("texts");
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject tData = array.getJSONObject(i);
-                    Text t = new Text(tData);
+                    Text t = new Text(tData,gr);
                     //Añadimos al hashMap con su id Correspondiente
                     textos.put(tData.getString("id"), t);
                     if(tData.has("type"))
                         if(tData.getString("type").equals("scrollable"))
                             scrollablesElements.add(t);
-
                 }
             }
 
@@ -120,7 +120,7 @@ public class UIManager {
                             fig=new Hexagon(figureData);
                             break;
                     }
-//                    figures.put(figureData.getString("id"),fig);
+                   figures.put(figureData.getString("id"),fig);
 //                    if(figureData.has("type"))
 //                        if(figureData.getString("type").equals("scrollable"))
 //                            scrollablesElements.add(fig);
@@ -288,6 +288,8 @@ public class UIManager {
                     buttonTypes.put(type,new ArrayList<Button>());
                 }
                 buttonTypes.get(type).add(prefabButton);
+                if (type.equals("scrollable"))
+                    scrollablesElements.add(prefabButton);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -295,11 +297,16 @@ public class UIManager {
         }
     }
     public void configurarLimitesScroll() {
+        Collections.sort(scrollablesElements,(obj1,obj2)-> {
+            if(obj1.getY()<obj2.getY()) return -1;
+            if(obj1.getY()>obj2.getY()) return 1;
+            return 0;
+        });
         //Los botones deben estar entre estas dos posiciones
         //Posicion más alta permitida para el scroll alrededor de Y
-        this.minY = buttonTypes.get("scrollable").get(0).getY();
+        this.minY = scrollablesElements.get(0).getY();
         //Posicion más baja permitaida para el scroll
-        this.maxY = this.tamScroll - buttonTypes.get("scrollable").get(0).getHeight();
+        this.maxY = this.tamScroll - scrollablesElements.get(0).getHeight();
     }
     //si es de tipo touchmove manejamos el scroll del juego
     public void onTouchMove(TouchEvent e)
@@ -313,15 +320,15 @@ public class UIManager {
         //checkeamos si los extremeos de los objetos scrolleables (el mas alto y el mas bajo)
         //estan entre el minimo y maximo Y que hemos definido
         //Si es asi, ya no podemos scrollear mas
-        if((buttonTypes.get("scrollable").get(0).getY() > minY && destY>0)
-                ||(buttonTypes.get("scrollable").get(buttonTypes.get("scrollable").size()-1).getY() < maxY && destY<0))
+        if((scrollablesElements.get(0).getY() > minY && destY>0)
+                ||(scrollablesElements.get(scrollablesElements.size()-1).getY() < maxY && destY<0))
             canScroll=false;
 
         //Renderizo los botones en la nueva posicion y sumandole el desplazamiento
         if(canScroll) {
-            for (int i = 0; i < buttonTypes.get("scrollable").size(); i++) {
-                float newY = buttonTypes.get("scrollable").get(i).getY() + destY;
-                buttonTypes.get("scrollable").get(i).setY(newY);
+            for (int i = 0; i < scrollablesElements.size(); i++) {
+                float newY = scrollablesElements.get(i).getY() + destY;
+                scrollablesElements.get(i).setY(newY);
             }
         }
 

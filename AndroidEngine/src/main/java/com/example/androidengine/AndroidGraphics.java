@@ -356,6 +356,11 @@ public class AndroidGraphics{
         this.canvas.drawText(texto,xPos,yPos,this.paint);
     }
 
+    public Rect getTextBounds(String texto) {
+        Rect r= new Rect();
+        this.paint.setTextSize(af.getSize());
+        return r;
+    }
     /**
      * Metodo que setea el color con el que pinta el motor grafico
      * @param color Numero en hexadecimal del color

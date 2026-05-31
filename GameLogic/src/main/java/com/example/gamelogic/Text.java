@@ -15,6 +15,9 @@ public class Text extends UIElement {
     //Indican si es en negrita o italica
     boolean bold;
     boolean italic;
+    private AndroidGraphics gr;
+
+    private AndroidFont fuente;
 
     //Booleano que determina si se puede imprimir el texto o no
     boolean visible;
@@ -23,10 +26,11 @@ public class Text extends UIElement {
 
     //el texto despues de hacerle un Split, tiene todo el contenido en string del texto
     String[] myArray;
-    public Text(JSONObject json)
+    public Text(JSONObject json, AndroidGraphics gr)
     {
         super(json);
         try{
+            this.gr=gr;
             String text= json.getString("texto");
             this.myArray=text.split("\n");
             this.font=json.getString("font");
@@ -35,6 +39,10 @@ public class Text extends UIElement {
             this.italic =json.getBoolean("italic");
             this.color=json.getString("color");
             this.visible = true;
+            this.fuente = this.gr.newFont(this.font,this.size,this.bold,this.italic);
+            this.gr.setColor(this.color);
+            this.gr.setFont(fuente);
+            this.h=gr.getTextBounds(text).height();
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -62,7 +70,6 @@ public class Text extends UIElement {
     public void Render(AndroidGraphics gr){
         if(this.visible){
             if(this.y>=-size) {
-                AndroidFont fuente = gr.newFont(this.font, this.size, this.bold, this.italic);
                 gr.setColor(this.color);
                 gr.setFont(fuente);
                 for (int i = 0; i < myArray.length; i++)
@@ -72,7 +79,6 @@ public class Text extends UIElement {
     }
     public void RenderCentrado(AndroidGraphics gr,float x, float y){
         if(this.visible){
-            AndroidFont fuente = gr.newFont(this.font,this.size,this.bold,this.italic);
             gr.setColor(this.color);
             gr.setFont(fuente);
             for(int i=0;i<myArray.length;i++)

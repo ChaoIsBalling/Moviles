@@ -67,23 +67,7 @@ public class Tienda implements State {
         ScrollableButtons = new ArrayList<ButtonComprar>();
         this.engine=engine;
         this.mobile = mobile;
-
         this.datos2 =engine.readJsonFile("Tienda/style2.json");
-        try{
-            this.botonVolver = new Button(this.datos2.getJSONObject("BotonVolver"));
-
-            this.textoDiamantes = new Text(this.datos2.getJSONObject("TextoDiamantes"));
-            this.textoDiamantes.setText("" + this.save.getInt("gems"));
-
-            this.fondoDes = new Square(500,300,300,400,true);
-            this.fondoDes.setColor("#ff00ffff");
-            this.coste = new Text(this.datos2.getJSONObject("TextoCoste"));
-            this.botonComprar = new Button(this.datos2.getJSONObject("BotonComprar"));
-            this.botonComprar.setText(new Text(this.datos2.getJSONObject("TextoComprar")));
-            this.comprando = null;
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 
@@ -129,9 +113,22 @@ public class Tienda implements State {
     public void setGraphics(AndroidGraphics gr) {
         this.graphics=gr;
         try{
+
+            this.botonVolver = new Button(this.datos2.getJSONObject("BotonVolver"));
+
+            this.textoDiamantes = new Text(this.datos2.getJSONObject("TextoDiamantes"),gr);
+            this.textoDiamantes.setText("" + this.save.getInt("gems"));
+
+            this.fondoDes = new Square(500,300,300,400,true);
+            this.fondoDes.setColor("#ff00ffff");
+            this.coste = new Text(this.datos2.getJSONObject("TextoCoste"),gr);
+            this.botonComprar = new Button(this.datos2.getJSONObject("BotonComprar"));
+            this.botonComprar.setText(new Text(this.datos2.getJSONObject("TextoComprar"),gr));
+            this.comprando = null;
+
             this.botonVolver.setImages(new Image(datos2.getJSONObject("ImagenVolver"),gr));
             this.imagenDiamante = new Image(datos2.getJSONObject("ImagenDiamante"),gr);
-            this.CTorres = new Text(this.datos2.getJSONObject("TextoCTorres"));
+            this.CTorres = new Text(this.datos2.getJSONObject("TextoCTorres"),gr);
             ScrollableText.add(this.CTorres);
 
 
@@ -142,7 +139,7 @@ public class Tienda implements State {
             this.y = datos2.getJSONObject("EstandarBoton").getInt("y");
             generarBotonesComprar(botonesDT,gr);
 
-            this.CSkins = new Text(this.datos2.getJSONObject("TextoCSkins"));
+            this.CSkins = new Text(this.datos2.getJSONObject("TextoCSkins"),gr);
             y +=80;
             this.CSkins.setY(y);
             ScrollableText.add(this.CSkins);
@@ -152,7 +149,7 @@ public class Tienda implements State {
             JSONArray botonesDS = datos2.getJSONArray("BotonesDesbloqueoSkin");
             generarBotonesComprar(botonesDS,gr);
 
-            this.CFondo = new Text(this.datos2.getJSONObject("TextoColores"));
+            this.CFondo = new Text(this.datos2.getJSONObject("TextoColores"),gr);
             y+=80;
             this.CFondo.setY(y);
             ScrollableText.add(CFondo);

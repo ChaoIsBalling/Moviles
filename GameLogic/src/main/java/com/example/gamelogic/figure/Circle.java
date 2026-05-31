@@ -19,6 +19,7 @@ public class Circle extends UIElement implements Figure{
         this.x = x;
         this.y = y;
         this.r = r;
+        this.h=r*2;
         this.isFill = isFill;
         this.visible = true;
     }

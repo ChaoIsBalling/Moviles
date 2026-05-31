@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class Button extends UIElement {
 
     //Atributos del botón
-    private float w,h;
+    private float w;
 
     //Determina si tiene esquinas redondeadas
     private boolean isRound = false;
@@ -91,7 +91,7 @@ public class Button extends UIElement {
 
             JSONObject textData = json.optJSONObject("text");
             if(textData != null)
-                this.text = new Text(textData);
+                this.text = new Text(textData,gr);
 
             JSONObject figData = json.optJSONObject("figure");
             if(figData != null){
@@ -156,7 +156,6 @@ public class Button extends UIElement {
 
     //getter de los parametros de tamaño y posicion
     public float getWidth(){return this.w;}
-    public float getHeight(){return this.h;}
 
     public Text getTextButton(){ return this.text; }
 

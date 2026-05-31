@@ -36,6 +36,7 @@ public class Triangle extends UIElement implements Figure {
         super(obj);
         try {
             this.r = obj.getInt("r");
+            this.h=r*2;
             this.isFill = obj.getBoolean("fill");
             this.color = obj.getString("color");
             this.visible = obj.getBoolean("visible");

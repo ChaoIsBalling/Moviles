@@ -38,6 +38,7 @@ public class Hexagon extends UIElement implements Figure {
             this.x = obj.getInt("x");
             this.y = obj.getInt("y");
             this.r = obj.getInt("r");
+            this.h=r*2;
             this.isFill = obj.getBoolean("fill");
             this.color = obj.getString("color");
             setVisible(obj.getBoolean("visible"));
