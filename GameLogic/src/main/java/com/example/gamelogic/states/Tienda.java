@@ -15,6 +15,7 @@ import com.example.gamelogic.button.Button;
 import com.example.gamelogic.button.ButtonCambio;
 import com.example.gamelogic.button.ButtonComprar;
 import com.example.gamelogic.figure.Circle;
+import com.example.gamelogic.figure.Figure;
 import com.example.gamelogic.figure.Hexagon;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.figure.Square;
@@ -25,16 +26,11 @@ import com.example.gamelogic.managers.UIManager;
 import java.util.ArrayList;
 
 public class Tienda implements State {
-    private Button botonVolver;
+    private Button botonVolver,botonComprar;
     private AndroidEngine engine;
     private AndroidGraphics graphics;
-    private Text textoDiamantes;
-    private Text coste;
-    private Button botonComprar;
+    private Text textoDiamantes,coste,CTorres,CSkins,CFondo;
     private Square fondoDes;
-    private Text CTorres;
-    private Text CSkins;
-    private Text CFondo;
     private Image imagenDiamante;
     //El archivo de guardado del juego
     private JSONObject save;
@@ -44,20 +40,13 @@ public class Tienda implements State {
 
     //Ultima cordenada Y tocada
     float lastTouchedY;
-
     //bool que nos dice si estamos haciendo scroll de pantalla
     boolean scroll;
-
-    //La posición minima que puede tener el promer boton de la lista en la posicion y
-    float minY;
-    //La posición minima que puede tener el promer boton de la lista en la posicion y
-    float maxY;
-    //JSONObject datos;
-    //private Estado estado;
+    //La posición minima y maxima que puede tener el promer boton de la lista en la posicion y
+    float minY,maxY;
     AndroidMobile mobile;
     JSONObject datos2;
-    int x, y;
-    int initX, initY;
+    int x, y,initX, initY;
     ButtonComprar comprando;
     private UIManager ui;
 
@@ -92,19 +81,16 @@ public class Tienda implements State {
         this.imagenDiamante.Render(gr);
         if(this.comprando!=null){
             this.fondoDes.Render(gr);
-
             try {
                 if(!this.save.getBoolean(this.comprando.getDesbloqueo())){
                     this.coste.Render(gr);
                     this.botonComprar.Render(gr);
                 }
-                else{
+                else
                     this.comprando.RenderCambio(gr);
-                }
             }catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-
         }
         gr.TerminarLimiteDibujado();
     }
@@ -115,7 +101,6 @@ public class Tienda implements State {
         try{
 
             this.botonVolver = new Button(this.datos2.getJSONObject("BotonVolver"));
-
             this.textoDiamantes = new Text(this.datos2.getJSONObject("TextoDiamantes"),gr);
             this.textoDiamantes.setText("" + this.save.getInt("gems"));
 
@@ -130,7 +115,6 @@ public class Tienda implements State {
             this.imagenDiamante = new Image(datos2.getJSONObject("ImagenDiamante"),gr);
             this.CTorres = new Text(this.datos2.getJSONObject("TextoCTorres"),gr);
             ScrollableText.add(this.CTorres);
-
 
             //Generamos los botones de compra
             JSONArray botonesDT = datos2.getJSONArray("BotonesDesbloqueoTorre");
@@ -163,9 +147,9 @@ public class Tienda implements State {
             this.maxY=400-ScrollableButtons.get(ScrollableButtons.size()-1).getHeight();
 
             x = datos2.getJSONObject("InitBotonCambio").getInt("x");
-            initX = datos2.getJSONObject("InitBotonCambio").getInt("x");
+            initX = x;
             y = datos2.getJSONObject("InitBotonCambio").getInt("y");
-            initY = datos2.getJSONObject("InitBotonCambio").getInt("y");
+            initY = y;
             JSONArray botonesC = datos2.getJSONArray("BotonesCambio");
             generarBotonesCambio(botonesC,gr);
 
@@ -197,33 +181,7 @@ public class Tienda implements State {
                 if(this.save.getBoolean(boton.getDesbloqueo())){
                     boton.setColor("#ff00ff00");
                 }
-                if(array.getJSONObject(i).getBoolean("tieneImagen")){
-                    JSONObject image = datos2.getJSONObject("EstandarImagen");
-                    image.put("imagen",array.getJSONObject(i).getString("imagen"));
-                    boton.setImages(new Image(image,gr));
-                }
-                if(array.getJSONObject(i).getBoolean("tieneForma")){
-                    if(array.getJSONObject(i).getString("tipoForma").equals("cuadrado")){
-                        Square br = new Square(0,0,datos2.getJSONObject("EstandarCuadrado").getInt("w"),datos2.getJSONObject("EstandarCuadrado").getInt("h"),datos2.getJSONObject("EstandarCuadrado").getBoolean("isFill"));
-                        br.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigures(br);
-                    }
-                    else if(array.getJSONObject(i).getString("tipoForma").equals("triangulo")){
-                        Triangle tr = new Triangle(0,0,datos2.getJSONObject("EstandarTriangulo").getInt("r"),datos2.getJSONObject("EstandarTriangulo").getBoolean("isFill"));
-                        tr.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigures(tr);
-                    }
-                    else if(array.getJSONObject(i).getString("tipoForma").equals("hexagono")){
-                        Hexagon hx = new Hexagon(0,0,datos2.getJSONObject("EstandarHexagono").getInt("r"),datos2.getJSONObject("EstandarHexagono").getBoolean("isFill"));
-                        hx.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigures(hx);
-                    }
-                    else if(array.getJSONObject(i).getString("tipoForma").equals("circulo")){
-                        Circle cr = new Circle(0,0,datos2.getJSONObject("EstandarCirculo").getInt("r"),datos2.getJSONObject("EstandarCirculo").getBoolean("isFill"));
-                        cr.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigures(cr);
-                    }
-                }
+                initializeButton(boton, array.getJSONObject(i));
                 if(x == initX){
                     x+=150;
                 }
@@ -257,33 +215,7 @@ public class Tienda implements State {
                 if(this.save.get(boton.getGuardado()) == boton.getDatoGuardado()){
                     boton.setColor("#ff00ff00");
                 }
-                if(array.getJSONObject(i).getBoolean("tieneImagen")){
-                    JSONObject image = datos2.getJSONObject("EstandarImagen");
-                    image.put("imagen",array.getJSONObject(i).getString("imagen"));
-                    boton.setImages(new Image(image,gr));
-                }
-                if(array.getJSONObject(i).getBoolean("tieneForma")){
-                    if(array.getJSONObject(i).getString("tipoForma").equals("cuadrado")){
-                        Square br = new Square(0,0,datos2.getJSONObject("EstandarCuadrado").getInt("w"),datos2.getJSONObject("EstandarCuadrado").getInt("h"),datos2.getJSONObject("EstandarCuadrado").getBoolean("isFill"));
-                        br.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigures(br);
-                    }
-                    else if(array.getJSONObject(i).getString("tipoForma").equals("triangulo")){
-                        Triangle tr = new Triangle(0,0,datos2.getJSONObject("EstandarTriangulo").getInt("r"),datos2.getJSONObject("EstandarTriangulo").getBoolean("isFill"));
-                        tr.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigures(tr);
-                    }
-                    else if(array.getJSONObject(i).getString("tipoForma").equals("hexagono")){
-                        Hexagon hx = new Hexagon(0,0,datos2.getJSONObject("EstandarHexagono").getInt("r"),datos2.getJSONObject("EstandarHexagono").getBoolean("isFill"));
-                        hx.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigures(hx);
-                    }
-                    else if(array.getJSONObject(i).getString("tipoForma").equals("circulo")){
-                        Circle cr = new Circle(0,0,datos2.getJSONObject("EstandarCirculo").getInt("r"),datos2.getJSONObject("EstandarCirculo").getBoolean("isFill"));
-                        cr.setColor(array.getJSONObject(i).getString("colorForma"));
-                        boton.setFigures(cr);
-                    }
-                }
+                initializeButton(boton,array.getJSONObject(i));
                 if(x == initX){
                     x+=110;
                 }
@@ -306,13 +238,38 @@ public class Tienda implements State {
         }
     }
 
+    private void initializeButton(Button boton,JSONObject obj)
+    {
+        try {
+            if(obj.getBoolean("tieneImagen")){
+                JSONObject image = datos2.getJSONObject("EstandarImagen");
+                image.put("imagen",obj.getString("imagen"));
+                boton.setImages(new Image(image,this.graphics));
+            }
+        if(obj.getBoolean("tieneForma")){
+            Figure fig=null;
+            if(obj.getString("tipoForma").equals("cuadrado"))
+                fig= new Square(datos2.getJSONObject("EstandarCuadrado"));
+            else if(obj.getString("tipoForma").equals("triangulo"))
+                fig = new Triangle(0,0,datos2.getJSONObject("EstandarTriangulo").getInt("r"),datos2.getJSONObject("EstandarTriangulo").getBoolean("isFill"));
+            else if(obj.getString("tipoForma").equals("hexagono"))
+                fig = new Hexagon(0,0,datos2.getJSONObject("EstandarHexagono").getInt("r"),datos2.getJSONObject("EstandarHexagono").getBoolean("isFill"));
+            else if(obj.getString("tipoForma").equals("circulo"))
+                fig = new Circle(0,0,datos2.getJSONObject("EstandarCirculo").getInt("r"),datos2.getJSONObject("EstandarCirculo").getBoolean("isFill"));
+
+            fig.setColor(obj.getString("colorForma"));
+            boton.setFigures(fig);
+        }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
             //Si es nulo no se procesa
-            if (e == null || e.type == null) {
+            if (e == null || e.type == null)
                 continue;
-            }
             switch (e.type){
                 case TOUCH_DOWN:
                     onTouchDown(e);
@@ -342,7 +299,6 @@ public class Tienda implements State {
     {
         if(!scroll)
             return;
-
         float destY=e.y-lastTouchedY;
         lastTouchedY=e.y;
         boolean canScroll=true;
@@ -380,30 +336,18 @@ public class Tienda implements State {
                     this.save.put(this.comprando.getDesbloqueo(),true);
                     this.comprando.setColor("#ff00ff00");
                 }
+                if(this.comprando != null){
+                    this.comprando.pulsarCambio(e.x,e.y,this.save);
+                    this.graphics.setColorClear(this.save.getString("fondo"));
+                }
             }catch (JSONException ex) {
                 throw new RuntimeException(ex);
             }
-
-            if(this.comprando != null){
-                try {
-                    this.comprando.pulsarCambio(e.x,e.y,this.save);
-                    this.graphics.setColorClear(this.save.getString("fondo"));
-                }catch (JSONException ex) {
-                    throw new RuntimeException(ex);
+            for(ButtonComprar boton: ScrollableButtons) {
+                if (boton.contains(e.x, e.y)) {
+                    this.comprando = boton;
+                    this.coste.setText("Coste: " + this.comprando.getCoste() + this.comprando.getDescripcion());
                 }
-            }
-            boolean bct = false;
-            int i =0;
-            while (i<this.ScrollableButtons.size() && !bct){
-                if(this.ScrollableButtons.get(i).contains(e.x,e.y)){
-                    this.comprando = this.ScrollableButtons.get(i);
-                    this.coste.setText("Coste: "+ this.comprando.getCoste()+this.comprando.getDescripcion());
-                    bct = true;
-                }
-                i++;
-            }
-            if(!bct){
-                this.comprando = null;
             }
         }
     }

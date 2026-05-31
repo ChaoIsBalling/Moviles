@@ -18,14 +18,20 @@
     },
     "EstandarCuadrado":    
     {   
+        "x":0,
+        "y":0,
         "w":80,
         "h":80,
-        "isFill":true
+        "r":0,
+        "color":"#FFFFFFFF",
+        "fill":true,
+        "visible":true,
+        "round":false
     },
     "EstandarTriangulo":    
     {   
         "r":50,
-        "isFill":true
+        "fill":true
     },
     "EstandarHexagono":    
     {   
