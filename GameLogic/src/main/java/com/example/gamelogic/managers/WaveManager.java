@@ -193,21 +193,14 @@ public class WaveManager {
             if(enemy.equals("goblin")) {
                 tipo = TipoTorre.RAYO;
                 im = new Image(this.imagesEnemies.getJSONObject("ImagenGoblin"),this.gr);
-                //im = this.ui.getImageUI("Goblin");
-                //im=new Image(this.ui.getImageUI("Goblin"),gr);
             }
             else if(enemy.equals("imp")) {
                 tipo = TipoTorre.FUEGO;
                 im = new Image(this.imagesEnemies.getJSONObject("ImagenImp"),this.gr);
-                //im = this.ui.getImageUI("Imp");
-                //im=new Image(this.styleLevel.getJSONObject("ImagenImp"),gr);
             }
             else {
                 tipo = TipoTorre.HIELO;
                 im = new Image(this.imagesEnemies.getJSONObject("ImagenOgre"),this.gr);
-
-                //im = this.ui.getImageUI("Ogre");
-                //im=new Image(this.styleLevel.getJSONObject("ImagenOgre"),gr);
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);

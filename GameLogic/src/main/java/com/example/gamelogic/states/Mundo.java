@@ -131,6 +131,9 @@ public class Mundo implements State {
         }
     }
 
+    /**
+     * Metodo que se encarga de clacular cuantos niveles se ha pasado el jugador en este mundo
+     */
     private void calcularProgreso(){
         try {
             this.completed= this.save.getInt("completed");
@@ -148,13 +151,21 @@ public class Mundo implements State {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Metodo que se encarga de inicializar el nivel i + 1
+     * @param index indice de [0 - n) niveles del mundo actual
+     */
     private void iniciarNivel(int index){
             GameLogic gameLogic = new GameLogic(this.engine, this.mobile, "Mundo/World" +
                     this.mundo + "/Level" + (index + 1) + ".json", index+1,this.mundo,this.save);
             this.engine.setState(gameLogic);
     }
 
-
+    /**
+     * Metodo que setea el Callback de los niveles
+     * @param b Boton que se le quiere setear el callback
+     */
     public void setCallbackButtonLevel(Button b)
     {
         if(this.nivelesCount<=Math.min(this.numNiveles - 1, nivelesCompletadosEnMundo)) {
@@ -183,7 +194,7 @@ public class Mundo implements State {
             else {
                 int targetWorld=(nextWorld)? 1:-1;
                 b.setOnClickListener(  ()->{
-                    Mundo mundoDestino = new Mundo(this.engine, this.mobile, this.mundo +targetWorld,this.save);
+                    Mundo mundoDestino = new Mundo(this.engine, this.mobile, this.mundo + targetWorld,this.save);
                     this.engine.setState(mundoDestino);});
             }
         } catch (JSONException e) {
@@ -201,9 +212,12 @@ public class Mundo implements State {
             this.engine.setState(menu);
         });
     }
+
+    /**
+     * Metodo que se encarga de inicializar todo lo que tiene que ver con la UI
+     */
     private void inicializarUI(){
         cargarDatosMundo();
-        //Array donde guardamos los botones de niveles
         this.ui = new UIManager(this.style,this.engine,this.gr);
         this.ui.setAllCallbacks();
         calcularProgreso();
