@@ -3,6 +3,7 @@ package com.example.gamelogic.towers;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.gamelogic.Enemy;
+import com.example.gamelogic.figure.Figure;
 import com.example.gamelogic.figure.Hexagon;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.TipoTorre;
@@ -12,8 +13,6 @@ import com.example.gamelogic.TipoTorre;
  */
 public class FireTower extends BaseTower {
 
-    //Figura que represeta la torre de fuego
-    Hexagon hexagono;
     float fuego = 1;
     boolean disparo = false;
     float radioBolaFuego = 15.0f;
@@ -24,10 +23,9 @@ public class FireTower extends BaseTower {
     /**
      * Constructora de la torre de fuego
      */
-    public FireTower(float x, float y) {
+    public FireTower(float x, float y, Figure figure) {
         super(x,y,3,70,2, TipoTorre.FUEGO);
-        this.hexagono = new Hexagon(x, y, 15, true);
-        this.hexagono.setColor("#ffff0000");
+        this.figura=figure;
     }
     public FireTower(float x, float y, Image im){
         super(x,y,3,70,2, TipoTorre.FUEGO);
@@ -88,7 +86,7 @@ public class FireTower extends BaseTower {
     @Override
     public void Render(AndroidGraphics gr) {
         if(this.image==null)
-            this.hexagono.Render(gr);
+            this.figura.RenderAtPosition(gr,this.getPosX(),this.getPosY());
         else
             this.image.RenderCentrado((int)this.getPosX(),(int)this.getPosY());
         if(this.disparo && this.fuego > 0){

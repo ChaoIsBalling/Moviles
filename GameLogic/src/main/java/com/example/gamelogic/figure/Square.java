@@ -1,5 +1,6 @@
 package com.example.gamelogic.figure;
 import com.example.androidengine.AndroidGraphics;
+import com.example.gamelogic.UIElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,10 +8,7 @@ import org.json.JSONObject;
 /**
  * Clase que representa un cuadrado e implementa los métodos de Figura
  */
-public class Square implements Figure{
-    //Coordenadas
-    private float x;
-    private float y;
+public class Square extends UIElement implements Figure{
     //Dimensiones
     private float w;
     private float h;
@@ -37,20 +35,11 @@ public class Square implements Figure{
         this.isFill = isFill;
         this.visible = true;
     }
-    public Square(float x, float y, float w, float h, boolean isFill, boolean isRound, float ar){
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.isFill = isFill;
-        this.isRound = isRound;
-        this.arcRadius = ar;
-    }
+
 
     public Square(JSONObject obj){
+        super(obj);
         try {
-            this.x = obj.getInt("x");
-            this.y = obj.getInt("y");
             this.w = obj.getInt("w");
             this.h = obj.getInt("h");
             this.isFill = obj.getBoolean("fill");
@@ -62,25 +51,11 @@ public class Square implements Figure{
             throw new RuntimeException(e);
         }
     }
-    public Square(float x, float y, float w, float h){
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-    }
-
 
     /**
      * Getters
      */
-    @Override
-    public float getX() {
-        return this.x;
-    }
-    @Override
-    public float getY() {
-        return this.y;
-    }
+
     @Override
     public String getColor() {
         return this.color;
@@ -89,14 +64,6 @@ public class Square implements Figure{
     /**
      * Setters
      */
-    @Override
-    public void setX(float x) {
-        this.x =x;
-    }
-    @Override
-    public void setY(float y) {
-        this.y = y;
-    }
     @Override
     public void setColor(String color) {
         this.color = color;
@@ -133,12 +100,23 @@ public class Square implements Figure{
             gr.setColor(this.color);
             if(this.isFill && this.isRound)
                 gr.rellenarCuadradoRedondeado(x+this.x, y+this.y,this.w,this.h,this.arcRadius);
-
             else if(this.isFill)
                 gr.rellenarCuadrado(x+this.x, y+this.y, this.w, this.h);
-
             else
                 gr.pintarCuadrado(x+this.x,y+this.y,this.w,this.h);
+        }
+    }
+
+    @Override
+    public void RenderAtPosition(AndroidGraphics gr, float x, float y) {
+        if(this.visible){
+            gr.setColor(this.color);
+            if(this.isFill && this.isRound)
+                gr.rellenarCuadradoRedondeado(x, y,this.w,this.h,this.arcRadius);
+            else if(this.isFill)
+                gr.rellenarCuadrado(x, y, this.w, this.h);
+            else
+                gr.pintarCuadrado(x,y,this.w,this.h);
         }
     }
 }

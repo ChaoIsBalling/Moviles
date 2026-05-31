@@ -5,15 +5,13 @@ import com.example.androidengine.AndroidGraphics;
 import com.example.gamelogic.Enemy;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.TipoTorre;
+import com.example.gamelogic.figure.Figure;
 import com.example.gamelogic.figure.Triangle;
 
 /**
  * Clase que representa la torre de Rayo e implementa la interfaz Tower
  */
 public class ThunderTower extends BaseTower{
-    //figura de la torre
-    Triangle triangulo;
-
     //Timer de renderizado del rayo
     float rayo;
 
@@ -32,11 +30,11 @@ public class ThunderTower extends BaseTower{
     /**
      * Constructora de la torre de rayo con sus coordenadas
      */
-    public ThunderTower(float x, float y){
+    public ThunderTower(float x, float y, Figure figure){
         super(x,y,4,70,1.6f, TipoTorre.RAYO);
-        this.triangulo = new Triangle(x,y,15,true);
-        this.triangulo.setColor("#FF000000");
         this.rayo = this.frecuenciaRayo;
+        this.figura=figure;
+
     }
     public ThunderTower(float x, float y, Image im){
         super(x,y,4,70,1.6f, TipoTorre.RAYO);
@@ -88,7 +86,7 @@ public class ThunderTower extends BaseTower{
         if(this.imagen!=null)
             this.imagen.RenderCentrado((int)this.getPosX(),(int)this.getPosY());
         else
-            this.triangulo.Render(gr);
+            this.figura.RenderAtPosition(gr,this.getPosX(),this.getPosY());
 
         if(this.disparo && this.rayo > 0 && this.enemigo != null){
             gr.setColor(colorRayo);

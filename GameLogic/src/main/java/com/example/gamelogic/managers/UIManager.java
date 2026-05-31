@@ -207,6 +207,12 @@ public class UIManager {
         }
         return null;
     }
+    public Figure getButtonFigure(String id,int i){
+        if(botones.containsKey(id) && !botones.get(id).isEmptyFigures()){
+            return botones.get(id).getFigButton(i);
+        }
+        return null;
+    }
 
     public Image getImageUI(String id){
         if(imagenes.containsKey(id))

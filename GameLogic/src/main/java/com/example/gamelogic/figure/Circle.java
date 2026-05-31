@@ -1,12 +1,12 @@
 package com.example.gamelogic.figure;
 import com.example.androidengine.AndroidGraphics;
+import com.example.gamelogic.UIElement;
+
 /**
  * Clase que representa un círculo e implementa a Figura
  */
-public class Circle implements Figure{
+public class Circle extends UIElement implements Figure{
     //Atributos del circulo
-    private float x;
-    private float y;
     private float r; //radio
     private String color;
     private boolean isFill; //Si esta relleno o no
@@ -21,12 +21,6 @@ public class Circle implements Figure{
         this.r = r;
         this.isFill = isFill;
         this.visible = true;
-    }
-
-    public Circle(float x, float y, float r){
-        this.x = x;
-        this.y = y;
-        this.r = r;
     }
 
     /**
@@ -92,5 +86,15 @@ public class Circle implements Figure{
             gr.rellenarCirculo(x+this.x, y+this.y, this.r);
         else
             gr.pintarCirculo(x+this.x, y+this.y,this.r);
+    }
+
+    @Override
+    public void RenderAtPosition(AndroidGraphics gr, float x, float y) {
+        gr.setColor(this.color);
+
+        if(isFill)
+            gr.rellenarCirculo(x,y,this.r);
+        else
+            gr.pintarCirculo(x,y,this.r);
     }
 }

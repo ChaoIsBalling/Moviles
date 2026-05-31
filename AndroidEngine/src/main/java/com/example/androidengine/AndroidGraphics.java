@@ -334,7 +334,7 @@ public class AndroidGraphics{
             Bitmap scaled = Bitmap.createScaledBitmap(bm, scaleX, scaleY, false);
 
             //El canvas dibuja el bitmap
-            canvas.drawBitmap(scaled, (int)x, (int)y,this.paint);
+            canvas.drawBitmap(scaled, x, y,this.paint);
 
         }
     }

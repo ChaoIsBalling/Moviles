@@ -54,4 +54,8 @@ public interface Figure {
      * Renderiza la figura centrada desde una posicion x,y
      */
     void RenderCentrado(AndroidGraphics gr, float x, float y);
+    /**
+     * Renderiza la figura en la posicion x,y
+     */
+    void RenderAtPosition(AndroidGraphics gr, float x, float y);
 }

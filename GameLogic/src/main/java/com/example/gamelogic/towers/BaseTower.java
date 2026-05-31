@@ -4,6 +4,7 @@ import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidSound;
 import com.example.gamelogic.Enemy;
 import com.example.gamelogic.TipoTorre;
+import com.example.gamelogic.figure.Figure;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,8 @@ public abstract class BaseTower implements Tower {
     //Tipo de ataque de la torre
     protected TipoTorre tipoTorre;
 
+    protected Figure figura;
+
     public BaseTower(float x, float y, float ataque, float rango, float velocidad, TipoTorre tipo){
         this.posX = x;
         this.posY = y;
@@ -54,7 +57,7 @@ public abstract class BaseTower implements Tower {
      * @param e lista
      */
     @Override public void setListaEnemigos(ArrayList<Enemy> e) { this.enemigos = e; }
-
+    @Override public void setFigura(Figure figura){this.figura =figura;}
     /**
      * Getter del rango de la torre
      * @return
@@ -66,7 +69,6 @@ public abstract class BaseTower implements Tower {
      */
     @Override
     public float getPosX() { return this.posX; }
-
     @Override
     public float getPosY() { return this.posY; }
     /**

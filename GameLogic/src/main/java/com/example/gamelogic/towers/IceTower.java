@@ -4,6 +4,7 @@ import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.gamelogic.Enemy;
 import com.example.gamelogic.Image;
+import com.example.gamelogic.figure.Figure;
 import com.example.gamelogic.figure.Square;
 import com.example.gamelogic.TipoTorre;
 
@@ -11,7 +12,7 @@ import com.example.gamelogic.TipoTorre;
  *  Clase que representa la torre de Hielo e implementa la interfaz Tower
  */
 public class IceTower extends BaseTower {
-    Square cuadrado;
+
     //Determina si el audio ya ha sido loopeado o no
     boolean loopAudio;
     //Determina si aun hay enemigos en el area de ataque
@@ -21,10 +22,9 @@ public class IceTower extends BaseTower {
     /**
      * Constructora de la torre de hielo con su coordenada x,y
      */
-    public IceTower(float x, float y){
+    public IceTower(float x, float y, Figure figure){
         super(x,y,10,70,4, TipoTorre.HIELO);
-        this.cuadrado = new Square(x,y,20,20,true);
-        this.cuadrado.setColor("#FFC8A2C8");
+        this.figura=figure;
     }
     public IceTower(float x, float y,Image im){
         super(x,y,10,70,4, TipoTorre.HIELO);
@@ -75,8 +75,8 @@ public class IceTower extends BaseTower {
     @Override
     public void Render(AndroidGraphics gr) {
         if(this.image!=null)
-        this.image.RenderCentrado((int)this.getPosX(),(int)this.getPosY());
+            this.image.RenderCentrado((int)this.getPosX(),(int)this.getPosY());
         else
-            cuadrado.Render(gr);
+            this.figura.RenderAtPosition(gr,this.getPosX(),this.getPosY());
     }
 }

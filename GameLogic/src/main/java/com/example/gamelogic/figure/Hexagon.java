@@ -1,5 +1,6 @@
 package com.example.gamelogic.figure;
 import com.example.androidengine.AndroidGraphics;
+import com.example.gamelogic.UIElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,10 +8,7 @@ import org.json.JSONObject;
 /**
  * Clase que representa un Hexágono
  */
-public class Hexagon implements Figure {
-    //Centro de la figura
-    private float cx;
-    private float cy;
+public class Hexagon extends UIElement implements Figure {
 
     //radio desde el centro
     private float r;
@@ -21,37 +19,33 @@ public class Hexagon implements Figure {
     //Indica si es relleno o no
     private boolean isFill;
     //Booleano que indica si es visible o no
-    private boolean visible;
+
 
     /**
      * Constructora de la clase Hexagono con su coordenada x,y, su radio y si esta relleno o no
      */
     public Hexagon(float x, float y, float r, boolean isFill){
-        this.cx = x;
-        this.cy = y;
+        this.x = x;
+        this.y = y;
         this.r = r;
         this.isFill = isFill;
-        this.visible = true;
+        this.isVisible = true;
     }
 
     public Hexagon(JSONObject obj){
+        super(obj);
         try {
-            this.cx = obj.getInt("x");
-            this.cy = obj.getInt("y");
+            this.x = obj.getInt("x");
+            this.y = obj.getInt("y");
             this.r = obj.getInt("r");
             this.isFill = obj.getBoolean("fill");
             this.color = obj.getString("color");
-            this.visible = obj.getBoolean("visible");
+            setVisible(obj.getBoolean("visible"));
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
 
 
-    }
-    Hexagon(float x, float y, float r){
-        this.cx = x;
-        this.cy = y;
-        this.r = r;
     }
 
     /**
@@ -59,11 +53,11 @@ public class Hexagon implements Figure {
      */
     @Override
     public float getX() {
-        return this.cx;
+        return this.x;
     }
     @Override
     public float getY() {
-        return this.cy;
+        return this.y;
     }
     @Override
     public String getColor() {
@@ -78,19 +72,15 @@ public class Hexagon implements Figure {
         this.color= color;
     }
 
-    @Override
-    public void setVisible(boolean c) {
-        this.visible = c;
-    }
 
     @Override
     public void setX(float x) {
-        this.cx = x;
+        this.x = x;
     }
 
     @Override
     public void setY(float y) {
-        this.cy = y;
+        this.y = y;
     }
 
     /**
@@ -99,13 +89,13 @@ public class Hexagon implements Figure {
      */
     @Override
     public void Render(AndroidGraphics gr) {
-        if(this.visible){
+        if(this.isVisible){
             gr.setColor(this.color);
             if(isFill){
-                gr.rellenarHexagono(this.cx, this.cy,this.r);
+                gr.rellenarHexagono(this.x, this.y,this.r);
             }
             else {
-                gr.rellenarHexagono(this.cx, this.cy,this.r);
+                gr.rellenarHexagono(this.x, this.y,this.r);
             }
         }
 
@@ -116,12 +106,24 @@ public class Hexagon implements Figure {
      */
     @Override
     public void RenderCentrado(AndroidGraphics gr, float x, float y) {
-        if(this.visible) {
+        if(this.isVisible) {
             gr.setColor(this.color);
             if (isFill) {
-                gr.rellenarHexagono(x + this.cx, y + this.cy, this.r);
+                gr.rellenarHexagono(x + this.x, y + this.y, this.r);
             } else {
-                gr.rellenarHexagono(x + this.cx, y + this.cy, this.r);
+                gr.rellenarHexagono(x + this.x, y + this.y, this.r);
+            }
+        }
+    }
+
+    @Override
+    public void RenderAtPosition(AndroidGraphics gr, float x, float y) {
+        if(this.isVisible) {
+            gr.setColor(this.color);
+            if (isFill) {
+                gr.rellenarHexagono(x,y,this.r);
+            } else {
+                gr.rellenarHexagono(x,y,this.r);
             }
         }
     }

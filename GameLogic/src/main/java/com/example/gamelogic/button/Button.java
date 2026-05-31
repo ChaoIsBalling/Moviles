@@ -4,6 +4,7 @@ import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.State;
 import com.example.gamelogic.Image;
 import com.example.gamelogic.Text;
+import com.example.gamelogic.UIElement;
 import com.example.gamelogic.figure.Figure;
 
 import com.example.androidengine.TouchEvent;
@@ -21,10 +22,10 @@ import java.util.ArrayList;
 /**
  * Clase que representa un boton en la interfaz del juego
  */
-public class Button {
+public class Button extends UIElement {
 
     //Atributos del botón
-    private float x,y,w,h;
+    private float w,h;
 
     //Determina si tiene esquinas redondeadas
     private boolean isRound = false;
@@ -36,8 +37,6 @@ public class Button {
 
     //Determina si el boton esta visible
     private boolean isVisible = true;
-    private State currentState;
-
 
     //Texto del boton
     Text text;
@@ -52,30 +51,12 @@ public class Button {
     //Funcion callback asociada al boton
     private ButtonClickListener onClickFunction;
 
-    /**
-     * Constructora del botón que inicializa su posición, dimensiones, y si es redondeado o no
-     */
-    public Button(float x, float y, float w, float h, boolean isRound, float ar){
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.isRound = isRound;
-        this.arcRadius = ar;
-    }
-    public Button(float x, float y, float w, float h){
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-    }
+
     //Constructora que te crea un boton a partir de un Json
     public Button(JSONObject json)
     {
+        super(json);
         try {
-
-            this.x = json.getInt("x");
-            this.y= json.getInt("y");
             this.w= json.getInt("w");
             this.h=json.getInt("h");
             this.isRound=json.getBoolean("isRound");
@@ -94,10 +75,9 @@ public class Button {
     //Quitar el booleano luego, es solo para hacer otra constrctora
     public Button(JSONObject json, AndroidGraphics gr)
     {
+        super(json);
         try {
             this.id=json.getString("id");
-            this.x = json.getInt("x");
-            this.y= json.getInt("y");
             this.w= json.getInt("w");
             this.h=json.getInt("h");
             this.isRound=json.getBoolean("isRound");
@@ -141,9 +121,6 @@ public class Button {
     /**
      * Setters de atributos del botón
      */
-    //setter de los parametros de posicion texto color imagen y figura
-    public void setX(float x){this.x=x;}
-    public void setY(float y){this.y=y;}
     public void setText(Text text) {
         this.text = text;
     }
@@ -180,8 +157,6 @@ public class Button {
     //getter de los parametros de tamaño y posicion
     public float getWidth(){return this.w;}
     public float getHeight(){return this.h;}
-    public float getX(){return this.x;}
-    public float getY(){return this.y;}
 
     public Text getTextButton(){ return this.text; }
 
@@ -193,6 +168,9 @@ public class Button {
     public JSONObject getCallback(){return this.callback;}
     public boolean isEmptyImages(){
         return images.isEmpty();
+    }
+    public boolean isEmptyFigures(){
+        return figures.isEmpty();
     }
     public boolean isEnable(){ return this.isEnable; }
     public  boolean isVisible(){ return this.isVisible; }
@@ -209,6 +187,7 @@ public class Button {
      * Metodo que renderiza el boton
      * @param gr
      */
+    @Override
     public void Render(AndroidGraphics gr) {
         if(this.isVisible&&this.y>=-h){
             //Renderizamos el cuadrado que representa el botón

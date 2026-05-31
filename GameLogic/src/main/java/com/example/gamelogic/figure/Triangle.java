@@ -1,5 +1,6 @@
 package com.example.gamelogic.figure;
 import com.example.androidengine.AndroidGraphics;
+import com.example.gamelogic.UIElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,11 +8,8 @@ import org.json.JSONObject;
 /**
  * Clase que representa un traingulo e implementa los métodos de Figura
  */
-public class Triangle implements Figure {
+public class Triangle extends UIElement implements Figure {
 
-    //Centro del triangulo
-    private float cx;
-    private float cy;
 
     //radio desde el que generar los vertices del triangulo
     private float r;
@@ -27,17 +25,16 @@ public class Triangle implements Figure {
      * Constructora del triangulo con su posición, radio y booleano de rellenado
      */
     public Triangle(float x, float y, float r, boolean isFill){
-        this.cx = x;
-        this.cy = y;
+        this.x = x;
+        this.y = y;
         this.r = r;
         this.isFill = isFill;
         this.visible = true;
     }
 
     public Triangle(JSONObject obj){
+        super(obj);
         try {
-            this.cx = obj.getInt("x");
-            this.cy = obj.getInt("y");
             this.r = obj.getInt("r");
             this.isFill = obj.getBoolean("fill");
             this.color = obj.getString("color");
@@ -45,21 +42,11 @@ public class Triangle implements Figure {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     /**
      * Getters
      */
-    @Override
-    public float getX() {
-        return this.cx;
-    }
-    @Override
-    public float getY() {
-        return this.cy;
-    }
     @Override
     public String getColor() {
         return this.color;
@@ -68,15 +55,7 @@ public class Triangle implements Figure {
     /**
      * Setters
      */
-    @Override
-    public void setX(float x) {
-        this.cx = x;
-    }
 
-    @Override
-    public void setY(float y) {
-        this.cy = y;
-    }
     @Override
     public void setColor(String color) {
         this.color = color;
@@ -97,10 +76,10 @@ public class Triangle implements Figure {
         if(this.visible){
             gr.setColor(this.color);
             if(isFill){
-                gr.rellenarPoligono(this.cx,this.cy,this.r, 3);
+                gr.rellenarPoligono(this.x,this.y,this.r, 3);
             }
             else {
-                gr.pintarPoligono(this.cx,this.cy,this.r, 3);
+                gr.pintarPoligono(this.x,this.y,this.r, 3);
             }
         }
     }
@@ -109,10 +88,23 @@ public class Triangle implements Figure {
         if(this.visible){
             gr.setColor(this.color);
             if(isFill){
-                gr.rellenarPoligono(x+ this.cx,y + this.cy,this.r, 3);
+                gr.rellenarPoligono(x+ this.x,y + this.y,this.r, 3);
             }
             else {
-                gr.pintarPoligono(x + this.cx,y + this.cy,this.r, 3);
+                gr.pintarPoligono(x + this.x,y + this.y,this.r, 3);
+            }
+        }
+    }
+
+    @Override
+    public void RenderAtPosition(AndroidGraphics gr, float x, float y) {
+        if(this.visible){
+            gr.setColor(this.color);
+            if(isFill){
+                gr.rellenarPoligono(x,y,this.r, 3);
+            }
+            else {
+                gr.pintarPoligono(x ,y,this.r, 3);
             }
         }
     }

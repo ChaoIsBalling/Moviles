@@ -10,6 +10,7 @@ import com.example.gamelogic.TipoMejora;
 import com.example.gamelogic.button.Button;
 import com.example.gamelogic.Casilla;
 import com.example.gamelogic.Enemy;
+import com.example.gamelogic.figure.Figure;
 import com.example.gamelogic.managers.UIManager;
 import com.example.gamelogic.managers.WaveManager;
 import com.example.gamelogic.Image;
@@ -396,7 +397,7 @@ public class GameLogic implements State {
         gr.clear();
 
         //Renderizar el fondo de pantalla
-        this.fondoNivel.RenderEscalado();
+        this.fondoNivel.Render(gr);
         this.placeGrey.Render(gr);
 
         //Renderizado del mapa
@@ -444,7 +445,7 @@ public class GameLogic implements State {
     private void cargarFondoNivel() {
         try {
             this.fondoNivel = new Image(mapaObj.getJSONObject("background"), this.gr);
-
+            this.fondoNivel.setEscalado(true);
             //Seteamos las dimensiones y el comienzo donde se renderiza la imagen
             this.fondoNivel.setX((int) (this.offsetX - (this.anchoCasilla/2)));
             this.fondoNivel.setY((int) (this.offsetY - (this.altoCasilla/2)));
@@ -623,12 +624,13 @@ public class GameLogic implements State {
         if (this.dinero >= precioAPagar && !casillaObjetivo.esCamino()){
             // Ver si la skin de la torre está activa
             Image skin = this.ui.getButtonImage(CURRENT_BUT_ID, 0);
+            Figure figure=this.ui.getButtonFigure(CURRENT_BUT_ID, 0);
             // Decimos a la factoría que fabrique la torre del tipo que queremos
             Tower torreR = towerFactory.getTower(
                     tipoTorreSeleccionado,
                     casillaObjetivo.getX(),
                     casillaObjetivo.getY(),
-                    skin
+                    skin,figure
             );
 
             // Ponemos la torre en la posicion que corresponda

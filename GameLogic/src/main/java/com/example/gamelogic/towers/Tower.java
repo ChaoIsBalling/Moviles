@@ -3,6 +3,7 @@ package com.example.gamelogic.towers;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.gamelogic.Enemy;
+import com.example.gamelogic.figure.Figure;
 
 import java.util.ArrayList;
 
@@ -63,6 +64,8 @@ public interface Tower {
     public float getRange();
     public float getPosX();
     public float getPosY();
+
+    public void setFigura(Figure figura);
 
     /**
      * Para detener el audio asociado a la torre
