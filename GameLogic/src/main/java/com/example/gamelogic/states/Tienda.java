@@ -105,7 +105,7 @@ public class Tienda implements State {
 
         this.botonVolver.Render(gr);
         this.textoDiamantes.Render(gr);
-        this.imagenDiamante.Render();
+        this.imagenDiamante.Render(gr);
         if(this.comprando!=null){
             this.fondoDes.Render(gr);
 
@@ -394,7 +394,6 @@ public class Tienda implements State {
                 }catch (JSONException ex) {
                     throw new RuntimeException(ex);
                 }
-
             }
             boolean bct = false;
             int i =0;

@@ -85,9 +85,9 @@ public class Image {
     /**
      * Renderiza la imagen con la referencia a Graphics
      */
-    public void Render(){
+    public void Render(AndroidGraphics gr){
         if(this.visible)
-            this.gr.pintarImagen(this.im,this.x,this.y);
+            gr.pintarImagen(this.im,this.x,this.y);
     }
 
     public void RenderEscalado(){

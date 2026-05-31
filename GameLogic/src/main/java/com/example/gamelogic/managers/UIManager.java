@@ -251,7 +251,7 @@ public class UIManager {
             //System.out.println(b.getImgButton(0));
             b.Render(gr);
         }
-        for (Image img : imagenes.values()) img.Render();
+        for (Image img : imagenes.values()) img.Render(gr);
         for (Figure fig:figures.values()) fig.Render(gr);
         for (Text txt : textos.values()) txt.Render(gr);
     }
