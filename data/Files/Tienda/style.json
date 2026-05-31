@@ -25,22 +25,32 @@
         "r":0,
         "color":"#FFFFFFFF",
         "fill":true,
-        "visible":true
+        "visible":true,
+        "round":false
     },
     "EstandarTriangulo":    
-    {   
+    {   "x":0,
+        "y":0,
         "r":50,
-        "fill":true
+        "fill":true,
+        "color":"#FFFFFFFF",
+        "visible":true
     },
     "EstandarHexagono":    
-    {   
+    {   "x":0,
+        "y":0,
         "r":50,
-        "isFill":true
+        "fill":true,
+        "visible":true,
+        "color":"#FFFFFFFF"
     },
     "EstandarCirculo":    
-    {   
+    {   "x":0,
+        "y":0,
         "r":50,
-        "isFill":true
+        "fill":true,
+        "visible":true,
+        "color":"#FFFFFFFF"
     },
     "BotonesDesbloqueoTorre":[
         {

@@ -2,6 +2,9 @@ package com.example.gamelogic.figure;
 import com.example.androidengine.AndroidGraphics;
 import com.example.gamelogic.UIElement;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Clase que representa un círculo e implementa a Figura
  */
@@ -24,6 +27,22 @@ public class Circle extends UIElement implements Figure{
         this.visible = true;
     }
 
+    public Circle(JSONObject obj)
+    {
+        super(obj);
+        try {
+            this.x = obj.getInt("x");
+            this.y = obj.getInt("y");
+            this.r = obj.getInt("r");
+            this.h=r*2;
+            this.isFill = obj.getBoolean("fill");
+            this.color = obj.getString("color");
+            setVisible(obj.getBoolean("visible"));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
     /**
      * Getters
      */

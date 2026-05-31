@@ -53,7 +53,6 @@ public class ButtonComprar extends Button {
                 }catch (JSONException ex) {
                     throw new RuntimeException(ex);
                 }
-
             }
             else{
                 this.botonesCambio.get(i).setColor("#ffffffff");

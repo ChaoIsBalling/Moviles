@@ -25,8 +25,7 @@
         "r":0,
         "color":"#FFFFFFFF",
         "fill":true,
-        "visible":true,
-        "round":false
+        "visible":true
     },
     "EstandarTriangulo":    
     {   

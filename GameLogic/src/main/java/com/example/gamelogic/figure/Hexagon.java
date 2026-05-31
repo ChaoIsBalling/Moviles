@@ -45,8 +45,6 @@ public class Hexagon extends UIElement implements Figure {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     /**
