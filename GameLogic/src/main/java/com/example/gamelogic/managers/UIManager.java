@@ -5,6 +5,7 @@ import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.TouchEvent;
 import com.example.gamelogic.Image;
+import com.example.gamelogic.UIElement;
 import com.example.gamelogic.button.Button;
 import com.example.gamelogic.Text;
 import com.example.gamelogic.figure.Figure;
@@ -40,6 +41,8 @@ public class UIManager {
     //Aqui se guardan las imagenes que sirven como HUD y que se queden todo el tiempo en pantalla
     private HashMap<String, Image> imagenes = new HashMap<>();
 
+    private ArrayList<UIElement> scrollablesElements= new ArrayList<>();
+
     //Aqui se guardan las figuras que podrian servir como elementos de HUD
     private HashMap<String, Figure> figures = new HashMap<>();
 
@@ -68,7 +71,8 @@ public class UIManager {
                         buttonTypes.put(type,new ArrayList<Button>());
                     }
                     buttonTypes.get(type).add(b);
-
+                    if (type.equals("scrollable"))
+                        scrollablesElements.add(b);
                 }
             }
 
@@ -80,6 +84,10 @@ public class UIManager {
                     Text t = new Text(tData);
                     //Añadimos al hashMap con su id Correspondiente
                     textos.put(tData.getString("id"), t);
+                    if(tData.has("type"))
+                        if(tData.getString("type").equals("scrollable"))
+                            scrollablesElements.add(t);
+
                 }
             }
 
@@ -90,6 +98,9 @@ public class UIManager {
                     JSONObject imageData = array.getJSONObject(i);
                     Image img = new Image(imageData, engine.getGraphics());
                     imagenes.put(imageData.getString("id"), img);
+                    if(imageData.has("type"))
+                        if(imageData.getString("type").equals("scrollable"))
+                            scrollablesElements.add(img);
                 }
             }
             if(sceneJson.has("figures")){
@@ -109,7 +120,10 @@ public class UIManager {
                             fig=new Hexagon(figureData);
                             break;
                     }
-                    figures.put(figureData.getString("id"),fig);
+//                    figures.put(figureData.getString("id"),fig);
+//                    if(figureData.has("type"))
+//                        if(figureData.getString("type").equals("scrollable"))
+//                            scrollablesElements.add(fig);
                 }
             }
         } catch (JSONException e) {
