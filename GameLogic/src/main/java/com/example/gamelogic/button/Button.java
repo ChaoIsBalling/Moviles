@@ -171,13 +171,8 @@ public class Button {
             callback.getString("method");
             Method method =state.getClass().getMethod(callback.getString("method"), Button.class);
             method.invoke(state,this);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
+        } catch (JSONException | NoSuchMethodException | InvocationTargetException |
+                 IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }

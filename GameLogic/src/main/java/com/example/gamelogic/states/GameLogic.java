@@ -28,6 +28,7 @@ import java.util.Random;
  * Clase que representa la interfaz principal de juego, donde se desarrolla toda su lógica de gameplay
  */
 public class GameLogic implements State {
+    //Factoria de las torres
     private TowerFactory towerFactory = new TowerFactory();
     private final String TEXT_VIDA_ID = "TEXT_VIDA" , TEXT_DINERO_ID= "TEXT_DINERO", TEXT_OLEADA_ID = "TEXT_OLEADA";
     //Franja en la que están los botones

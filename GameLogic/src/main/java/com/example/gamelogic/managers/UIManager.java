@@ -43,8 +43,6 @@ public class UIManager {
     //Aqui se guardan las figuras que podrian servir como elementos de HUD
     private HashMap<String, Figure> figures = new HashMap<>();
 
-    //private HashMap<String, Image> imagenesHUD = new HashMap<>(); // Solo para render automático
-
     public UIManager(JSONObject sceneJson, AndroidEngine engine, AndroidGraphics gr) {
         // Limpiamos lo anterior para cargar la nueva escena
         botones.clear();
@@ -92,11 +90,6 @@ public class UIManager {
                     JSONObject imageData = array.getJSONObject(i);
                     Image img = new Image(imageData, engine.getGraphics());
                     imagenes.put(imageData.getString("id"), img);
-
-                    // Si el JSON dice que es HUD, la añadimos a la lista de renderizado
-                    //if (imageData.optBoolean("isHUD", false)) {
-                    //imagenesHUD.put(imageData.getString("id"),img);
-                    //}
                 }
             }
             if(sceneJson.has("figures")){
@@ -256,6 +249,11 @@ public class UIManager {
         for (Text txt : textos.values()) txt.Render(gr);
     }
 
+    /**
+     * Metodo que crea un boton a partir de un archivo prefab (ideal para Mundo)
+     * @param prefab JSON Object que contiene la info del prefab
+     * @param amount cantidad de prefabs que se quieren generar
+     */
     public void createPrefabs(JSONObject prefab, int amount)
     {   Button prefabButton = null;
         String type= new String();
@@ -264,7 +262,7 @@ public class UIManager {
             prefabButton = new Button(prefab, this.gr);
             prefabButton.setY(prefabButton.getY() + prefabButton.getHeight() * (float) i * 1.5f);
             try {
-                botones.put(prefab.getString("id")+i, prefabButton);
+                botones.put(prefab.getString("id")+ i, prefabButton);
                 type=prefab.getString("type");
                 if(!buttonTypes.containsKey(type)) {
                     buttonTypes.put(type,new ArrayList<Button>());
@@ -279,10 +277,9 @@ public class UIManager {
     public void configurarLimitesScroll() {
         //Los botones deben estar entre estas dos posiciones
         //Posicion más alta permitida para el scroll alrededor de Y
-            this.minY = buttonTypes.get("scrollable").get(0).getY();
-            //Posicion más baja permitaida para el scroll
-            this.maxY = this.tamScroll - buttonTypes.get("scrollable").get(0).getHeight();
-
+        this.minY = buttonTypes.get("scrollable").get(0).getY();
+        //Posicion más baja permitaida para el scroll
+        this.maxY = this.tamScroll - buttonTypes.get("scrollable").get(0).getHeight();
     }
     //si es de tipo touchmove manejamos el scroll del juego
     public void onTouchMove(TouchEvent e)
