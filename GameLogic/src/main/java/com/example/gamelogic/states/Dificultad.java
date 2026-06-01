@@ -11,7 +11,7 @@ import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.managers.UIManager;
-import com.example.gamelogic.button.Button;
+import com.example.gamelogic.VisualElements.button.Button;
 /**
  * Clase que representa el menú de seleccción de dificultad
  */
@@ -54,7 +54,7 @@ public class Dificultad implements State {
      * @param gr Graphics
      */
     @Override
-    public void setGraphics(AndroidGraphics gr) {
+    public void setGr(AndroidGraphics gr) {
         this.gr=gr;
         this.ui = new UIManager(this.style,this.engine,gr);
         this.ui.setAllCallbacks();

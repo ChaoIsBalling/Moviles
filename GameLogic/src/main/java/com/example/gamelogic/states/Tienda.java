@@ -4,158 +4,42 @@ import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.State;
 import com.example.androidengine.TouchEvent;
-import java.util.*;
 import com.example.androidengine.AndroidAudio;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import com.example.androidengine.AndroidMobile;
-import com.example.gamelogic.button.Button;
-import com.example.gamelogic.button.ButtonCambio;
-import com.example.gamelogic.button.ButtonComprar;
-import com.example.gamelogic.figure.Circle;
-import com.example.gamelogic.figure.Figure;
-import com.example.gamelogic.figure.Hexagon;
-import com.example.gamelogic.Image;
-import com.example.gamelogic.figure.Square;
-import com.example.gamelogic.Text;
-import com.example.gamelogic.figure.Triangle;
+import com.example.gamelogic.VisualElements.button.Button;
 import com.example.gamelogic.managers.UIManager;
 
 import java.util.ArrayList;
 
 public class Tienda implements State {
-    private Button botonVolver,botonComprar;
     private AndroidEngine engine;
-    private AndroidGraphics graphics;
-    private Text textoDiamantes,coste,CTorres,CSkins,CFondo;
-    private Square fondoDes;
-    private Image imagenDiamante;
+    private AndroidGraphics gr;
     //El archivo de guardado del juego
     private JSONObject save;
-    //ArrayList de elementos de la tienda que pueden hacer scroll
-    private ArrayList<ButtonComprar> ScrollableButtons;
-    private ArrayList<Text>ScrollableText;
-    private HashMap<String, ButtonComprar> itemBotones=new HashMap<>();
-
-    //Ultima cordenada Y tocada
-    float lastTouchedY;
-    //bool que nos dice si estamos haciendo scroll de pantalla
-    boolean scroll;
-    //La posición minima y maxima que puede tener el promer boton de la lista en la posicion y
-    float minY,maxY;
     AndroidMobile mobile;
-    JSONObject datos2;
-    int x, y,initX, initY;
-    ButtonComprar comprando;
+    JSONObject style;
     private UIManager ui;
-
     public Tienda(AndroidEngine engine,AndroidMobile mobile,JSONObject save){
         this.save =save;
-        ScrollableText = new ArrayList<Text>();
-        ScrollableButtons = new ArrayList<ButtonComprar>();
         this.engine=engine;
         this.mobile = mobile;
-        this.datos2 =engine.readJsonFile("Tienda/styleNuevo.json");
+        this.style =engine.readJsonFile("Tienda/styleNuevo.json");
     }
-
-
     @Override
     public void update(double deltatime) {}
 
     @Override
     public void render(AndroidGraphics gr) {
-
-//        gr.EmpezarLimiteDibujado(0,0,600,400);
-//        gr.EmpezarLimiteDibujado(0,80,600,400);
         this.ui.render(gr);
-//        for (int i =0; i<this.ScrollableButtons.size();i++){
-//            this.ScrollableButtons.get(i).Render(gr);
-//        }
-//        for (int i =0; i<this.ScrollableText.size();i++){
-//            this.ScrollableText.get(i).Render(gr);
-//        }
-//        gr.TerminarLimiteDibujado();
-//
-//        this.botonVolver.Render(gr);
-//        this.textoDiamantes.Render(gr);
-//        this.imagenDiamante.Render(gr);
-//        if(this.comprando!=null){
-//            this.fondoDes.Render(gr);
-//            try {
-//                if(!this.save.getBoolean(this.comprando.getDesbloqueo())){
-//                    this.coste.Render(gr);
-//                    this.botonComprar.Render(gr);
-//                }
-//                else
-//                    this.comprando.RenderCambio(gr);
-//            }catch (JSONException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//        gr.TerminarLimiteDibujado();
     }
 
     @Override
-    public void setGraphics(AndroidGraphics gr) {
-        this.graphics=gr;
-        this.ui = new UIManager(this.datos2 , this.engine, this.graphics);
+    public void setGr(AndroidGraphics gr) {
+        this.gr =gr;
+        this.ui = new UIManager(this.style, this.engine, this.gr);
         this.ui.setAllCallbacks();
-//            this.botonVolver = new Button(this.datos2.getJSONObject("BotonVolver"));
-//            this.textoDiamantes = new Text(this.datos2.getJSONObject("TextoDiamantes"),gr);
-//            this.textoDiamantes.setText("" + this.save.getInt("gems"));
-//
-//            this.fondoDes = new Square(500,300,300,400,true);
-//            this.fondoDes.setColor("#ff00ffff");
-//            this.coste = new Text(this.datos2.getJSONObject("TextoCoste"),gr);
-//            this.botonComprar = new Button(this.datos2.getJSONObject("BotonComprar"));
-//            this.botonComprar.setText(new Text(this.datos2.getJSONObject("TextoComprar"),gr));
-//            this.comprando = null;
-//
-//            this.botonVolver.setImages(new Image(datos2.getJSONObject("ImagenVolver"),gr));
-//            this.imagenDiamante = new Image(datos2.getJSONObject("ImagenDiamante"),gr);
-//            this.CTorres = new Text(this.datos2.getJSONObject("TextoCTorres"),gr);
-//            ScrollableText.add(this.CTorres);
-//
-//            //Generamos los botones de compra
-//            JSONArray botonesDT = datos2.getJSONArray("BotonesDesbloqueoTorre");
-//            this.x = datos2.getJSONObject("EstandarBoton").getInt("x");
-//            this.initX = datos2.getJSONObject("EstandarBoton").getInt("x");
-//            this.y = datos2.getJSONObject("EstandarBoton").getInt("y");
-//            generarBotonesComprar(botonesDT,gr);
-//
-//            this.CSkins = new Text(this.datos2.getJSONObject("TextoCSkins"),gr);
-//            y +=80;
-//            this.CSkins.setY(y);
-//            ScrollableText.add(this.CSkins);
-//            y+=100;
-//
-//            x = initX;
-//            JSONArray botonesDS = datos2.getJSONArray("BotonesDesbloqueoSkin");
-//            generarBotonesComprar(botonesDS,gr);
-//
-//            this.CFondo = new Text(this.datos2.getJSONObject("TextoColores"),gr);
-//            y+=80;
-//            this.CFondo.setY(y);
-//            ScrollableText.add(CFondo);
-//            y+=100;
-//
-//            x = initX;
-//            JSONArray botonesDF = datos2.getJSONArray("BotonesDesbloqueoFondo");
-//            generarBotonesComprar(botonesDF,gr);
-//
-//            this.minY=ScrollableText.get(0).getY();
-//            this.maxY=400-ScrollableButtons.get(ScrollableButtons.size()-1).getHeight();
-//
-//            x = datos2.getJSONObject("InitBotonCambio").getInt("x");
-//            initX = x;
-//            y = datos2.getJSONObject("InitBotonCambio").getInt("y");
-//            initY = y;
-//            JSONArray botonesC = datos2.getJSONArray("BotonesCambio");
-//            generarBotonesCambio(botonesC,gr);
-
-
     }
     /**
      * Metodo para setear el callback de volver a la pantalla anterior
@@ -168,96 +52,7 @@ public class Tienda implements State {
             this.engine.setState(menu);
         });
     }
-    private void generarBotonesComprar(JSONArray array, AndroidGraphics gr){
-        try{
-            for(int i =0; i<array.length();i++){
-                JSONObject db = this.datos2.getJSONObject("EstandarBoton");
-                db.put("coste",array.getJSONObject(i).getInt("coste"));
-                db.put("descripcion",array.getJSONObject(i).getString("descripcion"));
-                db.put("desbloqueo",array.getJSONObject(i).getString("desbloqueo"));
-                ButtonComprar boton = new ButtonComprar(db);
-                boton.setX(x);
-                boton.setY(y);
-                if(this.save.getBoolean(boton.getDesbloqueo()))
-                    boton.setColor("#ff00ff00");
 
-                initializeButton(boton, array.getJSONObject(i));
-                if(x == initX)
-                    x+=150;
-                else{
-                    x = initX;
-                    y+=150;
-                }
-                ScrollableButtons.add(boton);
-                itemBotones.put(boton.getDesbloqueo(),boton);
-            }
-
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void generarBotonesCambio(JSONArray array, AndroidGraphics gr){
-        ButtonCambio ultimo = null;
-        try{
-            for(int i =0; i<array.length();i++){
-                JSONObject db = this.datos2.getJSONObject("EstandarBoton");
-                db.put("desbloqueo",array.getJSONObject(i).getString("desbloqueo"));
-                db.put("guardado",array.getJSONObject(i).getString("guardado"));
-                db.put("datoGuardado",array.getJSONObject(i).getString("datoGuardado"));
-                ButtonCambio boton = new ButtonCambio(db);
-                if(ultimo != null && !Objects.equals(ultimo.getDesbloqueo(), boton.getDesbloqueo())){
-                    x = initX;
-                    y = initY;
-                }
-                ultimo = boton;
-                boton.setX(x); boton.setY(y);
-                if(this.save.get(boton.getGuardado()) == boton.getDatoGuardado()){
-                    boton.setColor("#ff00ff00");
-                }
-                initializeButton(boton,array.getJSONObject(i));
-                if(x == initX)
-                    x+=110;
-                else{
-                    x = initX;
-                    y+=110;
-                }
-                itemBotones.get(boton.getDesbloqueo()).addBotonCambio(boton);
-            }
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void initializeButton(Button boton,JSONObject obj)
-    {
-        try {
-            if(obj.getBoolean("tieneImagen")){
-                JSONObject image = datos2.getJSONObject("EstandarImagen");
-                image.put("imagen",obj.getString("imagen"));
-                boton.setImages(new Image(image,this.graphics));
-            }
-        if(obj.getBoolean("tieneForma")){
-            Figure fig=null;
-            if(obj.getString("tipoForma").equals("cuadrado"))
-                fig= new Square(datos2.getJSONObject("EstandarCuadrado"));
-
-            else if(obj.getString("tipoForma").equals("triangulo"))
-                fig = new Triangle(datos2.getJSONObject("EstandarTriangulo"));
-
-            else if(obj.getString("tipoForma").equals("hexagono"))
-                fig = new Hexagon(datos2.getJSONObject("EstandarHexagono"));
-
-            else if(obj.getString("tipoForma").equals("circulo"))
-                fig = new Circle(datos2.getJSONObject("EstandarCirculo"));
-
-            fig.setColor(obj.getString("colorForma"));
-            boton.setFigures(fig);
-        }
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
@@ -267,85 +62,15 @@ public class Tienda implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     this.ui.handleInput(e);
-                  //  onTouchDown(e);
-                   // this.gestionBotones(e);
                     break;
                 case TOUCH_UP:
-                    //onTouchUp();
                     break;
                 case TOUCH_MOVE:
-                    //onTouchMove(e);
                     break;
             }
         }
     }
 
-    //si el evento es de tipo TouchDown guardamos el ultimo valor de la Y y ponemo a true el scroll
-    private void onTouchDown(TouchEvent e){
-        lastTouchedY=e.y;
-        scroll=true;
-    }
-    //si es de tipo touch up el scroll se pone a false
-    private void onTouchUp(){
-        scroll = false;
-    }
-    //si es de tipo touchmove manejamos el scroll del juego
-    private void onTouchMove(TouchEvent e)
-    {
-        if(!scroll)
-            return;
-        float destY=e.y-lastTouchedY;
-        lastTouchedY=e.y;
-        boolean canScroll=true;
-        //checkeamos si los extremeos de los objetos scrolleables (el mas alto y el mas bajo)
-        //estan entre el minimo y maximo Y que hemos definido
-        if((ScrollableText.get(0).getY()>minY&&destY>0)||(ScrollableButtons.get(ScrollableButtons.size()-1).getY()<maxY&&destY<0))
-            canScroll=false;
-
-        if(canScroll) {
-            for (int i = 0; i < ScrollableText.size(); i++) {
-                float newY = ScrollableText.get(i).getY() + destY;
-                ScrollableText.get(i).setY(newY);
-            }
-            for (int i = 0; i < ScrollableButtons.size(); i++) {
-                float newY = ScrollableButtons.get(i).getY() + destY;
-                ScrollableButtons.get(i).setY(newY);
-            }
-        }
-    }
-
-    /**
-     * Metodo que gestiona los estados del juego
-     */
-    private void gestionBotones(TouchEvent e) //maneja los estados del juego cuando pulsas botones o las torres
-    {
-        if(this.botonVolver.contains(e.x,e.y)){
-            Menu menu = new Menu(this.engine,this.mobile,this.save);
-            this.engine.setState(menu);
-        }
-        else {
-            try {
-                if(this.comprando != null && !this.save.getBoolean(this.comprando.getDesbloqueo()) && this.botonComprar.contains(e.x, e.y) && this.comprando.getCoste() <= this.save.getInt("gems")){
-                    this.save.put("gems",this.save.getInt("gems")-this.comprando.getCoste());
-                    this.textoDiamantes.setText("" + this.save.getInt("gems"));
-                    this.save.put(this.comprando.getDesbloqueo(),true);
-                    this.comprando.setColor("#ff00ff00");
-                }
-                if(this.comprando != null){
-                    this.comprando.pulsarCambio(e.x,e.y,this.save);
-                    this.graphics.setColorClear(this.save.getString("fondo"));
-                }
-            }catch (JSONException ex) {
-                throw new RuntimeException(ex);
-            }
-            for(ButtonComprar boton: ScrollableButtons) {
-                if (boton.contains(e.x, e.y)) {
-                    this.comprando = boton;
-                    this.coste.setText("Coste: " + this.comprando.getCoste() + this.comprando.getDescripcion());
-                }
-            }
-        }
-    }
     @Override
     public void setAudio(AndroidAudio audio) {}
     @Override

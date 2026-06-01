@@ -1,8 +1,8 @@
 package com.example.gamelogic.towers;
 
-import com.example.gamelogic.TipoTorre;
-import com.example.gamelogic.Image;
-import com.example.gamelogic.figure.Figure;
+import com.example.gamelogic.Tipos.TipoTorre;
+import com.example.gamelogic.VisualElements.Image;
+import com.example.gamelogic.VisualElements.figure.Figure;
 
 import java.util.HashMap;
 import java.util.Map;

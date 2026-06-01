@@ -6,16 +6,17 @@ import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.Color;
-import com.example.gamelogic.TipoMejora;
-import com.example.gamelogic.button.Button;
+import com.example.gamelogic.Tipos.TipoMejora;
+import com.example.gamelogic.VisualElements.VisualElement;
+import com.example.gamelogic.VisualElements.button.Button;
 import com.example.gamelogic.Casilla;
 import com.example.gamelogic.Enemy;
-import com.example.gamelogic.figure.Figure;
+import com.example.gamelogic.VisualElements.figure.Figure;
 import com.example.gamelogic.managers.UIManager;
 import com.example.gamelogic.managers.WaveManager;
-import com.example.gamelogic.Image;
-import com.example.gamelogic.figure.Square;
-import com.example.gamelogic.TipoTorre;
+import com.example.gamelogic.VisualElements.Image;
+import com.example.gamelogic.VisualElements.figure.Square;
+import com.example.gamelogic.Tipos.TipoTorre;
 import com.example.gamelogic.towers.Tower;
 import com.example.gamelogic.Vector2D;
 import com.example.gamelogic.towers.TowerFactory;
@@ -433,8 +434,8 @@ public class GameLogic implements State {
         this.ui = new UIManager(this.style,this.engine, this.gr);
         this.ui.setAllCallbacks();
         //Hacemos que los botones de construccion esten activados desde el principio
-        cambiarEstadoBotones("tower", true);
-        cambiarEstadoBotones("upgrade",false);
+        this.ui.changeVisualElementStateOfType("tower",true);
+        this.ui.changeVisualElementStateOfType("upgrade",false);
         this.inicializarContadores();
         this.cargarFondoNivel();
     }
@@ -492,7 +493,7 @@ public class GameLogic implements State {
             else {
                 b.setEnabled(false);
                 b.setVisible(false);
-                this.ui.unloadButtonOfType("tower",b);
+                this.ui.unloadVisualElementOfType("tower",b);
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -522,12 +523,7 @@ public class GameLogic implements State {
      * @param type El tipo de boton que queremos activar/desactivar
      * @param active true si se activa, false si se desactiva
      */
-    public void cambiarEstadoBotones(String type, boolean active) {
-        for (Button b : this.ui.getAllButtonsOfType(type)) {
-                b.setVisible(active);
-                b.setEnabled(active);
-        }
-    }
+
 
     /**
      * Gestiona la interacción de la entrada con el juego
@@ -571,7 +567,7 @@ public class GameLogic implements State {
      * @param gr Graphics
      */
     @Override
-    public void setGraphics(AndroidGraphics gr) {
+    public void setGr(AndroidGraphics gr) {
         this.gr = gr;
         this.inicializarUI();
 
@@ -607,9 +603,8 @@ public class GameLogic implements State {
             //Modo Mejora
             this.torreSeleccionada = torreEnCasilla;
             this.estado = Estado.TORRE;
-            this.cambiarEstadoBotones("upgrade",true);
-            this.cambiarEstadoBotones("tower", false);
-
+            this.ui.changeVisualElementStateOfType("tower",false);
+            this.ui.changeVisualElementStateOfType("upgrade",true);
         }else if(this.estado == Estado.CONSTRUCCION) {
             comprarTorre(casillaActual, e);
         }
@@ -663,8 +658,8 @@ public class GameLogic implements State {
         this.tipoTorreSeleccionado = null;
 
         //Se vuelven a activar los botones de contruccion
-        cambiarEstadoBotones("tower", true);
-        cambiarEstadoBotones("upgrade",false);
+        this.ui.changeVisualElementStateOfType("tower",true);
+        this.ui.changeVisualElementStateOfType("upgrade",false);
 
         if(this.ui.getButtonUI(CURRENT_BUT_ID) != null) {
             this.ui.getButtonUI(CURRENT_BUT_ID).setColor(Color.BLANCO.getHex());
@@ -728,7 +723,7 @@ public class GameLogic implements State {
         this.tipoTorreSeleccionado = tipoTorre;
 
         //Primero coloreamos todos los botones de torres en blanco
-        for (Button b : this.ui.getAllButtonsOfType("tower")) {
+        for (VisualElement b : this.ui.getAllVisualElementsOfType("tower")) {
             b.setColor(Color.BLANCO.getHex());
         }
         //Cambiamos el color a Amarillo del boton correspondiente

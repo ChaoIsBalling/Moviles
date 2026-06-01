@@ -1,6 +1,6 @@
-package com.example.gamelogic.figure;
+package com.example.gamelogic.VisualElements.figure;
 import com.example.androidengine.AndroidGraphics;
-import com.example.gamelogic.UIElement;
+import com.example.gamelogic.VisualElements.VisualElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,16 +8,14 @@ import org.json.JSONObject;
 /**
  * Clase que representa un traingulo e implementa los métodos de Figura
  */
-public class Triangle extends UIElement implements Figure {
+public class Triangle extends Figure {
 
 
     //radio desde el que generar los vertices del triangulo
     private float r;
-    //color
-    private String color = "#FF000000";
+
     //Indica si esta relleno o no
     private boolean isFill;
-
     private boolean visible;
 
 

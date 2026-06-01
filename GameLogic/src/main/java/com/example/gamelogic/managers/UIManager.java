@@ -4,14 +4,15 @@ package com.example.gamelogic.managers;
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.TouchEvent;
-import com.example.gamelogic.Image;
-import com.example.gamelogic.UIElement;
-import com.example.gamelogic.button.Button;
-import com.example.gamelogic.Text;
-import com.example.gamelogic.figure.Figure;
-import com.example.gamelogic.figure.Hexagon;
-import com.example.gamelogic.figure.Square;
-import com.example.gamelogic.figure.Triangle;
+import com.example.gamelogic.VisualElements.Image;
+import com.example.gamelogic.VisualElements.VisualElement;
+import com.example.gamelogic.VisualElements.button.Button;
+import com.example.gamelogic.VisualElements.Text;
+import com.example.gamelogic.VisualElements.figure.Circle;
+import com.example.gamelogic.VisualElements.figure.Figure;
+import com.example.gamelogic.VisualElements.figure.Hexagon;
+import com.example.gamelogic.VisualElements.figure.Square;
+import com.example.gamelogic.VisualElements.figure.Triangle;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,24 +35,25 @@ public class UIManager {
     float tamScroll = 400;
     // Hash Maps donde vamos a guardar los elementos de la UI de la escena
     private HashMap<String, Button> botones = new HashMap<>();
-    private ArrayList<Button> scrollables =new ArrayList<>();
     private HashMap<String, Text> textos = new HashMap<>();
-    private HashMap<String, ArrayList<Button>> buttonTypes =new HashMap<>();
+    private HashMap<String, Figure> figures = new HashMap<>();
+    private HashMap<String, Image> imagenes = new HashMap<>();
+    //ArrayList que guarda todos los objetos que pueden hacer scroll
+    private ArrayList<VisualElement> scrollableElements =new ArrayList<>();
+    private HashMap<String, ArrayList< VisualElement>> visualElementTypes =new HashMap<>();
+    private ArrayList<ArrayList<VisualElement>> visualElementRenderList=new ArrayList<>();
     private AndroidEngine engine;
     private AndroidGraphics gr;
     //Aqui se guardan las imagenes que sirven como HUD y que se queden todo el tiempo en pantalla
-    private HashMap<String, Image> imagenes = new HashMap<>();
 
-    private ArrayList<UIElement> scrollablesElements= new ArrayList<>();
-
-    //Aqui se guardan las figuras que podrian servir como elementos de HUD
-    private HashMap<String, Figure> figures = new HashMap<>();
 
     public UIManager(JSONObject sceneJson, AndroidEngine engine, AndroidGraphics gr) {
         // Limpiamos lo anterior para cargar la nueva escena
+        visualElementRenderList.add(new ArrayList<>());
         botones.clear();
         textos.clear();
         imagenes.clear();
+        figures.clear();
         this.engine=engine;
         this.gr=gr;
         loadUIFromJson(sceneJson);
@@ -68,15 +70,9 @@ public class UIManager {
                     type=bData.getString("type");
                     Button b = new Button(bData,gr);
                     botones.put(bData.getString("id"), b);
-                    if(!buttonTypes.containsKey(type)) {
-                        buttonTypes.put(type,new ArrayList<Button>());
-                    }
-                    buttonTypes.get(type).add(b);
-                    if (type.equals("scrollable"))
-                        scrollablesElements.add(b);
+                    addVisualElementToArray(b,bData);
                 }
             }
-
             //Textos
             if (sceneJson.has("texts")){
                 JSONArray array = sceneJson.getJSONArray("texts");
@@ -85,12 +81,9 @@ public class UIManager {
                     Text t = new Text(tData,gr);
                     //Añadimos al hashMap con su id Correspondiente
                     textos.put(tData.getString("id"), t);
-                    if(tData.has("type"))
-                        if(tData.getString("type").equals("scrollable"))
-                            scrollablesElements.add(t);
+                    addVisualElementToArray(t,tData);
                 }
             }
-
             //Imagenes
             if(sceneJson.has("images")){
                 JSONArray array = sceneJson.getJSONArray("images");
@@ -98,9 +91,7 @@ public class UIManager {
                     JSONObject imageData = array.getJSONObject(i);
                     Image img = new Image(imageData, engine.getGraphics());
                     imagenes.put(imageData.getString("id"), img);
-                    if(imageData.has("type"))
-                        if(imageData.getString("type").equals("scrollable"))
-                            scrollablesElements.add(img);
+                    addVisualElementToArray(img,imageData);
                 }
             }
             if(sceneJson.has("figures")){
@@ -119,16 +110,51 @@ public class UIManager {
                         case "hexagon":
                             fig=new Hexagon(figureData);
                             break;
+                        case "circle":
+                            fig=new Circle(figureData);
                     }
                    figures.put(figureData.getString("id"),fig);
-//                    if(figureData.has("type"))
-//                        if(figureData.getString("type").equals("scrollable"))
-//                            scrollablesElements.add(fig);
+                    addVisualElementToArray(fig,figureData);
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Metodo para añadir los elementos de UI a arrays dependiendo del tipo de elemento o de su layer
+     * @param element el elemento a añadir
+     * @param obj el json object del objet
+     */
+    public void addVisualElementToArray(VisualElement element, JSONObject obj)
+    {
+        try {
+            if(obj.has("type"))
+            {
+                String type= obj.getString("type");
+
+                if(!visualElementTypes.containsKey(type))
+                    visualElementTypes.put(type,new ArrayList<VisualElement>());
+
+                visualElementTypes.get(type).add(element);
+            }
+            if(obj.has("layer"))
+            {
+                Integer layer= obj.getInt("layer");
+                //esto es en caso de que hayan layers que no se usan o la lectura de layers no este en orden
+                while(layer>=visualElementRenderList.size()) {
+                    visualElementRenderList.add(new ArrayList<>());}
+                 visualElementRenderList.get(layer).add(element);
+            }
+            else {
+                //en caso de que no se especifique la layer lo añadimos a la layer 0
+                visualElementRenderList.get(0).add(element);
+            }
+        }
+        catch (JSONException e) {
+            throw new RuntimeException(e);
+    }
     }
     public void setAllCallbacks()
     {
@@ -149,13 +175,17 @@ public class UIManager {
                 t.setText(value);
         }
     }
-    public void unloadButtonOfType(String type, Button b)
-    {
-        buttonTypes.get(type).remove(b);
+    public void  unloadVisualElementOfType(String type,VisualElement element) {
+        visualElementTypes.get(type).remove(element);
     }
-    public ArrayList<Button> getAllButtonsOfType(String type)
-    {
-      return buttonTypes.get(type);
+    public ArrayList<VisualElement> getAllVisualElementsOfType(String type) {
+        return visualElementTypes.get(type);
+    }
+    public void changeVisualElementStateOfType(String type,boolean state){
+        for(VisualElement element:visualElementTypes.get(type)){
+            element.setEnabled(state);
+            element.setVisible(state);
+        }
     }
 
     /**
@@ -260,13 +290,11 @@ public class UIManager {
      * @param gr Referencia al gestor de gráficos de Android
      */
     public void render(AndroidGraphics gr){
-        for (Button b : botones.values()) {
-            //System.out.println(b.getImgButton(0));
-            b.Render(gr);
+        for(ArrayList<VisualElement> array: visualElementRenderList) {
+            for(VisualElement element: array){
+                element.Render(gr);
+            }
         }
-        for (Image img : imagenes.values()) img.Render(gr);
-        for (Figure fig:figures.values()) fig.Render(gr);
-        for (Text txt : textos.values()) txt.Render(gr);
     }
 
     /**
@@ -276,20 +304,13 @@ public class UIManager {
      */
     public void createPrefabs(JSONObject prefab, int amount)
     {   Button prefabButton = null;
-        String type= new String();
         for (int i =0;i<amount;i++)
         {
             prefabButton = new Button(prefab, this.gr);
             prefabButton.setY(prefabButton.getY() + prefabButton.getHeight() * (float) i * 1.5f);
             try {
                 botones.put(prefab.getString("id")+ i, prefabButton);
-                type=prefab.getString("type");
-                if(!buttonTypes.containsKey(type)) {
-                    buttonTypes.put(type,new ArrayList<Button>());
-                }
-                buttonTypes.get(type).add(prefabButton);
-                if (type.equals("scrollable"))
-                    scrollablesElements.add(prefabButton);
+                addVisualElementToArray(prefabButton,prefab);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -297,16 +318,17 @@ public class UIManager {
         }
     }
     public void configurarLimitesScroll() {
-        Collections.sort(scrollablesElements,(obj1,obj2)-> {
+        scrollableElements=visualElementTypes.get("scrollable");
+        Collections.sort(scrollableElements,(obj1,obj2)-> {
             if(obj1.getY()<obj2.getY()) return -1;
             if(obj1.getY()>obj2.getY()) return 1;
             return 0;
         });
         //Los botones deben estar entre estas dos posiciones
         //Posicion más alta permitida para el scroll alrededor de Y
-        this.minY = scrollablesElements.get(0).getY();
+        this.minY = scrollableElements.get(0).getY();
         //Posicion más baja permitaida para el scroll
-        this.maxY = this.tamScroll - scrollablesElements.get(0).getHeight();
+        this.maxY = this.tamScroll - scrollableElements.get(0).getHeight();
     }
     //si es de tipo touchmove manejamos el scroll del juego
     public void onTouchMove(TouchEvent e)
@@ -320,15 +342,15 @@ public class UIManager {
         //checkeamos si los extremeos de los objetos scrolleables (el mas alto y el mas bajo)
         //estan entre el minimo y maximo Y que hemos definido
         //Si es asi, ya no podemos scrollear mas
-        if((scrollablesElements.get(0).getY() > minY && destY>0)
-                ||(scrollablesElements.get(scrollablesElements.size()-1).getY() < maxY && destY<0))
+        if((scrollableElements.get(0).getY() > minY && destY>0)
+                ||(scrollableElements.get(scrollableElements.size()-1).getY() < maxY && destY<0))
             canScroll=false;
 
         //Renderizo los botones en la nueva posicion y sumandole el desplazamiento
         if(canScroll) {
-            for (int i = 0; i < scrollablesElements.size(); i++) {
-                float newY = scrollablesElements.get(i).getY() + destY;
-                scrollablesElements.get(i).setY(newY);
+            for (int i = 0; i < scrollableElements.size(); i++) {
+                float newY = scrollableElements.get(i).getY() + destY;
+                scrollableElements.get(i).setY(newY);
             }
         }
 
@@ -338,7 +360,9 @@ public class UIManager {
         lastTouchedY=e.y;
         scroll=true;
     }
-    //si es de tipo touch up el scroll se pone a false
+    /**
+     * Si tenemos un TouchEvent de tipo TouchUp, El scroll se pone a falso
+     */
     public void onTouchUp(){
         scroll = false;
     }

@@ -1,6 +1,6 @@
 package com.example.gamelogic;
 import com.example.androidengine.AndroidGraphics;
-import com.example.gamelogic.figure.Square;
+import com.example.gamelogic.VisualElements.figure.Square;
 import com.example.gamelogic.towers.Tower;
 
 /**

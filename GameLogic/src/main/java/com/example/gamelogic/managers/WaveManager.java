@@ -2,8 +2,8 @@ package com.example.gamelogic.managers;
 
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
-import com.example.gamelogic.Image;
-import com.example.gamelogic.TipoTorre;
+import com.example.gamelogic.VisualElements.Image;
+import com.example.gamelogic.Tipos.TipoTorre;
 import com.example.gamelogic.states.GameLogic;
 
 import org.json.JSONArray;

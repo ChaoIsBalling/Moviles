@@ -8,7 +8,7 @@ import com.example.androidengine.TouchEvent;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidSound;
 import com.example.androidengine.AndroidMobile;
-import com.example.gamelogic.button.Button;
+import com.example.gamelogic.VisualElements.button.Button;
 import com.example.gamelogic.managers.UIManager;
 
 import org.json.JSONException;
@@ -204,7 +204,7 @@ public class GameOver implements State {
     }
 
     @Override
-    public void setGraphics(AndroidGraphics gr) {
+    public void setGr(AndroidGraphics gr) {
         this.gr = gr;
 
         //Determinamos que UI Setear

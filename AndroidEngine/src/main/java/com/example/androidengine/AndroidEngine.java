@@ -107,7 +107,7 @@ public class AndroidEngine implements Runnable {
      */
     public void setState(State state){
         this.state = state;
-        this.state.setGraphics(this.gr);
+        this.state.setGr(this.gr);
         this.state.setAudio(this.audio);
     }
 

@@ -1,16 +1,18 @@
-package com.example.gamelogic;
+package com.example.gamelogic.VisualElements;
 import com.example.androidengine.AndroidGraphics;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public abstract class UIElement {
+public abstract class VisualElement {
     protected float x;
     protected float y;
     protected float h=0;
     protected boolean isVisible = true;
-    public UIElement(){}
-    public UIElement(JSONObject json)
+    private boolean isEnable = true;
+    protected String color="#FF000000";;
+    public VisualElement(){}
+    public VisualElement(JSONObject json)
     {
         try {
             this.x=json.getInt("x");
@@ -28,4 +30,8 @@ public abstract class UIElement {
     public float getY(){return this.y;}
     public float getHeight(){return this.h;}
     public void setVisible(boolean visible){this.isVisible = visible;}
+    public void setEnabled(boolean enabled){this.isEnable = enabled;}
+    public void setColor(String color){
+        this.color = color;
+    }
 }

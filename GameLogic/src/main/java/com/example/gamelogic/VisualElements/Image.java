@@ -1,6 +1,7 @@
-package com.example.gamelogic;
+package com.example.gamelogic.VisualElements;
 import com.example.androidengine.AndroidImage;
 import com.example.androidengine.AndroidGraphics;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,7 +9,7 @@ import org.json.JSONObject;
 /**
  * Clase que representa la clase Imagen
  */
-public class Image extends UIElement {
+public class Image extends VisualElement {
     //Dimensiones
     int w;
     int h;
@@ -17,8 +18,6 @@ public class Image extends UIElement {
 
     boolean escalado =true;
 
-    //Booleano que indica si es visible o no
-    private boolean visible;
     //Interfaz del motor
     AndroidImage im;
     //Graphics del motor
@@ -37,8 +36,8 @@ public class Image extends UIElement {
         this.h=json.getInt("h");
 
         if(json.has("visible"))
-            this.visible = json.getBoolean("visible");
-        else this.visible = true;
+            this.isVisible = json.getBoolean("visible");
+        else this.isVisible = true;
     } catch (
     JSONException e) {
         throw new RuntimeException(e);
@@ -54,7 +53,6 @@ public class Image extends UIElement {
         this.h = h;
     }
 
-    public void setVisible(boolean c){ this.visible = c; }
     public void setEscalado(boolean c){this.escalado=c;}
 
     /**
@@ -62,7 +60,7 @@ public class Image extends UIElement {
      */
     @Override
     public void Render(AndroidGraphics gr){
-        if(this.visible) {
+        if(this.isVisible) {
             if(this.escalado)
                 gr.pintarImagenEscalada(this.im,(int)this.x,(int)this.y,this.w,this.h);
             else
@@ -74,7 +72,7 @@ public class Image extends UIElement {
      * Reneriza la imagen de forma centrada con la referencia a Graphics
      */
     public void RenderCentrado(int x, int y){
-        if(this.visible)
+        if(this.isVisible)
             this.gr.pintarImagen(this.im,x+(int)this.x,y+(int)this.y);
     }
 }

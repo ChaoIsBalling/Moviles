@@ -1,6 +1,6 @@
-package com.example.gamelogic.figure;
+package com.example.gamelogic.VisualElements.figure;
 import com.example.androidengine.AndroidGraphics;
-import com.example.gamelogic.UIElement;
+import com.example.gamelogic.VisualElements.VisualElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,13 +8,10 @@ import org.json.JSONObject;
 /**
  * Clase que representa un Hexágono
  */
-public class Hexagon extends UIElement implements Figure {
+public class Hexagon extends Figure {
 
     //radio desde el centro
     private float r;
-
-    //Color del hexágono
-    private String color;
 
     //Indica si es relleno o no
     private boolean isFill;

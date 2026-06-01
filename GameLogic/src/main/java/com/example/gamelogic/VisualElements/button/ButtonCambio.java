@@ -1,4 +1,4 @@
-package com.example.gamelogic.button;
+package com.example.gamelogic.VisualElements.button;
 
 import org.json.JSONException;
 import org.json.JSONObject;

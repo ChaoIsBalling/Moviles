@@ -1,13 +1,14 @@
-package com.example.gamelogic;
+package com.example.gamelogic.VisualElements;
 
 import org.json.JSONObject;
 import org.json.JSONException;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidFont;
+
 /**
  * Clase que representa un texto
  */
-public class Text extends UIElement {
+public class Text extends VisualElement {
     //Font del texto
     String font;
     //tamaño
@@ -18,11 +19,6 @@ public class Text extends UIElement {
     private AndroidGraphics gr;
 
     private AndroidFont fuente;
-
-    //Booleano que determina si se puede imprimir el texto o no
-    boolean visible;
-    //color del texto
-    String color = "#FF000000";
 
     //el texto despues de hacerle un Split, tiene todo el contenido en string del texto
     String[] myArray;
@@ -38,7 +34,6 @@ public class Text extends UIElement {
             this.bold= json.getBoolean("bold");
             this.italic =json.getBoolean("italic");
             this.color=json.getString("color");
-            this.visible = true;
             this.fuente = this.gr.newFont(this.font,this.size,this.bold,this.italic);
             this.gr.setColor(this.color);
             this.gr.setFont(fuente);
@@ -50,14 +45,10 @@ public class Text extends UIElement {
     /**
      * Setters
      */
-    public void setColor(String color){
-        this.color = color;
-    }
     public void setText(String text){
         this.myArray=text.split("\n");
     }
 
-    public void setVisible(boolean c){ this.visible = c; }
     public String getText(){
         return String.join("\n", this.myArray);
     }
@@ -68,7 +59,7 @@ public class Text extends UIElement {
      */
     @Override
     public void Render(AndroidGraphics gr){
-        if(this.visible){
+        if(this.isVisible){
             if(this.y>=-size) {
                 gr.setColor(this.color);
                 gr.setFont(fuente);
@@ -78,7 +69,7 @@ public class Text extends UIElement {
         }
     }
     public void RenderCentrado(AndroidGraphics gr,float x, float y){
-        if(this.visible){
+        if(this.isVisible){
             gr.setColor(this.color);
             gr.setFont(fuente);
             for(int i=0;i<myArray.length;i++)

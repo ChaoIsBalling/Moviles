@@ -1,7 +1,7 @@
 package com.example.gamelogic.towers;
 
-import com.example.gamelogic.Image;
-import com.example.gamelogic.figure.Figure;
+import com.example.gamelogic.VisualElements.Image;
+import com.example.gamelogic.VisualElements.figure.Figure;
 
 /**
  * Interfaz para añadir un callback a la factoria de torres

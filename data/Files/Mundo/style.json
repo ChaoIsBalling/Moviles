@@ -80,6 +80,7 @@
 "figures":[
     {
       "id": "FIGURE_TEXT_BG",
+      "layer":1,
       "form": "square",
       "x": 300, "y": 50,
       "w": 300, "h": 70,
@@ -95,6 +96,7 @@
   "texts": [
     {
       "id": "TEXT_MUNDO",
+      "layer":2,
       "texto": "Mundo X",
       "font": "Inika-Regular.ttf",
       "x": 300,

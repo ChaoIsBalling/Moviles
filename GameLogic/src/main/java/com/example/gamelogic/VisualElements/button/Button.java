@@ -1,16 +1,16 @@
-package com.example.gamelogic.button;
+package com.example.gamelogic.VisualElements.button;
 
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.State;
-import com.example.gamelogic.Image;
-import com.example.gamelogic.Text;
-import com.example.gamelogic.UIElement;
-import com.example.gamelogic.figure.Figure;
+import com.example.gamelogic.VisualElements.Image;
+import com.example.gamelogic.VisualElements.Text;
+import com.example.gamelogic.VisualElements.VisualElement;
 
 import com.example.androidengine.TouchEvent;
-import com.example.gamelogic.figure.Hexagon;
-import com.example.gamelogic.figure.Square;
-import com.example.gamelogic.figure.Triangle;
+import com.example.gamelogic.VisualElements.figure.Figure;
+import com.example.gamelogic.VisualElements.figure.Hexagon;
+import com.example.gamelogic.VisualElements.figure.Square;
+import com.example.gamelogic.VisualElements.figure.Triangle;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -22,11 +22,10 @@ import java.util.ArrayList;
 /**
  * Clase que representa un boton en la interfaz del juego
  */
-public class Button extends UIElement {
+public class Button extends VisualElement {
 
     //Atributos del botón
     private float w;
-
     //Determina si tiene esquinas redondeadas
     private boolean isRound = false;
     //Radio del arco bordeado
@@ -34,9 +33,6 @@ public class Button extends UIElement {
 
     //Determina si el boton esta activado
     private boolean isEnable = true;
-
-    //Determina si el boton esta visible
-    private boolean isVisible = true;
 
     //Texto del boton
     Text text;
@@ -136,8 +132,6 @@ public class Button extends UIElement {
     public void setImages(Image img){this.images.add(img);}
 
     public void cleanImages(){this.images.clear();}
-    public void setEnabled(boolean enabled){this.isEnable = enabled;}
-    public void setVisible(boolean visible){this.isVisible = visible;}
 
     // Setter para asignar el callback
     public void setOnClickListener(ButtonClickListener listener) {this.onClickFunction = listener;}

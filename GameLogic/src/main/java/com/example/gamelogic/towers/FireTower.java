@@ -3,10 +3,9 @@ package com.example.gamelogic.towers;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.gamelogic.Enemy;
-import com.example.gamelogic.figure.Figure;
-import com.example.gamelogic.figure.Hexagon;
-import com.example.gamelogic.Image;
-import com.example.gamelogic.TipoTorre;
+import com.example.gamelogic.VisualElements.Image;
+import com.example.gamelogic.Tipos.TipoTorre;
+import com.example.gamelogic.VisualElements.figure.Figure;
 
 /**
  * Clase que representa la torre de Fuego e implementa la interfaz Tower

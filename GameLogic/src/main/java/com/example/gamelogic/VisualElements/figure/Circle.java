@@ -1,6 +1,5 @@
-package com.example.gamelogic.figure;
+package com.example.gamelogic.VisualElements.figure;
 import com.example.androidengine.AndroidGraphics;
-import com.example.gamelogic.UIElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,10 +7,9 @@ import org.json.JSONObject;
 /**
  * Clase que representa un círculo e implementa a Figura
  */
-public class Circle extends UIElement implements Figure{
+public class Circle extends Figure {
     //Atributos del circulo
     private float r; //radio
-    private String color;
     private boolean isFill; //Si esta relleno o no
     private boolean visible;
 

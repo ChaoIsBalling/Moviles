@@ -1,6 +1,6 @@
-package com.example.gamelogic.figure;
+package com.example.gamelogic.VisualElements.figure;
 import com.example.androidengine.AndroidGraphics;
-import com.example.gamelogic.UIElement;
+import com.example.gamelogic.VisualElements.VisualElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,15 +8,13 @@ import org.json.JSONObject;
 /**
  * Clase que representa un cuadrado e implementa los métodos de Figura
  */
-public class Square extends UIElement implements Figure{
+public class Square extends Figure{
     //Dimensiones
     private float w;
     private float h;
 
     //Radio de las esquinas (si es que son redondeadas)
     private float arcRadius;
-    //color del cuadrado
-    private String color;
 
     //Determinan si esta relleno o redondeado
     private boolean isFill = false;

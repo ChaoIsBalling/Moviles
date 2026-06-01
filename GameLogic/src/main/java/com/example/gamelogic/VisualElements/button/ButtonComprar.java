@@ -1,4 +1,4 @@
-package com.example.gamelogic.button;
+package com.example.gamelogic.VisualElements.button;
 
 import com.example.androidengine.AndroidGraphics;
 

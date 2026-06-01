@@ -26,7 +26,7 @@ public interface State {
      * Inicializa el Graphics del motor
      * @param gr Graphics
      */
-    void setGraphics(AndroidGraphics gr);
+    void setGr(AndroidGraphics gr);
 
     /**
      * Procesa los eventos de entrada del usuario

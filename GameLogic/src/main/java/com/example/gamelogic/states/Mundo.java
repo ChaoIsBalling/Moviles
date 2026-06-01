@@ -8,36 +8,25 @@ import com.example.androidengine.AndroidAudio;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.example.androidengine.AndroidMobile;
-import com.example.gamelogic.button.Button;
-import com.example.gamelogic.figure.Square;
-import com.example.gamelogic.Text;
+import com.example.gamelogic.VisualElements.button.Button;
 import com.example.gamelogic.managers.UIManager;
 
 import java.util.ArrayList;
 
 public class Mundo implements State {
     private AndroidEngine engine;
-
     private AndroidMobile mobile;
-
     private AndroidGraphics gr;
     //booleanos que determinan si el mundo actual tiene un mundo anterior o posterior
-    private boolean next;
-    private boolean previous;
-
+    private boolean next,previous;
     private int numNiveles;
     //contador de niveles del mundo usado por el callback de niveles
     private int nivelesCount=0;
-
     //en que mundo estamos ahora
     private int mundo;
-
     //El archivo de guardado del juego
     private JSONObject save;
 
-
-    //variable que inspecciona cuantos niveles hemos derrotado
-    int completed;
     //JSON que almacena los prefabs necesarios para este estado
     JSONObject prefabs;
 
@@ -72,7 +61,7 @@ public class Mundo implements State {
     }
 
     @Override
-    public void setGraphics(AndroidGraphics gr) {
+    public void setGr(AndroidGraphics gr) {
         this.gr = gr;
         this.style = engine.readJsonFile("Mundo/style.json");
         try {
@@ -136,17 +125,16 @@ public class Mundo implements State {
      */
     private void calcularProgreso(){
         try {
-            this.completed= this.save.getInt("completed");
+            int  completed= this.save.getInt("completed");
 
             int nivelesHastaAhora =0;
             //esto calcula cuantos niveles han habido hasta este mundo
-            for(int i = 1; i < this.mundo; i++)
-            {
+            for(int i = 1; i < this.mundo; i++) {
                 JSONObject obj=engine.readJsonFile("Mundo/World"+i+"/World"+i+".json");
                 nivelesHastaAhora+=obj.getInt("niveles");
             }
             //determina que niveles de ESTE mundo se han completado
-            this.nivelesCompletadosEnMundo = this.completed-nivelesHastaAhora;
+            this.nivelesCompletadosEnMundo = completed-nivelesHastaAhora;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

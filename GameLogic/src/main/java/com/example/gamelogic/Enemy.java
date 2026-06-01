@@ -1,5 +1,7 @@
 package com.example.gamelogic;
 import com.example.androidengine.AndroidGraphics;
+import com.example.gamelogic.Tipos.TipoTorre;
+import com.example.gamelogic.VisualElements.Image;
 import com.example.gamelogic.states.GameLogic;
 
 import java.util.ArrayList;

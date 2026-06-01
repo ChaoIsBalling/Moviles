@@ -2,12 +2,7 @@ package com.example.gamelogic.towers;
 
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
-import com.example.androidengine.AndroidSound;
-import com.example.gamelogic.Enemy;
-import com.example.gamelogic.Image;
-import com.example.gamelogic.TipoTorre;
-
-import java.util.ArrayList;
+import com.example.gamelogic.VisualElements.Image;
 
 /**
  * Clase que implementa una nueva torre: La torre de rayo mini

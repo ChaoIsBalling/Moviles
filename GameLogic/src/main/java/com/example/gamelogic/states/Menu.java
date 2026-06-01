@@ -6,7 +6,7 @@ import com.example.androidengine.TouchEvent;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidMobile;
-import com.example.gamelogic.button.Button;
+import com.example.gamelogic.VisualElements.button.Button;
 import com.example.gamelogic.managers.UIManager;
 
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class Menu implements State {
      * @param gr Graphics
      */
     @Override
-    public void setGraphics(AndroidGraphics gr) {
+    public void setGr(AndroidGraphics gr) {
         this.gr=gr;
         this.style = engine.readJsonFile("Menu/style.json");
 

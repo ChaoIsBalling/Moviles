@@ -3,7 +3,7 @@ package com.example.gamelogic.towers;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.gamelogic.Enemy;
-import com.example.gamelogic.figure.Figure;
+import com.example.gamelogic.VisualElements.figure.Figure;
 
 import java.util.ArrayList;
 
