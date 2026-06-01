@@ -139,6 +139,11 @@ public class UIManager {
 
                 visualElementTypes.get(type).add(element);
             }
+            if(obj.has("scrollable"))
+            {
+                if(obj.getBoolean("scrollable"))
+                    scrollableElements.add(element);
+            }
             if(obj.has("layer"))
             {
                 Integer layer= obj.getInt("layer");
@@ -318,7 +323,6 @@ public class UIManager {
         }
     }
     public void configurarLimitesScroll() {
-        scrollableElements=visualElementTypes.get("scrollable");
         Collections.sort(scrollableElements,(obj1,obj2)-> {
             if(obj1.getY()<obj2.getY()) return -1;
             if(obj1.getY()>obj2.getY()) return 1;

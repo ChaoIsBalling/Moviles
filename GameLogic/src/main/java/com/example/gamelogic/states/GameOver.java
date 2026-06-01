@@ -120,7 +120,7 @@ public class GameOver implements State {
                 throw new RuntimeException(e);
             }
             ui.setTextUI(
-                    "TEXT_RECOMPENSA_AD",
+                "TEXT_RECOMPENSA_AD",
                     "+10"
             );
         }

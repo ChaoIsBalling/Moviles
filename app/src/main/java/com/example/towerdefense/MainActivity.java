@@ -84,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
             obj.put("hielo",false);
             obj.put("mini",false);
 
+            JSONObject itemsComprados= new JSONObject();
+            obj.put("itemsComprados",itemsComprados);
+
             JSONObject torres=new JSONObject();
             JSONObject torre = new JSONObject();
             torre.put("id", "BUT_RAYO");

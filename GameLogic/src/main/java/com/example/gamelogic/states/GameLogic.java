@@ -487,7 +487,7 @@ public class GameLogic implements State {
             JSONObject torre=this.save.getJSONObject("torres").getJSONObject(tipo.toString());
             if(torre.getBoolean("active")) {
                 b.setOnClickListener(() ->
-                        this.prepararConstruccion(Integer.parseInt(b.getTextButton().getText()), tipo, b.getId()));
+                        this.prepararConstruccion(Integer.parseInt(b.getTextButton().getText()), tipo,b));
                 setButtonSkin(torre.getString("skin"),b);
             }
             else {
@@ -570,7 +570,6 @@ public class GameLogic implements State {
     public void setGr(AndroidGraphics gr) {
         this.gr = gr;
         this.inicializarUI();
-
         //Inicializamos manager de oleadas (lo pongo aqui porque se debe iniclizar despues del setState)
         this.wave = new WaveManager(this, this.engine, this.oleadasRestantes, this.oleadasDatos,this.gr);
     }
@@ -715,9 +714,9 @@ public class GameLogic implements State {
      * Metodo que pone el juego en modo construccion y setea los valores para posteriormente, internar comprar una torre
      * @param precio precio que cuesta la torre que queremos construir
      * @param tipoTorre el tipo de la torre
-     * @param id el indice del boton en el UIManager
+     * @param but el boton al que le asignamos este metodo
      */
-    public void prepararConstruccion(int precio, TipoTorre tipoTorre, String id){
+    public void prepararConstruccion(int precio, TipoTorre tipoTorre, Button but){
         this.estado = Estado.CONSTRUCCION;
         this.precioAPagar = precio;
         this.tipoTorreSeleccionado = tipoTorre;
@@ -727,8 +726,8 @@ public class GameLogic implements State {
             b.setColor(Color.BLANCO.getHex());
         }
         //Cambiamos el color a Amarillo del boton correspondiente
-        this.ui.getButtonUI(id).setColor(Color.AMARILLO_CLARO.getHex());
-        this.CURRENT_BUT_ID = id;
+        but.setColor(Color.AMARILLO_CLARO.getHex());
+        this.CURRENT_BUT_ID = but.getId();
     }
 
     /**

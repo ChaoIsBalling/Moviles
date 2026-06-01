@@ -20,7 +20,7 @@
           "visible": true
       },
       "icon" :{
-         "id": "THielo",
+         "id": "TRayo",
          "imagen": "TorreRayo.png", 
          "x": -15, "y": -20, 
          "w": 35, "h": 35 ,
