@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     {
         JSONObject obj=new JSONObject();
         try {
-            obj.put("gems",0);
+            obj.put("gems",1000);
             obj.put("completed",0);
             obj.put("rayo",false);
             obj.put("fuego",false);

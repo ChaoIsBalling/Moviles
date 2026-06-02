@@ -14,6 +14,9 @@ import com.example.gamelogic.VisualElements.button.Button;
 import com.example.gamelogic.managers.UIManager;
 import java.util.ArrayList;
 
+/**
+ * Clase que se encarga de representar la tienda y la gestión de compras
+ */
 public class Tienda implements State {
     private AndroidEngine engine;
     private AndroidGraphics gr;
@@ -21,7 +24,7 @@ public class Tienda implements State {
     private JSONObject save;
     AndroidMobile mobile;
     JSONObject style;
-    private int numGems=0;
+    private int numGems = 0;
     //El item seleccionado en la tienda
     private JSONObject currentItem=null;
     private UIManager ui;
@@ -39,6 +42,10 @@ public class Tienda implements State {
         this.ui.render(gr);
     }
 
+    /**
+     * Seteo del graphics que se encarga der inicializar la UI
+     * @param gr Graphics
+     */
     @Override
     public void setGr(AndroidGraphics gr) {
         this.gr =gr;
@@ -52,6 +59,7 @@ public class Tienda implements State {
         this.ui.getTextUI("TEXT_DIAMANTES").setText(String.valueOf(numGems));
         this.ui.changeVisualElementStateOfType("compra",false);
         this.ui.changeVisualElementStateOfType("yacomprado",false);
+        this.ui.changeVisualElementStateOfType("cambio",false);
     }
     /**
      * Metodo para setear el callback de volver a la pantalla anterior
@@ -65,6 +73,10 @@ public class Tienda implements State {
         });
     }
 
+    /**
+     * Metodo para setear el callback al boton que represtenta un item a comprar
+     * @param b boton al que le queremos setear el callback
+     */
     public void setCallbackButtonShopItem(Button b)
     {
         try {
@@ -77,28 +89,51 @@ public class Tienda implements State {
         }
     }
 
-    public void setCallbackButtonBuy(Button b)
-    {
+    /**
+     * Metodo que setea el callback al boton de compra
+     * @param b Boton de compra
+     */
+    public void setCallbackButtonBuy(Button b) {
         b.setOnClickListener( () -> {
             comprobarCompra(b);
         });
     }
+
+
+    public void setCallbackButtonChangeSkin(Button b) {
+        b.setOnClickListener(() ->{
+            Cambio cambioSkin = new Cambio(this.engine,this.mobile,this.save);
+            this.engine.setState(cambioSkin);
+        });
+    }
+
+    /**
+     * Metodo que sirve para procesar la compra de un item en la tienda
+     * @param b boton del item que se ha pulsado
+     */
     public void comprobarCompra(Button b)
     {   if(currentItem!=null) {
             try {
-            if(this.save.getInt("gems")>this.currentItem.getInt("precio")) {
-                numGems-=this.currentItem.getInt("precio");
-                this.ui.getTextUI("TEXT_DIAMANTES").setText(String.valueOf(numGems));
-                this.save.getJSONObject("itemsComprados").put(currentItem.getString("ID"),currentItem);
-                this.ui.changeVisualElementStateOfType("compra",false);
-                this.ui.changeVisualElementStateOfType("yacomprado",true);
-                this.save.put("gems",numGems);
-            }
+                if(this.save.getInt("gems")>this.currentItem.getInt("precio")) {
+                    numGems-=this.currentItem.getInt("precio");
+                    this.ui.getTextUI("TEXT_DIAMANTES").setText(String.valueOf(numGems));
+                    this.save.getJSONObject("itemsComprados").put(currentItem.getString("ID"),currentItem);
+                    this.ui.changeVisualElementStateOfType("compra",false);
+                    this.ui.changeVisualElementStateOfType("yacomprado",true);
+                    this.save.put("gems",numGems);
+                }
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
         }
     }
+
+    /**
+     * Metodo que modifica la interfaz a la hora de pulsar un item de compra
+     * Utiliza el UIManager para escribir el precio, descripcion y coste del producto y marcar botones con colores
+     * @param item Item que se quiere comprar
+     * @param b Boton que contiene el item seleccionado
+     */
     public void prepararCompra(JSONObject item, Button b){
 
         for (VisualElement element : this.ui.getAllVisualElementsOfType("item")) {
@@ -122,6 +157,12 @@ public class Tienda implements State {
         }
 
     }
+
+    /**
+     *
+     * @param list Lista de eventos
+     * @param elapseTime Tiempo trascurrido
+     */
     @Override
     public void handleInput(ArrayList<TouchEvent> list, double elapseTime) {
         for(TouchEvent e: list){
@@ -145,7 +186,5 @@ public class Tienda implements State {
     @Override
     public void setMobile(AndroidMobile mobile) {}
     @Override
-    public JSONObject getSave() {
-        return this.save;
-    }
+    public JSONObject getSave() { return this.save; }
 }

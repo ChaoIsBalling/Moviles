@@ -1,0 +1,55 @@
+{
+  "buttons": [
+    {
+      "id": "BUT_VOLVER",
+      "type":"ui",
+      "x": 30, "y": 50,
+      "w": 30, "h": 30,
+      "isRound": true,
+      "ar": 15,
+      "color": "#FFFFFFFF",
+      "icon": {
+        "id": "ICON_VOLVER",
+        "imagen": "Volver.png",
+        "x": -15, "y": -15,
+        "w": -30, "h": 30,
+        "visible": true
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonReturnShop"
+      }
+    }
+  ],
+
+  "images": [
+  ],
+  "figures":[
+    {
+      "id": "FIGURE_CHANGE_BG",
+      "form": "square",
+      "x": 300, "y": 250,
+      "w": 300, "h": 300,
+      "color": "#ff00ffff",
+      "fill": true,
+      "round": false,
+      "r": 0,
+      "visible": true
+    }
+  ],
+
+  "texts": [
+    {
+      "id": "TEXT_COMPRAS",
+      "texto": "Cambia a la skin que quieras",
+      "font": "Inika-Regular.ttf",
+      "x": 300,
+      "y": 50,
+      "size": 30,
+      "bold": true,
+      "italic": true,
+      "color": "#FF000000"
+    }
+    
+  ]
+}

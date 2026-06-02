@@ -1,6 +1,5 @@
 {
   "buttons": [
-   
     {
       "id": "BUT_VOLVER",
       "type":"ui",
@@ -52,7 +51,34 @@
       {
         "method":"setCallbackButtonBuy"
       }
-    },  
+    }, 
+    
+    {
+      "id": "BUT_CAMBIAR",
+      "type":"cambio",
+      "layer":1,
+      "x": 480,
+      "y": 250,
+      "w": 200,
+      "h": 50,
+      "isRound": true,
+      "ar": 20,
+      "color":"#FF999999",
+      "text": {
+        "id": "TEXT_BOTON_CAMBIAR",
+        "texto": "Cambiar aspecto",
+        "font": "Inika-Regular.ttf",
+        "x": 0, "y": 0,
+        "size": 20,
+        "bold": true,
+        "italic": true,
+        "color": "#FF00FFFF"
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonChangeSkin"
+      }
+    },
     {
       "id": "BUT_SKINTORRE",
       "type":"item",
@@ -74,9 +100,9 @@
       {
         "method":"setCallbackButtonShopItem",
         "item":{  
-        "ID":"MININ'T",
-        "descripcion":"Hola",
-        "precio":10
+          "ID":"MININ'T",
+          "descripcion":"Hola",
+          "precio":10
         }
       }
     },  
@@ -101,9 +127,9 @@
       {
         "method":"setCallbackButtonShopItem",
         "item":{  
-        "ID":"MINI",
-        "descripcion":"adios",
-        "precio":100
+          "ID":"MINI",
+          "descripcion":"adios",
+          "precio":100
         }
         
       }
