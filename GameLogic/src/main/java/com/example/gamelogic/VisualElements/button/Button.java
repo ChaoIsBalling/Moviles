@@ -31,9 +31,6 @@ public class Button extends VisualElement {
     //Radio del arco bordeado
     private float arcRadius;
 
-    //Determina si el boton esta activado
-    private boolean isEnable = true;
-
     //Texto del boton
     Text text;
     //id del boton

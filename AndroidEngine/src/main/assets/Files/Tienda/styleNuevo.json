@@ -226,8 +226,7 @@
       "italic": true,
       "color": "#FF000000"
     },
-    
-     {
+    {
       "id": "TEXT_TOWERS",
       "texto": "Nuevas Torres",
       "font": "Inika-Regular.ttf",
@@ -238,8 +237,5 @@
       "italic": true,
       "color": "#FF000000"
     }
-
-
-
   ]
 }
