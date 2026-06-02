@@ -65,8 +65,7 @@ public class Tienda implements State {
      * Metodo para setear el callback de volver a la pantalla anterior
      * @param b el boton al que le pasamos el callback
      */
-    public void setCallbackButtonReturn(Button b)
-    {
+    public void setCallbackButtonReturn(Button b) {
         b.setOnClickListener( () -> {
             Menu menu = new Menu(this.engine,this.mobile,this.save);
             this.engine.setState(menu);
@@ -77,8 +76,7 @@ public class Tienda implements State {
      * Metodo para setear el callback al boton que represtenta un item a comprar
      * @param b boton al que le queremos setear el callback
      */
-    public void setCallbackButtonShopItem(Button b)
-    {
+    public void setCallbackButtonShopItem(Button b) {
         try {
             JSONObject callback = b.getCallback();
             JSONObject item=callback.getJSONObject("item");
@@ -100,6 +98,10 @@ public class Tienda implements State {
     }
 
 
+    /**
+     * Metodo que setea el callback al boton de cambiar aspecto de las torres
+     * @param b Boton de compra
+     */
     public void setCallbackButtonChangeSkin(Button b) {
         b.setOnClickListener(() ->{
             Cambio cambioSkin = new Cambio(this.engine,this.mobile,this.save);
@@ -120,6 +122,7 @@ public class Tienda implements State {
                     this.save.getJSONObject("itemsComprados").put(currentItem.getString("ID"),currentItem);
                     this.ui.changeVisualElementStateOfType("compra",false);
                     this.ui.changeVisualElementStateOfType("yacomprado",true);
+                    this.ui.changeVisualElementStateOfType("cambio", true);
                     this.save.put("gems",numGems);
                 }
             } catch (JSONException e) {
@@ -142,20 +145,23 @@ public class Tienda implements State {
         b.setColor(Color.AMARILLO_CLARO.getHex());
         this.currentItem=item;
         try {
+            //Caso en que el item ya esté comprado
             if(this.save.getJSONObject("itemsComprados").has(item.getString("ID"))) {
                 this.ui.changeVisualElementStateOfType("compra",false);
                 this.ui.changeVisualElementStateOfType("yacomprado",true);
+                this.ui.changeVisualElementStateOfType("cambio", true);
             }
+            //Caso en el que el item este sin comprar
             else {
                 this.ui.changeVisualElementStateOfType("compra",true);
                 this.ui.changeVisualElementStateOfType("yacomprado",false);
+                this.ui.changeVisualElementStateOfType("cambio", false);
                 this.ui.getTextUI("TEXT_DESCRIPTION").setText(item.getString("descripcion"));
                 this.ui.getTextUI("TEXT_PRECIO").setText("Coste:"+item.getInt("precio"));
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     /**

@@ -216,8 +216,8 @@
     }
     ,
      {
-      "id": "TEXT_TOWER",
-      "texto": "Nuevas Torres",
+      "id": "TEXT_SKINS",
+      "texto": "Nuevos Aspectos",
       "font": "Inika-Regular.ttf",
       "x":150,
       "y":100,
@@ -225,6 +225,21 @@
       "bold": true,
       "italic": true,
       "color": "#FF000000"
+    },
+    
+     {
+      "id": "TEXT_TOWERS",
+      "texto": "Nuevas Torres",
+      "font": "Inika-Regular.ttf",
+      "x":150,
+      "y":300,
+      "size": 40,
+      "bold": true,
+      "italic": true,
+      "color": "#FF000000"
     }
+
+
+
   ]
 }
