@@ -308,18 +308,30 @@ public class UIManager {
      * @param amount cantidad de prefabs que se quieren generar
      */
     public void createPrefabs(JSONObject prefab, int amount)
-    {   Button prefabButton = null;
-        for (int i =0;i<amount;i++)
-        {
-            prefabButton = new Button(prefab, this.gr);
-            prefabButton.setY(prefabButton.getY() + prefabButton.getHeight() * (float) i * 1.5f);
-            try {
-                botones.put(prefab.getString("id")+ i, prefabButton);
-                addVisualElementToArray(prefabButton,prefab);
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
+    {   try {
+        Button prefabButton = null;
+        float yOffset = (float)prefab.getDouble("yOffset");
+        float xOffset = (float)prefab.getDouble("xOffset");
+        float xLimit = (float)prefab.getDouble("xLimit");
+        int xIndex = 0;
+        int yIndex = 0;
+             for (int i = 0; i < amount; i++) {
+                prefabButton = new Button(prefab, this.gr);
+                 prefabButton.setY(prefabButton.getY() + prefabButton.getHeight() * (float) yIndex * yOffset);
+                prefabButton.setX(prefabButton.getX() + prefabButton.getWidth() * (float) xIndex * xOffset);
+                xIndex++;
+                if (prefabButton.getX() > xLimit) {
+                xIndex = 0;
+                yIndex++;
+                }
+                botones.put(prefab.getString("id") + i, prefabButton);
+                addVisualElementToArray(prefabButton, prefab);
+
+                prefabButton.setCallback(this.engine.getState());
             }
-            prefabButton.setCallback(this.engine.getState());
+        }
+        catch (JSONException e) {
+            throw new RuntimeException(e);
         }
     }
     public void configurarLimitesScroll() {
