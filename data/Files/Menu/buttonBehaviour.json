@@ -16,7 +16,8 @@
         },
         "callback":
         {
-        "method":"setCallbackButtonInicial"
+        "method":"setCallbackButtonInicial",
+        "state":"Dificultad"        
         }
         }
     ]

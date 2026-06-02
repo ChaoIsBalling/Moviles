@@ -36,10 +36,9 @@ public class Button extends VisualElement {
     //id del boton
     String id;
     String color; //Color por defecto
-    ArrayList<Image> images = new ArrayList<Image>(); //Imagen
-    ArrayList<Figure> figures = new ArrayList<Figure>(); //Figura del botón
-    int imgIndex=0;
-    int figIndex=0;
+    Image image; //Imagen
+    Figure figure; //Figura del botón
+
 
     private JSONObject callback;
 
@@ -94,20 +93,20 @@ public class Button extends VisualElement {
                 String form = figData.getString("form");
                 switch (form){
                     case "triangle":
-                        this.figures.add(new Triangle(figData));
+                        this.figure= new Triangle(figData);
                         break;
                     case "square":
-                        this.figures.add(new Square(figData));
+                        this.figure= new Square(figData);
                         break;
                     case "hexagon":
-                        this.figures.add(new Hexagon(figData));
+                        this.figure=new Hexagon(figData);
                         break;
                 }
             }
 
             JSONObject iconData = json.optJSONObject("icon");
             if(iconData != null){
-                this.images.add(new Image(iconData,gr));
+                this.image=new Image(iconData,gr);
             }
 
         } catch (JSONException e) {
@@ -129,15 +128,13 @@ public class Button extends VisualElement {
     //setters
     public void setColor(String color){ this.color = color; }
     public void setFigures(Figure fig){
-        this.figures.add(fig);
-        figIndex=this.figures.size()-1;
+        this.figure=fig;
     }
     public void setImages(Image img){
-        this.images.add(img);
-        imgIndex=this.images.size()-1;
+        this.image=img;
     }
 
-    public void cleanImages(){this.images.clear();}
+    public void cleanImages(){this.image=null;}
 
     // Setter para asignar el callback
     public void setOnClickListener(ButtonClickListener listener) {this.onClickFunction = listener;}
@@ -163,16 +160,11 @@ public class Button extends VisualElement {
 
     public String getId(){return this.id;}
 
-    public Image getImgButton(int i){ return this.images.get(i); }
-    public Figure getFigButton(int i){ return this.figures.get(i); }
+    public Image getImgButton(){ return this.image; }
+    public Figure getFigButton(){ return this.figure; }
 
     public JSONObject getCallback(){return this.callback;}
-    public boolean isEmptyImages(){
-        return images.isEmpty();
-    }
-    public boolean isEmptyFigures(){
-        return figures.isEmpty();
-    }
+
 
     /**
      * Comprueba si la coordenada x,y está dentro del botón
@@ -180,6 +172,13 @@ public class Button extends VisualElement {
     public boolean contains(float x, float y){
         return x >= this.x-this.w/2 && x <= this.x + this.w/2 &&
                 y >= this.y-this.h/2 && y <= this.y + this.h/2;
+    }
+    public boolean isImageNull(){
+        return image==null;
+    }
+
+    public boolean isFigureNull(){
+        return figure==null;
     }
 
 
@@ -200,12 +199,12 @@ public class Button extends VisualElement {
                 gr.rellenarCuadrado(this.x,this.y,this.w,this.h);
 
             //Renderizamos imagen si la tiene
-            if(!this.images.isEmpty()){
-                images.get(imgIndex).RenderCentrado((int)this.x,(int)this.y);
+            if(this.image !=null){
+                image.RenderCentrado((int)this.x,(int)this.y);
             }
             //Renderizamos figuras si las tiene
-            if(!this.figures.isEmpty()){
-                figures.get(figIndex).RenderCentrado(gr, (int)this.x,(int)this.y);
+            if(this.figure !=null){
+                figure.RenderCentrado(gr, (int)this.x,(int)this.y);
             }
 
             //Renderizamos texto centrado

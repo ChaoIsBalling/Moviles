@@ -250,15 +250,15 @@ public class UIManager {
         return null;
     }
 
-    public Image getButtonImage(String id,int i){
-        if(botones.containsKey(id) && !botones.get(id).isEmptyImages()){
-            return botones.get(id).getImgButton(i);
+    public Image getButtonImage(String id){
+        if(botones.containsKey(id) && !botones.get(id).isImageNull()){
+            return botones.get(id).getImgButton();
         }
         return null;
     }
-    public Figure getButtonFigure(String id,int i){
-        if(botones.containsKey(id) && !botones.get(id).isEmptyFigures()){
-            return botones.get(id).getFigButton(i);
+    public Figure getButtonFigure(String id){
+        if(botones.containsKey(id) && !botones.get(id).isFigureNull()){
+            return botones.get(id).getFigButton();
         }
         return null;
     }

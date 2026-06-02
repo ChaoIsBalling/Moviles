@@ -508,13 +508,13 @@ public class GameLogic implements State {
     private void setButtonSkin(String skin,Button b)
     {
         if (!skin.equals("Figura")){
-            b.getImgButton(0).setVisible(true);
-            b.getFigButton(0).setVisible(false);
+            b.getImgButton().setVisible(true);
+            b.getFigButton().setVisible(false);
         }
         else {
-            b.getImgButton(0).setVisible(false);
+            b.getImgButton().setVisible(false);
             b.cleanImages();
-            b.getFigButton(0).setVisible(true);
+            b.getFigButton().setVisible(true);
         }
     }
 
@@ -617,8 +617,8 @@ public class GameLogic implements State {
     {
         if (this.dinero >= precioAPagar && !casillaObjetivo.esCamino()){
             // Ver si la skin de la torre está activa
-            Image skin = this.ui.getButtonImage(CURRENT_BUT_ID, 0);
-            Figure figure=this.ui.getButtonFigure(CURRENT_BUT_ID, 0);
+            Image skin = this.ui.getButtonImage(CURRENT_BUT_ID);
+            Figure figure=this.ui.getButtonFigure(CURRENT_BUT_ID);
             // Decimos a la factoría que fabrique la torre del tipo que queremos
             Tower torreR = towerFactory.getTower(
                     tipoTorreSeleccionado,
