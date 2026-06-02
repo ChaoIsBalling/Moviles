@@ -126,7 +126,6 @@ public class Mundo implements State {
     private void calcularProgreso(){
         try {
             int  completed= this.save.getInt("completed");
-
             int nivelesHastaAhora =0;
             //esto calcula cuantos niveles han habido hasta este mundo
             for(int i = 1; i < this.mundo; i++) {

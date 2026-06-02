@@ -23,7 +23,8 @@
       },
       "callback":
       {
-        "method":"setCallbackButtonInicial"
+        "method":"setCallbackButtonMenu",
+        "state":"Dificultad"
       }
     },
     {
@@ -49,7 +50,8 @@
       },
       "callback":
       {
-          "method":"setCallbackButtonAventura"
+        "method":"setCallbackButtonMenu",
+        "state":"Aventura"
       }
     },
     {
@@ -75,7 +77,8 @@
       },
       "callback":
       {
-         "method":"setCallbackButtonTienda"
+        "method":"setCallbackButtonMenu",
+        "state":"Tienda"
       }
     }
   ],

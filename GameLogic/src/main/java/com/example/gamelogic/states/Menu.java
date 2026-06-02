@@ -7,6 +7,7 @@ import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.VisualElements.button.Button;
+import com.example.gamelogic.VisualElements.button.ButtonClickListener;
 import com.example.gamelogic.managers.UIManager;
 
 import java.util.ArrayList;
@@ -68,6 +69,7 @@ public class Menu implements State {
 
         this.ui = new UIManager(this.style , this.engine, this.gr);
         this.ui.setAllCallbacks();
+        //this.ui.createPrefabs(engine.readJsonFile("Menu/prefabs.json"),3);
         //Leemos valores guardados
         this.fondo="#FFFFFFFF"; //Fondo por defecto
         try {
@@ -80,34 +82,29 @@ public class Menu implements State {
         }
     }
     /**
-     * Metodo para setear el callback de volver a la pantalla de dificultad
+     * Metodo para setear el callback de los botones de menu
      * @param b el boton al que le pasamos el callback
      */
-    public void setCallbackButtonInicial(Button b) {
-        b.setOnClickListener(() -> {
-            Dificultad dificultad = new Dificultad(this.engine, this.mobile, this.save);
-            this.engine.setState(dificultad);
-        });
-    }
-    /**
-     * Metodo para setear el callback del modo aventura
-     * @param b el boton al que le pasamos el callback
-     */
-    public void setCallbackButtonAventura(Button b) {
-        b.setOnClickListener(() -> {
-            Mundo mundo = new Mundo(this.engine,this.mobile,1,this.save);
-            this.engine.setState(mundo);
-        });
-    }
-    /**
-     * Metodo para setear el callback de ir a la tienda
-     * @param b el boton al que le pasamos el callback
-     */
-    public void setCallbackButtonTienda(Button b) {
-        b.setOnClickListener(() -> {
-            Tienda tienda = new Tienda(this.engine,this.mobile,this.save);
-            this.engine.setState(tienda);
-        });
+    public void setCallbackButtonMenu(Button b) {
+        String state= null;
+        try {
+            state = b.getCallback().getString("state");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        ButtonClickListener listener=null;
+        switch (state) {
+            case "Dificultad":
+                listener=()-> {this.engine.setState( new Dificultad(this.engine, this.mobile, this.save));};
+                break;
+            case "Aventura":
+                listener=() -> {this.engine.setState(new Mundo(this.engine, this.mobile, 1, this.save));};
+                break;
+            case "Tienda":
+                listener=() -> {this.engine.setState(new Tienda(this.engine,this.mobile,this.save));};
+                break;
+        }
+        b.setOnClickListener(listener);
     }
 
     /**

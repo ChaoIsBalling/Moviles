@@ -38,6 +38,8 @@ public class Button extends VisualElement {
     String color; //Color por defecto
     ArrayList<Image> images = new ArrayList<Image>(); //Imagen
     ArrayList<Figure> figures = new ArrayList<Figure>(); //Figura del botón
+    int imgIndex=0;
+    int figIndex=0;
 
     private JSONObject callback;
 
@@ -78,8 +80,9 @@ public class Button extends VisualElement {
                 this.arcRadius=json.getInt("ar");
 
             this.color=json.getString("color");
-            this.callback=json.getJSONObject("callback");
-
+            JSONObject callbackData=json.optJSONObject("callback");
+            if(callbackData!=null)
+                this.callback=json.getJSONObject("callback");
             //Ahora cargamos los elementos que haya en el boton
 
             JSONObject textData = json.optJSONObject("text");
@@ -125,8 +128,14 @@ public class Button extends VisualElement {
 
     //setters
     public void setColor(String color){ this.color = color; }
-    public void setFigures(Figure fig){ this.figures.add(fig); }
-    public void setImages(Image img){this.images.add(img);}
+    public void setFigures(Figure fig){
+        this.figures.add(fig);
+        figIndex=this.figures.size()-1;
+    }
+    public void setImages(Image img){
+        this.images.add(img);
+        imgIndex=this.images.size()-1;
+    }
 
     public void cleanImages(){this.images.clear();}
 
@@ -135,13 +144,15 @@ public class Button extends VisualElement {
 
     // Setter para asignar el callback
     public void setCallback(State state) {
-        try {
-            callback.getString("method");
-            Method method =state.getClass().getMethod(callback.getString("method"), Button.class);
-            method.invoke(state,this);
-        } catch (JSONException | NoSuchMethodException | InvocationTargetException |
-                 IllegalAccessException e) {
-            throw new RuntimeException(e);
+        if(this.callback!=null) {
+            try {
+                callback.getString("method");
+                Method method = state.getClass().getMethod(callback.getString("method"), Button.class);
+                method.invoke(state, this);
+            } catch (JSONException | NoSuchMethodException | InvocationTargetException |
+                     IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -162,8 +173,7 @@ public class Button extends VisualElement {
     public boolean isEmptyFigures(){
         return figures.isEmpty();
     }
-    public boolean isEnable(){ return this.isEnable; }
-    public  boolean isVisible(){ return this.isVisible; }
+
     /**
      * Comprueba si la coordenada x,y está dentro del botón
      */
@@ -191,18 +201,11 @@ public class Button extends VisualElement {
 
             //Renderizamos imagen si la tiene
             if(!this.images.isEmpty()){
-                for(Image i : images){
-                    if(i != null)
-                        i.RenderCentrado((int)this.x,(int)this.y);
-                }
+                images.get(imgIndex).RenderCentrado((int)this.x,(int)this.y);
             }
-
             //Renderizamos figuras si las tiene
             if(!this.figures.isEmpty()){
-                for(Figure f : figures){
-                    if(f != null)
-                        f.RenderCentrado(gr, (int)this.x,(int)this.y);
-                }
+                figures.get(figIndex).RenderCentrado(gr, (int)this.x,(int)this.y);
             }
 
             //Renderizamos texto centrado
