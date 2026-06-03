@@ -20,10 +20,9 @@ import java.util.ArrayList;
 public class Tienda implements State {
     private AndroidEngine engine;
     private AndroidGraphics gr;
-    //El archivo de guardado del juego
-    private JSONObject save;
+    //El archivo de guardado del juego mas los archivos de estilo, prefabs y la lista de items
+    private JSONObject save,style,prefabs,items;
     AndroidMobile mobile;
-    JSONObject style;
     private int numGems = 0;
     //El item seleccionado en la tienda
     private JSONObject currentItem=null;
@@ -32,7 +31,9 @@ public class Tienda implements State {
         this.save =save;
         this.engine=engine;
         this.mobile = mobile;
-        this.style =engine.readJsonFile("Tienda/styleNuevo.json");
+        this.style =engine.readJsonFile("Tienda/style.json");
+        this.items=engine.readJsonFile("items.json");
+        this.prefabs=engine.readJsonFile("Tienda/prefabs.json");
     }
     @Override
     public void update(double deltatime) {}
@@ -59,7 +60,6 @@ public class Tienda implements State {
         this.ui.getTextUI("TEXT_DIAMANTES").setText(String.valueOf(numGems));
         this.ui.changeVisualElementStateOfType("compra",false);
         this.ui.changeVisualElementStateOfType("yacomprado",false);
-        this.ui.changeVisualElementStateOfType("cambio",false);
     }
     /**
      * Metodo para setear el callback de volver a la pantalla anterior
@@ -94,18 +94,6 @@ public class Tienda implements State {
     public void setCallbackButtonBuy(Button b) {
         b.setOnClickListener( () -> {
             comprobarCompra(b);
-        });
-    }
-
-
-    /**
-     * Metodo que setea el callback al boton de cambiar aspecto de las torres
-     * @param b Boton de compra
-     */
-    public void setCallbackButtonChangeSkin(Button b) {
-        b.setOnClickListener(() ->{
-            Cambio cambioSkin = new Cambio(this.engine,this.mobile,this.save);
-            this.engine.setState(cambioSkin);
         });
     }
 
@@ -149,13 +137,11 @@ public class Tienda implements State {
             if(this.save.getJSONObject("itemsComprados").has(item.getString("ID"))) {
                 this.ui.changeVisualElementStateOfType("compra",false);
                 this.ui.changeVisualElementStateOfType("yacomprado",true);
-                this.ui.changeVisualElementStateOfType("cambio", true);
             }
             //Caso en el que el item este sin comprar
             else {
                 this.ui.changeVisualElementStateOfType("compra",true);
                 this.ui.changeVisualElementStateOfType("yacomprado",false);
-                this.ui.changeVisualElementStateOfType("cambio", false);
                 this.ui.getTextUI("TEXT_DESCRIPTION").setText(item.getString("descripcion"));
                 this.ui.getTextUI("TEXT_PRECIO").setText("Coste:"+item.getInt("precio"));
             }

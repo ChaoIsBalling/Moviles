@@ -46,7 +46,10 @@
     "BotonUpgrade" :{
       "id": "BUT_UP",
       "type": "upgrade",
-      "x": 0, "y": 0, "w": 50, "h": 50,
+       "xOffset":-1.2,
+      "yOffset":0,
+      "xLimit":-1,
+      "x": 550, "y": 360, "w": 50, "h": 50,
       "isRound": true, "ar": 20, 
       "color": "#FFFFFFFF"
     }

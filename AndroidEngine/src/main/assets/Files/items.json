@@ -23,7 +23,7 @@
     {
         "RAYO":
         {
-            "1" : {
+            "0" : {
                 "type": "Figura",
                 "id":  "triRayo",
                 "form": "triangle",
@@ -33,7 +33,7 @@
                 "fill": true,
                 "visible": true
             },
-            "0":{
+            "1":{
                 "type": "Image",
                 "id": "TRayo",
                 "imagen": "TorreRayo.png", 

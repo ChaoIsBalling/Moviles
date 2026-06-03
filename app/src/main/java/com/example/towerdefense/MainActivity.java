@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
             skins_eq.put("RAYO", "0");
             skins_eq.put("HIELO", "0");
             skins_eq.put("FUEGO", "0");
+            skins_eq.put("MINI","0");
             obj.put("skins_equipped", skins_eq);
 
             //Object con las skins desbloqueadas para cada torre
@@ -111,6 +112,10 @@ public class MainActivity extends AppCompatActivity {
             JSONArray skinsFuego = new JSONArray();
             skinsFuego.put("0");
             skins_des.put("FUEGO", skinsFuego);
+
+            JSONArray skinsMini = new JSONArray();
+            skinsMini.put("0");
+            skins_des.put("MINI", skinsMini);
 
             obj.put("skins_available", skins_des);
 
