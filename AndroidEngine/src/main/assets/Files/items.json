@@ -3,23 +3,19 @@
     {
         "RAYO":
         {
-            "Coste":100,
-            "Precio":200
+            "Coste":100
         },
         "FUEGO":
         {
-            "Coste":150,
-            "Precio":300
+            "Coste":150
         },
         "HIELO":
         {
-            "Coste":200,
-            "Precio":400
+            "Coste":200
         },
         "MINI":
         {
-            "Coste":100,
-            "Precio":50
+            "Coste":100
         }
     },
 

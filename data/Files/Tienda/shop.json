@@ -1,0 +1,42 @@
+{
+    "Torres":
+    {
+        "MINI":
+        {
+            "Precio":100,
+            "Descripcion": "Me la chupa\n XD"
+        }
+    },
+
+    "Skins":
+    {
+        "RAYO":
+        {
+            "1":{
+                "Precio":100,
+                "Descripcion": "Me la chupa\n XD"
+            }
+        },
+        "FUEGO":
+        {
+            "1":{      
+                "Precio":100,
+                "Descripcion": "Me la chupa\n XD"
+            }
+
+        },
+        "HIELO":
+        {
+            },
+            "1":{
+               "Precio":100,
+                "Descripcion": "Me la chupa\n XD"
+            }
+        },
+      
+    "Fondos":
+    {
+
+    }
+
+}

@@ -23,7 +23,7 @@ public class Tienda implements State {
     private AndroidEngine engine;
     private AndroidGraphics gr;
     //El archivo de guardado del juego mas los archivos de estilo, prefabs y la lista de items
-    private JSONObject save,style,prefabs,items;
+    private JSONObject save,style,prefabs, shop;
     AndroidMobile mobile;
     private int numGems = 0;
     //El item seleccionado en la tienda
@@ -34,7 +34,7 @@ public class Tienda implements State {
         this.engine=engine;
         this.mobile = mobile;
         this.style =engine.readJsonFile("Tienda/style.json");
-        this.items=engine.readJsonFile("items.json");
+        this.shop =engine.readJsonFile("Tienda/shop.json");
         this.prefabs=engine.readJsonFile("Tienda/prefabs.json");
     }
     @Override
@@ -77,9 +77,9 @@ public class Tienda implements State {
         int numTexts = 0;
 
         //Iterador que apunta a la primera seccion de la tienda
-        Iterator<String> it = items.keys();
+        Iterator<String> it = shop.keys();
         try {
-            for(int i = 0; i < items.length();i++){
+            for(int i = 0; i < shop.length(); i++){
                 //Creamos el text con el nombre de la seccion definida en el json
                 Text textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
                 String nombreSeccion = it.next();
@@ -91,8 +91,9 @@ public class Tienda implements State {
 
                 float ny = (textoSeccion.getY() + textoSeccion.getHeight()) * 1.1f;
                 this.prefabs.getJSONObject("BotonItem").put("y", ny);
+
                 //Creamos n numero de botones
-                this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), 6);
+                this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), shop.getJSONObject(nombreSeccion).length());
 
                 initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
                 //textoSkins.setY(ultimaPos);
