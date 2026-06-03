@@ -15,7 +15,6 @@ import com.example.gamelogic.VisualElements.figure.Figure;
 import com.example.gamelogic.managers.UIManager;
 import com.example.gamelogic.managers.WaveManager;
 import com.example.gamelogic.VisualElements.Image;
-import com.example.gamelogic.VisualElements.figure.Square;
 import com.example.gamelogic.Tipos.TipoTorre;
 import com.example.gamelogic.towers.Tower;
 import com.example.gamelogic.Vector2D;
@@ -33,8 +32,6 @@ public class GameLogic implements State {
     //Factoria de las torres
     private TowerFactory towerFactory = new TowerFactory();
     private final String TEXT_VIDA_ID = "TEXT_VIDA" , TEXT_DINERO_ID= "TEXT_DINERO", TEXT_OLEADA_ID = "TEXT_OLEADA";
-    //Franja en la que están los botones
-    private Square placeGrey;
 
     //Numero de filas y columnas
     int fil, col;
@@ -70,10 +67,8 @@ public class GameLogic implements State {
 
     private JSONObject save; //Archivo de Guardado del Juego
     private JSONObject mapaObj;
-    //Json que maneja el estilo de los botones y textos
-    private JSONObject style;
-    private JSONObject prefabs;
-    private JSONObject items;
+    //Json que maneja el estilo de los botones y textos mas el prefab y el json donde se manejan los items
+    private JSONObject style, prefabs,items;
     JSONArray camino; //Array con el numero de puntos que debe recorrer el enemigo en JSON
     ArrayList<Vector2D> caminoEnemigos;//el camino que recorren los enemigos
 
@@ -101,7 +96,6 @@ public class GameLogic implements State {
     //JSONArray que gestiona las oleadas en el juego
     JSONArray oleadasDatos;
     //Para leer el mapa
-
 
     //Fondo del propio nivel
     private Image fondoNivel;
@@ -163,17 +157,14 @@ public class GameLogic implements State {
      * @param mapa ruta del archivo
      */
     private void inicializarNivel(String mapa)
-    {
+    { try {
         this.mapaObj =engine.readJsonFile(mapa);
         JSONArray arr= null; //array del mapa
-        try {
+
             arr = mapaObj.getJSONArray("mapa");
             this.levelNumber= mapaObj.getInt("level"); //numero de nivel
             this.oleadasDatos = mapaObj.getJSONArray("waves"); //oleadas de enemigos
             this.camino = mapaObj.getJSONArray("road"); //camino de puntos de los enemigos
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
 
         //Oleadas que hay en total dependiendo del modo de juego
         switch(this.dificultad) {
@@ -193,11 +184,8 @@ public class GameLogic implements State {
 
         //dimensiones tablero
         this.fil=arr.length();
-        try {
-            this.col=arr.get(0).toString().length();
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+        this.col=arr.get(0).toString().length();
+
         this.ancho = col*(int)anchoCasilla;
         this.alto= fil*(int)altoCasilla;
 
@@ -213,13 +201,9 @@ public class GameLogic implements State {
             JSONArray pair = null;
             int x=0; int y=0;
 
-            try {
                 pair = this.camino.getJSONArray(i);
                  x = pair.getInt(0);
                  y = pair.getInt(1);
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
 
             this.caminoEnemigos.add(new Vector2D(x,y));
         }
@@ -232,8 +216,6 @@ public class GameLogic implements State {
                 //Calculamos la posicion de la casilla
                 float posX = j * altoCasilla + this.offsetX;
                 float posY = i * anchoCasilla + this.offsetY;
-
-                try {
                     char tipoCasilla = arr.get(i).toString().charAt(j);
 
                     //Es caminable si en el json no es una h
@@ -244,13 +226,13 @@ public class GameLogic implements State {
                          casilla.setColor(Color.NEGRO.getHex());
                     else
                         casilla.setColor(Color.MARRON.getHex());
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-                casilla.setCoor(new Vector2D(i, j));
+
                 fila.add(casilla);
             }
             this.casillas.add(fila);
+        }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -306,9 +288,9 @@ public class GameLogic implements State {
         //En caso de que haya ganado, no habrá oleadas, enemigos y la vida es mayor a 0
         int oleadasRestantes = wave.getNumOleadasRestantes();
         boolean isCompleted=true;
-        if (oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()) {
-            this.stopSoundTorres();
 
+        if (oleadasRestantes == 0 && this.vida > 0 && this.enemigos.isEmpty()||this.vida==0) {
+            this.stopSoundTorres();
             //comprobamos si el nivel que hemos derrotado es un nivel nuevo
             try {
                 if(this.levelNumber>save.getInt("completed")) {
@@ -319,17 +301,11 @@ public class GameLogic implements State {
                 throw new RuntimeException(e);
             }
             //Vamos al estado de GameOver
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,true,
+            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,this.vida>0,
                     isCompleted, this.nivel, this.mundo, this.wave.getNumOleadas(),this.save);
             this.engine.setState(gameOver);
         }
-        //En caso de que haya perdido
-        if (this.vida <= 0) {
-            this.stopSoundTorres();
-            GameOver gameOver = new GameOver(this.engine, this.audio, this.mobile,this.dificultad,false,
-                    isCompleted, this.nivel, this.mundo, this.wave.getNumOleadas(),this.save);
-            this.engine.setState(gameOver);
-        }
+
     }
 
     /**
@@ -348,34 +324,6 @@ public class GameLogic implements State {
 
         //Comprobamos si se ha acabado la partida
         comprobarFinal();
-    }
-
-    /**
-     * Dada una posición (x,y) se determina en que casilla está a partir
-     * del ancho y alto de la casilla
-     */
-    public Vector2D determinaCasilla(float x, float y) {
-
-        int j = (int) ((x - this.offsetX) / this.anchoCasilla);
-        int i = (int) ((y - this.offsetY) / this.altoCasilla);
-
-        Vector2D c = new Vector2D(i, j);
-        return c;
-    }
-
-    /**
-     * Dada una posición (x,y) del ratón se determina a que casilla esta clicando
-     */
-    public Vector2D determinaCasillaRaton(float x, float y) {
-        if (x < this.offsetX - this.anchoCasilla / 2 || y < this.offsetY - this.altoCasilla / 2) {
-            return new Vector2D(-1, -1);
-        }
-
-        int j = (int) (((x + (this.anchoCasilla / 2) - this.offsetX)) / this.anchoCasilla);
-        int i = (int) (((y + (this.altoCasilla / 2) - this.offsetY)) / this.altoCasilla);
-
-        Vector2D c = new Vector2D(i, j);
-        return c;
     }
 
     /**
@@ -401,7 +349,6 @@ public class GameLogic implements State {
 
         //Renderizar el fondo de pantalla
         this.fondoNivel.Render(gr);
-        this.placeGrey.Render(gr);
 
         //Renderizado del mapa
         for (int i = 0; i < this.fil; i++) {
@@ -441,7 +388,6 @@ public class GameLogic implements State {
         //inicalizamos los botones de torres
         initButtonsPlay();
 
-
         //Hacemos que los botones de construccion esten activados desde el principio
         this.ui.changeVisualElementStateOfType("tower",true);
         this.ui.changeVisualElementStateOfType("upgrade",false);
@@ -455,14 +401,11 @@ public class GameLogic implements State {
             JSONArray torresDesbloqueadas = this.save.getJSONArray("towers_unlocked");
             JSONObject skinsEquipadas = this.save.getJSONObject("skins_equipped");
             int n = torresDesbloqueadas.length();
-
             this.ui.createPrefabs(this.prefabs.getJSONObject("BotonTower"),n);
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     /**
@@ -477,9 +420,6 @@ public class GameLogic implements State {
             this.fondoNivel.setY((int) (this.offsetY - (this.altoCasilla/2)));
             this.fondoNivel.setW(this.ancho); this.fondoNivel.setH(this.alto);
 
-            //Franja gris donde se situan los botones
-            this.placeGrey = new Square(300,370,600,100,true);
-            this.placeGrey.setColor(Color.GRIS.getHex());
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -528,12 +468,6 @@ public class GameLogic implements State {
             throw new RuntimeException(e);
         }
     }
-    /**
-     * Metodo que activa/desactiva el grupo de botones que corresponda
-     * @param type El tipo de boton que queremos activar/desactivar
-     * @param active true si se activa, false si se desactiva
-     */
-
 
     /**
      * Gestiona la interacción de la entrada con el juego
@@ -593,17 +527,20 @@ public class GameLogic implements State {
         if(this.ui.handleInput(e))
             return;
 
-        //Determinamos si la casilla que hemos pulsado es valida
-        Vector2D casillaCoor = this.determinaCasillaRaton(e.x, e.y);
+        Casilla casillaActual=null;
 
+        for(ArrayList<Casilla>array: casillas ) {
+            for(Casilla casilla: array) {
+                if(casilla.handleInput(e))
+                    casillaActual=casilla;
+            }
+        }
         //Si no es valida, entonces no se devuelve nada y volvemos al estado Normal del juego
-        if(!casillaValida(casillaCoor.getX(), casillaCoor.getY())){
+        if(casillaActual==null){
             resetearEstado();
             return;
         }
 
-        //Como la casilla es valida, ahora compruebo si en esa casilla había una torre o no
-        Casilla casillaActual = this.casillas.get(casillaCoor.getX()).get(casillaCoor.getY());
         Tower torreEnCasilla = casillaActual.getTorre();
 
         //Si la habia -> modo torre
@@ -636,7 +573,6 @@ public class GameLogic implements State {
                     casillaObjetivo.getY(),
                     skin,figure
             );
-
             // Ponemos la torre en la posicion que corresponda
             if (torreR != null) {
                 ponerTorre(casillaObjetivo, torreR);
@@ -655,7 +591,7 @@ public class GameLogic implements State {
     private void ponerTorre(Casilla c, Tower torre){
         torre.setListaEnemigos(this.enemigos);
         torre.setAudio(this.audio);
-        this.casillas.get(c.getCoor().getX()).get(c.getCoor().getY()).setTorre(torre);
+        c.setTorre(torre);
         this.torres.add(torre);
     }
 
@@ -674,17 +610,6 @@ public class GameLogic implements State {
             this.ui.getButtonUI(CURRENT_BUT_ID).setColor(Color.BLANCO.getHex());
             CURRENT_BUT_ID = " ";
         }
-    }
-
-    /**
-     * Metodo que determina si la casilla que hemos clicado no se sale de los limites del mapa
-     * @param cx coordenada x de la casilla
-     * @param cy coordenada y de la casilla
-     * @return
-     */
-    public boolean casillaValida(int cx, int cy){
-        return (cx < this.fil && cy < this.col
-                && cx >= 0 && cy >= 0);
     }
 
     /**

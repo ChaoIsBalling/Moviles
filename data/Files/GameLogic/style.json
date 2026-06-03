@@ -3,6 +3,7 @@
     {
       "id": "BUT_ATAQUE",
       "type":"upgrade",
+      "layer":1,
       "x": 440, "y": 360, "w": 50, "h": 50,
       "isRound": true, "ar": 20, "color": "#FFFFFFFF",
       "text": {
@@ -26,6 +27,7 @@
     {
       "id": "BUT_RANGO",
       "type":"upgrade",
+      "layer":1,
       "x": 500, "y": 360, "w": 50, "h": 50,
       "isRound": true, "ar": 20, "color": "#FFFFFFFF",
       "text": {
@@ -50,6 +52,7 @@
     {
       "id": "BUT_VELOCIDAD",
       "type":"upgrade",
+      "layer":1,
       "x": 560, "y": 360, "w": 50, "h": 50,
       "isRound": true, "ar": 20, "color": "#FFFFFFFF",
       "text": {
@@ -71,13 +74,26 @@
       }
     }
   ],
+  "figures":[
+    {
+      "id": "FIGURE_TEXT_BG",
+      "form": "square",
+      "x": 300, "y": 370,
+      "w": 600, "h": 100,
+      "color": "#ffA3A3A3",
+      "fill": true,
+      "round": false,
+      "r": 0,
+      "visible": true
+    }
+  ],
   "images" : [
-    { "id": "Vida", "imagen": "Vida.png", "x": 60, "y": 330, "w": 30, "h": 30, "visible": true  },
-    { "id": "Dinero", "imagen": "Dinero.png", "x": 60, "y": 360, "w": 30, "h": 30, "visible": true}
+    { "id": "Vida", "layer":1,"imagen": "Vida.png", "x": 60, "y": 330, "w": 30, "h": 30, "visible": true  },
+    { "id": "Dinero", "layer":1,"imagen": "Dinero.png", "x": 60, "y": 360, "w": 30, "h": 30, "visible": true}
   ],
   "texts": [
-    { "id": "TEXT_VIDA", "texto": "0","font": "Inika-Regular.ttf", "x": 30, "y": 340, "size": 20, "bold": true, "italic": true, "color": "#FF000000" },
-    { "id": "TEXT_DINERO", "texto": "0","font": "Inika-Regular.ttf", "x": 30, "y": 370, "size": 20, "bold": true, "italic": true, "color": "#FF000000" },
+    { "id": "TEXT_VIDA","layer":1,"texto": "0","font": "Inika-Regular.ttf", "x": 30, "y": 340, "size": 20, "bold": true, "italic": true, "color": "#FF000000" },
+    { "id": "TEXT_DINERO","layer":1,"texto": "0","font": "Inika-Regular.ttf", "x": 30, "y": 370, "size": 20, "bold": true, "italic": true, "color": "#FF000000" },
     { "id": "TEXT_OLEADA", "texto": "Oleada: 0","font": "Inika-Regular.ttf", "x": 60, "y": 15, "size": 25, "bold": true, "italic": true, "color": "#FF000000"}
   ]
 }

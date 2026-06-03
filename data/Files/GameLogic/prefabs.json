@@ -1,32 +1,9 @@
     {
-    "ImagenImp":
-    {
-        "imagen":"Imp.png",
-        "x":-15,
-        "y":-20,
-        "w":35,
-        "h":35
-    },
-    "ImagenGoblin":
-    {
-        "imagen":"Goblin.png",
-        "x":-15,
-        "y":-20,
-        "w":35,
-        "h":35
-    },
-    "ImagenOgre":
-    {
-        "imagen":"Ogre.png",
-        "x":-15,
-        "y":-20,
-        "w":35,
-        "h":35
-    },
-   
+  
     "BotonTower" :{
       "id": "BUT_SEL",
       "type": "tower",
+      "layer":1,
       "xOffset":-1.2,
       "yOffset":0,
       "xLimit":-1,
@@ -45,6 +22,7 @@
     },
     "BotonUpgrade" :{
       "id": "BUT_UP",
+      "layer":1,
       "type": "upgrade",
        "xOffset":-1.2,
       "yOffset":0,

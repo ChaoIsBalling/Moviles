@@ -49,7 +49,7 @@ public class Square extends Figure{
             throw new RuntimeException(e);
         }
     }
-
+    public float getWidth(){return this.w;}
     /**
      * Getters
      */

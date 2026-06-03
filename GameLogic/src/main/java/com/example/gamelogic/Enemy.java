@@ -22,7 +22,6 @@ public class Enemy {
     float resistencia;
     float x, y;
 
-
     //Minimo a lo que se puede ajustar los daños al enemigo
     float damMinimo = 2;
     float ralentizacionMinima = 7;
@@ -33,14 +32,9 @@ public class Enemy {
     //Referencia a la escena de juego
     GameLogic gl;
 
-    //Coordenada de casilla en la que se encuentra
-    Vector2D coor;
-
     //factor ralentizar
     float ralentizar =0;
 
-    //Casillas para calcular el movimiento
-    Casilla casillaInicial;
 
     //Vector de puntos del camino a seguir por el enemigo en forma de coordenadas del tablero
     ArrayList<Vector2D> puntosCamino;
@@ -65,9 +59,6 @@ public class Enemy {
 
         this.gl = gl; //Instancia del gameLogic
 
-        //Obtenemos casilla actual a partir de sus coordenadas
-        this.coor = gl.determinaCasilla(this.y, this.x);
-        this.casillaInicial = this.gl.getCasillas().get(this.coor.getX()).get(this.coor.getY());
         this.puntosCamino = camino;
     }
 
