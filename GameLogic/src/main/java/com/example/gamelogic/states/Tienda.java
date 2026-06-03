@@ -14,6 +14,7 @@ import com.example.gamelogic.Color;
 import com.example.gamelogic.VisualElements.Text;
 import com.example.gamelogic.VisualElements.VisualElement;
 import com.example.gamelogic.VisualElements.button.Button;
+import com.example.gamelogic.VisualElements.figure.Square;
 import com.example.gamelogic.managers.UIManager;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public class Tienda implements State {
     private AndroidEngine engine;
     private AndroidGraphics gr;
     //El archivo de guardado del juego mas los archivos de estilo, prefabs y la lista de items
-    private JSONObject save,style,prefabs, shop;
+    private JSONObject save,style,prefabs, shop,items;
     AndroidMobile mobile;
     private int numGems = 0;
     //El item seleccionado en la tienda
@@ -51,6 +52,7 @@ public class Tienda implements State {
         this.shop =engine.readJsonFile("Tienda/shop.json");
         readShop();
         this.prefabs=engine.readJsonFile("Tienda/prefabs.json");
+        this.items=engine.readJsonFile("items.json");
     }
     @Override
     public void update(double deltatime) {}
@@ -104,8 +106,6 @@ public class Tienda implements State {
                     skins.get(currSkin.getString("Torre")).put(currSkin.getString("id"),false);
                 }
             }
-
-
             JSONArray bg = this.save.getJSONArray("bg_available");
             //Iterador que apunta a la primera seccion de la tienda
             name=null;
@@ -210,6 +210,7 @@ public class Tienda implements State {
     public void setCallbackButtonShopItem(Button b) {
         try {
             final JSONObject item=shopSection.getJSONObject(shopItem.next());
+            initShopButton(b,item);
             b.setOnClickListener( () -> {prepararCompra(item,b);
             });
         } catch (JSONException e) {
@@ -217,6 +218,30 @@ public class Tienda implements State {
         }
     }
 
+    public void initShopButton(Button b, JSONObject item)
+    {
+        try {
+            //Tipo de la compra definido en el json
+            String tipoCompra = item.getString("TipoCompra");
+            //procesamos cada tipo de compra
+            switch (tipoCompra){
+                case "skin":
+                    b.setAppeareance(this.items.getJSONObject("Skins")
+                            .getJSONObject(item.getString("Torre")).getJSONObject(item.getString("id")));
+                   break;
+                case "torre":
+                    b.setAppeareance(this.items.getJSONObject("Skins")
+                            .getJSONObject(item.getString("id")).getJSONObject("0"));
+                    break;
+                case "fondo":
+                    b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
+                    b.getFigButton().setColor(item.getString("id"));
+                    break;
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * Metodo que setea el callback al boton de compra
      * @param b Boton de compra

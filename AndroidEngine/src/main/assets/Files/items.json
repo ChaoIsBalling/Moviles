@@ -3,19 +3,23 @@
     {
         "RAYO":
         {
-            "Coste":100
+            "Coste":100,
+            "Skin":"0"
         },
         "FUEGO":
         {
-            "Coste":150
+            "Coste":150,
+            "Skin":"0"
         },
         "HIELO":
         {
-            "Coste":200
+            "Coste":200,
+            "Skin":"0"
         },
         "MINI":
         {
-            "Coste":100
+            "Coste":100,
+            "Skin":"0"
         }
     },
 
@@ -108,7 +112,9 @@
     },
     "Fondos":
     {
-
+        "Fondo":
+        {"color":"#FFFF0000"
+        }
     }
 
 }

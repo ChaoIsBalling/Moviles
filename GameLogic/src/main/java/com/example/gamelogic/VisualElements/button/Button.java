@@ -102,7 +102,18 @@ public class Button extends VisualElement {
 
     public void setID(String newID){this.id=newID;}
     //setters
-    public void setColor(String color){ this.color = color; }
+    public void setColor(String color){ this.color = color;}
+    public void setAppeareance(JSONObject obj)
+    {
+        try {
+            if(obj.getString("type").equals( "Figura"))
+                setFigure(obj);
+            else
+                setImage(obj);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void setFigure(JSONObject figData){
         String form = null;
         try {

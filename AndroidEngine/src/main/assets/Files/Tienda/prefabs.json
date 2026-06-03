@@ -1,4 +1,16 @@
-{
+{    "FiguraBoton":
+    {
+      "type": "Figura",
+      "id": "cuadradoHielo",
+      "form": "square",
+      "x": 0, "y": -5,
+      "w": 30, "h": 30,
+      "color": "#FFFFFFFF",
+      "fill": true,
+      "round": true,
+      "r": 3,
+      "visible": true
+    },
     "textoTienda": {
         "id": "TEXTO_",
         "texto":" ",
