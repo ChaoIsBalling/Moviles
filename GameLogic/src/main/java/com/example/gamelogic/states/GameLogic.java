@@ -49,6 +49,8 @@ public class GameLogic implements State {
     //Json que maneja el estilo de los botones y textos
     JSONObject style;
 
+    JSONObject prefabs;
+
     //Arrays de casillas, torres y enemigos
     ArrayList<ArrayList<Casilla>> casillas;
     ArrayList<Tower> torres;
@@ -430,14 +432,54 @@ public class GameLogic implements State {
     public void inicializarUI() {
         //Leemos el json de estilos de botones y elementos del juego
         this.style = engine.readJsonFile("GameLogic/style.json");
+        this.prefabs = engine.readJsonFile("GameLogic/enemies.json");
         //Inicializamos todos los elementos de la UI
         this.ui = new UIManager(this.style,this.engine, this.gr);
         this.ui.setAllCallbacks();
+
+        //inicalizamos los botones de torres
+        initButtonsPlay();
+
+
         //Hacemos que los botones de construccion esten activados desde el principio
         this.ui.changeVisualElementStateOfType("tower",true);
         this.ui.changeVisualElementStateOfType("upgrade",false);
         this.inicializarContadores();
         this.cargarFondoNivel();
+    }
+
+    private void initButtonsPlay(){
+        try {
+            JSONArray torresDesbloqueadas = this.save.getJSONArray("towers_unlocked");
+            JSONObject skinsEquipadas = this.save.getJSONObject("skins_equipped");
+            int n = torresDesbloqueadas.length();
+
+            int initX = 440;
+            int posY = 360;
+            int offsetX = 60;
+
+            for(int i = 0; i < n;i++){
+                Button b = new Button(prefabs.getJSONObject("BotonTower"));
+                int posX = initX + (i * offsetX);
+                b.setX(posX); b.setY(posY);
+
+                //Determinar la skin
+                
+
+
+
+
+
+            }
+
+
+
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     /**

@@ -22,5 +22,19 @@
         "y":-20,
         "w":35,
         "h":35
+    },
+    "BotonTower" :{
+      "id": "BUT_SEL",
+      "type": "tower",
+      "x": 0, "y": 0, "w": 50, "h": 50,
+      "isRound": true, "ar": 20, 
+      "color": "#FFFFFFFF"
+    },
+    "BotonUpgrade" :{
+      "id": "BUT_UP",
+      "type": "upgrade",
+      "x": 0, "y": 0, "w": 50, "h": 50,
+      "isRound": true, "ar": 20, 
+      "color": "#FFFFFFFF"
     }
 }

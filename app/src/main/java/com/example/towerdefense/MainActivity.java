@@ -77,9 +77,46 @@ public class MainActivity extends AppCompatActivity {
     {
         JSONObject obj=new JSONObject();
         try {
-            obj.put("gems",1000);
+            obj.put("gems",0);
             obj.put("completed",0);
-            obj.put("rayo",false);
+
+            //Array que contiene las torres desbloqueadas
+            JSONArray towers = new JSONArray();
+            towers.put("RAYO");
+            towers.put("HIELO");
+            towers.put("FUEGO");
+            obj.put("towers_unlocked", towers);
+
+
+            //Object que contiene las skins equipadas
+            JSONObject skins_eq = new JSONObject();
+            skins_eq.put("RAYO", "Figura");
+            skins_eq.put("HIELO", "Figura");
+            skins_eq.put("FUEGO", "Figura");
+            obj.put("skins_equipped", skins_eq);
+
+            //Object con las skins desbloqueadas para cada torre
+            JSONObject skins_des = new JSONObject();
+            //Rayo
+            JSONArray skinsRayo = new JSONArray();
+            skinsRayo.put("Figura");
+            skins_des.put("RAYO", skinsRayo);
+
+            //Hielo
+            JSONArray skinsHielo = new JSONArray();
+            skinsHielo.put("Figura");
+            skins_des.put("HIELO", skinsHielo);
+
+            //Fuego
+            JSONArray skinsFuego = new JSONArray();
+            skinsFuego.put("Figura");
+            skins_des.put("FUEGO", skinsFuego);
+
+            obj.put("skins_available", skins_des);
+
+            obj.put("background", "#FFFFFFFF");
+
+            /*obj.put("rayo",false);
             obj.put("fuego",false);
             obj.put("hielo",false);
             obj.put("mini",false);
@@ -115,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
             obj.put("skinHielo","Figura");
             obj.put("rojo",false);
             obj.put("azul",false);
-            obj.put("fondo","#FFFFFFFF");
+            obj.put("fondo","#FFFFFFFF");*/
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

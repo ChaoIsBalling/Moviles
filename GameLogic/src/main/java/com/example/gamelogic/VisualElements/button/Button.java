@@ -58,8 +58,6 @@ public class Button extends VisualElement {
                 this.arcRadius=json.getInt("ar");
 
             this.color=json.getString("color");
-
-
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
