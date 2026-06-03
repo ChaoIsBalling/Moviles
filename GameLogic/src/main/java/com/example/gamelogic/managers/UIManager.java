@@ -324,6 +324,7 @@ public class UIManager {
                 xIndex = 0;
                 yIndex++;
                 }
+                prefabButton.setID(prefab.getString("id") + i);
                 botones.put(prefab.getString("id") + i, prefabButton);
                 addVisualElementToArray(prefabButton, prefab);
 

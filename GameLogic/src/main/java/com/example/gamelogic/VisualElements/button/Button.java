@@ -100,6 +100,7 @@ public class Button extends VisualElement {
         this.text.setText(message);
     }
 
+    public void setID(String newID){this.id=newID;}
     //setters
     public void setColor(String color){ this.color = color; }
     public void setFigure(JSONObject figData){

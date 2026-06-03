@@ -27,10 +27,10 @@
     "BotonTower" :{
       "id": "BUT_SEL",
       "type": "tower",
-      "xOffset":1.5,
+      "xOffset":-1.2,
       "yOffset":0,
       "xLimit":-1,
-      "x": 400, "y": 360, "w": 50, "h": 50,
+      "x": 550, "y": 360, "w": 50, "h": 50,
       "isRound": true, "ar": 20, 
       "color": "#FFFFFFFF",
         "text": {
