@@ -37,9 +37,9 @@ public class Tienda implements State {
     Iterator<String> shopItem=null;
 
     //Estructras que almacenan los items que se han obtenido
-    HashMap<String, Boolean> torres;
-    HashMap<String, HashMap<String, Boolean>> skins;
-    HashMap<String, Boolean> fondos;
+    HashMap<String, Boolean> torres=new HashMap<>();
+    HashMap<String, HashMap<String, Boolean>> skins=new HashMap<>();
+    HashMap<String, Boolean> fondos=new HashMap<>();
 
 
 
@@ -49,6 +49,7 @@ public class Tienda implements State {
         this.mobile = mobile;
         this.style =engine.readJsonFile("Tienda/style.json");
         this.shop =engine.readJsonFile("Tienda/shop.json");
+        readShop();
         this.prefabs=engine.readJsonFile("Tienda/prefabs.json");
     }
     @Override
@@ -62,21 +63,20 @@ public class Tienda implements State {
 
     public void readShop(){
         try {
-            JSONObject t = this.save.getJSONObject("towers_unlocked");
+            JSONArray t = this.save.getJSONArray("towers_unlocked");
             //Iterador que apunta a la primera seccion de la tienda
-            Iterator<String> it = t.keys();
+
             String name=null;
             for (int i = 0; i< t.length();i++){
-                torres.put(it.next(), true);
+                torres.put(t.getString(i), true);
             }
-            t = this.shop.getJSONObject("Torres");
-
-            it=t.keys();
-            for(int i=0;i<t.length();i++)
+            JSONObject tor = this.shop.getJSONObject("Torres");
+            Iterator<String> it = tor.keys();
+            for(int i=0;i<tor.length();i++)
             {
                 name=it.next();
-                if(!torres.containsKey(name))
-                    torres.put(name,false);
+                if(!torres.containsKey(tor.getJSONObject(name).getString("id")))
+                    torres.put(tor.getJSONObject(name).getString("id"),false);
             }
 
             JSONObject sk =  this.save.getJSONObject("skins_available");
@@ -85,13 +85,14 @@ public class Tienda implements State {
 
             for (int i = 0; i< sk.length();i++){
                 name=it.next();
-                JSONArray skinTorre=this.save.getJSONArray(name);
+                JSONArray skinTorre=sk.getJSONArray(name);
                 skins.put(name, new HashMap<>());
                 for (int j=0;j<skinTorre.length();j++)
                 {
                     skins.get(name).put(skinTorre.getString(j),true);
                 }
             }
+
             sk =  this.shop.getJSONObject("Skins");
             it = sk.keys();
 
@@ -105,39 +106,24 @@ public class Tienda implements State {
             }
 
 
-            JSONObject f =  this.shop.getJSONObject("Skins");
+            JSONArray bg = this.save.getJSONArray("bg_available");
             //Iterador que apunta a la primera seccion de la tienda
-            Iterator<String> itF = sk.keys();
-
-            for (int i = 0; i< sk.length();i++){
-                fondos.put(itF.next(), false);
-            }
-
-            JSONObject fondos = this.save.getJSONObject("bg_available");
-            //Iterador que apunta a la primera seccion de la tienda
-            it = fondos.keys();
             name=null;
 
-            for (int i = 0; i< t.length();i++){
-                fondos.put(it.next(), true);
+            for (int i = 0; i< bg.length();i++){
+                fondos.put(bg.getString(i), true);
             }
 
             //Leer la tienda
-            t = this.shop.getJSONObject("Fondos");
+            JSONObject bgFondo = this.shop.getJSONObject("Fondos");
 
-            it=t.keys();
-            for(int i=0;i<t.length();i++)
+            it= bgFondo.keys();
+            for(int i=0;i<bgFondo.length();i++)
             {
                 name=it.next();
-                if(!fondos.)
-                    torres.put(name,false);
+                if(!fondos.containsKey(bgFondo.getJSONObject(name).getString("id")))
+                    fondos.put(bgFondo.getJSONObject(name).getString("id"),false);
             }
-
-
-
-
-
-
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -158,7 +144,6 @@ public class Tienda implements State {
 
         inicializarScroll();
         this.ui.configurarLimitesScroll();
-
 
         try {
             numGems = this.save.getInt("gems");
@@ -279,7 +264,7 @@ public class Tienda implements State {
         this.currentItem=item;
         try {
             //Caso en que el item ya esté comprado
-            if(this.save.getJSONObject("itemsComprados").has(item.getString("ID"))) {
+            if(itemBought()) {
                 this.ui.changeVisualElementStateOfType("compra",false);
                 this.ui.changeVisualElementStateOfType("yacomprado",true);
             }
@@ -303,31 +288,18 @@ public class Tienda implements State {
         try {
             //Tipo de la compra definido en el json
             String tipoCompra = currentItem.getString("TipoCompra");
-
             //procesamos cada tipo de compra
             switch (tipoCompra){
                 case "skin":
-                    //Accdemos al id
-
-                    break;
+                    return skins.get(currentItem.getString("Torre")).get(currentItem.getString("id"));
                 case "torre":
-                    break;
-
+                    return torres.get(currentItem.getString("id"));
                 case "fondo":
-                    break;
-
-
-
-
+                    return fondos.get(currentItem.getString("id"));
             }
-
-
-
-
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
         return false;
     }
 

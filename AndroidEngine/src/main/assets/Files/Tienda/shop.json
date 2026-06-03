@@ -1,8 +1,9 @@
 {
     "Torres":
     {
-        "MINI":
+        "TORRE MINI":
         {
+            "id":"MINI",
             "TipoCompra": "torre",
             "Seccion":"towers_unlocked",
             "Precio":100,
@@ -41,6 +42,13 @@
       
     "Fondos":
     {
+        "FONDO":{
+            "id":"#FFFF0000",
+            "TipoCompra": "fondo",
+            "Seccion" : "bg_available",
+            "Precio":10,
+            "Descripcion": "Fondo rojo"
+        }
         
     }
 
