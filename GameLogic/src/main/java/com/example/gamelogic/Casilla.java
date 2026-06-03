@@ -50,10 +50,10 @@ public class Casilla {
         return this.tower;
     }
     public float getX(){
-        return this.cuadrado.getX();
+        return this.x;
     }
     public float getY(){
-        return this.cuadrado.getY();
+        return this.y;
     }
     public Vector2D getCoor() {return this.coor;};
 

@@ -50,6 +50,9 @@ public class Text extends VisualElement {
      */
     public void setText(String text){
         this.myArray=text.split("\n");
+        this.gr.setColor(this.color);
+        this.gr.setFont(fuente);
+        this.h=gr.getTextBounds(text).height();
     }
 
     public String getText(){

@@ -44,7 +44,7 @@
       "isRound": true, 
       "scrollable":true,
       "ar": 20, 
-      "color": "#FFFFFFFF",
+      "color": "#FFF54927",
       "text": {
         "id": "TEXT_coste",
         "texto": "0", "font": "Inika-Regular.ttf",

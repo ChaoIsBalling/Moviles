@@ -359,6 +359,7 @@ public class AndroidGraphics{
     public Rect getTextBounds(String texto) {
         Rect r= new Rect();
         this.paint.setTextSize(af.getSize());
+        this.paint.getTextBounds(texto,0,texto.length(),r);
         return r;
     }
     /**

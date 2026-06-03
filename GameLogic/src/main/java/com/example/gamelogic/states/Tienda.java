@@ -72,36 +72,38 @@ public class Tienda implements State {
 
     private void inicializarScroll(){
         int initXText = 100;
-        int initYText = 200, offsetTextY = 10;
+        int initYText = 200, offsetTextY = 1;
         int numTexts = 0;
         try {
             //Texto de nuevas torres
             Text textoTorres = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
             textoTorres.setText("Nuevas Torres");
             textoTorres.setId(textoTorres.getId() + numTexts);
-            textoTorres.setX(initXText); textoTorres.setY(initYText + (offsetTextY * numTexts));
+            textoTorres.setX(initXText);
+            textoTorres.setY(initYText + (offsetTextY * numTexts));
             numTexts++;
 
             this.ui.addVisualElementToArray(textoTorres, prefabs.getJSONObject("textoTienda"));
 
             //Creamos n numero de botones
-            this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), 3);
+            //this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), 3);
 
             //Texto de nuevas torres
             Text textoSkins = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
             textoSkins.setId(textoSkins.getId() + numTexts);
-            textoTorres.setText("Nuevas Skins");
-            textoSkins.setX(initXText); textoSkins.setY(initYText + (offsetTextY * numTexts));
+            textoSkins.setText("Nuevas Skins");
+            textoSkins.setX(initXText);
+            textoSkins.setY(initYText + (textoSkins.getHeight()*offsetTextY * numTexts));
             numTexts++;
 
             this.ui.addVisualElementToArray(textoSkins, prefabs.getJSONObject("textoTienda"));
 
 
-            int nuevaY = this.prefabs.getJSONObject("BotonItem").getInt("y") + 300;
-            this.prefabs.getJSONObject("BotonItem").put("y", nuevaY);
+            //int nuevaY = this.prefabs.getJSONObject("BotonItem").getInt("y") + 300;
+            //this.prefabs.getJSONObject("BotonItem").put("y", nuevaY);
 
             //Numero de items en el apartado de nuevas torres
-            this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), 3);
+            //this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), 3);
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
