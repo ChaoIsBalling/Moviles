@@ -113,6 +113,32 @@ public class Tienda implements State {
                 fondos.put(itF.next(), false);
             }
 
+            JSONObject fondos = this.save.getJSONObject("bg_available");
+            //Iterador que apunta a la primera seccion de la tienda
+            it = fondos.keys();
+            name=null;
+
+            for (int i = 0; i< t.length();i++){
+                fondos.put(it.next(), true);
+            }
+
+            //Leer la tienda
+            t = this.shop.getJSONObject("Fondos");
+
+            it=t.keys();
+            for(int i=0;i<t.length();i++)
+            {
+                name=it.next();
+                if(!fondos.)
+                    torres.put(name,false);
+            }
+
+
+
+
+
+
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -282,8 +308,6 @@ public class Tienda implements State {
             switch (tipoCompra){
                 case "skin":
                     //Accdemos al id
-
-
 
                     break;
                 case "torre":

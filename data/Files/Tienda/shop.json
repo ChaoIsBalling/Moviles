@@ -41,6 +41,12 @@
       
     "Fondos":
     {
+        "FFFF0000":{
+            "TipoCompra": "fondo",
+            "Seccion" : "bg_available",
+            "Precio":10,
+            "Descripcion": "Fondo rojo"
+        }
         
     }
 

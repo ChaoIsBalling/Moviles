@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         this.engine.setNotificationIcon(R.drawable.ic_tower_defense_noti); //icono de notificación
 
         checkRewardNotifiactionIntent(); //Comprobamos si el jugador ha vuelto a entrar al juego por la notificacion recompensada
-        if(this.engine.checkFileExists("save"))
+        if(!this.engine.checkFileExists("save"))
         {
             save=this.engine.readInternalJsonFile("save");
             String hash = this.engine.createHash(save.toString());
@@ -118,6 +118,10 @@ public class MainActivity extends AppCompatActivity {
             skins_des.put("MINI", skinsMini);
 
             obj.put("skins_available", skins_des);
+
+            JSONArray backgrounds = new JSONArray();
+            backgrounds.put("#FFFFFFFF");
+            obj.put("bg_available", backgrounds);
 
             obj.put("background", "#FFFFFFFF");
 
