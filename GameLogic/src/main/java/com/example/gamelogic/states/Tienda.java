@@ -259,13 +259,12 @@ public class Tienda implements State {
     public void comprobarCompra(Button b)
     {   if(currentItem!=null) {
             try {
-                if(this.save.getInt("gems")>this.currentItem.getInt("precio")) {
-                    numGems-=this.currentItem.getInt("precio");
+                if(this.save.getInt("gems")>=this.currentItem.getInt("Precio")) {
+                    numGems-=this.currentItem.getInt("Precio");
                     this.ui.getTextUI("TEXT_DIAMANTES").setText(String.valueOf(numGems));
-                    this.save.getJSONObject("itemsComprados").put(currentItem.getString("ID"),currentItem);
+                    buyItem();
                     this.ui.changeVisualElementStateOfType("compra",false);
                     this.ui.changeVisualElementStateOfType("yacomprado",true);
-                    this.ui.changeVisualElementStateOfType("cambio", true);
                     this.save.put("gems",numGems);
                 }
             } catch (JSONException e) {
@@ -328,6 +327,31 @@ public class Tienda implements State {
         return false;
     }
 
+    public void buyItem()
+    {
+        try {
+            //Tipo de la compra definido en el json
+            String tipoCompra = currentItem.getString("TipoCompra");
+            //procesamos cada tipo de compra
+            switch (tipoCompra){
+                case "skin":
+                    skins.get(currentItem.getString("Torre")).put(currentItem.getString("id"),true);
+                    this.save.getJSONObject("skins_available")
+                            .getJSONArray(currentItem.getString("Torre")).put(currentItem.getString("id"));
+                    break;
+                case "torre":
+                    torres.put(currentItem.getString("id"),true);
+                    this.save.getJSONArray("towers_unlocked").put(currentItem.getString("id"));
+                    break;
+                case "fondo":
+                    fondos.put(currentItem.getString("id"),true);
+                    this.save.getJSONArray("bg_available").put(currentItem.getString("id"));
+                    break;
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      *
      * @param list Lista de eventos
