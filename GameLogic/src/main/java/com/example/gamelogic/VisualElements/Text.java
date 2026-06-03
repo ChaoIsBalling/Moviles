@@ -22,12 +22,15 @@ public class Text extends VisualElement {
 
     //el texto despues de hacerle un Split, tiene todo el contenido en string del texto
     String[] myArray;
+    //id del boton
+    String id;
     public Text(JSONObject json, AndroidGraphics gr)
     {
         super(json);
         try{
             this.gr=gr;
             String text= json.getString("texto");
+            this.id = json.getString("id");
             this.myArray=text.split("\n");
             this.font=json.getString("font");
             this.size=json.getInt("size");
@@ -52,6 +55,9 @@ public class Text extends VisualElement {
     public String getText(){
         return String.join("\n", this.myArray);
     }
+
+    public void setId(String newID) {this.id = newID; }
+    public String getId() { return this.id; }
 
     /**
      * Renderiza el texto (con y sin centrado) con la fuente y color deseados

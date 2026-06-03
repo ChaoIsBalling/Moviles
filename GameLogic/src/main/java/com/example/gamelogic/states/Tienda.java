@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.example.androidengine.AndroidMobile;
 import com.example.gamelogic.Color;
+import com.example.gamelogic.VisualElements.Text;
 import com.example.gamelogic.VisualElements.VisualElement;
 import com.example.gamelogic.VisualElements.button.Button;
 import com.example.gamelogic.managers.UIManager;
@@ -52,15 +53,58 @@ public class Tienda implements State {
         this.gr =gr;
         this.ui = new UIManager(this.style, this.engine, this.gr);
         this.ui.setAllCallbacks();
+
+        inicializarScroll();
+        this.ui.configurarLimitesScroll();
+
+
         try {
             numGems = this.save.getInt("gems");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
         this.ui.getTextUI("TEXT_DIAMANTES").setText(String.valueOf(numGems));
         this.ui.changeVisualElementStateOfType("compra",false);
         this.ui.changeVisualElementStateOfType("yacomprado",false);
+
     }
+
+    private void inicializarScroll(){
+        int initXText = 100;
+        int initYText = 200, offsetTextY = 10;
+        int currText = 0;
+        try {
+            //Texto de nuevas torres
+            Text textoTorres = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
+            this.ui.addVisualElementToArray(textoTorres, prefabs.getJSONObject("textoTienda"));
+            textoTorres.setId(textoTorres.getId() + currText);
+            textoTorres.setX(initXText); textoTorres.setY(initYText + (offsetTextY * currText));
+            textoTorres.setText("Nuevas Torres");
+            currText++;
+
+            //Numero de items en el apartado de nuevas torres
+            this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), 3);
+
+            //Texto de nuevas torres
+            Text textoSkins = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
+            textoSkins.setId(textoSkins.getId() + currText);
+            textoSkins.setX(initXText); textoSkins.setY(initYText + (offsetTextY * currText));
+            textoTorres.setText("Nuevas Skins");
+            currText++;
+
+            int nuevaY = this.prefabs.getJSONObject("BotonItem").getInt("y") + 300;
+            this.prefabs.getJSONObject("BotonItem").put("y", nuevaY);
+
+            //Numero de items en el apartado de nuevas torres
+            this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), 3);
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     /**
      * Metodo para setear el callback de volver a la pantalla anterior
      * @param b el boton al que le pasamos el callback
@@ -77,14 +121,14 @@ public class Tienda implements State {
      * @param b boton al que le queremos setear el callback
      */
     public void setCallbackButtonShopItem(Button b) {
-        try {
+        /*try {
             JSONObject callback = b.getCallback();
             JSONObject item=callback.getJSONObject("item");
             b.setOnClickListener( () -> {prepararCompra(item,b);
             });
         } catch (JSONException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 
     /**
@@ -164,10 +208,13 @@ public class Tienda implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                     this.ui.handleInput(e);
+                    this.ui.onTouchDown(e);
                     break;
                 case TOUCH_UP:
+                    this.ui.onTouchUp();
                     break;
                 case TOUCH_MOVE:
+                    this.ui.onTouchMove(e);
                     break;
             }
         }

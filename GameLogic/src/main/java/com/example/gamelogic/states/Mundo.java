@@ -45,9 +45,7 @@ public class Mundo implements State {
         this.engine=engine;
         this.mundo=mundo;
         this.mobile = mobile;
-
         this.mobile.setVisibleAdBanner(false);
-
     }
 
     @Override

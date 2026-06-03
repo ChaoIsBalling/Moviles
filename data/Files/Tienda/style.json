@@ -51,88 +51,6 @@
       {
         "method":"setCallbackButtonBuy"
       }
-    }, 
-    
-    {
-      "id": "BUT_CAMBIAR",
-      "type":"cambio",
-      "layer":1,
-      "x": 480,
-      "y": 250,
-      "w": 200,
-      "h": 50,
-      "isRound": true,
-      "ar": 20,
-      "color":"#FF999999",
-      "text": {
-        "id": "TEXT_BOTON_CAMBIAR",
-        "texto": "Cambiar aspecto",
-        "font": "Inika-Regular.ttf",
-        "x": 0, "y": 0,
-        "size": 20,
-        "bold": true,
-        "italic": true,
-        "color": "#FF00FFFF"
-      },
-      "callback":
-      {
-        "method":"setCallbackButtonChangeSkin"
-      }
-    },
-    {
-      "id": "BUT_SKINTORRE",
-      "type":"item",
-      "x": 30,
-      "y": 200,
-      "w": 100,
-      "h": 100,
-      "isRound": true,
-      "ar": 15,
-      "color": "#FFFFFFFF",
-      "icon" :{
-         "id": "TRayo",
-         "imagen": "TorreRayo.png", 
-          "x": -30, "y": -40, 
-         "w": 80, "h": 80 ,
-         "visible": true
-      },
-      "callback":
-      {
-        "method":"setCallbackButtonShopItem",
-        "item":{  
-          "ID":"MININ'T",
-          "descripcion":"Hola",
-          "precio":10
-        }
-      }
-    },  
-    {
-      "id": "BUT_SKINTORRE2",
-      "type":"item",
-      "x": 230,
-      "y": 200,
-      "w": 100,
-      "h": 100,
-      "isRound": true,
-      "ar": 15,
-      "color": "#FFFFFFFF",
-      "icon" :{
-         "id": "TMINI",
-         "imagen": "MiniTorreRayo.png", 
-          "x": -30, "y": -40, 
-         "w": 80, "h": 80 ,
-         "visible": true
-      },
-      "callback":
-      {
-        "method":"setCallbackButtonShopItem",
-        "item":{  
-          "ID":"MINI",
-          "descripcion":"adios",
-          "precio":100
-        }
-        
-      }
     }
   ],
 
@@ -215,7 +133,7 @@
       "color": "#FF000000"
     }
     ,
-     {
+    {
       "id": "TEXT_SKINS",
       "texto": "Nuevos Aspectos",
       "font": "Inika-Regular.ttf",
