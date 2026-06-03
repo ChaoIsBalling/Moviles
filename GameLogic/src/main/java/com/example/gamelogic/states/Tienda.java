@@ -5,6 +5,8 @@ import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.State;
 import com.example.androidengine.TouchEvent;
 import com.example.androidengine.AndroidAudio;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.example.androidengine.AndroidMobile;
@@ -60,22 +62,48 @@ public class Tienda implements State {
 
     public void readShop(){
         try {
-            JSONObject t = this.shop.getJSONObject("Torres");
-
+            JSONObject t = this.save.getJSONObject("towers_unlocked");
             //Iterador que apunta a la primera seccion de la tienda
             Iterator<String> it = t.keys();
-
+            String name=null;
             for (int i = 0; i< t.length();i++){
-                torres.put(it.next(), false);
+                torres.put(it.next(), true);
+            }
+            t = this.shop.getJSONObject("Torres");
+
+            it=t.keys();
+            for(int i=0;i<t.length();i++)
+            {
+                name=it.next();
+                if(!torres.containsKey(name))
+                    torres.put(name,false);
             }
 
-            JSONObject sk =  this.shop.getJSONObject("Skins");
+            JSONObject sk =  this.save.getJSONObject("skins_available");
             //Iterador que apunta a la primera seccion de la tienda
-            Iterator<String> itSk = sk.keys();
+                it = sk.keys();
 
             for (int i = 0; i< sk.length();i++){
-                skins.put(itSk.next(), new HashMap<>());
+                name=it.next();
+                JSONArray skinTorre=this.save.getJSONArray(name);
+                skins.put(name, new HashMap<>());
+                for (int j=0;j<skinTorre.length();j++)
+                {
+                    skins.get(name).put(skinTorre.getString(j),true);
+                }
             }
+            sk =  this.shop.getJSONObject("Skins");
+            it = sk.keys();
+
+            for (int i = 0; i< sk.length();i++){
+                name=it.next();
+                JSONObject currSkin=sk.getJSONObject(name);
+                if(!skins.get(currSkin.getString("Torre")).containsKey(currSkin.getString("id")))
+                {
+                    skins.get(currSkin.getString("Torre")).put(currSkin.getString("id"),false);
+                }
+            }
+
 
             JSONObject f =  this.shop.getJSONObject("Skins");
             //Iterador que apunta a la primera seccion de la tienda
