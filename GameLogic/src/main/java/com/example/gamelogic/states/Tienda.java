@@ -29,6 +29,10 @@ public class Tienda implements State {
     //El item seleccionado en la tienda
     private JSONObject currentItem=null;
     private UIManager ui;
+
+    JSONObject shopSection=null;
+    Iterator<String> shopItem=null;
+
     public Tienda(AndroidEngine engine,AndroidMobile mobile,JSONObject save){
         this.save =save;
         this.engine=engine;
@@ -74,8 +78,6 @@ public class Tienda implements State {
     private void inicializarScroll(){
         float initXText = 100;
         float initYText = 200, offsetTextY = 1;
-        int numTexts = 0;
-
         //Iterador que apunta a la primera seccion de la tienda
         Iterator<String> it = shop.keys();
         try {
@@ -83,6 +85,8 @@ public class Tienda implements State {
                 //Creamos el text con el nombre de la seccion definida en el json
                 Text textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
                 String nombreSeccion = it.next();
+                shopSection=shop.getJSONObject(nombreSeccion);
+                shopItem=shopSection.keys();
                 textoSeccion.setText(nombreSeccion);
                 textoSeccion.setId(textoSeccion.getId() + i);
                 textoSeccion.setX(initXText);
@@ -120,14 +124,13 @@ public class Tienda implements State {
      * @param b boton al que le queremos setear el callback
      */
     public void setCallbackButtonShopItem(Button b) {
-        /*try {
-            JSONObject callback = b.getCallback();
-            JSONObject item=callback.getJSONObject("item");
+        try {
+            final JSONObject item=shopSection.getJSONObject(shopItem.next());
             b.setOnClickListener( () -> {prepararCompra(item,b);
             });
         } catch (JSONException e) {
             throw new RuntimeException(e);
-        }*/
+        }
     }
 
     /**
@@ -176,18 +179,18 @@ public class Tienda implements State {
         b.setColor(Color.AMARILLO_CLARO.getHex());
         this.currentItem=item;
         try {
-            //Caso en que el item ya esté comprado
-            if(this.save.getJSONObject("itemsComprados").has(item.getString("ID"))) {
-                this.ui.changeVisualElementStateOfType("compra",false);
-                this.ui.changeVisualElementStateOfType("yacomprado",true);
-            }
-            //Caso en el que el item este sin comprar
-            else {
+//            //Caso en que el item ya esté comprado
+//            if(this.save.getJSONObject("itemsComprados").has(item.getString("ID"))) {
+//                this.ui.changeVisualElementStateOfType("compra",false);
+//                this.ui.changeVisualElementStateOfType("yacomprado",true);
+//            }
+//            //Caso en el que el item este sin comprar
+//            else {
                 this.ui.changeVisualElementStateOfType("compra",true);
                 this.ui.changeVisualElementStateOfType("yacomprado",false);
-                this.ui.getTextUI("TEXT_DESCRIPTION").setText(item.getString("descripcion"));
-                this.ui.getTextUI("TEXT_PRECIO").setText("Coste:"+item.getInt("precio"));
-            }
+                this.ui.getTextUI("TEXT_DESCRIPTION").setText(item.getString("Descripcion"));
+                this.ui.getTextUI("TEXT_PRECIO").setText("Coste:"+item.getInt("Precio"));
+//            }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
