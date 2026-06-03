@@ -46,9 +46,10 @@ public class GameLogic implements State {
     //Variable que indica en que nivel estamos
     int levelNumber;
 
+    private int towersCount;
+
     //Json que maneja el estilo de los botones y textos
     JSONObject style;
-
     JSONObject prefabs;
 
     //Arrays de casillas, torres y enemigos
@@ -449,31 +450,13 @@ public class GameLogic implements State {
     }
 
     private void initButtonsPlay(){
+
         try {
             JSONArray torresDesbloqueadas = this.save.getJSONArray("towers_unlocked");
             JSONObject skinsEquipadas = this.save.getJSONObject("skins_equipped");
             int n = torresDesbloqueadas.length();
 
-            int initX = 440;
-            int posY = 360;
-            int offsetX = 60;
-
-            for(int i = 0; i < n;i++){
-                Button b = new Button(prefabs.getJSONObject("BotonTower"));
-                int posX = initX + (i * offsetX);
-                b.setX(posX); b.setY(posY);
-
-                //Determinar la skin
-                
-
-
-
-
-
-            }
-
-
-
+            this.ui.createPrefabs(this.prefabs.getJSONObject("BotonTower"),n);
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -525,18 +508,12 @@ public class GameLogic implements State {
     {
         JSONObject callback= b.getCallback();
         try {
-            TipoTorre tipo = TipoTorre.valueOf(callback.getString("TipoTorre"));
-            JSONObject torre=this.save.getJSONObject("torres").getJSONObject(tipo.toString());
-            if(torre.getBoolean("active")) {
+            String torre=this.save.getJSONArray("towers_unlocked").getString(towersCount);
+            TipoTorre tipo = TipoTorre.valueOf(torre);
                 b.setOnClickListener(() ->
                         this.prepararConstruccion(Integer.parseInt(b.getTextButton().getText()), tipo,b));
-                setButtonSkin(torre.getString("skin"),b);
-            }
-            else {
-                b.setEnabled(false);
-                b.setVisible(false);
-                this.ui.unloadVisualElementOfType("tower",b);
-            }
+                setButtonSkin(this.save.getJSONObject("skins_equipped").getString(tipo.toString()),b);
+                towersCount++;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -555,7 +532,6 @@ public class GameLogic implements State {
         }
         else {
             b.getImgButton().setVisible(false);
-            b.cleanImages();
             b.getFigButton().setVisible(true);
         }
     }

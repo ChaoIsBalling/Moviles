@@ -320,7 +320,7 @@ public class UIManager {
                  prefabButton.setY(prefabButton.getY() + prefabButton.getHeight() * (float) yIndex * yOffset);
                 prefabButton.setX(prefabButton.getX() + prefabButton.getWidth() * (float) xIndex * xOffset);
                 xIndex++;
-                if (prefabButton.getX() > xLimit) {
+                if (prefabButton.getX() > xLimit&&xLimit!=-1) {
                 xIndex = 0;
                 yIndex++;
                 }
@@ -369,7 +369,6 @@ public class UIManager {
                 scrollableElements.get(i).setY(newY);
             }
         }
-
     }
     //si el evento es de tipo TouchDown guardamos el ultimo valor de la Y y ponemo a true el scroll
     public void onTouchDown(TouchEvent e){

@@ -1,105 +1,6 @@
 {
   "buttons": [
     {
-      "id": "BUT_RAYO",
-      "type": "tower",
-      "x": 440, "y": 360, "w": 50, "h": 50,
-      "isRound": true, "ar": 20, "color": "#FFFFFFFF",
-      "text": {
-        "id": "costeMejoraTriangulos",
-        "texto": "100", "font": "Inika-Regular.ttf",
-        "x": 0, "y": 15, "size": 15, "bold": true, "italic": true, "color": "#FF000000"
-      },
-       "figure" :{
-          "id": "triRayo",
-          "form": "triangle",
-          "x": 0, "y":0,
-          "r": 15,
-          "color": "#FF000000",
-          "fill": true,
-          "visible": true
-      },
-      "icon" :{
-         "id": "TRayo",
-         "imagen": "TorreRayo.png", 
-         "x": -15, "y": -20, 
-         "w": 35, "h": 35 ,
-         "visible": true
-      },
-      "callback":
-      {
-        "method":"setCallbackButtonTower",
-        "TipoTorre":"RAYO"
-      }
-    },
-    {
-      "id": "BUT_HIELO",
-      "type":"tower",
-      "x": 500, "y": 360, "w": 50, "h": 50,
-      "isRound": true, "ar": 20, "color": "#FFFFFFFF",
-      "text": {
-        "id": "costeMejoraCuadrados",
-        "texto": "150", "font": "Inika-Regular.ttf",
-        "x": 0, "y": 15, "size": 15, "bold": true, "italic": true, "color": "#FF000000"
-      },
-      "figure" :{
-          "id": "cuadradoHielo",
-          "form": "square",
-          "x": 0, "y": -5,
-          "w": 30, "h": 30,
-          "color": "#FFC8A2C8",
-          "fill": true,
-          "round": true,
-          "r": 3,
-          "visible": true
-      },
-      "icon" :{
-         "id": "THielo",
-         "imagen": "TorreHielo.png", 
-         "x": -15, "y": -20, 
-         "w": 35, "h": 35,
-         "visible": true
-      },
-      "callback":
-      {
-        "method":"setCallbackButtonTower",
-        "TipoTorre":"HIELO"
-      }
-    },
-    {
-      "id": "BUT_FUEGO",
-      "type":"tower",
-      "x": 560, "y": 360, "w": 50, "h": 50,
-      "isRound": true, "ar": 20, "color": "#FFFFFFFF",
-      "text": {
-        "id": "costeMejoraHexagonos",
-        "texto": "200", "font": "Inika-Regular.ttf",
-        "x": 0, "y": 15, "size": 15, "bold": true, "italic": true, "color": "#FF000000"
-      }, 
-       "figure" :{
-          "id": "hexFuego",
-          "form": "hexagon",
-          "x": 0, "y":-5,
-          "r": 15,
-          "color": "#FFFF0000",
-          "fill": true,
-          "visible": true
-      },
-      "icon" :{
-         "id": "TFuego",
-         "imagen": "TorreFuego.png", 
-         "x": -15, "y": -20, 
-         "w": 35, "h": 35,
-         "visible": true
-      },
-      "callback":
-      {
-        "method":"setCallbackButtonTower",
-        "TipoTorre":"FUEGO"         
-      }
-    },
-
-    {
       "id": "BUT_ATAQUE",
       "type":"upgrade",
       "x": 440, "y": 360, "w": 50, "h": 50,
@@ -167,29 +68,6 @@
       {
         "method":"setCallbackButtonUpgrade",
         "TipoMejora":"VELOCIDAD"          
-      }
-    },
-    {
-      "id": "BUT_MINI",
-       "type":"tower",
-      "x": 380, "y": 360, "w": 50, "h": 50,
-      "isRound": true, "ar": 20, "color": "#FFFFFFFF",
-      "text": {
-        "id": "costeMejoraMini",
-        "texto": "50", "font": "Inika-Regular.ttf",
-        "x": 0, "y": 15, "size": 15, "bold": true, "italic": true, "color": "#FF000000"
-      },
-      "icon": {
-        "id":"TMini",
-        "imagen": "MiniTorreRayo.png",
-        "x": -15, "y": -20, 
-        "w": 35, "h": 35,
-        "visible": true
-      },
-      "callback":
-      {
-        "method":"setCallbackButtonTower",
-        "TipoTorre":"MINI"              
       }
     }
   ],

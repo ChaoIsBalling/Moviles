@@ -1,0 +1,54 @@
+{
+    "Torres":
+    {
+        "RAYO":
+        {
+            "Coste":100
+        },
+        "FUEGO":
+        {
+            "Coste":150
+        },
+        "HIELO":
+        {
+            "Coste":200
+        },
+        "MINI":
+        {
+            "Coste":100
+        }
+
+    },
+    "Skins":
+    {
+        "RAYO":
+        {
+            "figure" :{
+          "id": "triRayo",
+          "form": "triangle",
+          "x": 0, "y":0,
+          "r": 15,
+          "color": "#FF000000",
+          "fill": true,
+          "visible": true
+      },
+        },
+        "FUEGO":
+        {
+
+        },
+        "HIELO":
+        {
+
+        },
+        "MINI":
+        {
+            
+        }
+    },
+    "Fondos":
+    {
+
+    }
+
+}
