@@ -7,6 +7,7 @@ import com.example.gamelogic.VisualElements.Text;
 import com.example.gamelogic.VisualElements.VisualElement;
 
 import com.example.androidengine.TouchEvent;
+import com.example.gamelogic.VisualElements.figure.Circle;
 import com.example.gamelogic.VisualElements.figure.Figure;
 import com.example.gamelogic.VisualElements.figure.Hexagon;
 import com.example.gamelogic.VisualElements.figure.Square;
@@ -31,6 +32,8 @@ public class Button extends VisualElement {
     //Radio del arco bordeado
     private float arcRadius;
 
+    private AndroidGraphics gr;
+
     //Texto del boton
     Text text;
     //id del boton
@@ -46,22 +49,6 @@ public class Button extends VisualElement {
     private ButtonClickListener onClickFunction;
 
 
-    //Constructora que te crea un boton a partir de un Json
-    public Button(JSONObject json)
-    {
-        super(json);
-        try {
-            this.w= json.getInt("w");
-            this.h=json.getInt("h");
-            this.isRound=json.getBoolean("isRound");
-            if(isRound)
-                this.arcRadius=json.getInt("ar");
-
-            this.color=json.getString("color");
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     //Constructora que te crea un boton a partir de un Json con mas parametros
     //Quitar el booleano luego, es solo para hacer otra constrctora
@@ -69,6 +56,7 @@ public class Button extends VisualElement {
     {
         super(json);
         try {
+            this.gr=gr;
             this.id=json.getString("id");
             this.w= json.getInt("w");
             this.h=json.getInt("h");
@@ -88,18 +76,7 @@ public class Button extends VisualElement {
 
             JSONObject figData = json.optJSONObject("figure");
             if(figData != null){
-                String form = figData.getString("form");
-                switch (form){
-                    case "triangle":
-                        this.figure= new Triangle(figData);
-                        break;
-                    case "square":
-                        this.figure= new Square(figData);
-                        break;
-                    case "hexagon":
-                        this.figure=new Hexagon(figData);
-                        break;
-                }
+               setFigure(figData);
             }
 
             JSONObject iconData = json.optJSONObject("icon");
@@ -125,11 +102,30 @@ public class Button extends VisualElement {
 
     //setters
     public void setColor(String color){ this.color = color; }
-    public void setFigures(Figure fig){
-        this.figure=fig;
+    public void setFigure(JSONObject figData){
+        String form = null;
+        try {
+            form = figData.getString("form");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        switch (form){
+            case "triangle":
+                this.figure= new Triangle(figData);
+                break;
+            case "square":
+                this.figure= new Square(figData);
+                break;
+            case "hexagon":
+                this.figure=new Hexagon(figData);
+                break;
+            case "circle":
+                this.figure=new Circle(figData);
+                break;
+        }
     }
-    public void setImages(Image img){
-        this.image=img;
+    public void setImage(JSONObject obj){
+        this.image=new Image(obj,this.gr);
     }
 
     public void cleanImages(){this.image=null;}

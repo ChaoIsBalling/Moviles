@@ -116,43 +116,6 @@ public class MainActivity extends AppCompatActivity {
 
             obj.put("background", "#FFFFFFFF");
 
-            /*obj.put("rayo",false);
-            obj.put("fuego",false);
-            obj.put("hielo",false);
-            obj.put("mini",false);
-
-            JSONObject itemsComprados= new JSONObject();
-            obj.put("itemsComprados",itemsComprados);
-
-            JSONObject torres=new JSONObject();
-            JSONObject torre = new JSONObject();
-            torre.put("id", "BUT_RAYO");
-            torre.put("skin", "Figura");
-            torre.put("active",true);
-            torres.put("RAYO",torre);
-            torre = new JSONObject();
-            torre.put("id", "BUT_HIELO");
-            torre.put("skin", "Figura");
-            torre.put("active",true);
-            torres.put("HIELO",torre);
-            torre = new JSONObject();
-            torre.put("id", "BUT_FUEGO");
-            torre.put("skin", "Figura");
-            torre.put("active",true);
-            torres.put("FUEGO",torre);
-            torre = new JSONObject();
-            torre.put("id", "BUT_MINI");
-            torre.put("skin", "Figura");
-            torre.put("active",false);
-            torres.put("MINI",torre);
-            obj.put("torres",torres);
-
-            obj.put("skinRayo","Figura");
-            obj.put("skinFuego","Figura");
-            obj.put("skinHielo","Figura");
-            obj.put("rojo",false);
-            obj.put("azul",false);
-            obj.put("fondo","#FFFFFFFF");*/
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
