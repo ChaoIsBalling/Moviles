@@ -23,17 +23,12 @@ public class WaveManager {
     private int oleadaActual; //Oleada en la que estamos ahora
     private int oleadasRestantes; //Oleadas que quedan para acabar el nivel
 
-    // Control de la oleada activa
-    private int totalGrupos;       // Numero total de grupos en la oleada
-    private int gruposGenerados;   // Contador de grupos generados
-
     // Control del grupo activo
     private int enemigosPorGrupo;  // Numero total de enemigos en un grupo
     private int enemigosGenerados; // Contador de enemigos generados en el grupo
 
     // Temporizadores
     private double timerOleada; //Tiempo hasta la generacion de la proxima oleada
-    private double timerGrupo; //Tiempo hasta la generacion del proximo grupo
     private double timerEnemigo; //Tiempo hasta la generacion del proximo enemigo
 
     // Tiempos fijos calculados
@@ -81,11 +76,7 @@ public class WaveManager {
         this.oleadaActual = 1;
 
         //Incializamos contadores de grupos y enemigos
-        this.gruposGenerados = 1; //Empieza en 1 para que no cuente un grupo de mas
         this.enemigosGenerados = 0;
-
-        //Numero de enemigos en un grupo y total de grupos -> en la primera oleada
-        this.totalGrupos = 1;
 
         try {
             this.enemigosPorGrupo = this.oleadasDatos.getJSONObject(0).getInt("amount");
@@ -95,8 +86,7 @@ public class WaveManager {
 
         //Inicializamos timers
         this.timerEnemigo= tiempoEntreEnemigos;
-        this.timerGrupo = tiempoEntreGrupos;
-        this.timerOleada = this.timerGrupo * this.totalGrupos;
+        this.timerOleada = tiempoEntreGrupos;
     }
 
     /**
@@ -107,51 +97,15 @@ public class WaveManager {
         //Si el juego ya no hay más oleadas, el WaveManager se desactiva.
         if (oleadasRestantes == 0) return;
 
-        //Si aun no hemos generado todos los enemigos del grupo...
-        if(enemigosGenerados < enemigosPorGrupo){
-            prepararSiguienteEnemigo();
-        }
-        //Si aun no hemos generado todos los grupos de la oleada...
-        else if(gruposGenerados < totalGrupos){
-            prepararSiguienteGrupo();
-        }
+        //Si aun no hemos generado todos los enemigos del grupo y ya se ha terminado la espera
+        if(enemigosGenerados < enemigosPorGrupo&&timerEnemigo <= 0)
+            generarEnemigo();
         //Preparamos la siguiente oleada
-        else{
+        else
             prepararSiguienteOleada();
-        }
+
         //Actualizamos los temporizadores
         actualizarTemporizadores(deltaTime);
-    }
-
-    /**
-     * Metodo para preparar el siguiente enemigo en caso de que se pueda hacer
-     */
-    private void prepararSiguienteEnemigo(){
-        if(timerEnemigo <= 0){
-            generarEnemigo();
-        }
-    }
-
-    /**
-     * Metodo para preparar el siguiente grupo de enemigos en caso de que se pueda hacer
-     */
-    private void prepararSiguienteGrupo() {
-        if(timerGrupo <= 0){
-            this.gruposGenerados++; //aumentamos el numero de grupos
-            this.timerGrupo = this.tiempoEntreGrupos; //reseteamos el timer del grupo
-
-            //Reseteamos contador de enemigos por grupoGenerados y su timer
-            this.enemigosGenerados = 0;
-            // El primer enemigo del grupo sale de inmediato
-            this.timerEnemigo = 0;
-
-            try {
-                this.enemigosPorGrupo = this.oleadasDatos.getJSONObject(
-                        (this.oleadaActual - 1)%this.oleadasDatos.length()).getInt("amount");
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     /**
@@ -164,15 +118,23 @@ public class WaveManager {
             this.oleadaActual++;
             this.oleadasRestantes--;
 
-            // Reseteamos contador de grupos para continuar generando grupos en la sig oleada
-            this.gruposGenerados = 0;
+            //Reseteamos contador de enemigos por grupoGenerados y su timer
+            this.enemigosGenerados = 0;
+            // El primer enemigo del grupo sale de inmediato
+            this.timerEnemigo = 0;
 
             // Calculamos cuánto tardará en salir la SIGUIENTE oleada cuando la actual termine
-            this.timerOleada = (this.tiempoEntreGrupos * this.totalGrupos) + (2 * this.oleadaActual);
+            this.timerOleada = (this.tiempoEntreGrupos) + (2 * this.oleadaActual);
 
             // Decimos al gl que actualice el HUD correctamente
             if (this.oleadasRestantes > 0) {
                 gl.actualizaOleadas(this.oleadaActual);
+            }
+            try {
+                this.enemigosPorGrupo = this.oleadasDatos.getJSONObject(
+                        (this.oleadaActual - 1)%this.oleadasDatos.length()).getInt("amount");
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -210,7 +172,6 @@ public class WaveManager {
 
     private void actualizarTemporizadores(double deltaTime){
         this.timerEnemigo -= deltaTime;
-        this.timerGrupo -= deltaTime;
         this.timerOleada -= deltaTime;
     }
 
