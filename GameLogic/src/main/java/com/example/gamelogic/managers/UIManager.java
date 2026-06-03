@@ -303,7 +303,7 @@ public class UIManager {
     }
 
     /**
-     * Metodo que crea un boton a partir de un archivo prefab (ideal para Mundo)
+     * Metodo que crea un boton a partir de un archivo prefab (ideal para Mundo, los botones de gameLogic y la Tienda)
      * @param prefab JSON Object que contiene la info del prefab
      * @param amount cantidad de prefabs que se quieren generar
      */
@@ -321,8 +321,8 @@ public class UIManager {
                 prefabButton.setX(prefabButton.getX() + prefabButton.getWidth() * (float) xIndex * xOffset);
                 xIndex++;
                 if (prefabButton.getX() > xLimit&&xLimit!=-1) {
-                xIndex = 0;
-                yIndex++;
+                    xIndex = 0;
+                    yIndex++;
                 }
                 prefabButton.setID(prefab.getString("id") + i);
                 botones.put(prefab.getString("id") + i, prefabButton);
@@ -336,6 +336,7 @@ public class UIManager {
         }
     }
     public void configurarLimitesScroll() {
+        //Se usa para ordenar todos los elemntos de arriba hacia abajo (no hay garantia de que se pongan de forma ordenada)
         Collections.sort(scrollableElements,(obj1,obj2)-> {
             if(obj1.getY()<obj2.getY()) return -1;
             if(obj1.getY()>obj2.getY()) return 1;
