@@ -90,26 +90,26 @@ public class MainActivity extends AppCompatActivity {
 
             //Object que contiene las skins equipadas
             JSONObject skins_eq = new JSONObject();
-            skins_eq.put("RAYO", "Figura");
-            skins_eq.put("HIELO", "Figura");
-            skins_eq.put("FUEGO", "Figura");
+            skins_eq.put("RAYO", "0");
+            skins_eq.put("HIELO", "0");
+            skins_eq.put("FUEGO", "0");
             obj.put("skins_equipped", skins_eq);
 
             //Object con las skins desbloqueadas para cada torre
             JSONObject skins_des = new JSONObject();
             //Rayo
             JSONArray skinsRayo = new JSONArray();
-            skinsRayo.put("Figura");
+            skinsRayo.put("0");
             skins_des.put("RAYO", skinsRayo);
 
             //Hielo
             JSONArray skinsHielo = new JSONArray();
-            skinsHielo.put("Figura");
+            skinsHielo.put("0");
             skins_des.put("HIELO", skinsHielo);
 
             //Fuego
             JSONArray skinsFuego = new JSONArray();
-            skinsFuego.put("Figura");
+            skinsFuego.put("0");
             skins_des.put("FUEGO", skinsFuego);
 
             obj.put("skins_available", skins_des);

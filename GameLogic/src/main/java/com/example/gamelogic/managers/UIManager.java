@@ -317,7 +317,7 @@ public class UIManager {
         int yIndex = 0;
              for (int i = 0; i < amount; i++) {
                 prefabButton = new Button(prefab, this.gr);
-                 prefabButton.setY(prefabButton.getY() + prefabButton.getHeight() * (float) yIndex * yOffset);
+                prefabButton.setY(prefabButton.getY() + prefabButton.getHeight() * (float) yIndex * yOffset);
                 prefabButton.setX(prefabButton.getX() + prefabButton.getWidth() * (float) xIndex * xOffset);
                 xIndex++;
                 if (prefabButton.getX() > xLimit&&xLimit!=-1) {

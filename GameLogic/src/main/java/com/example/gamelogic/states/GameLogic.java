@@ -48,10 +48,6 @@ public class GameLogic implements State {
 
     private int towersCount;
 
-    //Json que maneja el estilo de los botones y textos
-    JSONObject style;
-    JSONObject prefabs;
-
     //Arrays de casillas, torres y enemigos
     ArrayList<ArrayList<Casilla>> casillas;
     ArrayList<Tower> torres;
@@ -73,6 +69,11 @@ public class GameLogic implements State {
     int oleadasRestantes;//oleadas restantes
 
     private JSONObject save; //Archivo de Guardado del Juego
+    private JSONObject mapaObj;
+    //Json que maneja el estilo de los botones y textos
+    private JSONObject style;
+    private JSONObject prefabs;
+    private JSONObject items;
     JSONArray camino; //Array con el numero de puntos que debe recorrer el enemigo en JSON
     ArrayList<Vector2D> caminoEnemigos;//el camino que recorren los enemigos
 
@@ -100,7 +101,7 @@ public class GameLogic implements State {
     //JSONArray que gestiona las oleadas en el juego
     JSONArray oleadasDatos;
     //Para leer el mapa
-    JSONObject mapaObj;
+
 
     //Fondo del propio nivel
     private Image fondoNivel;
@@ -434,6 +435,7 @@ public class GameLogic implements State {
         //Leemos el json de estilos de botones y elementos del juego
         this.style = engine.readJsonFile("GameLogic/style.json");
         this.prefabs = engine.readJsonFile("GameLogic/enemies.json");
+        this.items=engine.readJsonFile("items.json");
         //Inicializamos todos los elementos de la UI
         this.ui = new UIManager(this.style,this.engine, this.gr);
         this.ui.setAllCallbacks();
@@ -510,32 +512,24 @@ public class GameLogic implements State {
         try {
             String torre=this.save.getJSONArray("towers_unlocked").getString(towersCount);
             TipoTorre tipo = TipoTorre.valueOf(torre);
+            int coste=this.items.getJSONObject("Torres").getJSONObject(torre).getInt("Coste");
+
+            b.changeText(Integer.toString(coste));
                 b.setOnClickListener(() ->
-                        this.prepararConstruccion(Integer.parseInt(b.getTextButton().getText()), tipo,b));
-                setButtonSkin(this.save.getJSONObject("skins_equipped").getString(tipo.toString()),b);
+                        this.prepararConstruccion(coste, tipo,b));
+
+                String skin=this.save.getJSONObject("skins_equipped").getString(tipo.toString());
+                JSONObject currSkin= this.items.getJSONObject("Skins").getJSONObject(torre).getJSONObject(skin);
+
+                if(currSkin.getString("type").equals("Figura"))
+                    b.setFigure(currSkin);
+                else
+                    b.setImage(currSkin);
                 towersCount++;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
     }
-    /**
-     * Metodo que gestiona la aplicacion de skins en las torres
-     * @param skin El String que indica si la torre tiene una skin o no
-     * @param b El boton al que aplicamos la skin
-     */
-    private void setButtonSkin(String skin,Button b)
-    {
-        if (!skin.equals("Figura")){
-            b.getImgButton().setVisible(true);
-            b.getFigButton().setVisible(false);
-        }
-        else {
-            b.getImgButton().setVisible(false);
-            b.getFigButton().setVisible(true);
-        }
-    }
-
     /**
      * Metodo que activa/desactiva el grupo de botones que corresponda
      * @param type El tipo de boton que queremos activar/desactivar
