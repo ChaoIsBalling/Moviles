@@ -51,7 +51,7 @@ public class WaveManager {
     private JSONArray oleadasDatos;
 
     //JSON que contiene las imagenes de los enemigos
-    private JSONObject imagesEnemies;
+    private JSONObject enemiesJSON;
     //private JSONObject styleLevel;
 
     //Referencia al graphics de Android
@@ -69,7 +69,7 @@ public class WaveManager {
         this.oleadasDatos = olDatos;
         this.gr = gr;
 
-        this.imagesEnemies = engine.readJsonFile("GameLogic/enemies.json");
+        this.enemiesJSON = engine.readJsonFile("GameLogic/enemies.json");
 
         //Si no hay ningun enemigo, paramos la incializacion
         if(this.oleadasDatos.length() == 0) {
@@ -85,7 +85,6 @@ public class WaveManager {
         this.enemigosGenerados = 0;
 
         //Numero de enemigos en un grupo y total de grupos -> en la primera oleada
-        //this.enemigosPorGrupo = 1;
         this.totalGrupos = 1;
 
         try {
@@ -184,28 +183,16 @@ public class WaveManager {
      */
     private void generarEnemigo() {
         TipoTorre tipo;
-        String enemy = null;
+        JSONObject enemy = null;
         Image im;
         try {
             //Los indices van de 0 a numOleadas-1
-            enemy = this.oleadasDatos.getJSONObject(this.oleadaActual - 1).getString("enemy");
-
-            if(enemy.equals("goblin")) {
-                tipo = TipoTorre.RAYO;
-                im = new Image(this.imagesEnemies.getJSONObject("ImagenGoblin"),this.gr);
-            }
-            else if(enemy.equals("imp")) {
-                tipo = TipoTorre.FUEGO;
-                im = new Image(this.imagesEnemies.getJSONObject("ImagenImp"),this.gr);
-            }
-            else {
-                tipo = TipoTorre.HIELO;
-                im = new Image(this.imagesEnemies.getJSONObject("ImagenOgre"),this.gr);
-            }
+            enemy =enemiesJSON.getJSONObject(this.oleadasDatos.getJSONObject(this.oleadaActual - 1).getString("enemy"));
+            tipo=TipoTorre.valueOf(enemy.getString("tipo"));
+            im = new Image(enemy.getJSONObject("image"),this.gr);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
 
         float vida = 8 + (this.mejoraVida * (this.oleadaActual - 1));
         float vel = 30 + (this.mejoraVelocidad * (this.oleadaActual - 1));
@@ -228,23 +215,12 @@ public class WaveManager {
     }
 
     /**
-     * Metodo que aumenta la dificiltad del juego modificando los parametros que determinan
-     * cuantos grupos se generan por oleada y los enemigos en dicho grupo
-     */
-    /*private void aumentarDificultad(){
-        this.totalGrupos++; //se aumenta en 1 el grupo de ls siguiente oleada y los enemigos en el grupo
-        this.enemigosPorGrupo++;
-        this.tiempoEntreGrupos += (this.oleadaActual - 1); //Se tarda más en generar los grupos de la siguiente oleada
-    }*/
-
-    /**
      * Metodo que resetea los temporizador de las oleadas en funcion de la oleada actual
      * cuanto mayor sea la oleada actual, más aumentará el valor del timer de oleadas
      */
     private void resetearTemporizadorOleadas(){
         // Calculamos cuánto tardará en salir la SIGUIENTE oleada cuando la actual termine
         //this.timerOleada = (this.tiempoEntreGrupos * this.totalGrupos) + (2 * this.oleadaActual);
-
         this.timerOleada = 5.0;
     }
 

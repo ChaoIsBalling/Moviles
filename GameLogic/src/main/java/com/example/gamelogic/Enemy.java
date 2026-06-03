@@ -98,8 +98,6 @@ public class Enemy {
         else // quitamos vida
             this.vida -= Math.max(damMinimo, damEfectivo);
 
-        //System.out.println("("+damage+","+tipo+")");
-        //System.out.println(this.vida);
     }
 
     public void setImagen(Image img){this.imagen = img;}
@@ -121,7 +119,6 @@ public class Enemy {
         //Posicion a la que queremos llegar
         float targetX = gl.getRealX(objetivo.getY());
         float targetY = gl.getRealY(objetivo.getX());
-        //System.out.println(targetX + ","+ targetY);
 
         //Direccion a la que debemos ir
         float dirX = targetX - this.x;

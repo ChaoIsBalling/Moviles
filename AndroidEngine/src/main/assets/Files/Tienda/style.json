@@ -1,311 +1,241 @@
 {
-    "EstandarBoton":    
-    {   
-        "x":100,
-        "y":200,
-        "w":100,
-        "h":100,
-        "isRound":true,
-        "ar":15,
-        "color":"#FFFFFFFF"
-    },
-    "EstandarImagen":
+  "buttons": [
     {
-        "x":-50,
-        "y":-50,
-        "w":100,
-        "h":100
+      "id": "BUT_VOLVER",
+      "type":"ui",
+      "x": 30,
+      "y": 50,
+      "w": 30,
+      "h": 30,
+      "isRound": true,
+      "ar": 15,
+      "color": "#FFFFFFFF",
+      "icon": {
+        "id": "ICON_VOLVER",
+        "imagen": "Volver.png",
+        "x": -15,
+        "y": -15,
+        "w": -30,
+        "h": 30,
+        "visible": true
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonReturn"
+      }
     },
-    "EstandarCuadrado":    
-    {   
-        "x":0,
-        "y":0,
-        "w":80,
-        "h":80,
-        "r":0,
-        "color":"#FFFFFFFF",
-        "fill":true,
-        "visible":true,
-        "round":false
-    },
-    "EstandarTriangulo":    
-    {   "x":0,
-        "y":0,
-        "r":50,
-        "fill":true,
-        "color":"#FFFFFFFF",
-        "visible":true
-    },
-    "EstandarHexagono":    
-    {   "x":0,
-        "y":0,
-        "r":50,
-        "fill":true,
-        "visible":true,
-        "color":"#FFFFFFFF"
-    },
-    "EstandarCirculo":    
-    {   "x":0,
-        "y":0,
-        "r":50,
-        "fill":true,
-        "visible":true,
-        "color":"#FFFFFFFF"
-    },
-    "BotonesDesbloqueoTorre":[
-        {
-            "coste":50,
-            "descripcion":"\n Nueva torre como\n la torre de rayo\n pero mas rapida",
-            "tieneImagen":true,
-            "imagen":"MiniTorreRayo.png",
-            "tieneForma":false,
-            "desbloqueo":"mini"
-        }
-    ],
-    "BotonesDesbloqueoSkin":[
-        {
-            "coste":100,
-            "descripcion":"\nCosmetico de la\n torre de Rayo",
-            "tieneImagen":true,
-            "imagen":"TorreRayo.png",
-            "tieneForma":false,
-            "desbloqueo":"rayo"
-        },
-        {
-            "coste":150,
-            "descripcion":"\nCosmetico de la\ntorre de Fuego",
-            "tieneImagen":true,
-            "imagen":"TorreFuego.png",
-            "tieneForma":false,
-            "desbloqueo":"fuego"
-        },
-        {
-            "coste":200,
-            "descripcion":"\nCosmetico de la\n torre de Hielo",
-            "tieneImagen":true,
-            "imagen":"TorreHielo.png",
-            "tieneForma":false,
-            "desbloqueo":"hielo"
-        }
-    ],
-    "BotonesDesbloqueoFondo":[
-        {
-            "coste":100,
-            "descripcion":"\n Nuevo color\nde fondo rojo",
-            "tieneImagen":false,
-            "tieneForma":true,
-            "tipoForma":"cuadrado",
-            "colorForma":"#FFFF0000",
-            "desbloqueo":"rojo"
-        },
-        {
-            "coste":100,
-            "descripcion":"\n Nuevo color\nde fondo azul",
-            "tieneImagen":false,
-            "tieneForma":true,
-            "tipoForma":"cuadrado",
-            "colorForma":"#FF0000FF",
-            "desbloqueo":"azul"
-        }
-    ],
-    "BotonesCambio":[
-        {
-            "tieneImagen":false,
-            "tieneForma":true,
-            "tipoForma":"triangulo",
-            "colorForma":"#FF000000",
-            "desbloqueo":"rayo",
-            "guardado":"skinRayo",
-            "datoGuardado":"Figura"
-        },
-        {
-            "tieneImagen":true,
-            "imagen":"TorreRayo.png",
-            "tieneForma":false,
-            "desbloqueo":"rayo",
-            "guardado":"skinRayo",
-            "datoGuardado":"TorreRayoCosmetico"
-        },
-        {
-            "tieneImagen":false,
-            "tieneForma":true,
-            "tipoForma":"hexagono",
-            "colorForma":"#FFFF0000",
-            "desbloqueo":"fuego",
-            "guardado":"skinFuego",
-            "datoGuardado":"Figura"
-        },
-        {
-            "tieneImagen":true,
-            "imagen":"TorreFuego.png",
-            "tieneForma":false,
-            "desbloqueo":"fuego",
-            "guardado":"skinFuego",
-            "datoGuardado":"TorreFuegoCosmetico"
-        },
-        {
-            "tieneImagen":false,
-            "tieneForma":true,
-            "tipoForma":"cuadrado",
-            "colorForma":"#FFC8A2C8",
-            "desbloqueo":"hielo",
-            "guardado":"skinHielo",
-            "datoGuardado":"Figura"
-        },
-        {
-            "tieneImagen":true,
-            "imagen":"TorreHielo.png",
-            "tieneForma":false,
-            "desbloqueo":"hielo",
-            "guardado":"skinHielo",
-            "datoGuardado":"TorreHieloCosmetico"
-        },
-        {
-            "tieneImagen":false,
-            "tieneForma":true,
-            "tipoForma":"cuadrado",
-            "colorForma":"#FFFFFFFF",
-            "desbloqueo":"rojo",
-            "guardado":"fondo",
-            "datoGuardado":"#FFFFFFFF"
-        },
-        {
-            "tieneImagen":false,
-            "tieneForma":true,
-            "tipoForma":"cuadrado",
-            "colorForma":"#FFFF0000",
-            "desbloqueo":"rojo",
-            "guardado":"fondo",
-            "datoGuardado":"#FFFF0000"
-        },
-        {
-            "tieneImagen":false,
-            "tieneForma":true,
-            "tipoForma":"cuadrado",
-            "colorForma":"#FFFFFFFF",
-            "desbloqueo":"azul",
-            "guardado":"fondo",
-            "datoGuardado":"#FFFFFFFF"
-        },
-        {
-            "tieneImagen":false,
-            "tieneForma":true,
-            "tipoForma":"cuadrado",
-            "colorForma":"#FF0000FF",
-            "desbloqueo":"azul",
-            "guardado":"fondo",
-            "datoGuardado":"#FF0000FF"
-        }
-    ],
-    "InitBotonCompra":{
-        "x":100,
-        "y":200
-    },
-    "InitBotonCambio":{
-        "x":420,
-        "y":170
-    },
-    "CompraPorFila":2,
-    "CambioPorFila":2,
-    "BotonVolver":    
-    {   "x":30,
-        "y":30,
-        "w":30,
-        "h":30,
-        "isRound":true,
-        "ar":15,
-        "color":"#FFFFffff"
-    },
-    "ImagenVolver":
-    {
-        "imagen":"Volver.png",
-        "x":-15,
-        "y":-15,
-        "w":-30,
-        "h":30
-    },
-        "TextoDiamantes":
-    {
-        "texto":"0",
-        "font":"Inika-Regular.ttf",
-        "x":300,
-        "y":50,
-        "size":40,
-        "bold":true,
-        "italic":true,
-        "color":"#FF00FFFF"
-    },
-    "TextoCoste":
-    {
-        "texto":"Coste:",
-        "font":"Inika-Regular.ttf",
-        "x":470,
-        "y":150,
-        "size":30,
-        "bold":true,
-        "italic":true,
-        "color":"#FF000000"
-    },
-    "BotonComprar":    
-    {   "x":470,
-        "y":350,
-        "w":100,
-        "h":50,
-        "isRound":true,
-        "ar":15,
-        "color":"#FF0000ff"
-    },
-    "TextoComprar":
-    {
-        "texto":"Comprar",
-        "font":"Inika-Regular.ttf",
-        "x":0,
-        "y":0,
-        "size":20,
-        "bold":true,
-        "italic":true,
-        "color":"#FFffffff"
-    },
-    "TextoCTorres":
-    {
-        "texto":"Nuevas torres",
-        "font":"Inika-Regular.ttf",
-        "x":150,
-        "y":100,
-        "size":40,
-        "bold":true,
-        "italic":true,
-        "color":"#FF000000"
-    },
-    "TextoCSkins":
-    {
-        "texto":"Nuevos aspectos",
-        "font":"Inika-Regular.ttf",
-        "x":170,
-        "y":270,
-        "size":40,
-        "bold":true,
-        "italic":true,
-        "color":"#FF000000"
-    },
-    "ImagenDiamante":
-    {
-        "imagen":"Diamante.png",
-        "x":230,
-        "y":25,
-        "w":50,
-        "h":50
-    },
-    "TextoColores":
-    {
-        "texto":"Colores fondo",
-        "font":"Inika-Regular.ttf",
-        "x":170,
-        "y":570,
-        "size":40,
-        "bold":true,
-        "italic":true,
-        "color":"#FF000000"
-    }
 
+    {
+      "id": "BUT_COMPRAR",
+      "type":"compra",
+       "layer":1,
+      "x": 480,
+      "y": 350,
+      "w": 200,
+      "h": 50,
+      "isRound": true,
+      "ar": 20,
+      "color":"#FF999999",
+      "text": {
+        "id": "TEXT_BOTON_COMPRAR",
+        "texto": "Comprar",
+        "font": "Inika-Regular.ttf",
+        "x": 0,
+        "y": 0,
+        "size": 30,
+        "bold": true,
+        "italic": true,
+        "color": "#FF00FFFF"
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonBuy"
+      }
+    }, 
+    
+    {
+      "id": "BUT_CAMBIAR",
+      "type":"cambio",
+      "layer":1,
+      "x": 480,
+      "y": 250,
+      "w": 200,
+      "h": 50,
+      "isRound": true,
+      "ar": 20,
+      "color":"#FF999999",
+      "text": {
+        "id": "TEXT_BOTON_CAMBIAR",
+        "texto": "Cambiar aspecto",
+        "font": "Inika-Regular.ttf",
+        "x": 0, "y": 0,
+        "size": 20,
+        "bold": true,
+        "italic": true,
+        "color": "#FF00FFFF"
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonChangeSkin"
+      }
+    },
+    {
+      "id": "BUT_SKINTORRE",
+      "type":"item",
+      "x": 30,
+      "y": 200,
+      "w": 100,
+      "h": 100,
+      "isRound": true,
+      "ar": 15,
+      "color": "#FFFFFFFF",
+      "icon" :{
+         "id": "TRayo",
+         "imagen": "TorreRayo.png", 
+          "x": -30, "y": -40, 
+         "w": 80, "h": 80 ,
+         "visible": true
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonShopItem",
+        "item":{  
+          "ID":"MININ'T",
+          "descripcion":"Hola",
+          "precio":10
+        }
+      }
+    },  
+    {
+      "id": "BUT_SKINTORRE2",
+      "type":"item",
+      "x": 230,
+      "y": 200,
+      "w": 100,
+      "h": 100,
+      "isRound": true,
+      "ar": 15,
+      "color": "#FFFFFFFF",
+      "icon" :{
+         "id": "TMINI",
+         "imagen": "MiniTorreRayo.png", 
+          "x": -30, "y": -40, 
+         "w": 80, "h": 80 ,
+         "visible": true
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonShopItem",
+        "item":{  
+          "ID":"MINI",
+          "descripcion":"adios",
+          "precio":100
+        }
+        
+      }
+    }
+  ],
+
+  "images": [
+    {
+      "id": "IMG_DIAMANTE",
+      "imagen": "Diamante.png",
+      "x": 230,
+      "y": 25,
+      "w": 50,
+      "h": 50,
+      "isHUD": true,
+      "visible": true
+    }
+  ],
+  "figures":[
+    {
+      "id": "FIGURE_SHOP_BG",
+      "form": "square",
+      "x": 500, "y": 300,
+      "w": 300, "h": 400,
+      "color": "#ff00ffff",
+      "fill": true,
+      "round": false,
+      "r": 0,
+      "visible": true
+    }
+  ],
+
+  "texts": [
+    {
+      "id": "TEXT_DIAMANTES",
+      "texto": "0",
+      "font": "Inika-Regular.ttf",
+      "x": 300,
+      "y": 50,
+      "size": 40,
+      "bold": true,
+      "italic": true,
+      "color": "#FF00FFFF"
+    },
+     {
+      "id": "TEXT_DESCRIPTION",
+      "type":"compra",
+      "layer":1,
+      "texto": "Prueba",
+      "font": "Inika-Regular.ttf",
+      "x":470,
+      "y":150,
+      "size": 40,
+      "bold": true,
+      "italic": true,
+      "color": "#FF000000"
+    }
+    ,
+     {
+      "id": "TEXT_PRECIO",
+      "type":"compra",
+      "layer":1,
+      "texto": "Coste:0",
+      "font": "Inika-Regular.ttf",
+      "x":470,
+      "y":100,
+      "size": 40,
+      "bold": true,
+      "italic": true,
+      "color": "#FF000000"
+    },
+     {
+      "id": "TEXT_YACOMPRADO",
+      "type":"yacomprado",
+      "layer":1,
+      "texto": "Este Item ya ha sido\n comprado, Gracias",
+      "font": "Inika-Regular.ttf",
+      "x":470,
+      "y":150,
+      "size": 40,
+      "bold": true,
+      "italic": true,
+      "color": "#FF000000"
+    }
+    ,
+     {
+      "id": "TEXT_SKINS",
+      "texto": "Nuevos Aspectos",
+      "font": "Inika-Regular.ttf",
+      "x":150,
+      "y":100,
+      "size": 40,
+      "bold": true,
+      "italic": true,
+      "color": "#FF000000"
+    },
+    {
+      "id": "TEXT_TOWERS",
+      "texto": "Nuevas Torres",
+      "font": "Inika-Regular.ttf",
+      "x":150,
+      "y":300,
+      "size": 40,
+      "bold": true,
+      "italic": true,
+      "color": "#FF000000"
+    }
+  ]
 }

@@ -3,19 +3,23 @@
     {
         "RAYO":
         {
-            "Coste":100
+            "Coste":100,
+            "Precio":200
         },
         "FUEGO":
         {
-            "Coste":150
+            "Coste":150,
+            "Precio":300
         },
         "HIELO":
         {
-            "Coste":200
+            "Coste":200,
+            "Precio":400
         },
         "MINI":
         {
-            "Coste":100
+            "Coste":100,
+            "Precio":50
         }
     },
 
@@ -24,6 +28,7 @@
         "RAYO":
         {
             "0" : {
+                "Precio":20,
                 "type": "Figura",
                 "id":  "triRayo",
                 "form": "triangle",
@@ -34,6 +39,7 @@
                 "visible": true
             },
             "1":{
+                "Precio":20,
                 "type": "Image",
                 "id": "TRayo",
                 "imagen": "TorreRayo.png", 
@@ -45,6 +51,7 @@
         "FUEGO":
         {
              "0" : {
+                "Precio":20,
                 "type": "Figura",
                 "id": "cuadradoHielo",
                 "form": "square",
@@ -56,7 +63,8 @@
                 "r": 3,
                 "visible": true
             },
-            "1":{
+            "1":{      
+                "Precio":20,
                 "type": "Image",
                 "imagen": "TorreHielo.png", 
                 "x": -15, "y": -20, 
@@ -68,6 +76,7 @@
         "HIELO":
         {
              "0" : {
+                "Precio":20,
                 "type": "Figura",
                 "id": "hexFuego",
                 "form": "hexagon",
@@ -78,6 +87,7 @@
                 "visible": true
             },
             "1":{
+                "Precio":20,
                 "type": "Image",
                 "id": "TFuego",
                 "imagen": "TorreFuego.png", 
@@ -89,6 +99,7 @@
         "MINI":
         {
             "0" : {
+                "Precio":20,
                 "type": "Image",
                 "id":"TMini",
                 "imagen": "MiniTorreRayo.png",

@@ -285,7 +285,6 @@ public class GameLogic implements State {
             //Si el enemigo llega a la casilla final
             if (this.enemigos.get(i).Win()) {
                 this.vida--;
-                //this.hud.actualizaVidas(this.vida);
                 this.ui.setTextUI(TEXT_VIDA_ID, String.valueOf(this.vida));
                 //Añadimos al enemigo en la lista de ganadores para que sea eliminado (se comprueba en el tercer if)
                 deadEnemies.add(this.enemigos.get(i));
@@ -296,7 +295,6 @@ public class GameLogic implements State {
                 this.ui.setTextUI(TEXT_DINERO_ID, String.valueOf(this.dinero));
             }
         }
-
         limpiarListaEnemigos();
     }
 
@@ -434,7 +432,7 @@ public class GameLogic implements State {
     public void inicializarUI() {
         //Leemos el json de estilos de botones y elementos del juego
         this.style = engine.readJsonFile("GameLogic/style.json");
-        this.prefabs = engine.readJsonFile("GameLogic/enemies.json");
+        this.prefabs = engine.readJsonFile("GameLogic/prefabs.json");
         this.items=engine.readJsonFile("items.json");
         //Inicializamos todos los elementos de la UI
         this.ui = new UIManager(this.style,this.engine, this.gr);

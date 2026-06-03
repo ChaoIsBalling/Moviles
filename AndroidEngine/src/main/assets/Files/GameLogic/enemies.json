@@ -1,5 +1,8 @@
+ {
+  
+  "imp":
     {
-    "ImagenImp":
+      "image":
     {
         "imagen":"Imp.png",
         "x":-15,
@@ -7,50 +10,31 @@
         "w":35,
         "h":35
     },
-    "ImagenGoblin":
-    {
+    "tipo":"FUEGO"
+    },
+    "goblin":
+    {   
+      "image":
+      {
         "imagen":"Goblin.png",
         "x":-15,
         "y":-20,
         "w":35,
         "h":35
+      },
+      "tipo":"RAYO"
     },
-    "ImagenOgre":
+    "ogre":
     {
+       "image":
+      {
         "imagen":"Ogre.png",
         "x":-15,
         "y":-20,
         "w":35,
         "h":35
-    },
-   
-    "BotonTower" :{
-      "id": "BUT_SEL",
-      "type": "tower",
-      "xOffset":-1.2,
-      "yOffset":0,
-      "xLimit":-1,
-      "x": 550, "y": 360, "w": 50, "h": 50,
-      "isRound": true, "ar": 20, 
-      "color": "#FFFFFFFF",
-        "text": {
-        "id": "TEXT_coste",
-        "texto": "0", "font": "Inika-Regular.ttf",
-        "x": 0, "y": 15, "size": 15, "bold": true, "italic": true, "color": "#FF000000"
       },
-      "callback":
-      {
-        "method":"setCallbackButtonTower"
-      }
-    },
-    "BotonUpgrade" :{
-      "id": "BUT_UP",
-      "type": "upgrade",
-       "xOffset":-1.2,
-      "yOffset":0,
-      "xLimit":-1,
-      "x": 550, "y": 360, "w": 50, "h": 50,
-      "isRound": true, "ar": 20, 
-      "color": "#FFFFFFFF"
-    }
-}
+      "tipo":"HIELO"
+   }
+  }
+   
