@@ -98,7 +98,7 @@ public class WaveManager {
         if (oleadasRestantes == 0) return;
 
         //Si aun no hemos generado todos los enemigos del grupo y ya se ha terminado la espera
-        if(enemigosGenerados < enemigosPorGrupo&&timerEnemigo <= 0)
+        if(enemigosGenerados < enemigosPorGrupo && timerEnemigo <= 0)
             generarEnemigo();
         //Preparamos la siguiente oleada
         else

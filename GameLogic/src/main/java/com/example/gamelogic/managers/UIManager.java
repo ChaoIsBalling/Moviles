@@ -146,7 +146,7 @@ public class UIManager {
             }
             if(obj.has("layer"))
             {
-                Integer layer= obj.getInt("layer");
+                int layer= obj.getInt("layer");
                 //esto es en caso de que hayan layers que no se usan o la lectura de layers no este en orden
                 while(layer>=visualElementRenderList.size()) {
                     visualElementRenderList.add(new ArrayList<>());}
