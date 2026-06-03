@@ -52,15 +52,13 @@
         {
              "0" : {
                 "Precio":20,
-                "type": "Figura",
-                "id": "cuadradoHielo",
-                "form": "square",
-                "x": 0, "y": -5,
-                "w": 30, "h": 30,
-                "color": "#FFC8A2C8",
+                 "type": "Figura",
+                "id": "hexFuego",
+                "form": "hexagon",
+                "x": 0, "y":-5,
+                "r": 15,
+                "color": "#FFFF0000",
                 "fill": true,
-                "round": true,
-                "r": 3,
                 "visible": true
             },
             "1":{      
@@ -78,13 +76,16 @@
              "0" : {
                 "Precio":20,
                 "type": "Figura",
-                "id": "hexFuego",
-                "form": "hexagon",
-                "x": 0, "y":-5,
-                "r": 15,
-                "color": "#FFFF0000",
+                "id": "cuadradoHielo",
+                "form": "square",
+                "x": 0, "y": -5,
+                "w": 30, "h": 30,
+                "color": "#FFC8A2C8",
                 "fill": true,
+                "round": true,
+                "r": 3,
                 "visible": true
+        
             },
             "1":{
                 "Precio":20,

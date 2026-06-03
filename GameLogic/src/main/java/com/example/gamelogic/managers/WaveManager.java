@@ -105,7 +105,7 @@ public class WaveManager {
      */
     public void update(double deltaTime) {
         //Si el juego ya no hay más oleadas, el WaveManager se desactiva.
-        if (oleadasRestantes <= 0) return;
+        if (oleadasRestantes == 0) return;
 
         //Si aun no hemos generado todos los enemigos del grupo...
         if(enemigosGenerados < enemigosPorGrupo){
@@ -145,10 +145,9 @@ public class WaveManager {
             // El primer enemigo del grupo sale de inmediato
             this.timerEnemigo = 0;
 
-            int oleadaIndex =this.oleadaActual - 1;
-            //int oleadasT = this.oleadasDatos.length();
             try {
-                this.enemigosPorGrupo = this.oleadasDatos.getJSONObject(oleadaIndex).getInt("amount");
+                this.enemigosPorGrupo = this.oleadasDatos.getJSONObject(
+                        (this.oleadaActual - 1)%this.oleadasDatos.length()).getInt("amount");
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -168,8 +167,8 @@ public class WaveManager {
             // Reseteamos contador de grupos para continuar generando grupos en la sig oleada
             this.gruposGenerados = 0;
 
-            //aumentarDificultad();
-            resetearTemporizadorOleadas();
+            // Calculamos cuánto tardará en salir la SIGUIENTE oleada cuando la actual termine
+            this.timerOleada = (this.tiempoEntreGrupos * this.totalGrupos) + (2 * this.oleadaActual);
 
             // Decimos al gl que actualice el HUD correctamente
             if (this.oleadasRestantes > 0) {
@@ -187,7 +186,8 @@ public class WaveManager {
         Image im;
         try {
             //Los indices van de 0 a numOleadas-1
-            enemy =enemiesJSON.getJSONObject(this.oleadasDatos.getJSONObject(this.oleadaActual - 1).getString("enemy"));
+            enemy =enemiesJSON.getJSONObject(this.oleadasDatos.getJSONObject(
+                    (this.oleadaActual - 1)%this.oleadasDatos.length()).getString("enemy"));
             tipo=TipoTorre.valueOf(enemy.getString("tipo"));
             im = new Image(enemy.getJSONObject("image"),this.gr);
         } catch (JSONException e) {
@@ -212,16 +212,6 @@ public class WaveManager {
         this.timerEnemigo -= deltaTime;
         this.timerGrupo -= deltaTime;
         this.timerOleada -= deltaTime;
-    }
-
-    /**
-     * Metodo que resetea los temporizador de las oleadas en funcion de la oleada actual
-     * cuanto mayor sea la oleada actual, más aumentará el valor del timer de oleadas
-     */
-    private void resetearTemporizadorOleadas(){
-        // Calculamos cuánto tardará en salir la SIGUIENTE oleada cuando la actual termine
-        //this.timerOleada = (this.tiempoEntreGrupos * this.totalGrupos) + (2 * this.oleadaActual);
-        this.timerOleada = 5.0;
     }
 
     /**
