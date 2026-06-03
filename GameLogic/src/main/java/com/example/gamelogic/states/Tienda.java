@@ -95,6 +95,8 @@ public class Tienda implements State {
 
                 float ny = (textoSeccion.getY() + textoSeccion.getHeight()) * 1.1f;
                 this.prefabs.getJSONObject("BotonItem").put("y", ny);
+                this.prefabs.getJSONObject("BotonItem").put("id",
+                        this.prefabs.getJSONObject("BotonItem").getString("id")+i);
 
                 //Creamos n numero de botones
                 this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), shop.getJSONObject(nombreSeccion).length());
