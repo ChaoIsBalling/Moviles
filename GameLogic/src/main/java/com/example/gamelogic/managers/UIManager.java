@@ -204,16 +204,9 @@ public class UIManager {
         }
     }
 
-    /**
-     * Metodo que cambia la visibilidad de una imagen estatica del HUD
-     * @param id ID de la imagen
-     * @param c condicion
-     */
-    /*public void setImageUIVisibility(String id, Boolean c){
-        if(imagenes.containsKey(id)){
-            imagenes.get(id).setVisible(c);
-        }
-    }*/
+    public VisualElement getLastScrollable(){
+        return scrollableElements.get(scrollableElements.size()-1);
+    }
 
     /**
      * Metodo de deshabilta/habilita el boton
@@ -320,7 +313,7 @@ public class UIManager {
                 prefabButton.setY(prefabButton.getY() + prefabButton.getHeight() * (float) yIndex * yOffset);
                 prefabButton.setX(prefabButton.getX() + prefabButton.getWidth() * (float) xIndex * xOffset);
                 xIndex++;
-                if (prefabButton.getX() > xLimit&&xLimit!=-1) {
+                if (prefabButton.getX() > xLimit&&xLimit != -1) {
                     xIndex = 0;
                     yIndex++;
                 }

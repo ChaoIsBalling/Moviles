@@ -14,6 +14,7 @@ import com.example.gamelogic.VisualElements.VisualElement;
 import com.example.gamelogic.VisualElements.button.Button;
 import com.example.gamelogic.managers.UIManager;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Clase que se encarga de representar la tienda y la gestión de compras
@@ -71,40 +72,31 @@ public class Tienda implements State {
     }
 
     private void inicializarScroll(){
-        int initXText = 100;
-        int initYText = 200, offsetTextY = 1;
+        float initXText = 100;
+        float initYText = 200, offsetTextY = 1;
         int numTexts = 0;
+
+        //Iterador que apunta a la primera seccion de la tienda
+        Iterator<String> it = items.keys();
         try {
-            //Texto de nuevas torres
-            Text textoTorres = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
-            textoTorres.setText("Nuevas Torres");
-            textoTorres.setId(textoTorres.getId() + numTexts);
-            textoTorres.setX(initXText);
-            textoTorres.setY(initYText + (offsetTextY * numTexts));
-            numTexts++;
+            for(int i = 0; i < items.length();i++){
+                //Creamos el text con el nombre de la seccion definida en el json
+                Text textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
+                String nombreSeccion = it.next();
+                textoSeccion.setText(nombreSeccion);
+                textoSeccion.setId(textoSeccion.getId() + i);
+                textoSeccion.setX(initXText);
+                textoSeccion.setY(initYText + (offsetTextY * i));
+                this.ui.addVisualElementToArray(textoSeccion, prefabs.getJSONObject("textoTienda"));
 
-            this.ui.addVisualElementToArray(textoTorres, prefabs.getJSONObject("textoTienda"));
+                float ny = (textoSeccion.getY() + textoSeccion.getHeight()) * 1.1f;
+                this.prefabs.getJSONObject("BotonItem").put("y", ny);
+                //Creamos n numero de botones
+                this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), 6);
 
-            //Creamos n numero de botones
-            //this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), 3);
-
-            //Texto de nuevas torres
-            Text textoSkins = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
-            textoSkins.setId(textoSkins.getId() + numTexts);
-            textoSkins.setText("Nuevas Skins");
-            textoSkins.setX(initXText);
-            textoSkins.setY(initYText + (textoSkins.getHeight()*offsetTextY * numTexts));
-            numTexts++;
-
-            this.ui.addVisualElementToArray(textoSkins, prefabs.getJSONObject("textoTienda"));
-
-
-            //int nuevaY = this.prefabs.getJSONObject("BotonItem").getInt("y") + 300;
-            //this.prefabs.getJSONObject("BotonItem").put("y", nuevaY);
-
-            //Numero de items en el apartado de nuevas torres
-            //this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), 3);
-
+                initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
+                //textoSkins.setY(ultimaPos);
+            }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
