@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             obj.put("towers_unlocked", towers);
 
 
-            //Object que contiene las skins equipadas
+            //Object que contiene las skins equipadas -> 0 es la figura
             JSONObject skins_eq = new JSONObject();
             skins_eq.put("RAYO", "0");
             skins_eq.put("HIELO", "0");

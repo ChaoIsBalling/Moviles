@@ -3,7 +3,8 @@
     {
         "MINI":
         {
-            "Seccion":"Torres",
+            "TipoCompra": "torre",
+            "Seccion":"towers_unlocked",
             "Precio":100,
             "Descripcion": "Me la chupa\n XD"
         }
@@ -11,33 +12,36 @@
 
     "Skins":
     {
-        "RAYO":
-        {
-            "1":{
-                "Precio":100,
-                "Descripcion": "Me la chupa\n XD"
-            }
+        "skinRayo":{
+            "id": "1",
+            "TipoCompra": "skin",
+            "Torre": "RAYO",
+            "Seccion" : "skins_available",
+            "Precio":100,
+            "Descripcion": "Me la chupa\n XD"
         },
-        "FUEGO":
-        {
-            "1":{      
-                "Precio":100,
-                "Descripcion": "Me la chupa\n XD"
-            }
-
+        "skinHielo":{  
+            "id": "1",
+            "TipoCompra": "skin",    
+            "Torre": "HIELO",
+            "Seccion" : "skins_available",
+            "Precio":100,
+            "Descripcion": "Me la chupa\n XD"
         },
-        "HIELO":
-        {    
-            "1":{
-               "Precio":100,
-                "Descripcion": "Me la chupa\n XD"
-            }
+        "skinFuego":{
+            "id": "1",
+            "TipoCompra": "skin",
+            "Torre": "FUEGO",
+            "Seccion" : "skins_available",
+            "Precio":100,
+            "Descripcion": "Me la chupa\n XD"
         }
+      
     },
       
     "Fondos":
     {
-
+        
     }
 
 }

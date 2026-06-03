@@ -14,6 +14,7 @@ import com.example.gamelogic.VisualElements.VisualElement;
 import com.example.gamelogic.VisualElements.button.Button;
 import com.example.gamelogic.managers.UIManager;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -33,6 +34,13 @@ public class Tienda implements State {
     JSONObject shopSection=null;
     Iterator<String> shopItem=null;
 
+    //Estructras que almacenan los items que se han obtenido
+    HashMap<String, Boolean> torres;
+    HashMap<String, HashMap<String, Boolean>> skins;
+    HashMap<String, Boolean> fondos;
+
+
+
     public Tienda(AndroidEngine engine,AndroidMobile mobile,JSONObject save){
         this.save =save;
         this.engine=engine;
@@ -47,6 +55,41 @@ public class Tienda implements State {
     @Override
     public void render(AndroidGraphics gr) {
         this.ui.render(gr);
+    }
+
+
+    public void readShop(){
+        try {
+            JSONObject t = this.shop.getJSONObject("Torres");
+
+            //Iterador que apunta a la primera seccion de la tienda
+            Iterator<String> it = t.keys();
+
+            for (int i = 0; i< t.length();i++){
+                torres.put(it.next(), false);
+            }
+
+            JSONObject sk =  this.shop.getJSONObject("Skins");
+            //Iterador que apunta a la primera seccion de la tienda
+            Iterator<String> itSk = sk.keys();
+
+            for (int i = 0; i< sk.length();i++){
+                skins.put(itSk.next(), new HashMap<>());
+            }
+
+            JSONObject f =  this.shop.getJSONObject("Skins");
+            //Iterador que apunta a la primera seccion de la tienda
+            Iterator<String> itF = sk.keys();
+
+            for (int i = 0; i< sk.length();i++){
+                fondos.put(itF.next(), false);
+            }
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     /**
@@ -181,21 +224,59 @@ public class Tienda implements State {
         b.setColor(Color.AMARILLO_CLARO.getHex());
         this.currentItem=item;
         try {
-//            //Caso en que el item ya esté comprado
-//            if(this.save.getJSONObject("itemsComprados").has(item.getString("ID"))) {
-//                this.ui.changeVisualElementStateOfType("compra",false);
-//                this.ui.changeVisualElementStateOfType("yacomprado",true);
-//            }
-//            //Caso en el que el item este sin comprar
-//            else {
+            //Caso en que el item ya esté comprado
+            if(this.save.getJSONObject("itemsComprados").has(item.getString("ID"))) {
+                this.ui.changeVisualElementStateOfType("compra",false);
+                this.ui.changeVisualElementStateOfType("yacomprado",true);
+            }
+            //Caso en el que el item este sin comprar
+            else {
                 this.ui.changeVisualElementStateOfType("compra",true);
                 this.ui.changeVisualElementStateOfType("yacomprado",false);
                 this.ui.getTextUI("TEXT_DESCRIPTION").setText(item.getString("Descripcion"));
                 this.ui.getTextUI("TEXT_PRECIO").setText("Coste:"+item.getInt("Precio"));
-//            }
+            }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Metodo que determina si el articulo se ha comprado ya
+     * @return booleano que indica el resultado
+     */
+    public boolean itemBought(){
+        try {
+            //Tipo de la compra definido en el json
+            String tipoCompra = currentItem.getString("TipoCompra");
+
+            //procesamos cada tipo de compra
+            switch (tipoCompra){
+                case "skin":
+                    //Accdemos al id
+
+
+
+                    break;
+                case "torre":
+                    break;
+
+                case "fondo":
+                    break;
+
+
+
+
+            }
+
+
+
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        return false;
     }
 
     /**
