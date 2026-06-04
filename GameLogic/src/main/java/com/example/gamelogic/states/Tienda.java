@@ -70,29 +70,6 @@ public class Tienda implements State {
     public void readShop(){
 
     }
-
-    /*public void readData(HashMap<String,Boolean> itemData,JSONArray unlockedItems, JSONObject shopItem)
-    {
-        try {
-        //Iterador que apunta a la  seccion de la tienda
-        Iterator<String> it = null;
-
-        String name=null;
-        for (int i = 0; i< unlockedItems.length();i++){
-            itemData.put(unlockedItems.getString(i), true);
-        }
-        it = shopItem.keys();
-        for(int i=0;i<shopItem.length();i++)
-        {
-            name=it.next();
-            if(!itemData.containsKey(shopItem.getJSONObject(name).getString("id")))
-                itemData.put(shopItem.getJSONObject(name).getString("id"),false);
-        }
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }*/
-
     /**
      * Seteo del graphics que se encarga der inicializar la UI
      * @param gr Graphics
@@ -118,6 +95,9 @@ public class Tienda implements State {
 
     }
 
+    /**
+     * Metodo que inicializa el inventario que hay en la tienda
+     */
     private void inicializarScroll(){
         float initXText = 0;
         float initYText = 200, offsetTextY = 1.5f;
@@ -242,8 +222,8 @@ public class Tienda implements State {
     public void comprobarCompra(Button b)
     {   if(currentItem!=null) {
             try {
-                if(this.save.getInt("gems")>=this.currentItem.getInt("Precio")) {
-                    numGems-=this.currentItem.getInt("Precio");
+                if(this.save.getInt("gems")>=this.currentItem.getInt("cost")) {
+                    numGems-=this.currentItem.getInt("cost");
                     this.ui.getTextUI("TEXT_DIAMANTES").setText(String.valueOf(numGems));
                     buyItem();
                     this.ui.changeVisualElementStateOfType("compra",false);
@@ -309,16 +289,14 @@ public class Tienda implements State {
             //procesamos cada tipo de compra
             switch (tipoCompra){
                 case "skin":
-                    //return skins.get(currentItem.getString("Torre")).get(currentItem.getString("id"));
                     arrayPur = purchases.getJSONArray("skins");
-
+                    break;
                 case "torre":
-                    //return torres.get(currentItem.getString("id"));
                     arrayPur = purchases.getJSONArray("towers");
-
+                    break;
                 case "fondo":
-                    //return fondos.get(currentItem.getString("id"));
                     arrayPur = purchases.getJSONArray("bg");
+                    break;
             }
 
             //Determino si el indice esta en el array
@@ -340,20 +318,23 @@ public class Tienda implements State {
         try {
             //Tipo de la compra definido en el json
             String tipoCompra = currentItem.getString("TipoCompra");
+
+            int idItem = Integer.parseInt(currentItem.getString("id"));
+
+            JSONObject shopPurchases = this.save.getJSONObject("shop").getJSONObject("purchases");
             //procesamos cada tipo de compra
             switch (tipoCompra){
                 case "skin":
-                    skins.get(currentItem.getString("Torre")).put(currentItem.getString("id"),true);
-                    this.save.getJSONObject("skins_available")
-                            .getJSONArray(currentItem.getString("Torre")).put(currentItem.getString("id"));
+                    //skins.get(currentItem.getString("Torre")).put(currentItem.getString("id"),true);
+                    shopPurchases.getJSONArray("skins").put(idItem);
                     break;
                 case "torre":
-                    torres.put(currentItem.getString("id"),true);
-                    this.save.getJSONArray("towers_unlocked").put(currentItem.getString("id"));
+                    //torres.put(currentItem.getString("id"),true);
+                    shopPurchases.getJSONArray("towers").put(idItem);
                     break;
                 case "fondo":
-                    fondos.put(currentItem.getString("id"),true);
-                    this.save.getJSONArray("bg_available").put(currentItem.getString("id"));
+                    //fondos.put(currentItem.getString("id"),true);
+                    shopPurchases.getJSONArray("bg").put(idItem);
                     break;
             }
         } catch (JSONException e) {

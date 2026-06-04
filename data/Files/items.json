@@ -1,21 +1,25 @@
 {
     "Torres":
     {
-        "RAYO":
+        "0":
         {
-            "Coste":100
+            "type": "RAYO",
+            "cost": 100
         },
-        "FUEGO":
+        "1":
         {
-            "Coste":150
+            "type": "HIELO",
+            "cost":150
         },
-        "HIELO":
+        "2":
         {
-            "Coste":200
+            "type": "FUEGO",
+            "cost":200
         },
-        "MINI":
+        "3":
         {
-            "Coste":100
+            "type": "MINI",
+            "cost":100
         }
     },
 
