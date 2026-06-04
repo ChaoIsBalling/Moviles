@@ -1,6 +1,5 @@
 {
-    "store":{
-
+    "shop":{
         "towers":[
             {
                 "id": 3,
@@ -12,34 +11,39 @@
         "skins":[
             {
                 "icon": " ",
+                "id": 4,
                 "forTower": 0,
                 "cost": 100,
-                "Descripcion": "Skin para RAYO"
+                "description": "Skin para RAYO"
             },
              {
                 "icon": " ",
+                "id": 5,
                 "forTower": 1,
                 "cost": 100,
-                "Descripcion": "Skin para HIELO"
+                "description": "Skin para HIELO"
             },
              {
                 "icon": " ",
+                "id": 6,
                 "forTower": 2,
                 "cost": 100,
-                "Descripcion": "Skin para FUEGO"
+                "description": "Skin para FUEGO"
             }
         ],
 
         "bg":[
             {
                 "icon": " ",
+                "id": 1,
                 "cost": 10,
-                "Descripcion": "Fondo rojo"
+                "description": "Fondo rojo"
             },
             {
                 "icon": " ",
+                "id": 2,
                 "cost": 10,
-                "Descripcion": "Fondo azul"
+                "description": "Fondo azul"
             }
         ]  
     }

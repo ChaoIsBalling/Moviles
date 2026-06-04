@@ -37,7 +37,7 @@
       "color": "#FFF54927",
       "text": {
         "id": "TEXT_coste",
-        "texto": "0", "font": "Inika-Regular.ttf",
+        "texto": " ", "font": "Inika-Regular.ttf",
         "x": 0, "y": 15, "size": 15, "bold": true, "italic": true, "color": "#FF000000"
       },
       "callback":

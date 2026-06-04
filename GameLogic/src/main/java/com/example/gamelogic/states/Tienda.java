@@ -35,8 +35,11 @@ public class Tienda implements State {
     private JSONObject currentItem=null;
     private UIManager ui;
 
-    JSONObject shopSection=null;
+    JSONArray shopSection=null;
     Iterator<String> shopItem=null;
+
+    // El indice del item de la tienda selccionado actualmente (en el jsonArray de shop)
+    private int shopItemIndex = 0;
 
     //Estructras que almacenan los items que se han obtenido
     HashMap<String, Boolean> torres=new HashMap<>();
@@ -65,37 +68,10 @@ public class Tienda implements State {
 
 
     public void readShop(){
-        try {
-            readData(torres, this.save.getJSONArray("towers_unlocked"),this.shop.getJSONObject("Torres"));
-            readData(fondos,this.save.getJSONArray("bg_available"),this.shop.getJSONObject("Fondos"));
 
-            JSONObject shopItem = null;
-            //Iterador que apunta a la primera seccion de la tienda
-            Iterator<String> it = null;
-            String name=null;
-
-            JSONObject sk =  this.save.getJSONObject("skins_available");
-            //Iterador que apunta a la primera seccion de la tienda
-            it = sk.keys();
-
-            for (int i = 0; i< sk.length();i++){
-                name=it.next();
-                JSONArray skinTorre=sk.getJSONArray(name);
-                skins.put(name, new HashMap<>());
-                if(this.shop.getJSONObject("Skins").has(name)) {
-                    shopItem = this.shop.getJSONObject("Skins").getJSONObject(name);
-                    for (int j = 0; j < skinTorre.length(); j++) {
-                        readData(skins.get(name), skinTorre, shopItem);
-                    }
-                }
-            }
-
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
     }
 
-    public void readData(HashMap<String,Boolean> itemData,JSONArray unlockedItems, JSONObject shopItem)
+    /*public void readData(HashMap<String,Boolean> itemData,JSONArray unlockedItems, JSONObject shopItem)
     {
         try {
         //Iterador que apunta a la  seccion de la tienda
@@ -115,7 +91,7 @@ public class Tienda implements State {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
     /**
      * Seteo del graphics que se encarga der inicializar la UI
@@ -146,56 +122,48 @@ public class Tienda implements State {
         float initXText = 0;
         float initYText = 200, offsetTextY = 1.5f;
         int i=0;
-        //Iterador que apunta a la primera seccion de la tienda
 
        try {
-           initSections(initXText,initYText,offsetTextY,this.shop.getJSONObject( "Torres"),i,"Torres");
+           initSections(initXText,initYText,offsetTextY,this.shop.getJSONObject("shop").getJSONArray( "towers"),i,"Nuevas Torres");
            initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
-            i++;
-           JSONObject skins= this.shop.getJSONObject("Skins");
-           Iterator<String> it = skins.keys();
+           i++;
 
-           Text textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
-           textoSeccion.setText("Skins");
-           textoSeccion.setId(textoSeccion.getId() + i);
-           textoSeccion.setX(initXText);
-           textoSeccion.setY(initYText + (offsetTextY * i));
-           this.ui.addVisualElementToArray(textoSeccion, prefabs.getJSONObject("textoTienda"));
+           //reiniciamos contador que apunta al ultimo elemento de la seccion
+           shopItemIndex = 0;
+
+           initSections(initXText,initYText,offsetTextY,this.shop.getJSONObject("shop").getJSONArray( "skins"),i,"Nuevas Skins");
            initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
-            i++;
-           for(int j=0;j<skins.length();j++)
-           {
-               String nombre= it.next();
-               initSections(100,initYText,offsetTextY,skins.getJSONObject(nombre),i,nombre);
-               initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
-               i++;
-           }
-           initSections(initXText,initYText,offsetTextY,this.shop.getJSONObject( "Fondos"),i,"Fondos");
+           i++;
 
-
+           shopItemIndex = 0;
+           initSections(initXText,initYText,offsetTextY,this.shop.getJSONObject("shop").getJSONArray( "bg"),i,"Fondos");
        } catch (JSONException e) {
            throw new RuntimeException(e);
       }
 
     }
-    public void initSections( float initXText ,float initYText, float offsetTextY,JSONObject section, int i, String nombreSeccion ){
-
+    public void initSections( float initXText ,float initYText, float offsetTextY,JSONArray section, int i, String nombreSeccion ){
         try {
-        Text textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
-        shopSection=section;
-        shopItem=shopSection.keys();
-        textoSeccion.setText(nombreSeccion);
-        textoSeccion.setId(textoSeccion.getId() + i);
-        textoSeccion.setX(initXText);
-        textoSeccion.setY(initYText);
-        this.ui.addVisualElementToArray(textoSeccion, prefabs.getJSONObject("textoTienda"));
-        float ny = (textoSeccion.getY() + textoSeccion.getHeight()* offsetTextY) ;
-        this.prefabs.getJSONObject("BotonItem").put("y", ny);
-        this.prefabs.getJSONObject("BotonItem").put("id",
-                this.prefabs.getJSONObject("BotonItem").getString("id") + i);
-        //Creamos n numero de botones
-        this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), section.length());
+            Text textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
 
+            //Array perteneciente a la seccion de la tienda
+            shopSection = section;
+
+            //Setamos valores del texto de la seccion
+            textoSeccion.setText(nombreSeccion);
+            textoSeccion.setId(textoSeccion.getId() + i);
+            textoSeccion.setX(initXText);
+            textoSeccion.setY(initYText);
+            //Se añade al scroll
+            this.ui.addVisualElementToArray(textoSeccion, prefabs.getJSONObject("textoTienda"));
+
+            //Desplazamos el offset de Y
+            float ny = (textoSeccion.getY() + textoSeccion.getHeight()* offsetTextY) ;
+            this.prefabs.getJSONObject("BotonItem").put("y", ny);
+            this.prefabs.getJSONObject("BotonItem").put("id",
+                    this.prefabs.getJSONObject("BotonItem").getString("id") + i);
+            //Creamos n numero de botones
+            this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), section.length());
     } catch (JSONException e) {
         throw new RuntimeException(e);
     }
@@ -218,7 +186,13 @@ public class Tienda implements State {
      */
     public void setCallbackButtonShopItem(Button b) {
         try {
-            final JSONObject item=shopSection.getJSONObject(shopItem.next());
+            final JSONObject item = shopSection.getJSONObject(shopItemIndex);
+
+            shopItemIndex++;
+
+            //Le seteamos al item un tipo de compra determinado
+            item.put("TipoCompra", "torre");
+
             initShopButton(b,item);
             b.setOnClickListener( () -> {prepararCompra(item,b);
             });
@@ -236,11 +210,11 @@ public class Tienda implements State {
             switch (tipoCompra){
                 case "skin":
                     b.setAppeareance(this.items.getJSONObject("Skins")
-                            .getJSONObject(item.getString("Torre")).getJSONObject(item.getString("id")));
+                            .getJSONObject(item.getString("id")));
                    break;
                 case "torre":
                     b.setAppeareance(this.items.getJSONObject("Skins")
-                            .getJSONObject(item.getString("id")).getJSONObject("0"));
+                            .getJSONObject(item.getString("id")));
                     break;
                 case "fondo":
                     b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
@@ -305,8 +279,8 @@ public class Tienda implements State {
             else {
                 this.ui.changeVisualElementStateOfType("compra",true);
                 this.ui.changeVisualElementStateOfType("yacomprado",false);
-                this.ui.getTextUI("TEXT_DESCRIPTION").setText(item.getString("Descripcion"));
-                this.ui.getTextUI("TEXT_PRECIO").setText("Coste:"+item.getInt("Precio"));
+                this.ui.getTextUI("TEXT_DESCRIPTION").setText(item.getString("description"));
+                this.ui.getTextUI("TEXT_PRECIO").setText("Coste:"+item.getInt("cost"));
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -319,16 +293,41 @@ public class Tienda implements State {
      */
     public boolean itemBought(){
         try {
-            //Tipo de la compra definido en el json
+            //Accedemos a los objetos que tenemos comprados
+            JSONObject purchases = this.save.getJSONObject("shop")
+                    .getJSONObject("purchases");
+
+            //Tipo de la compra del item actual
             String tipoCompra = currentItem.getString("TipoCompra");
+
+
+            //ID del item que se quiere buscar
+            int idItem = Integer.parseInt(currentItem.getString("id"));
+
+            JSONArray arrayPur = null;
+
             //procesamos cada tipo de compra
             switch (tipoCompra){
                 case "skin":
-                    return skins.get(currentItem.getString("Torre")).get(currentItem.getString("id"));
+                    //return skins.get(currentItem.getString("Torre")).get(currentItem.getString("id"));
+                    arrayPur = purchases.getJSONArray("skins");
+
                 case "torre":
-                    return torres.get(currentItem.getString("id"));
+                    //return torres.get(currentItem.getString("id"));
+                    arrayPur = purchases.getJSONArray("towers");
+
                 case "fondo":
-                    return fondos.get(currentItem.getString("id"));
+                    //return fondos.get(currentItem.getString("id"));
+                    arrayPur = purchases.getJSONArray("bg");
+            }
+
+            //Determino si el indice esta en el array
+            if(arrayPur != null){
+                for (int i = 0; i < arrayPur.length(); i++) {
+                    if (arrayPur.getInt(i) == idItem) {
+                        return true; // El ítem ya ha sido comprado
+                    }
+                }
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
