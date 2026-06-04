@@ -66,7 +66,6 @@ public class Tienda implements State {
 
     public void readShop(){
         try {
-
             readData(torres, this.save.getJSONArray("towers_unlocked"),this.shop.getJSONObject("Torres"));
             readData(fondos,this.save.getJSONArray("bg_available"),this.shop.getJSONObject("Fondos"));
 
@@ -144,41 +143,64 @@ public class Tienda implements State {
     }
 
     private void inicializarScroll(){
-        float initXText = 100;
-        float initYText = 200, offsetTextY = 1;
+        float initXText = 0;
+        float initYText = 200, offsetTextY = 1.5f;
+        int i=0;
         //Iterador que apunta a la primera seccion de la tienda
-        Iterator<String> it = shop.keys();
-        Text textoSeccion = null;
-        try {
-            for(int i = 0; i < shop.length(); i++){
-                //Creamos el text con el nombre de la seccion definida en el json
-                textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
-                String nombreSeccion = it.next();
-                shopSection=shop.getJSONObject(nombreSeccion);
-                shopItem=shopSection.keys();
-                textoSeccion.setText(nombreSeccion);
-                textoSeccion.setId(textoSeccion.getId() + i);
-                textoSeccion.setX(initXText);
-                textoSeccion.setY(initYText + (offsetTextY * i));
-                this.ui.addVisualElementToArray(textoSeccion, prefabs.getJSONObject("textoTienda"));
 
-                float ny = (textoSeccion.getY() + textoSeccion.getHeight()) * 1.1f;
-                this.prefabs.getJSONObject("BotonItem").put("y", ny);
-                this.prefabs.getJSONObject("BotonItem").put("id",
-                        this.prefabs.getJSONObject("BotonItem").getString("id")+i);
+       try {
+           initSections(initXText,initYText,offsetTextY,this.shop.getJSONObject( "Torres"),i,"Torres");
+           initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
+            i++;
+           JSONObject skins= this.shop.getJSONObject("Skins");
+           Iterator<String> it = skins.keys();
 
-                //Creamos n numero de botones
-                this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), shop.getJSONObject(nombreSeccion).length());
+           Text textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
+           textoSeccion.setText("Skins");
+           textoSeccion.setId(textoSeccion.getId() + i);
+           textoSeccion.setX(initXText);
+           textoSeccion.setY(initYText + (offsetTextY * i));
+           this.ui.addVisualElementToArray(textoSeccion, prefabs.getJSONObject("textoTienda"));
+           initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
+            i++;
+           for(int j=0;j<skins.length();j++)
+           {
+               String nombre= it.next();
+               initSections(100,initYText,offsetTextY,skins.getJSONObject(nombre),i,nombre);
+               initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
+               i++;
+           }
+           initSections(initXText,initYText,offsetTextY,this.shop.getJSONObject( "Fondos"),i,"Fondos");
 
-                initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
 
-            }
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+       } catch (JSONException e) {
+           throw new RuntimeException(e);
+      }
 
     }
+    public void initSections( float initXText ,float initYText, float offsetTextY,JSONObject section, int i, String nombreSeccion ){
 
+        try {
+        Text textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
+        shopSection=section;
+        shopItem=shopSection.keys();
+        textoSeccion.setText(nombreSeccion);
+        textoSeccion.setId(textoSeccion.getId() + i);
+        textoSeccion.setX(initXText);
+        textoSeccion.setY(initYText);
+        this.ui.addVisualElementToArray(textoSeccion, prefabs.getJSONObject("textoTienda"));
+        float ny = (textoSeccion.getY() + textoSeccion.getHeight()* offsetTextY) ;
+        this.prefabs.getJSONObject("BotonItem").put("y", ny);
+        this.prefabs.getJSONObject("BotonItem").put("id",
+                this.prefabs.getJSONObject("BotonItem").getString("id") + i);
+        //Creamos n numero de botones
+        this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), section.length());
+
+    } catch (JSONException e) {
+        throw new RuntimeException(e);
+    }
+
+    }
     /**
      * Metodo para setear el callback de volver a la pantalla anterior
      * @param b el boton al que le pasamos el callback
