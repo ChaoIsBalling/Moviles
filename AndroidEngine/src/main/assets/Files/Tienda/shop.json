@@ -1,64 +1,46 @@
 {
-    "Torres":
-    {
-        "TORRE MINI":
-        {
-            "id":"MINI",
-            "TipoCompra": "torre",
-            "Seccion":"towers_unlocked",
-            "Precio":100,
-            "Descripcion": "Me la chupa\n XD"
-        }
-    },
+    "store":{
 
-    "Skins":
-    {  "RAYO":
-        {
-        "skinRayo":{
-            "id": "1",
-            "TipoCompra": "skin",
-            "Torre": "RAYO",
-            "Seccion" : "skins_available",
-            "Precio":100,
-            "Descripcion": "Me la chupa\n XD"
+        "towers":[
+            {
+                "id": 3,
+                "cost": 100,
+                "description": "Me la chupa\n XD"
             }
-        },
-        
-        "HIELO":
-        {
-        "skinHielo":{  
-            "id": "1",
-            "TipoCompra": "skin",    
-            "Torre": "HIELO",
-            "Seccion" : "skins_available",
-            "Precio":100,
-            "Descripcion": "Me la chupa\n XD"
+        ],
+
+        "skins":[
+            {
+                "icon": " ",
+                "forTower": 0,
+                "cost": 100,
+                "Descripcion": "Skin para RAYO"
+            },
+             {
+                "icon": " ",
+                "forTower": 1,
+                "cost": 100,
+                "Descripcion": "Skin para HIELO"
+            },
+             {
+                "icon": " ",
+                "forTower": 2,
+                "cost": 100,
+                "Descripcion": "Skin para FUEGO"
             }
-        },
-        "FUEGO":
-        {
-        "skinFuego":{
-            "id": "1",
-            "TipoCompra": "skin",
-            "Torre": "FUEGO",
-            "Seccion" : "skins_available",
-            "Precio":100,
-            "Descripcion": "Me la chupa\n XD"
+        ],
+
+        "bg":[
+            {
+                "icon": " ",
+                "cost": 10,
+                "Descripcion": "Fondo rojo"
+            },
+            {
+                "icon": " ",
+                "cost": 10,
+                "Descripcion": "Fondo azul"
             }
-        }
-      
-    },
-      
-    "Fondos":
-    {
-        "FONDO":{
-            "id":"#FFFF0000",
-            "TipoCompra": "fondo",
-            "Seccion" : "bg_available",
-            "Precio":10,
-            "Descripcion": "Fondo rojo"
-        }
-        
+        ]  
     }
-
 }

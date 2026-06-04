@@ -75,7 +75,8 @@ public class Menu implements State {
         try {
             int numGemasGuardadas = this.save.getInt("gems");
             this.ui.getTextUI("TEXT_DIAMANTES").setText(String.valueOf(numGemasGuardadas));
-            this.fondo = this.save.getString("background");
+            this.fondo = this.save.getJSONObject("shop").
+                    getJSONObject("equips").getString("bg");
             this.gr.setColorClear(this.fondo);
         } catch (JSONException e) {
             throw new RuntimeException(e);
