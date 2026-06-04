@@ -65,71 +65,54 @@ public class Tienda implements State {
 
     public void readShop(){
         try {
-            JSONArray t = this.save.getJSONArray("towers_unlocked");
-            //Iterador que apunta a la primera seccion de la tienda
 
+            readData(torres, this.save.getJSONArray("towers_unlocked"),this.shop.getJSONObject("Torres"));
+            readData(fondos,this.save.getJSONArray("bg_available"),this.shop.getJSONObject("Fondos"));
+
+            JSONObject shopItem = null;
+            //Iterador que apunta a la primera seccion de la tienda
+            Iterator<String> it = null;
             String name=null;
-            for (int i = 0; i< t.length();i++){
-                torres.put(t.getString(i), true);
-            }
-            JSONObject tor = this.shop.getJSONObject("Torres");
-            Iterator<String> it = tor.keys();
-            for(int i=0;i<tor.length();i++)
-            {
-                name=it.next();
-                if(!torres.containsKey(tor.getJSONObject(name).getString("id")))
-                    torres.put(tor.getJSONObject(name).getString("id"),false);
-            }
 
             JSONObject sk =  this.save.getJSONObject("skins_available");
             //Iterador que apunta a la primera seccion de la tienda
-                it = sk.keys();
-
-            for (int i = 0; i< sk.length();i++){
-                name=it.next();
-                JSONArray skinTorre=sk.getJSONArray(name);
-                skins.put(name, new HashMap<>());
-                for (int j=0;j<skinTorre.length();j++)
-                {
-                    skins.get(name).put(skinTorre.getString(j),true);
-                }
-            }
-
-            sk =  this.shop.getJSONObject("Skins");
             it = sk.keys();
 
             for (int i = 0; i< sk.length();i++){
                 name=it.next();
-                JSONObject currSkin=sk.getJSONObject(name);
-                if(!skins.get(currSkin.getString("Torre")).containsKey(currSkin.getString("id")))
-                {
-                    skins.get(currSkin.getString("Torre")).put(currSkin.getString("id"),false);
+                JSONArray skinTorre=sk.getJSONArray(name);
+                shopItem=this.shop.getJSONObject("skins").getJSONObject(name);
+                skins.put(name, new HashMap<>());
+                for (int j=0;j<skinTorre.length();j++) {
+                    readData(skins.get(name),skinTorre,shopItem);
                 }
-            }
-            JSONArray bg = this.save.getJSONArray("bg_available");
-            //Iterador que apunta a la primera seccion de la tienda
-            name=null;
-
-            for (int i = 0; i< bg.length();i++){
-                fondos.put(bg.getString(i), true);
-            }
-
-            //Leer la tienda
-            JSONObject bgFondo = this.shop.getJSONObject("Fondos");
-
-            it= bgFondo.keys();
-            for(int i=0;i<bgFondo.length();i++)
-            {
-                name=it.next();
-                if(!fondos.containsKey(bgFondo.getJSONObject(name).getString("id")))
-                    fondos.put(bgFondo.getJSONObject(name).getString("id"),false);
             }
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public void readData(HashMap<String,Boolean> itemData,JSONArray unlockedItems, JSONObject shopItem)
+    {
+        try {
+        //Iterador que apunta a la  seccion de la tienda
+        Iterator<String> it = null;
 
+        String name=null;
+        for (int i = 0; i< unlockedItems.length();i++){
+            itemData.put(unlockedItems.getString(i), true);
+        }
+        it = shopItem.keys();
+        for(int i=0;i<shopItem.length();i++)
+        {
+            name=it.next();
+            if(!itemData.containsKey(shopItem.getJSONObject(name).getString("id")))
+                itemData.put(shopItem.getJSONObject(name).getString("id"),false);
+        }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

@@ -12,7 +12,8 @@
     },
 
     "Skins":
-    {
+    {  "RAYO":
+        {
         "skinRayo":{
             "id": "1",
             "TipoCompra": "skin",
@@ -20,7 +21,11 @@
             "Seccion" : "skins_available",
             "Precio":100,
             "Descripcion": "Me la chupa\n XD"
+            }
         },
+        
+        "HIELO":
+        {
         "skinHielo":{  
             "id": "1",
             "TipoCompra": "skin",    
@@ -28,7 +33,10 @@
             "Seccion" : "skins_available",
             "Precio":100,
             "Descripcion": "Me la chupa\n XD"
+            }
         },
+        "FUEGO":
+        {
         "skinFuego":{
             "id": "1",
             "TipoCompra": "skin",
@@ -36,6 +44,7 @@
             "Seccion" : "skins_available",
             "Precio":100,
             "Descripcion": "Me la chupa\n XD"
+            }
         }
       
     },
