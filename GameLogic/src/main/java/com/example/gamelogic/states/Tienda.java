@@ -1,5 +1,7 @@
 package com.example.gamelogic.states;
 
+import android.webkit.HttpAuthHandler;
+
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.State;
@@ -14,7 +16,6 @@ import com.example.gamelogic.Color;
 import com.example.gamelogic.VisualElements.Text;
 import com.example.gamelogic.VisualElements.VisualElement;
 import com.example.gamelogic.VisualElements.button.Button;
-import com.example.gamelogic.VisualElements.figure.Square;
 import com.example.gamelogic.managers.UIManager;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,10 +82,12 @@ public class Tienda implements State {
             for (int i = 0; i< sk.length();i++){
                 name=it.next();
                 JSONArray skinTorre=sk.getJSONArray(name);
-                shopItem=this.shop.getJSONObject("skins").getJSONObject(name);
                 skins.put(name, new HashMap<>());
-                for (int j=0;j<skinTorre.length();j++) {
-                    readData(skins.get(name),skinTorre,shopItem);
+                if(this.shop.getJSONObject("Skins").has(name)) {
+                    shopItem = this.shop.getJSONObject("Skins").getJSONObject(name);
+                    for (int j = 0; j < skinTorre.length(); j++) {
+                        readData(skins.get(name), skinTorre, shopItem);
+                    }
                 }
             }
 
@@ -145,10 +148,11 @@ public class Tienda implements State {
         float initYText = 200, offsetTextY = 1;
         //Iterador que apunta a la primera seccion de la tienda
         Iterator<String> it = shop.keys();
+        Text textoSeccion = null;
         try {
             for(int i = 0; i < shop.length(); i++){
                 //Creamos el text con el nombre de la seccion definida en el json
-                Text textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
+                textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
                 String nombreSeccion = it.next();
                 shopSection=shop.getJSONObject(nombreSeccion);
                 shopItem=shopSection.keys();
@@ -167,7 +171,7 @@ public class Tienda implements State {
                 this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), shop.getJSONObject(nombreSeccion).length());
 
                 initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
-                //textoSkins.setY(ultimaPos);
+
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
