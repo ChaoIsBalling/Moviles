@@ -93,7 +93,6 @@ public class Cambio implements State {
                     break;
             }
 
-            indexItem++;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -103,7 +102,6 @@ public class Cambio implements State {
 
         //Incializamos su apariencia con la skin que se pueda elegir
         initAppeareanceButton(b);
-        indexItem =0;
 
         final JSONObject item;
         try {
@@ -115,7 +113,7 @@ public class Cambio implements State {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
+        indexItem++;
         b.setOnClickListener( () -> {
             changeSkinEquiped(b, item);
         });
@@ -144,7 +142,7 @@ public class Cambio implements State {
                 case "bg":
                 case "but":
                     //Guardamos el seteo del color de bg o but en el save
-                    shopSaveEquips.getJSONArray(tipoItem).put(item.getString("color"));
+                    shopSaveEquips.put(tipoItem,item.getString("color"));
                     break;
             }
         } catch (JSONException e) {
