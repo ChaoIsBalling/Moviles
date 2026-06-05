@@ -453,7 +453,7 @@ public class GameLogic implements State {
         try {
             //Accedo a las torre que tengo
             JSONObject equip = this.save.getJSONObject("shop").getJSONObject("equips");
-            String id = equip.getJSONArray("towers").getgetString(Integer.toString(towersCount));
+            String id = equip.getJSONArray("towers").getString(towersCount);
 
             //Cogemos el tipo de torre
             String torre = this.items.getJSONObject("Torres").getJSONObject(id).getString("type");
@@ -468,7 +468,7 @@ public class GameLogic implements State {
                         this.prepararConstruccion(coste, tipo,b));
 
                 //Cogemos la skin
-                int idSkin =  equip.getJSONArray("skins")
+                //int idSkin =  equip.getJSONArray("skins");
 
                 String skin=this.save.getJSONObject("skins_equipped").getString(tipo.toString());
 

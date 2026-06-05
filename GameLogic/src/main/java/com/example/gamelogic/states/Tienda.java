@@ -34,29 +34,59 @@ public class Tienda implements State {
     //El item seleccionado en la tienda
     private JSONObject currentItem=null;
     private UIManager ui;
+    String  shopSection=null;
 
-    JSONArray shopSection=null;
-    Iterator<String> shopItem=null;
+    private HashMap<String,HashMap<Integer,Boolean>> shopPurchases=new HashMap<>();
+
 
     // El indice del item de la tienda selccionado actualmente (en el jsonArray de shop)
     private int shopItemIndex = 0;
-
-    //Estructras que almacenan los items que se han obtenido
-    HashMap<String, Boolean> torres=new HashMap<>();
-    HashMap<String, HashMap<String, Boolean>> skins=new HashMap<>();
-    HashMap<String, Boolean> fondos=new HashMap<>();
-
-
 
     public Tienda(AndroidEngine engine,AndroidMobile mobile,JSONObject save){
         this.save =save;
         this.engine=engine;
         this.mobile = mobile;
         this.style =engine.readJsonFile("Tienda/style.json");
-        this.shop =engine.readJsonFile("Tienda/shop.json");
-        readShop();
+        this.shop=engine.readJsonFile("Tienda/shop.json");
         this.prefabs=engine.readJsonFile("Tienda/prefabs.json");
         this.items=engine.readJsonFile("items.json");
+        readData();
+    }
+
+    public void readData()
+    {
+        try {
+            JSONObject purchases = this.save.getJSONObject("shop").getJSONObject("purchases");
+            Iterator<String> it = purchases.keys();
+            //el name es la seccion del save de purchases
+            String name=null;
+            for(int i=0;i<purchases.length();i++)
+            {
+                name=it.next();
+                shopPurchases.put(name,new HashMap<>());
+                JSONArray purchaseSection= purchases.getJSONArray(name);
+                for(int j=0;j<purchaseSection.length();j++)
+                    //Seteamos a true todos los elementos que esten en la seccion de purchase
+                    shopPurchases.get(name).put(purchaseSection.getInt(j),true);
+            }
+            it=this.shop.keys();
+            for(int i=0;i<shop.length();i++)
+            {
+                name=it.next();
+                JSONArray shopSection= shop.getJSONArray(name);
+
+                for(int j=0;j<shopSection.length();j++)
+                {
+                    int idItem=shopSection.getJSONObject(j).getInt("id");
+                    if(!shopPurchases.get(name).containsKey(idItem))
+                        shopPurchases.get(name).put(idItem,false);
+                }
+                    //Seteamos a true todos los elementos que esten en la seccion de purchase
+
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public void update(double deltatime) {}
@@ -66,10 +96,6 @@ public class Tienda implements State {
         this.ui.render(gr);
     }
 
-
-    public void readShop(){
-
-    }
     /**
      * Seteo del graphics que se encarga der inicializar la UI
      * @param gr Graphics
@@ -103,26 +129,23 @@ public class Tienda implements State {
         float initYText = 200, offsetTextY = 1.5f;
         int i=0;
 
-       try {
-           initSections(initXText,initYText,offsetTextY,this.shop.getJSONObject("shop").getJSONArray( "towers"),i,"Nuevas Torres");
+           initSections(initXText,initYText,offsetTextY,"towers",i,"Nuevas Torres");
            initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
            i++;
 
            //reiniciamos contador que apunta al ultimo elemento de la seccion
            shopItemIndex = 0;
 
-           initSections(initXText,initYText,offsetTextY,this.shop.getJSONObject("shop").getJSONArray( "skins"),i,"Nuevas Skins");
+           initSections(initXText,initYText,offsetTextY,"skins",i,"Nuevas Skins");
            initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
            i++;
 
            shopItemIndex = 0;
-           initSections(initXText,initYText,offsetTextY,this.shop.getJSONObject("shop").getJSONArray( "bg"),i,"Fondos");
-       } catch (JSONException e) {
-           throw new RuntimeException(e);
-      }
+           initSections(initXText,initYText,offsetTextY,"bg",i,"Fondos");
+
 
     }
-    public void initSections( float initXText ,float initYText, float offsetTextY,JSONArray section, int i, String nombreSeccion ){
+    public void initSections( float initXText ,float initYText, float offsetTextY,String section, int i, String nombreSeccion ){
         try {
             Text textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
 
@@ -143,7 +166,7 @@ public class Tienda implements State {
             this.prefabs.getJSONObject("BotonItem").put("id",
                     this.prefabs.getJSONObject("BotonItem").getString("id") + i);
             //Creamos n numero de botones
-            this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), section.length());
+            this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), this.shop.getJSONArray(section).length());
     } catch (JSONException e) {
         throw new RuntimeException(e);
     }
@@ -166,12 +189,11 @@ public class Tienda implements State {
      */
     public void setCallbackButtonShopItem(Button b) {
         try {
-            final JSONObject item = shopSection.getJSONObject(shopItemIndex);
-
+            final JSONObject item =shop.getJSONArray(shopSection).getJSONObject(shopItemIndex);
             shopItemIndex++;
 
             //Le seteamos al item un tipo de compra determinado
-            item.put("TipoCompra", "torre");
+            item.put("TipoCompra", shopSection);
 
             initShopButton(b,item);
             b.setOnClickListener( () -> {prepararCompra(item,b);
@@ -188,17 +210,15 @@ public class Tienda implements State {
             String tipoCompra = item.getString("TipoCompra");
             //procesamos cada tipo de compra
             switch (tipoCompra){
-                case "skin":
+                case "skins":
+                case "towers":
                     b.setAppeareance(this.items.getJSONObject("Skins")
                             .getJSONObject(item.getString("id")));
                    break;
-                case "torre":
-                    b.setAppeareance(this.items.getJSONObject("Skins")
-                            .getJSONObject(item.getString("id")));
-                    break;
-                case "fondo":
+                case  "bg":
                     b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
-                    b.getFigButton().setColor(item.getString("id"));
+                    b.getFigButton().setColor(this.items.getJSONObject("Fondos")
+                            .getJSONObject(item.getString("id")).getString("color"));
                     break;
             }
         } catch (JSONException e) {
@@ -273,44 +293,18 @@ public class Tienda implements State {
      */
     public boolean itemBought(){
         try {
-            //Accedemos a los objetos que tenemos comprados
-            JSONObject purchases = this.save.getJSONObject("shop")
-                    .getJSONObject("purchases");
 
             //Tipo de la compra del item actual
             String tipoCompra = currentItem.getString("TipoCompra");
 
-
             //ID del item que se quiere buscar
-            int idItem = Integer.parseInt(currentItem.getString("id"));
+            int idItem = currentItem.getInt("id");
 
-            JSONArray arrayPur = null;
+            return shopPurchases.get(tipoCompra).get(idItem);
 
-            //procesamos cada tipo de compra
-            switch (tipoCompra){
-                case "skin":
-                    arrayPur = purchases.getJSONArray("skins");
-                    break;
-                case "torre":
-                    arrayPur = purchases.getJSONArray("towers");
-                    break;
-                case "fondo":
-                    arrayPur = purchases.getJSONArray("bg");
-                    break;
-            }
-
-            //Determino si el indice esta en el array
-            if(arrayPur != null){
-                for (int i = 0; i < arrayPur.length(); i++) {
-                    if (arrayPur.getInt(i) == idItem) {
-                        return true; // El ítem ya ha sido comprado
-                    }
-                }
-            }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        return false;
     }
 
     public void buyItem()
@@ -318,25 +312,11 @@ public class Tienda implements State {
         try {
             //Tipo de la compra definido en el json
             String tipoCompra = currentItem.getString("TipoCompra");
+            int idItem = currentItem.getInt("id");
+            JSONObject compras= this.save.getJSONObject("shop").getJSONObject("purchases");
+            compras.getJSONArray(tipoCompra).put(idItem);
+            shopPurchases.get(tipoCompra).put(idItem,true);
 
-            int idItem = Integer.parseInt(currentItem.getString("id"));
-
-            JSONObject shopPurchases = this.save.getJSONObject("shop").getJSONObject("purchases");
-            //procesamos cada tipo de compra
-            switch (tipoCompra){
-                case "skin":
-                    //skins.get(currentItem.getString("Torre")).put(currentItem.getString("id"),true);
-                    shopPurchases.getJSONArray("skins").put(idItem);
-                    break;
-                case "torre":
-                    //torres.put(currentItem.getString("id"),true);
-                    shopPurchases.getJSONArray("towers").put(idItem);
-                    break;
-                case "fondo":
-                    //fondos.put(currentItem.getString("id"),true);
-                    shopPurchases.getJSONArray("bg").put(idItem);
-                    break;
-            }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
