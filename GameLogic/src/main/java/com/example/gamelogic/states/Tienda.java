@@ -38,7 +38,6 @@ public class Tienda implements State {
 
     private HashMap<String,HashMap<Integer,Boolean>> shopPurchases=new HashMap<>();
 
-
     // El indice del item de la tienda selccionado actualmente (en el jsonArray de shop)
     private int shopItemIndex = 0;
 
@@ -205,9 +204,12 @@ public class Tienda implements State {
             //procesamos cada tipo de compra
             switch (tipoCompra){
                 case "skins":
-                case "towers":
                     b.setAppeareance(this.items.getJSONObject("Skins")
                             .getJSONObject(item.getString("id")));
+                    break;
+                case "towers":
+                    b.setAppeareance(this.items.getJSONObject("Skins")
+                            .getJSONObject(item.getString("skin")));
                    break;
                 case  "bg":
                     b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
@@ -287,15 +289,12 @@ public class Tienda implements State {
      */
     public boolean itemBought(){
         try {
-
             //Tipo de la compra del item actual
             String tipoCompra = currentItem.getString("TipoCompra");
-
             //ID del item que se quiere buscar
             int idItem = currentItem.getInt("id");
 
             return shopPurchases.get(tipoCompra).get(idItem);
-
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

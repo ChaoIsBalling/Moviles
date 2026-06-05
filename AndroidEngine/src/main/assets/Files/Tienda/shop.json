@@ -3,14 +3,15 @@
             {
                 "id": 3,
                 "cost": 100,
-                "description": "Me la chupa\n XD"
+                "description": "Me la chupa\n XD",
+                "skin":6
             }
         ],
 
         "skins":[
             {
                 "icon": " ",
-                "id": 4,
+                "id": 3,
                 "forTower": 0,
                 "cost": 100,
                 "description": "Skin para RAYO"
@@ -24,7 +25,7 @@
             },
              {
                 "icon": " ",
-                "id": 6,
+                "id": 4,
                 "forTower": 2,
                 "cost": 100,
                 "description": "Skin para FUEGO"
