@@ -14,6 +14,8 @@ import com.example.gamelogic.VisualElements.VisualElement;
 import com.example.gamelogic.VisualElements.button.Button;
 import com.example.gamelogic.managers.UIManager;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Cambio implements State {
     private AndroidEngine engine;
     private AndroidGraphics gr;
@@ -23,11 +25,15 @@ public class Cambio implements State {
     JSONObject style;
     private UIManager ui;
 
-    public Cambio (AndroidEngine engine,AndroidMobile mobile,JSONObject save){
+    //Contiene los aspectos que se pueden elegir
+    HashMap<Integer, Boolean> res;
+
+    public Cambio (AndroidEngine engine, AndroidMobile mobile, JSONObject save, HashMap<Integer, Boolean> res){
         this.save =save;
         this.engine= engine;
         this.mobile = mobile;
         this.style =engine.readJsonFile("Cambio/style.json");
+        this.res = res;
     }
 
 

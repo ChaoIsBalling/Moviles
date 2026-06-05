@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         this.engine.setNotificationIcon(R.drawable.ic_tower_defense_noti); //icono de notificación
 
         checkRewardNotifiactionIntent(); //Comprobamos si el jugador ha vuelto a entrar al juego por la notificacion recompensada
-        if(this.engine.checkFileExists("save"))
+        if(!this.engine.checkFileExists("save"))
         {
             save=this.engine.readInternalJsonFile("save");
             String hash = this.engine.createHash(save.toString());
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     {
         JSONObject obj=new JSONObject();
         try {
-            obj.put("gems",0);
+            obj.put("gems",1000);
             obj.put("completed",0);
 
             JSONObject items=engine.readJsonFile("items.json");
@@ -92,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
 
             //Skins que tengo
             JSONArray skinsPur = new JSONArray();
+            skinsPur.put(0); //Skin de la figura de la torre de rayo
+            skinsPur.put(1); //fuego
+            skinsPur.put(2); //hielo
             purchases.put("skins", skinsPur);
 
             //Torres que tengo
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             shop.put( "purchases", purchases);
 
             //Objetos desbloqueados en la tienda
-            JSONObject unlocks = new JSONObject();
+            /*JSONObject unlocks = new JSONObject();
 
             JSONArray skinsUnl = new JSONArray();
             skinsUnl.put(0);
@@ -130,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
             towersUnl.put(2);
             unlocks.put("towers", towersUnl);
 
-            shop.put("unlocks", unlocks);
+            shop.put("unlocks", unlocks);*/
 
             //Objetos equipados
             JSONObject equips = new JSONObject();

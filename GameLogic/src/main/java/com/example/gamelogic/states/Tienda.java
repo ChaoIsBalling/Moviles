@@ -200,9 +200,52 @@ public class Tienda implements State {
 
     public void setCallbackButtonChange(Button b) {
             b.setOnClickListener( () -> {
-                Cambio cam = new Cambio(this.engine,this.mobile, this.save);
-                this.engine.setState(cam);
+                prepareChangeMenu(currentItem);
             });
+    }
+
+
+    /**
+     * Metodo que prepara el menu de cambio de aspecto
+     * @param item
+     */
+    public void prepareChangeMenu(JSONObject item){
+
+            //Primero debemos saber que tipo de elemento vamos a cambiar
+        String tipoItem = null;
+        try {
+            tipoItem = item.getString("TipoCompra");
+            int idTorre;
+            if(tipoItem == "towers"){
+                int idItemShop = item.getInt("id");
+                idTorre = items.getJSONObject("Skins").
+                        getJSONObject(String.valueOf(idItemShop)).getInt("forTower");
+            }
+            else if(tipoItem == "skins"){
+                //Id de la torre al que perteneceran los aspectos
+                idTorre = item.getInt("forTower");
+            } else {
+                idTorre = 0;
+            }
+
+            //Creamos una copia del hash map <id, bool> de las skins para saber cuales tenemos compradas
+            HashMap<Integer, Boolean> skinsResult = new HashMap<>(shopPurchases.get("skins"));
+
+            //Filtramos las skins que correspondan a la torre y que esten disponibles
+            skinsResult.entrySet().removeIf(skin ->
+                    skin.getKey() != idTorre && !skin.getValue());
+
+
+            Cambio cam = new Cambio(this.engine,this.mobile, this.save, skinsResult);
+            this.engine.setState(cam);
+
+
+
+
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void initShopButton(Button b, JSONObject item)
@@ -217,6 +260,7 @@ public class Tienda implements State {
                             .getJSONObject(item.getString("id")));
                     break;
                 case "towers":
+                    //Accede al campo skin del jsonArray de shop.json
                     b.setAppeareance(this.items.getJSONObject("Skins")
                             .getJSONObject(item.getString("skin")));
                    break;
