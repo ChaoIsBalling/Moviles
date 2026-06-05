@@ -27,7 +27,6 @@
     {
     "0" : {
         "forTower": 0,
-        "Precio":20,
         "type": "Figura",
         "id":  "triRayo",
         "form": "triangle",
@@ -37,22 +36,20 @@
         "visible": true
         },
     "1":{
-            "forTower": 1,
-            "Precio":20,
-            "type": "Figura",
-            "id": "cuadradoHielo",
-            "form": "square",
-                "x": 0, "y": -5,
-                "w": 30, "h": 30,
-                "color": "#FFC8A2C8",
-                "fill": true,
-                "round": true,
-                "r": 3,
-                "visible": true
+        "forTower": 1,
+        "type": "Figura",
+        "id": "cuadradoHielo",
+        "form": "square",
+            "x": 0, "y": -5,
+            "w": 30, "h": 30,
+            "color": "#FFC8A2C8",
+            "fill": true,
+            "round": true,
+            "r": 3,
+            "visible": true
         },
     "2" : {
                 "forTower": 2,
-                "Precio":20,
                  "type": "Figura",
                 "id": "hexFuego",
                 "form": "hexagon",
@@ -64,7 +61,6 @@
     },
     "3": {
       "forTower": 0,
-      "Precio": 20,
       "type": "Image",
       "id": "TRayo",
       "imagen": "TorreRayo.png",
@@ -73,7 +69,6 @@
     },
     "4": {
       "forTower": 1,
-      "Precio": 20,
       "type": "Image",
       "id": "TFuego",
       "imagen": "TorreFuego.png",
@@ -82,7 +77,6 @@
     },
     "5": {
       "forTower": 2,
-      "Precio": 20,
       "type": "Image",
       "imagen": "TorreHielo.png",
       "x": -15, "y": -20, "w": 35, "h": 35,
@@ -90,7 +84,6 @@
     },
     "6": {
       "forTower": 3,
-      "Precio": 20,
       "type": "Image",
       "id": "TMini",
       "imagen": "MiniTorreRayo.png",

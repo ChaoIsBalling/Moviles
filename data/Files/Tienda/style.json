@@ -51,6 +51,33 @@
       {
         "method":"setCallbackButtonBuy"
       }
+    },
+    {
+      "id": "BUT_CAMBIO",
+      "type":"cambio",
+      "layer":1,
+      "x": 480,
+      "y": 250,
+      "w": 200,
+      "h": 50,
+      "isRound": true,
+      "ar": 20,
+      "color":"#FF999999",
+      "text": {
+        "id": "TEXT_BOTON_Cambio",
+        "texto": "Cambiar aspecto",
+        "font": "Inika-Regular.ttf",
+        "x": 0,
+        "y": 0,
+        "size": 30,
+        "bold": true,
+        "italic": true,
+        "color": "#FF00FFFF"
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonChange"
+      }
     }
   ],
 

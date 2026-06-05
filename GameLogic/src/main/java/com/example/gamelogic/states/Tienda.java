@@ -111,6 +111,7 @@ public class Tienda implements State {
         this.ui.getTextUI("TEXT_DIAMANTES").setText(String.valueOf(numGems));
         this.ui.changeVisualElementStateOfType("compra",false);
         this.ui.changeVisualElementStateOfType("yacomprado",false);
+        this.ui.changeVisualElementStateOfType("cambio",false);
 
     }
 
@@ -196,6 +197,15 @@ public class Tienda implements State {
         }
     }
 
+
+    public void setCallbackButtonChange(Button b) {
+
+            b.setOnClickListener( () -> {
+                Cambio cam = new Cambio(this.engine,this.mobile, this.save);
+                this.engine.setState(cam);
+            });
+    }
+
     public void initShopButton(Button b, JSONObject item)
     {
         try {
@@ -270,11 +280,13 @@ public class Tienda implements State {
             if(itemBought()) {
                 this.ui.changeVisualElementStateOfType("compra",false);
                 this.ui.changeVisualElementStateOfType("yacomprado",true);
+                this.ui.changeVisualElementStateOfType("cambio",true);
             }
             //Caso en el que el item este sin comprar
             else {
                 this.ui.changeVisualElementStateOfType("compra",true);
                 this.ui.changeVisualElementStateOfType("yacomprado",false);
+                this.ui.changeVisualElementStateOfType("cambio",false);
                 this.ui.getTextUI("TEXT_DESCRIPTION").setText(item.getString("description"));
                 this.ui.getTextUI("TEXT_PRECIO").setText("Coste:"+item.getInt("cost"));
             }
@@ -309,7 +321,7 @@ public class Tienda implements State {
             JSONObject compras= this.save.getJSONObject("shop").getJSONObject("purchases");
             compras.getJSONArray(tipoCompra).put(idItem);
             shopPurchases.get(tipoCompra).put(idItem,true);
-
+            this.ui.changeVisualElementStateOfType("cambio",true);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
