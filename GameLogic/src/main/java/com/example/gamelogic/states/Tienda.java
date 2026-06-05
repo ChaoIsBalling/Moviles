@@ -225,7 +225,8 @@ public class Tienda implements State {
             int idTorre;
             if(tipoItem == "towers"){
                 int idItemShop = item.getInt("id");
-                idTorre = skinItems.getJSONObject(String.valueOf(idItemShop)).getInt("forTower");
+                idTorre = idItemShop;
+                //idTorre = skinItems.getJSONObject(String.valueOf(idItemShop));
             }
             else if(tipoItem == "skins"){
                 //Id de la torre al que perteneceran los aspectos

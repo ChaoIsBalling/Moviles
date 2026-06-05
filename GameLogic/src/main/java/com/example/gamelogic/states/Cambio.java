@@ -62,8 +62,8 @@ public class Cambio implements State {
      */
     public void inicializarAspectos(){
         int amount = res.size();
-
         try {
+            indexSkin = 0;
             JSONObject prefabBoton = prefabs.getJSONObject("BotonAspecto");
             this.ui.createPrefabs(prefabBoton, amount);
         } catch (JSONException e) {
@@ -77,25 +77,29 @@ public class Cambio implements State {
             switch (tipoItem){
                 case "skins":
                     b.setAppeareance(this.items.getJSONObject("Skins")
-                            .getJSONObject(String.valueOf(indexSkin)));
+                            .getJSONObject(String.valueOf(res.get(indexSkin))));
                     break;
                 case "towers":
                     //Accede al campo skin del jsonArray de shop.json
                     b.setAppeareance(this.items.getJSONObject("Skins")
-                            .getJSONObject(String.valueOf(indexSkin)));
+                            .getJSONObject(String.valueOf(res.get(indexSkin))));
                     break;
                 case  "bg":
                     b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
                     b.getFigButton().setColor(this.items.getJSONObject("Fondos")
-                            .getJSONObject(String.valueOf(indexSkin)).getString("color"));
+                            .getJSONObject(String.valueOf(res.get(indexSkin))).getString("color"));
                     break;
             }
+
+            indexSkin++;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void setCallbackButtonAspect(Button b) {
+        initAppeareanceButton(b);
+
         b.setOnClickListener( () -> {
             changeSkinEquiped(b);
         });

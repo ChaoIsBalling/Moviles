@@ -68,7 +68,7 @@
       "visible": true
     },
     "4": {
-      "forTower": 1,
+      "forTower": 2,
       "type": "Image",
       "id": "TFuego",
       "imagen": "TorreFuego.png",
@@ -76,7 +76,7 @@
       "visible": true
     },
     "5": {
-      "forTower": 2,
+      "forTower": 1,
       "type": "Image",
       "imagen": "TorreHielo.png",
       "x": -15, "y": -20, "w": 35, "h": 35,
