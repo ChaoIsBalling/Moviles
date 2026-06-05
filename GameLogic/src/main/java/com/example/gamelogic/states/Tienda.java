@@ -227,7 +227,7 @@ public class Tienda implements State {
         //Primero debemos saber que tipo de elemento vamos a cambiar
         String tipoItem = null;
         try {
-           final JSONObject skinItems=items.getJSONObject( "Skins");
+            final JSONObject skinItems=items.getJSONObject( "skins");
             tipoItem = item.getString("TipoCompra");
             int idTorre;
             if(tipoItem == "towers"){
@@ -272,22 +272,18 @@ public class Tienda implements State {
             //procesamos cada tipo de compra
             switch (tipoCompra){
                 case "skins":
-                    b.setAppeareance(this.items.getJSONObject("Skins")
+                    b.setAppeareance(this.items.getJSONObject("skins")
                             .getJSONObject(item.getString("id")));
                     break;
                 case "towers":
                     //Accede al campo skin del jsonArray de shop.json
-                    b.setAppeareance(this.items.getJSONObject("Skins")
+                    b.setAppeareance(this.items.getJSONObject("skins")
                             .getJSONObject(item.getString("skin")));
                    break;
                 case "bg":
-                    b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
-                    b.getFigButton().setColor(this.items.getJSONObject("Fondos")
-                            .getJSONObject(item.getString("id")).getString("color"));
-                    break;
                 case "but":
                     b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
-                    b.getFigButton().setColor(this.items.getJSONObject("Botones")
+                    b.getFigButton().setColor(this.items.getJSONObject(tipoCompra)
                             .getJSONObject(item.getString("id")).getString("color"));
                     break;
             }
@@ -318,6 +314,8 @@ public class Tienda implements State {
                     buyItem();
                     this.ui.changeVisualElementStateOfType("compra",false);
                     this.ui.changeVisualElementStateOfType("yacomprado",true);
+
+
                     this.save.put("gems",numGems);
                 }
             } catch (JSONException e) {
@@ -392,7 +390,9 @@ public class Tienda implements State {
             JSONObject compras= this.save.getJSONObject("shop").getJSONObject("purchases");
             compras.getJSONArray(tipoCompra).put(idItem);
             shopPurchases.get(tipoCompra).put(idItem,true);
-            this.ui.changeVisualElementStateOfType("cambio",true);
+
+            if(tipoCompra != "towers")
+                this.ui.changeVisualElementStateOfType("cambio",true);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

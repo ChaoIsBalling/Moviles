@@ -1,5 +1,5 @@
 {
-    "Torres":
+    "towers":
     {
         "0":
         {
@@ -23,7 +23,7 @@
         }
     },
 
-    "Skins":
+    "skins":
     {
     "0" : {
         "forTower": 0,
@@ -92,7 +92,7 @@
     }
     },
     
-    "Fondos":
+    "bg":
     {
         "0":{
             "color":"#FFFFFFFF"
@@ -105,7 +105,7 @@
         }
     },
 
-    "Botones":
+    "but":
     {
         "0":{
             "color":"#FF999999"

@@ -8,10 +8,11 @@ import com.example.androidengine.AndroidAudio;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.example.androidengine.AndroidMobile;
+import com.example.gamelogic.Color;
+import com.example.gamelogic.VisualElements.VisualElement;
 import com.example.gamelogic.VisualElements.button.Button;
 import com.example.gamelogic.managers.UIManager;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Cambio implements State {
     private AndroidEngine engine;
@@ -25,8 +26,7 @@ public class Cambio implements State {
 
     //Contiene los aspectos que se pueden elegir
     ArrayList<Integer>res;
-
-    int indexSkin;
+    int indexItem;
 
     public Cambio (AndroidEngine engine, AndroidMobile mobile, JSONObject save, ArrayList<Integer>res, String tipoItem){
         this.save =save;
@@ -63,7 +63,7 @@ public class Cambio implements State {
     public void inicializarAspectos(){
         int amount = res.size();
         try {
-            indexSkin = 0;
+            indexItem = 0;
             JSONObject prefabBoton = prefabs.getJSONObject("BotonAspecto");
             this.ui.createPrefabs(prefabBoton, amount);
         } catch (JSONException e) {
@@ -79,42 +79,89 @@ public class Cambio implements State {
         try {
             //procesamos cada tipo de compra
             switch (tipoItem){
-                case "skins":
-                    b.setAppeareance(this.items.getJSONObject("Skins")
-                            .getJSONObject(String.valueOf(res.get(indexSkin))));
-                    break;
                 case "towers":
+                case "skins":
                     //Accede al campo skin del jsonArray de shop.json
-                    b.setAppeareance(this.items.getJSONObject("Skins")
-                            .getJSONObject(String.valueOf(res.get(indexSkin))));
+                    b.setAppeareance(this.items.getJSONObject(tipoItem)
+                            .getJSONObject(String.valueOf(res.get(indexItem))));
                     break;
                 case "bg":
-                    b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
-                    b.getFigButton().setColor(this.items.getJSONObject("Fondos")
-                            .getJSONObject(String.valueOf(res.get(indexSkin))).getString("color"));
-                    break;
                 case "but":
                     b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
-                    b.getFigButton().setColor(this.items.getJSONObject("Botones")
-                            .getJSONObject(String.valueOf(res.get(indexSkin))).getString("color"));
+                    b.getFigButton().setColor(this.items.getJSONObject(tipoItem)
+                            .getJSONObject(String.valueOf(res.get(indexItem))).getString("color"));
                     break;
             }
 
-            indexSkin++;
+            indexItem++;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void setCallbackButtonAspect(Button b) {
+
+        //Incializamos su apariencia con la skin que se pueda elegir
         initAppeareanceButton(b);
+        indexItem =0;
+
+        final JSONObject item;
+        try {
+            item = this.items.getJSONObject(tipoItem).
+                    getJSONObject(String.valueOf(res.get(indexItem)));
+
+            //Nombre del jsonObject dentro del apartado de skins/bg/but en items.json
+            item.put("Nombre", res.get(indexItem));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
         b.setOnClickListener( () -> {
-            changeSkinEquiped(b);
+            changeSkinEquiped(b, item);
         });
     }
 
-    public void changeSkinEquiped(Button b){
+    public void changeSkinEquiped(Button b, JSONObject item){
+
+        //Coloreamos el boton seleccionado
+        colorButtons(b);
+
+        try{
+            //Ahora hay que modificar el archivo save para que se equipe la skin seleccionada
+            //Primero identificamos que clase de objeto se ha comprado
+            JSONObject shopSaveEquips =  this.save.getJSONObject("shop").getJSONObject("equips");
+
+            switch (tipoItem) {
+                case "skins":
+                    //indice de la skin seleccionada
+                    int indexObject = item.getInt("Nombre");
+                    //indice del array del save
+                    int indexSave = Integer.parseInt(item.getString("forTower"));
+
+                    //Guardamos el seteo de skin
+                    shopSaveEquips.getJSONArray(tipoItem).put(indexSave, indexObject);
+                    break;
+                case "bg":
+                case "but":
+                    //Guardamos el seteo del color de bg o but en el save
+                    shopSaveEquips.getJSONArray(tipoItem).put(item.getString("color"));
+                    break;
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * Pinta de verde el boton seleccionado
+     * @param b boton que se pulso (skin elegida)
+     */
+    public void colorButtons(Button b){
+        for (VisualElement element : this.ui.getAllVisualElementsOfType("item")) {
+            element.setColor(Color.GRIS.getHex());
+        }
+        b.setColor(Color.VERDE.getHex());
     }
 
     /**
