@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         this.engine.setNotificationIcon(R.drawable.ic_tower_defense_noti); //icono de notificación
 
         checkRewardNotifiactionIntent(); //Comprobamos si el jugador ha vuelto a entrar al juego por la notificacion recompensada
-        if(!this.engine.checkFileExists("save"))
+        if(this.engine.checkFileExists("save"))
         {
             save=this.engine.readInternalJsonFile("save");
             String hash = this.engine.createHash(save.toString());
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     {
         JSONObject obj=new JSONObject();
         try {
-            obj.put("gems",1000);
+            obj.put("gems",0);
             obj.put("completed",0);
 
             JSONObject items=engine.readJsonFile("items.json");
@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
 
             //Informacion relevante para la tienda
             JSONObject shop = new JSONObject();
-
 
             //Objeto en el que se almacenan las cosas ya compradas
             JSONObject purchases = new JSONObject();
@@ -113,27 +112,6 @@ public class MainActivity extends AppCompatActivity {
             purchases.put("bg", bgPur);
 
             shop.put( "purchases", purchases);
-
-            //Objetos desbloqueados en la tienda
-            /*JSONObject unlocks = new JSONObject();
-
-            JSONArray skinsUnl = new JSONArray();
-            skinsUnl.put(0);
-            skinsUnl.put(1);
-            skinsUnl.put(2);
-            skinsUnl.put(3);
-            skinsUnl.put(4);
-            skinsUnl.put(5);
-            unlocks.put("skins", skinsUnl);
-
-            //Torres desbloqueadas
-            JSONArray towersUnl = new JSONArray();
-            towersUnl.put(0);
-            towersUnl.put(1);
-            towersUnl.put(2);
-            unlocks.put("towers", towersUnl);
-
-            shop.put("unlocks", unlocks);*/
 
             //Objetos equipados
             JSONObject equips = new JSONObject();

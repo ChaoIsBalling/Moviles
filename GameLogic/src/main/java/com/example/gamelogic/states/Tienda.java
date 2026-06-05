@@ -1,7 +1,5 @@
 package com.example.gamelogic.states;
 
-import android.webkit.HttpAuthHandler;
-
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.State;
@@ -34,8 +32,11 @@ public class Tienda implements State {
     //El item seleccionado en la tienda
     private JSONObject currentItem=null;
     private UIManager ui;
+
+    //String que define la seccion actual de la tienda (torres, skins o fondos)
     String  shopSection=null;
 
+    //Hashmap que define las compras realizadas y se usa para comprobar los elementos comprados
     private HashMap<String,HashMap<Integer,Boolean>> shopPurchases=new HashMap<>();
 
     // El indice del item de la tienda selccionado actualmente (en el jsonArray de shop)
@@ -52,6 +53,9 @@ public class Tienda implements State {
         readData();
     }
 
+    /**
+     * Metodo que lee los datos de compra del save para inicializar el hashmap de shopPurchases
+     */
     public void readData()
     {
         try {
@@ -116,11 +120,11 @@ public class Tienda implements State {
     }
 
     /**
-     * Metodo que inicializa el inventario que hay en la tienda
+     * Metodo que inicializa el inventario que hay en la tienda los cuales tienen scroll
      */
     private void inicializarScroll(){
         float initXText = 150;
-        float initYText = 200, offsetTextY = 1.5f;
+        float initYText = 100, offsetTextY = 1.5f;
         int i=0;
 
            initSections(initXText,initYText,offsetTextY,"towers",i,"Nuevas Torres");
@@ -139,6 +143,9 @@ public class Tienda implements State {
 
 
     }
+    /**
+     * Metodo que inicializa cada una de las secciones de la tienda y setea su apariencia
+     */
     public void initSections( float initXText ,float initYText, float offsetTextY,String section, int i, String nombreSeccion ){
         try {
             Text textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
@@ -196,8 +203,10 @@ public class Tienda implements State {
             throw new RuntimeException(e);
         }
     }
-
-
+    /**
+     * Metodo para setear el callback al boton que represtenta la transicion a la escena de cambio
+     * @param b boton al que le queremos setear el callback
+     */
     public void setCallbackButtonChange(Button b) {
             b.setOnClickListener( () -> {
                 prepareChangeMenu(currentItem);
@@ -235,12 +244,8 @@ public class Tienda implements State {
             skinsResult.entrySet().removeIf(skin ->
                     skin.getKey() != idTorre && !skin.getValue());
 
-
             Cambio cam = new Cambio(this.engine,this.mobile, this.save, skinsResult);
             this.engine.setState(cam);
-
-
-
 
 
         } catch (JSONException e) {
