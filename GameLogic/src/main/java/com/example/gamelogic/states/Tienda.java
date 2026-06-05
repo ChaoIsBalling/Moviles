@@ -244,15 +244,28 @@ public class Tienda implements State {
                     //Setear la skin
                     JSONArray activeSkins = this.save.getJSONObject("shop").
                             getJSONObject("equips").getJSONArray("skins");
+
                     int indexSkin = this.items.getJSONObject("towers")
                             .getJSONObject(String.valueOf(indexTower)).getInt("skin");
                     activeSkins.put(indexTower, indexSkin);
+
+                    //Cambiamos el texto
+                    this.ui.getButtonUI("BUT_ACTIVAR").changeText("Desactivar torre");
                 }
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
+
+
+    public void removeTower(){
+
+
+    }
+
+
+
 
 
     /**

@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             obj.put("completed",0);
 
             JSONObject items=engine.readJsonFile("items.json");
-            int TorresAmount= items.getJSONObject("Torres").length();
+            int TorresAmount= items.getJSONObject("towers").length();
 
             //Informacion relevante para la tienda
             JSONObject shop = new JSONObject();
