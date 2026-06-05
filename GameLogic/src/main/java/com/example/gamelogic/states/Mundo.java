@@ -61,7 +61,7 @@ public class Mundo implements State {
         this.gr = gr;
         this.style = engine.readJsonFile("Mundo/style.json");
         try {
-            this.prefabs = engine.readJsonFile("Mundo/prefabs.json").getJSONObject("NivelMundo");
+            this.prefabs = engine.readJsonFile("prefabs.json").getJSONObject("NivelMundo");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
