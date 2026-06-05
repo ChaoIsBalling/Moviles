@@ -234,16 +234,20 @@ public class Tienda implements State {
                         getJSONObject("equips").getJSONArray("towers");
 
                 //Ponemos la torre en el array de torres activas
-                activeTowers.put(item.getInt("id"));
-
-                //Setear la skin
-                JSONArray activeSkins = this.save.getJSONObject("shop").
-                        getJSONObject("equips").getJSONArray("skins");
-
+                int i = 0;
                 int indexTower = item.getInt("id");
-                int indexSkin =this.items.getJSONObject("towers")
-                        .getJSONObject(String.valueOf(indexTower)).getInt("skin");
-                activeSkins.put(indexTower, indexSkin);
+                while(i<activeTowers.length()&& activeTowers.getInt(i)!=indexTower)
+                    i++;
+                if(i>=activeTowers.length()) {
+                    activeTowers.put(item.getInt("id"));
+
+                    //Setear la skin
+                    JSONArray activeSkins = this.save.getJSONObject("shop").
+                            getJSONObject("equips").getJSONArray("skins");
+                    int indexSkin = this.items.getJSONObject("towers")
+                            .getJSONObject(String.valueOf(indexTower)).getInt("skin");
+                    activeSkins.put(indexTower, indexSkin);
+                }
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
