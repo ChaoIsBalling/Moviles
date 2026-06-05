@@ -234,20 +234,18 @@ public class Tienda implements State {
      * @param item
      */
     public void prepareChangeMenu(JSONObject item){
-        //Primero debemos saber que tipo de elemento vamos a cambiar
-        String tipoItem = null;
+
         try {
+            //Primero debemos saber que tipo de elemento vamos a cambiar
+            String tipoItem = item.getString("TipoCompra");
             final JSONObject skinItems=items.getJSONObject( "skins");
-            tipoItem = item.getString("TipoCompra");
-            int idTorre;
-            if(tipoItem == "towers"){
+            int idTorre=0;
+            if(tipoItem.equals("towers"))
                 idTorre  = item.getInt("id");
-            }
-            else if(tipoItem == "skins"){
+
+            else if(tipoItem.equals( "skins")){
                 //Id de la torre al que perteneceran los aspectos
                 idTorre = item.getInt("forTower");
-            } else {
-                idTorre = 0;
             }
 
             //Filtramos las skins que correspondan a la torre y que esten disponibles
@@ -262,7 +260,6 @@ public class Tienda implements State {
                         skinsResult.add(entry.getKey());
                 }
             }
-
             Cambio cam = new Cambio(this.engine,this.mobile, this.save, skinsResult,tipoItem);
             this.engine.setState(cam);
 
