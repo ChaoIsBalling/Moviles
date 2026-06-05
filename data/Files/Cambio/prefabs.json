@@ -1,5 +1,5 @@
   {
-"BotonAspecto" :{
+  "BotonAspecto" :{
       "id": "BUT_ASPECTO",
       "type": "item",
       "xOffset": 2,
@@ -15,5 +15,19 @@
       {
         "method":"setCallbackButtonAspect"
       }
+    },
+
+    "FiguraBoton":
+    {
+      "type": "Figura",
+      "id": "cuadrado",
+      "form": "square",
+      "x": 0, "y": -5,
+      "w": 30, "h": 30,
+      "color": "#FFFFFFFF",
+      "fill": true,
+      "round": true,
+      "r": 3,
+      "visible": true
     }
   }

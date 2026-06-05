@@ -70,8 +70,12 @@ public class Cambio implements State {
             throw new RuntimeException(e);
         }
     }
-    public void initAppeareanceButton(Button b)
-    {
+
+    /**
+     *
+     * @param b
+     */
+    public void initAppeareanceButton(Button b) {
         try {
             //procesamos cada tipo de compra
             switch (tipoItem){
@@ -84,9 +88,14 @@ public class Cambio implements State {
                     b.setAppeareance(this.items.getJSONObject("Skins")
                             .getJSONObject(String.valueOf(res.get(indexSkin))));
                     break;
-                case  "bg":
+                case "bg":
                     b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
                     b.getFigButton().setColor(this.items.getJSONObject("Fondos")
+                            .getJSONObject(String.valueOf(res.get(indexSkin))).getString("color"));
+                    break;
+                case "but":
+                    b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
+                    b.getFigButton().setColor(this.items.getJSONObject("Botones")
                             .getJSONObject(String.valueOf(res.get(indexSkin))).getString("color"));
                     break;
             }
