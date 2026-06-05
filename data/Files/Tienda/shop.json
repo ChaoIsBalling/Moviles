@@ -3,7 +3,7 @@
             {
                 "id": 3,
                 "cost": 100,
-                "description": "Me la chupa\n XD",
+                "description": "Nueva torre\nde rayo,\nahora mini",
                 "skin":6
             }
         ],
@@ -14,21 +14,21 @@
                 "id": 3,
                 "forTower": 0,
                 "cost": 100,
-                "description": "Skin para RAYO"
+                "description": "Aspecto para la\ntorre de rayo"
             },
              {
                 "icon": " ",
                 "id": 5,
                 "forTower": 1,
                 "cost": 100,
-                "description": "Skin para HIELO"
+                "description": "Aspecto para la\ntorre de hielo"
             },
              {
                 "icon": " ",
                 "id": 4,
                 "forTower": 2,
                 "cost": 100,
-                "description": "Skin para FUEGO"
+                "description": "Aspecto para la\ntorre de fuego"
             }
         ],
 

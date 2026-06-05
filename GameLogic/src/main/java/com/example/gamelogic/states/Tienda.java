@@ -119,7 +119,7 @@ public class Tienda implements State {
      * Metodo que inicializa el inventario que hay en la tienda
      */
     private void inicializarScroll(){
-        float initXText = 0;
+        float initXText = 150;
         float initYText = 200, offsetTextY = 1.5f;
         int i=0;
 
@@ -154,8 +154,8 @@ public class Tienda implements State {
             //Se añade al scroll
             this.ui.addVisualElementToArray(textoSeccion, prefabs.getJSONObject("textoTienda"));
 
-            //Desplazamos el offset de Y
-            float ny = (textoSeccion.getY() + textoSeccion.getHeight()* offsetTextY) ;
+            //Desplazamos el offset de Y para el siguiente boton
+            float ny = (textoSeccion.getY() + textoSeccion.getHeight() * offsetTextY) ;
             this.prefabs.getJSONObject("BotonItem").put("y", ny);
             this.prefabs.getJSONObject("BotonItem").put("id",
                     this.prefabs.getJSONObject("BotonItem").getString("id") + i);
@@ -199,7 +199,6 @@ public class Tienda implements State {
 
 
     public void setCallbackButtonChange(Button b) {
-
             b.setOnClickListener( () -> {
                 Cambio cam = new Cambio(this.engine,this.mobile, this.save);
                 this.engine.setState(cam);
@@ -271,7 +270,7 @@ public class Tienda implements State {
     public void prepararCompra(JSONObject item, Button b){
 
         for (VisualElement element : this.ui.getAllVisualElementsOfType("item")) {
-            element.setColor(Color.BLANCO.getHex());
+            element.setColor(Color.GRIS.getHex());
         }
         b.setColor(Color.AMARILLO_CLARO.getHex());
         this.currentItem=item;

@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             skinsEq.put(0);
             skinsEq.put(1);
             skinsEq.put(2);
-            for(int i =0;i<TorresAmount-3;i++)
+            for(int i =0;i < TorresAmount-3;i++)
                 skinsEq.put(-1);
             equips.put("skins", skinsEq);
 
