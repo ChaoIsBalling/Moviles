@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -123,11 +124,12 @@ public class MainActivity extends AppCompatActivity {
 
             JSONArray skinsEq = new JSONArray();
             // tengo equipadas las skins base (0, 1 y 2) para sus torres
-            skinsEq.put(0);
-            skinsEq.put(1);
-            skinsEq.put(2);
-            for(int i =0;i < TorresAmount-3;i++)
-                skinsEq.put(-1);
+            Iterator<String> it =items.getJSONObject("towers").keys();
+            for(int i=0;i<items.getJSONObject("towers").length();i++)
+            {
+                skinsEq.put(items.getJSONObject("towers").getJSONObject(it.next()).getInt("skin"));
+            }
+
             equips.put("skins", skinsEq);
 
             equips.put("but" , "#FF999999");

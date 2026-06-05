@@ -208,9 +208,6 @@ public class Tienda implements State {
 
     public void activeTower(JSONObject item){
         try {
-            //Primero vemos si el item seleccionado es una torre
-            if(item.getString("TipoCompra") == "towers"){
-
                 //Accedemos al array de torres activas
                 JSONArray activeTowers = this.save.getJSONObject("shop").
                         getJSONObject("equips").getJSONArray("towers");
@@ -219,15 +216,6 @@ public class Tienda implements State {
 
                 if(!activeTowers.getBoolean(indexTower)) {
                     activeTowers.put(indexTower,true);
-
-                    //Setear la skin
-                    JSONArray activeSkins = this.save.getJSONObject("shop").
-                            getJSONObject("equips").getJSONArray("skins");
-
-                    int indexSkin = this.items.getJSONObject("towers")
-                            .getJSONObject(String.valueOf(indexTower)).getInt("skin");
-                    activeSkins.put(indexTower, indexSkin);
-
                     //Cambiamos el texto
                     this.ui.getButtonUI("BUT_ACTIVAR").changeText("Desactivar torre");
                 }
@@ -235,7 +223,7 @@ public class Tienda implements State {
                     activeTowers.put(indexTower,false);
                     this.ui.getButtonUI("BUT_ACTIVAR").changeText("Activar torre");
                 }
-            }
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -253,8 +241,7 @@ public class Tienda implements State {
             tipoItem = item.getString("TipoCompra");
             int idTorre;
             if(tipoItem == "towers"){
-                int idItemShop = item.getInt("id");
-                idTorre = idItemShop;
+                idTorre  = item.getInt("id");
             }
             else if(tipoItem == "skins"){
                 //Id de la torre al que perteneceran los aspectos
@@ -268,10 +255,10 @@ public class Tienda implements State {
             ArrayList<Integer>skinsResult = new ArrayList<>();
             String tipoCompra=item.getString("TipoCompra");
             for (Map.Entry<Integer,Boolean> entry : shopPurchases.get(tipoCompra).entrySet()) {
-                String skinId=String.valueOf(entry.getKey());
+                String entryId=String.valueOf(entry.getKey());
                 if(entry.getValue())
                 {
-                    if(!tipoCompra.equals("skins")||skinItems.getJSONObject(skinId).getInt( "forTower") == idTorre)
+                    if(!tipoCompra.equals("skins")||skinItems.getJSONObject(entryId).getInt( "forTower") == idTorre)
                         skinsResult.add(entry.getKey());
                 }
             }
@@ -333,8 +320,6 @@ public class Tienda implements State {
                     buyItem();
                     this.ui.changeVisualElementStateOfType("compra",false);
                     this.ui.changeVisualElementStateOfType("yacomprado",true);
-
-
                     this.save.put("gems",numGems);
                 }
             } catch (JSONException e) {
