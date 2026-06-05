@@ -126,22 +126,19 @@ public class Tienda implements State {
         float initXText = 150;
         float initYText = 100, offsetTextY = 1.5f;
         int i=0;
+        initSections(initXText,initYText,offsetTextY,"towers",i,"Nuevas Torres");
+        initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
+        i++;
 
-           initSections(initXText,initYText,offsetTextY,"towers",i,"Nuevas Torres");
-           initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
-           i++;
+        //reiniciamos contador que apunta al ultimo elemento de la seccion
+        shopItemIndex = 0;
 
-           //reiniciamos contador que apunta al ultimo elemento de la seccion
-           shopItemIndex = 0;
+        initSections(initXText,initYText,offsetTextY,"skins",i,"Nuevas Skins");
+        initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
+        i++;
 
-           initSections(initXText,initYText,offsetTextY,"skins",i,"Nuevas Skins");
-           initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
-           i++;
-
-           shopItemIndex = 0;
-           initSections(initXText,initYText,offsetTextY,"bg",i,"Fondos");
-
-
+        shopItemIndex = 0;
+        initSections(initXText,initYText,offsetTextY,"bg",i,"Fondos");
     }
     /**
      * Metodo que inicializa cada una de las secciones de la tienda y setea su apariencia
@@ -219,8 +216,7 @@ public class Tienda implements State {
      * @param item
      */
     public void prepareChangeMenu(JSONObject item){
-
-            //Primero debemos saber que tipo de elemento vamos a cambiar
+        //Primero debemos saber que tipo de elemento vamos a cambiar
         String tipoItem = null;
         try {
            final JSONObject skinItems=items.getJSONObject( "Skins");
@@ -238,23 +234,23 @@ public class Tienda implements State {
             }
 
             //Creamos una copia del hash map <id, bool> de las skins para saber cuales tenemos compradas
-            HashMap<Integer, Boolean> skinsResult = new HashMap<>(shopPurchases.get("skins"));
+            /*HashMap<Integer, Boolean> skinsResult = new HashMap<>(shopPurchases.get("skins"));
 
             //Filtramos las skins que correspondan a la torre y que esten disponibles
             skinsResult.entrySet().removeIf(skin ->
             {
                 try {
-
                     String skinId=String.valueOf(skin.getKey());
                     return skinItems.getJSONObject(skinId).getInt( "forTower") != idTorre || !skin.getValue();
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-            });
+            });*/
 
-            Cambio cam = new Cambio(this.engine,this.mobile, this.save, skinsResult);
+
+
+            Cambio cam = new Cambio(this.engine,this.mobile, this.save, skinsResult,tipoItem);
             this.engine.setState(cam);
-
 
         } catch (JSONException e) {
             throw new RuntimeException(e);

@@ -1,6 +1,5 @@
 package com.example.gamelogic.states;
 
-
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.AndroidGraphics;
 import com.example.androidengine.State;
@@ -9,8 +8,6 @@ import com.example.androidengine.AndroidAudio;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.example.androidengine.AndroidMobile;
-import com.example.gamelogic.Color;
-import com.example.gamelogic.VisualElements.VisualElement;
 import com.example.gamelogic.VisualElements.button.Button;
 import com.example.gamelogic.managers.UIManager;
 import java.util.ArrayList;
@@ -24,18 +21,26 @@ public class Cambio implements State {
     AndroidMobile mobile;
     JSONObject style, prefabs, items;
     private UIManager ui;
+    private String tipoItem;
 
     //Contiene los aspectos que se pueden elegir
     HashMap<Integer, Boolean> res;
 
-    public Cambio (AndroidEngine engine, AndroidMobile mobile, JSONObject save, HashMap<Integer, Boolean> res){
+    int indexSkin;
+
+    public Cambio (AndroidEngine engine, AndroidMobile mobile, JSONObject save, ArrayList<Integer>res, String tipoItem){
         this.save =save;
         this.engine= engine;
         this.mobile = mobile;
         this.style =engine.readJsonFile("Cambio/style.json");
         this.prefabs = engine.readJsonFile("Cambio/prefabs.json");
         this.items = engine.readJsonFile("items.json");
+
+
         this.res = res;
+
+
+        this.tipoItem = tipoItem;
     }
 
     @Override
@@ -61,9 +66,34 @@ public class Cambio implements State {
      */
     public void inicializarAspectos(){
         int amount = res.size();
+
         try {
             JSONObject prefabBoton = prefabs.getJSONObject("BotonAspecto");
             this.ui.createPrefabs(prefabBoton, amount);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void initAppeareanceButton(Button b)
+    {
+        try {
+            //procesamos cada tipo de compra
+            switch (tipoItem){
+                case "skins":
+                    b.setAppeareance(this.items.getJSONObject("Skins")
+                            .getJSONObject(String.valueOf(indexSkin)));
+                    break;
+                case "towers":
+                    //Accede al campo skin del jsonArray de shop.json
+                    b.setAppeareance(this.items.getJSONObject("Skins")
+                            .getJSONObject(String.valueOf(indexSkin)));
+                    break;
+                case  "bg":
+                    b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
+                    b.getFigButton().setColor(this.items.getJSONObject("Fondos")
+                            .getJSONObject(String.valueOf(indexSkin)).getString("color"));
+                    break;
+            }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -75,11 +105,7 @@ public class Cambio implements State {
         });
     }
 
-
     public void changeSkinEquiped(Button b){
-
-
-
     }
 
     /**
