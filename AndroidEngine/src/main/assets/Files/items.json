@@ -37,13 +37,17 @@
         "visible": true
         },
     "1":{
-                "forTower": 1,
-                "Precio":20,
-                "type": "Image",
-                "id": "TRayo",
-                "imagen": "TorreRayo.png", 
-                "x": -15, "y": -20, 
-                "w": 35, "h": 35 ,
+            "forTower": 1,
+            "Precio":20,
+            "type": "Figura",
+            "id": "cuadradoHielo",
+            "form": "square",
+                "x": 0, "y": -5,
+                "w": 30, "h": 30,
+                "color": "#FFC8A2C8",
+                "fill": true,
+                "round": true,
+                "r": 3,
                 "visible": true
         },
     "2" : {
