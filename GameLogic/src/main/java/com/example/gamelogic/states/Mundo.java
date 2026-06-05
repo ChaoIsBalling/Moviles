@@ -53,8 +53,6 @@ public class Mundo implements State {
     //renderización de todos los botones y texto
     @Override
     public void render(AndroidGraphics gr) {
-        gr.EmpezarLimiteDibujado(0,100,600,400);
-        gr.TerminarLimiteDibujado();
         this.ui.render(gr);
     }
 
