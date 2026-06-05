@@ -35,11 +35,6 @@
       "scrollable":true,
       "ar": 20, 
       "color": "#FF999999",
-      "text": {
-        "id": "TEXT_coste",
-        "texto": " ", "font": "Inika-Regular.ttf",
-        "x": 0, "y": 15, "size": 15, "bold": true, "italic": true, "color": "#FF000000"
-      },
       "callback":
       {
         "method":"setCallbackButtonShopItem"

@@ -1,0 +1,19 @@
+  {
+"BotonAspecto" :{
+      "id": "BUT_ASPECTO",
+      "type": "item",
+      "xOffset": 2,
+      "yOffset": 1.5,
+      "xLimit": 350,
+      "x": 200, "y": 150, 
+      "w": 50, "h": 50,
+      "isRound": true, 
+      "scrollable":true,
+      "ar": 20, 
+      "color": "#FF999999",
+      "callback":
+      {
+        "method":"setCallbackButtonAspect"
+      }
+    }
+  }

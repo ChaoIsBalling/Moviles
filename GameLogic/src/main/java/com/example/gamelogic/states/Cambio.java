@@ -22,7 +22,7 @@ public class Cambio implements State {
     //El archivo de guardado del juego
     private JSONObject save;
     AndroidMobile mobile;
-    JSONObject style;
+    JSONObject style, prefabs, items;
     private UIManager ui;
 
     //Contiene los aspectos que se pueden elegir
@@ -33,9 +33,10 @@ public class Cambio implements State {
         this.engine= engine;
         this.mobile = mobile;
         this.style =engine.readJsonFile("Cambio/style.json");
+        this.prefabs = engine.readJsonFile("Cambio/prefabs.json");
+        this.items = engine.readJsonFile("items.json");
         this.res = res;
     }
-
 
     @Override
     public void update(double deltatime) {}
@@ -52,6 +53,33 @@ public class Cambio implements State {
         this.gr =gr;
         this.ui = new UIManager(this.style, this.engine, this.gr);
         this.ui.setAllCallbacks();
+        inicializarAspectos();
+    }
+
+    /**
+     * Inicializa el UI Manager con los aspectos que se leen del unordered_Map
+     */
+    public void inicializarAspectos(){
+        int amount = res.size();
+        try {
+            JSONObject prefabBoton = prefabs.getJSONObject("BotonAspecto");
+            this.ui.createPrefabs(prefabBoton, amount);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setCallbackButtonAspect(Button b) {
+        b.setOnClickListener( () -> {
+            changeSkinEquiped(b);
+        });
+    }
+
+
+    public void changeSkinEquiped(Button b){
+
+
+
     }
 
     /**
