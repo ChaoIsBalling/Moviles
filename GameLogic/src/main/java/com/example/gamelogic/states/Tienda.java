@@ -222,8 +222,8 @@ public class Tienda implements State {
 
             //Primero debemos saber que tipo de elemento vamos a cambiar
         String tipoItem = null;
-        JSONObject skinItems=null;
         try {
+           final JSONObject skinItems=items.getJSONObject( "Skins");
             tipoItem = item.getString("TipoCompra");
             int idTorre;
             if(tipoItem == "towers"){
@@ -244,6 +244,7 @@ public class Tienda implements State {
             skinsResult.entrySet().removeIf(skin ->
             {
                 try {
+
                     String skinId=String.valueOf(skin.getKey());
                     return skinItems.getJSONObject(skinId).getInt( "forTower") != idTorre || !skin.getValue();
                 } catch (JSONException e) {
