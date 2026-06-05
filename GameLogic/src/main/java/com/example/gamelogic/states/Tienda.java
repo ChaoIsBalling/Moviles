@@ -241,8 +241,9 @@ public class Tienda implements State {
                         getJSONObject("equips").getJSONArray("skins");
 
                 int indexTower = item.getInt("id");
-                //int indexSkin =
-                //activeSkins.put(indexTower, indexTower);
+                int indexSkin =this.items.getJSONObject("towers")
+                        .getJSONObject(String.valueOf(indexTower)).getInt("skin");
+                activeSkins.put(indexTower, indexSkin);
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);

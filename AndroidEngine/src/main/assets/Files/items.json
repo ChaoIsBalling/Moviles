@@ -4,22 +4,26 @@
         "0":
         {
             "type": "RAYO",
-            "cost": 100
+            "cost": 100,
+            "skin": 0 
         },
         "1":
         {
             "type": "HIELO",
-            "cost":150
+            "cost":150,
+            "skin": 1 
         },
         "2":
         {
             "type": "FUEGO",
-            "cost":200
+            "cost":200,
+            "skin": 2 
         },
         "3":
         {
             "type": "MINI",
-            "cost":100
+            "cost":100,
+            "skin": 6
         }
     },
 
@@ -89,6 +93,16 @@
       "imagen": "MiniTorreRayo.png",
       "x": -15, "y": -20, "w": 35, "h": 35,
       "visible": true
+    },
+    "7": {
+      "forTower": 3,
+      "type": "Figura",
+        "id":  "triRayoMini",
+        "form": "triangle",
+        "x": 0, "y":0, "r": 8,
+        "color": "#FFFFFF00",
+        "fill": true,
+        "visible": true
     }
     },
     
