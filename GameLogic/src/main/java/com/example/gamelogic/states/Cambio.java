@@ -24,7 +24,7 @@ public class Cambio implements State {
     private String tipoItem;
 
     //Contiene los aspectos que se pueden elegir
-    HashMap<Integer, Boolean> res;
+    ArrayList<Integer>res;
 
     int indexSkin;
 
@@ -35,11 +35,7 @@ public class Cambio implements State {
         this.style =engine.readJsonFile("Cambio/style.json");
         this.prefabs = engine.readJsonFile("Cambio/prefabs.json");
         this.items = engine.readJsonFile("items.json");
-
-
         this.res = res;
-
-
         this.tipoItem = tipoItem;
     }
 

@@ -18,6 +18,7 @@ import com.example.gamelogic.managers.UIManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Clase que se encarga de representar la tienda y la gestión de compras
@@ -233,20 +234,14 @@ public class Tienda implements State {
                 idTorre = 0;
             }
 
-            //Creamos una copia del hash map <id, bool> de las skins para saber cuales tenemos compradas
-            /*HashMap<Integer, Boolean> skinsResult = new HashMap<>(shopPurchases.get("skins"));
-
             //Filtramos las skins que correspondan a la torre y que esten disponibles
-            skinsResult.entrySet().removeIf(skin ->
-            {
-                try {
-                    String skinId=String.valueOf(skin.getKey());
-                    return skinItems.getJSONObject(skinId).getInt( "forTower") != idTorre || !skin.getValue();
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            });*/
-
+            //y las ponemos en un arrayList Auxiliar
+            ArrayList<Integer>skinsResult = new ArrayList<>();
+            for (Map.Entry<Integer,Boolean> entry : shopPurchases.get("skins").entrySet()) {
+                String skinId=String.valueOf(entry.getKey());
+                if( skinItems.getJSONObject(skinId).getInt( "forTower") == idTorre && entry.getValue())
+                    skinsResult.add(entry.getKey());
+            }
 
 
             Cambio cam = new Cambio(this.engine,this.mobile, this.save, skinsResult,tipoItem);
