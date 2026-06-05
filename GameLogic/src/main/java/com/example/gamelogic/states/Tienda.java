@@ -68,22 +68,16 @@ public class Tienda implements State {
                 for(int j=0;j<purchaseSection.length();j++)
                     //Seteamos a true todos los elementos que esten en la seccion de purchase
                     shopPurchases.get(name).put(purchaseSection.getInt(j),true);
-            }
-            it=this.shop.keys();
-            for(int i=0;i<shop.length();i++)
-            {
-                name=it.next();
-                JSONArray shopSection= shop.getJSONArray(name);
 
+                JSONArray shopSection= shop.getJSONArray(name);
                 for(int j=0;j<shopSection.length();j++)
                 {
                     int idItem=shopSection.getJSONObject(j).getInt("id");
                     if(!shopPurchases.get(name).containsKey(idItem))
                         shopPurchases.get(name).put(idItem,false);
                 }
-                    //Seteamos a true todos los elementos que esten en la seccion de purchase
-
             }
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
