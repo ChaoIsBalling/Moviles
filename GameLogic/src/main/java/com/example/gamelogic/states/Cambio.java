@@ -33,7 +33,7 @@ public class Cambio implements State {
         this.engine= engine;
         this.mobile = mobile;
         this.style =engine.readJsonFile("Cambio/style.json");
-        this.prefabs = engine.readJsonFile("Cambio/prefabs.json");
+        this.prefabs = engine.readJsonFile("prefabs.json");
         this.items = engine.readJsonFile("items.json");
         this.res = res;
         this.tipoItem = tipoItem;

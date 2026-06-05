@@ -49,7 +49,7 @@ public class Tienda implements State {
         this.mobile = mobile;
         this.style =engine.readJsonFile("Tienda/style.json");
         this.shop=engine.readJsonFile("Tienda/shop.json");
-        this.prefabs=engine.readJsonFile("Tienda/prefabs.json");
+        this.prefabs=engine.readJsonFile("prefabs.json");
         this.items=engine.readJsonFile("items.json");
         readData();
     }

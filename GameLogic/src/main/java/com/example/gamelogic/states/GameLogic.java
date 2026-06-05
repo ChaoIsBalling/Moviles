@@ -379,7 +379,7 @@ public class GameLogic implements State {
     public void inicializarUI() {
         //Leemos el json de estilos de botones y elementos del juego
         this.style = engine.readJsonFile("GameLogic/style.json");
-        this.prefabs = engine.readJsonFile("GameLogic/prefabs.json");
+        this.prefabs = engine.readJsonFile("prefabs.json");
         this.items=engine.readJsonFile("items.json");
         //Inicializamos todos los elementos de la UI
         this.ui = new UIManager(this.style,this.engine, this.gr);
