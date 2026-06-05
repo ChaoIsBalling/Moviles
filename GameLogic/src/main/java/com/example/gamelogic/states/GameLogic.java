@@ -568,7 +568,12 @@ public class GameLogic implements State {
             this.ui.changeVisualElementStateOfType("tower",false);
             this.ui.changeVisualElementStateOfType("upgrade",true);
         }else if(this.estado == Estado.CONSTRUCCION) {
+            //si casilla vacia y modo construccion se crea una torre
             comprarTorre(casillaActual, e);
+        }
+        else{
+            //si casilla vacia y no modo construccion volvemos al estado Normal del juego
+            resetearEstado();
         }
     }
 
