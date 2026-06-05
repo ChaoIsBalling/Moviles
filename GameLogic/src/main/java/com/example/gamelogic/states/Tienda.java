@@ -245,10 +245,15 @@ public class Tienda implements State {
             //Filtramos las skins que correspondan a la torre y que esten disponibles
             //y las ponemos en un arrayList Auxiliar
             ArrayList<Integer>skinsResult = new ArrayList<>();
-            for (Map.Entry<Integer,Boolean> entry : shopPurchases.get("skins").entrySet()) {
+            String tipoCompra=item.getString("TipoCompra");
+            for (Map.Entry<Integer,Boolean> entry : shopPurchases.get(tipoCompra).entrySet()) {
                 String skinId=String.valueOf(entry.getKey());
-                if( skinItems.getJSONObject(skinId).getInt( "forTower") == idTorre && entry.getValue())
-                    skinsResult.add(entry.getKey());
+                if(entry.getValue())
+                {
+                    if(!tipoCompra.equals("skins")||skinItems.getJSONObject(skinId).getInt( "forTower") == idTorre)
+                        skinsResult.add(entry.getKey());
+
+                }
             }
 
 
