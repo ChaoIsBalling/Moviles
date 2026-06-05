@@ -135,9 +135,11 @@ public class MainActivity extends AppCompatActivity {
 
             JSONArray towersEq = new JSONArray();
             // Las torres activas en su inventario de partida
-            towersEq.put(0);
-            towersEq.put(1);
-            towersEq.put(2);
+            towersEq.put(true);
+            towersEq.put(true);
+            towersEq.put(true);
+            for(int i =0;i < TorresAmount-3;i++)
+                towersEq.put(false);
 
             equips.put("towers", towersEq);
 

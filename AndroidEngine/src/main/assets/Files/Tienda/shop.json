@@ -59,7 +59,13 @@
                 "cost": 10,
                 "description": "Fondo verde"
             }
-        ]
-        
-        
+        ],
+          "textoSeccion":
+        {
+         "towers":"Nuevas Torres",
+         "skins":"Nuevas Skins",
+         "bg":"Fondos",
+         "but":"Botones"
+        }
+          
     }

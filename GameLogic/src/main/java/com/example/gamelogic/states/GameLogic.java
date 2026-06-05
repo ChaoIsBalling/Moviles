@@ -108,6 +108,8 @@ public class GameLogic implements State {
     //UIManager de la pantalla de juego
     private UIManager ui;
 
+    private ArrayList<Integer>torresEquipadas=new ArrayList<>();
+
     /**
      * Constructora del estado principal de juego en el modo normal
      * @param engine Motor
@@ -401,8 +403,12 @@ public class GameLogic implements State {
             JSONObject equip = this.save.getJSONObject("shop").getJSONObject("equips");
 
             JSONArray torresDesbloqueadas = equip.getJSONArray("towers");
-            JSONArray skinsEquipadas = equip.getJSONArray("skins");
-            int n = torresDesbloqueadas.length();
+            for(int i=0;i<torresDesbloqueadas.length();i++) {
+                if(torresDesbloqueadas.getBoolean(i))
+                    torresEquipadas.add(i);
+            }
+
+            int n = torresEquipadas.size();
             this.ui.createPrefabs(this.prefabs.getJSONObject("BotonTower"),n);
 
         } catch (JSONException e) {
@@ -452,7 +458,7 @@ public class GameLogic implements State {
         try {
             //Accedo a las torre que tengo
             JSONObject equip = this.save.getJSONObject("shop").getJSONObject("equips");
-             String idTower  = String.valueOf(equip.getJSONArray("towers").getInt(towersCount));
+             String idTower  = String.valueOf(this.torresEquipadas.get(towersCount));
 
              //Cogemos el tipo de torre
             String torre = this.items.getJSONObject("towers").getJSONObject(idTower)

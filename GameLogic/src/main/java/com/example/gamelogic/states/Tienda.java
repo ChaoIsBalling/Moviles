@@ -126,57 +126,39 @@ public class Tienda implements State {
     private void inicializarScroll(){
         float initXText = 150;
         float initYText = 100, offsetTextY = 1.5f;
-        int i=0;
-        initSections(initXText,initYText,offsetTextY,"towers",i,"Nuevas Torres");
-        initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
-        i++;
-
-        //reiniciamos contador que apunta al ultimo elemento de la seccion
-        shopItemIndex = 0;
-
-        initSections(initXText,initYText,offsetTextY,"skins",i,"Nuevas Skins");
-        initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
-        i++;
-
-        shopItemIndex = 0;
-        initSections(initXText,initYText,offsetTextY,"bg",i,"Fondos");
-        initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
-        i++;
-
-        shopItemIndex = 0;
-        initSections(initXText,initYText,offsetTextY,"but",i,"Botones");
-
-
-    }
-    /**
-     * Metodo que inicializa cada una de las secciones de la tienda y setea su apariencia
-     */
-    public void initSections( float initXText ,float initYText, float offsetTextY,String section, int i, String nombreSeccion ){
         try {
-            Text textoSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
+            JSONObject textoSeccion=this.shop.getJSONObject("textoSeccion");
+            Text nombreSeccion=null;
+            Iterator<String> it= shop.keys();
+            String name= it.next();
+            JSONObject botonPrefab= this.prefabs.getJSONObject("BotonItem");
+        for(int i =0;i<shop.length()-1;i++) {
+            nombreSeccion = new Text(prefabs.getJSONObject("textoTienda"), this.gr);
 
             //Array perteneciente a la seccion de la tienda
-            shopSection = section;
+            shopSection = name;
 
             //Setamos valores del texto de la seccion
-            textoSeccion.setText(nombreSeccion);
-            textoSeccion.setId(textoSeccion.getId() + i);
-            textoSeccion.setX(initXText);
-            textoSeccion.setY(initYText);
+            nombreSeccion.setText(textoSeccion.getString(name));
+            nombreSeccion.setId(nombreSeccion.getId() + i);
+            nombreSeccion.setX(initXText);
+            nombreSeccion.setY(initYText);
             //Se añade al scroll
-            this.ui.addVisualElementToArray(textoSeccion, prefabs.getJSONObject("textoTienda"));
+            this.ui.addVisualElementToArray(nombreSeccion,prefabs.getJSONObject("textoTienda"));
 
             //Desplazamos el offset de Y para el siguiente boton
-            float ny = (textoSeccion.getY() + textoSeccion.getHeight() * offsetTextY) ;
-            this.prefabs.getJSONObject("BotonItem").put("y", ny);
-            this.prefabs.getJSONObject("BotonItem").put("id",
-                    this.prefabs.getJSONObject("BotonItem").getString("id") + i);
+            float ny = (nombreSeccion.getY() + nombreSeccion.getHeight() * offsetTextY) ;
+            botonPrefab.put("y", ny);
+            botonPrefab.put("id", botonPrefab.getString("id") + i);
             //Creamos n numero de botones
-            this.ui.createPrefabs(prefabs.getJSONObject("BotonItem"), this.shop.getJSONArray(section).length());
-    } catch (JSONException e) {
-        throw new RuntimeException(e);
-    }
-
+            this.ui.createPrefabs(botonPrefab, this.shop.getJSONArray(name).length());
+            shopItemIndex = 0;
+            initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight()*offsetTextY;
+            name=it.next();
+        }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
     /**
      * Metodo para setear el callback de volver a la pantalla anterior
@@ -233,13 +215,10 @@ public class Tienda implements State {
                 JSONArray activeTowers = this.save.getJSONObject("shop").
                         getJSONObject("equips").getJSONArray("towers");
 
-                //Ponemos la torre en el array de torres activas
-                int i = 0;
                 int indexTower = item.getInt("id");
-                while(i<activeTowers.length()&& activeTowers.getInt(i)!=indexTower)
-                    i++;
-                if(i>=activeTowers.length()) {
-                    activeTowers.put(item.getInt("id"));
+
+                if(!activeTowers.getBoolean(indexTower)) {
+                    activeTowers.put(indexTower,true);
 
                     //Setear la skin
                     JSONArray activeSkins = this.save.getJSONObject("shop").
@@ -252,21 +231,15 @@ public class Tienda implements State {
                     //Cambiamos el texto
                     this.ui.getButtonUI("BUT_ACTIVAR").changeText("Desactivar torre");
                 }
+                else {
+                    activeTowers.put(indexTower,false);
+                    this.ui.getButtonUI("BUT_ACTIVAR").changeText("Activar torre");
+                }
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
-
-
-    public void removeTower(){
-
-
-    }
-
-
-
-
 
     /**
      * Metodo que prepara el menu de cambio de aspecto
@@ -282,7 +255,6 @@ public class Tienda implements State {
             if(tipoItem == "towers"){
                 int idItemShop = item.getInt("id");
                 idTorre = idItemShop;
-                //idTorre = skinItems.getJSONObject(String.valueOf(idItemShop));
             }
             else if(tipoItem == "skins"){
                 //Id de la torre al que perteneceran los aspectos
@@ -301,10 +273,8 @@ public class Tienda implements State {
                 {
                     if(!tipoCompra.equals("skins")||skinItems.getJSONObject(skinId).getInt( "forTower") == idTorre)
                         skinsResult.add(entry.getKey());
-
                 }
             }
-
 
             Cambio cam = new Cambio(this.engine,this.mobile, this.save, skinsResult,tipoItem);
             this.engine.setState(cam);
