@@ -452,39 +452,33 @@ public class GameLogic implements State {
         try {
             //Accedo a las torre que tengo
             JSONObject equip = this.save.getJSONObject("shop").getJSONObject("equips");
-            Boolean isTowerActive = equip.getJSONArray("towers").getBoolean(towersCount);
+             String idTower  = String.valueOf(equip.getJSONArray("towers").getInt(towersCount));
 
-            //Si la torre esta activa...
-            if(isTowerActive){
-                String idTower = String.valueOf(towersCount);
+             //Cogemos el tipo de torre
+            String torre = this.items.getJSONObject("Torres").getJSONObject(idTower)
+                            .getString("type");
+            TipoTorre tipo = TipoTorre.valueOf(torre);
 
-                //Cogemos el tipo de torre
-                String torre = this.items.getJSONObject("Torres").getJSONObject(idTower)
-                        .getString("type");
-                TipoTorre tipo = TipoTorre.valueOf(torre);
+            //Coste de construir la torre
+            int coste = this.items.getJSONObject("Torres").getJSONObject(idTower)
+                            .getInt("cost");
 
+            b.changeText(Integer.toString(coste));
+            b.setOnClickListener(() ->
+                            this.prepararConstruccion(coste, tipo, b));
 
-                //Coste de construir la torre
-                int coste=this.items.getJSONObject("Torres").getJSONObject(idTower)
-                        .getInt("cost");
+            //Cogemos la skin
+            int idSkin = equip.getJSONArray("skins").getInt(Integer.parseInt(idTower));
 
-                b.changeText(Integer.toString(coste));
-                b.setOnClickListener(() ->
-                        this.prepararConstruccion(coste, tipo,b));
+            //String skin=this.save.getJSONObject("skins_equipped").getString(tipo.toString());
+            JSONObject currSkin = this.items.getJSONObject("Skins").
+                            getJSONObject(String.valueOf(idSkin));
 
-                //Cogemos la skin
-                int idSkin =  equip.getJSONArray("skins").getInt(Integer.parseInt(idTower));
-
-                //String skin=this.save.getJSONObject("skins_equipped").getString(tipo.toString());
-                JSONObject currSkin= this.items.getJSONObject("Skins").
-                        getJSONObject(String.valueOf(idSkin));
-
-                if(currSkin.getString("type").equals("Figura"))
-                    b.setFigure(currSkin);
-                else
-                    b.setImage(currSkin);
-                towersCount++;
-            }
+            if (currSkin.getString("type").equals("Figura"))
+                        b.setFigure(currSkin);
+            else
+                b.setImage(currSkin);
+            towersCount++;
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
