@@ -455,12 +455,12 @@ public class GameLogic implements State {
              String idTower  = String.valueOf(equip.getJSONArray("towers").getInt(towersCount));
 
              //Cogemos el tipo de torre
-            String torre = this.items.getJSONObject("Torres").getJSONObject(idTower)
+            String torre = this.items.getJSONObject("towers").getJSONObject(idTower)
                             .getString("type");
             TipoTorre tipo = TipoTorre.valueOf(torre);
 
             //Coste de construir la torre
-            int coste = this.items.getJSONObject("Torres").getJSONObject(idTower)
+            int coste = this.items.getJSONObject("towers").getJSONObject(idTower)
                             .getInt("cost");
 
             b.changeText(Integer.toString(coste));
@@ -471,7 +471,7 @@ public class GameLogic implements State {
             int idSkin = equip.getJSONArray("skins").getInt(Integer.parseInt(idTower));
 
             //String skin=this.save.getJSONObject("skins_equipped").getString(tipo.toString());
-            JSONObject currSkin = this.items.getJSONObject("Skins").
+            JSONObject currSkin = this.items.getJSONObject("skins").
                             getJSONObject(String.valueOf(idSkin));
 
             if (currSkin.getString("type").equals("Figura"))

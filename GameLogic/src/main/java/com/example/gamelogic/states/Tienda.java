@@ -117,7 +117,7 @@ public class Tienda implements State {
         this.ui.changeVisualElementStateOfType("compra",false);
         this.ui.changeVisualElementStateOfType("yacomprado",false);
         this.ui.changeVisualElementStateOfType("cambio",false);
-
+        this.ui.changeVisualElementStateOfType("activar",false);
     }
 
     /**
@@ -216,6 +216,37 @@ public class Tienda implements State {
             b.setOnClickListener( () -> {
                 prepareChangeMenu(currentItem);
             });
+    }
+
+    public void setCallbackButtonActiveTower(Button b){
+        b.setOnClickListener( () -> {
+            activeTower(currentItem);
+        });
+    }
+
+    public void activeTower(JSONObject item){
+        try {
+            //Primero vemos si el item seleccionado es una torre
+            if(item.getString("TipoCompra") == "towers"){
+
+                //Accedemos al array de torres activas
+                JSONArray activeTowers = this.save.getJSONObject("shop").
+                        getJSONObject("equips").getJSONArray("towers");
+
+                //Ponemos la torre en el array de torres activas
+                activeTowers.put(item.getInt("id"));
+
+                //Setear la skin
+                JSONArray activeSkins = this.save.getJSONObject("shop").
+                        getJSONObject("equips").getJSONArray("skins");
+
+                int indexTower = item.getInt("id");
+                //int indexSkin =
+                //activeSkins.put(indexTower, indexTower);
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -346,16 +377,21 @@ public class Tienda implements State {
                 this.ui.changeVisualElementStateOfType("yacomprado",true);
 
                 //Cuando se compra una torre, no se puede acceder al menu de cambio de skin
-                if(tipo != "towers")
+                if(tipo != "towers") {
                     this.ui.changeVisualElementStateOfType("cambio",true);
-                else
+                    this.ui.changeVisualElementStateOfType("activar",false);
+                }
+                else{
                     this.ui.changeVisualElementStateOfType("cambio",false);
+                    this.ui.changeVisualElementStateOfType("activar",true);
+                }
             }
             //Caso en el que el item este sin comprar
             else {
                 this.ui.changeVisualElementStateOfType("compra",true);
                 this.ui.changeVisualElementStateOfType("yacomprado",false);
                 this.ui.changeVisualElementStateOfType("cambio",false);
+                this.ui.changeVisualElementStateOfType("activar",false);
                 this.ui.getTextUI("TEXT_DESCRIPTION").setText(item.getString("description"));
                 this.ui.getTextUI("TEXT_PRECIO").setText("Coste:"+item.getInt("cost"));
             }
@@ -393,6 +429,10 @@ public class Tienda implements State {
 
             if(tipoCompra != "towers")
                 this.ui.changeVisualElementStateOfType("cambio",true);
+            else
+                this.ui.changeVisualElementStateOfType("activar",true);
+
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

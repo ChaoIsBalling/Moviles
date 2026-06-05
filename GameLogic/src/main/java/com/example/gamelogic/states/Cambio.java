@@ -99,7 +99,6 @@ public class Cambio implements State {
     }
 
     public void setCallbackButtonAspect(Button b) {
-
         //Incializamos su apariencia con la skin que se pueda elegir
         initAppeareanceButton(b);
 
