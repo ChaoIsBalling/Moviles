@@ -140,6 +140,13 @@ public class Tienda implements State {
 
         shopItemIndex = 0;
         initSections(initXText,initYText,offsetTextY,"bg",i,"Fondos");
+        initYText = this.ui.getLastScrollable().getY() + this.ui.getLastScrollable().getHeight() * 1.2f;
+        i++;
+
+        shopItemIndex = 0;
+        initSections(initXText,initYText,offsetTextY,"but",i,"Botones");
+
+
     }
     /**
      * Metodo que inicializa cada una de las secciones de la tienda y setea su apariencia
@@ -253,8 +260,7 @@ public class Tienda implements State {
         }
     }
 
-    public void initShopButton(Button b, JSONObject item)
-    {
+    public void initShopButton(Button b, JSONObject item) {
         try {
             //Tipo de la compra definido en el json
             String tipoCompra = item.getString("TipoCompra");
@@ -269,9 +275,14 @@ public class Tienda implements State {
                     b.setAppeareance(this.items.getJSONObject("Skins")
                             .getJSONObject(item.getString("skin")));
                    break;
-                case  "bg":
+                case "bg":
                     b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
                     b.getFigButton().setColor(this.items.getJSONObject("Fondos")
+                            .getJSONObject(item.getString("id")).getString("color"));
+                    break;
+                case "but":
+                    b.setFigure(this.prefabs.getJSONObject("FiguraBoton"));
+                    b.getFigButton().setColor(this.items.getJSONObject("Botones")
                             .getJSONObject(item.getString("id")).getString("color"));
                     break;
             }
@@ -323,12 +334,19 @@ public class Tienda implements State {
         }
         b.setColor(Color.AMARILLO_CLARO.getHex());
         this.currentItem=item;
+
         try {
+            String tipo = currentItem.getString("TipoCompra");
             //Caso en que el item ya esté comprado
             if(itemBought()) {
                 this.ui.changeVisualElementStateOfType("compra",false);
                 this.ui.changeVisualElementStateOfType("yacomprado",true);
-                this.ui.changeVisualElementStateOfType("cambio",true);
+
+                //Cuando se compra una torre, no se puede acceder al menu de cambio de skin
+                if(tipo != "towers")
+                    this.ui.changeVisualElementStateOfType("cambio",true);
+                else
+                    this.ui.changeVisualElementStateOfType("cambio",false);
             }
             //Caso en el que el item este sin comprar
             else {

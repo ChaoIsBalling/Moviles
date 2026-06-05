@@ -45,5 +45,21 @@
                 "cost": 10,
                 "description": "Fondo azul"
             }
-        ]  
+        ],
+        "but":[
+            {
+                "icon": " ",
+                "id": 1,
+                "cost": 10,
+                "description": "Fondo azul"
+            },
+            {
+                "icon": " ",
+                "id": 2,
+                "cost": 10,
+                "description": "Fondo verde"
+            }
+        ]
+        
+        
     }

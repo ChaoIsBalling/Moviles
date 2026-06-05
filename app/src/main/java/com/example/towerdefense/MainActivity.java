@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         this.engine.setNotificationIcon(R.drawable.ic_tower_defense_noti); //icono de notificación
 
         checkRewardNotifiactionIntent(); //Comprobamos si el jugador ha vuelto a entrar al juego por la notificacion recompensada
-        if(this.engine.checkFileExists("save"))
+        if(!this.engine.checkFileExists("save"))
         {
             save=this.engine.readInternalJsonFile("save");
             String hash = this.engine.createHash(save.toString());
@@ -105,11 +105,16 @@ public class MainActivity extends AppCompatActivity {
             towersPur.put(2);
             purchases.put("towers", towersPur);
 
-
             //Backgrounds que tengo
             JSONArray bgPur = new JSONArray();
             bgPur.put(0);
             purchases.put("bg", bgPur);
+
+            //Fondos de botones que tengo
+            JSONArray butPur = new JSONArray();
+            butPur.put(0);
+            purchases.put("but", butPur);
+
 
             shop.put( "purchases", purchases);
 
@@ -125,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 skinsEq.put(-1);
             equips.put("skins", skinsEq);
 
-            //equips.put("buttons", -1);
+            equips.put("but" , "#FF999999");
             equips.put("bg", "#FFFFFFFF");
 
             JSONArray towersEq = new JSONArray();
@@ -139,8 +144,6 @@ public class MainActivity extends AppCompatActivity {
             shop.put("equips", equips);
 
             obj.put("shop", shop);
-
-
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
