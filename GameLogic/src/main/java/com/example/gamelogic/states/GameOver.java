@@ -42,7 +42,7 @@ public class GameOver implements State {
     //archivo de guardado de JSON
     private JSONObject save;
     //Recompensa que ganará el jugador
-    int recompensa;
+    int recompensa=0;
 
     //Dificultad con la que se ha superado el nivel (Para saber el modo de juego)
     GameLogic.Dificultad dificultad;
@@ -69,18 +69,17 @@ public class GameOver implements State {
 
         this.mobile.setVisibleAdBanner(true);
 
-        JSONObject worldInfo = this.engine.readJsonFile("Mundo/World" + mundo + "/World" + mundo +".json");
-        int amountReward = 0;
-        try {
-            amountReward = worldInfo.getInt("reward");
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
 
+        if (this.dificultad == GameLogic.Dificultad.aventura) {
+            JSONObject worldInfo = this.engine.readJsonFile("Mundo/World" + mundo + "/World" + mundo + ".json");
+            try {
+                this.recompensa = worldInfo.getInt("reward");
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
         //Si no se ha completado el nivel la recompensa será de n diamantes de base
-        if(!isCompleted)
-            this.recompensa = amountReward;
-        else
+        if(isCompleted)
             this.recompensa = 0;
     }
     private void configurarUI() {
