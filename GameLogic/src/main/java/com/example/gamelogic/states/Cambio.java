@@ -156,6 +156,7 @@ public class Cambio implements State {
                 case "but":
                     //Guardamos el seteo del color de bg o but en el save
                     shopSaveEquips.put(shopSection,item.getString("color"));
+                    this.gr.setColorClear(shopSaveEquips.getString("bg"));
                     break;
             }
         } catch (JSONException e) {
