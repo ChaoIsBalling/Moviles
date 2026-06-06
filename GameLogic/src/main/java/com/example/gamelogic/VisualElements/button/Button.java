@@ -88,20 +88,20 @@ public class Button extends VisualElement {
             throw new RuntimeException(e);
         }
     }
+
     /**
-     * Setters de atributos del botón
+     * metodo que cambia el string del texto
+     * @param message texto que se quiere poner
      */
-    public void setText(Text text) {
-        this.text = text;
-    }
-    //metodo que cambia el string del texto
     public void changeText(String message)
     {
         this.text.setText(message);
     }
 
+    /**
+     * Setters de atributos del botón
+     */
     public void setID(String newID){this.id=newID;}
-    //setters
     public void setColor(String color){ this.color = color;}
     public void setAppeareance(JSONObject obj)
     {
@@ -140,12 +140,16 @@ public class Button extends VisualElement {
         this.image=new Image(obj,this.gr);
     }
 
-    public void cleanImages(){this.image=null;}
-
-    // Setter para asignar el callback
+    /**
+     * Setter para asignar el callback
+     * @param listener callback del boton
+     */
     public void setOnClickListener(ButtonClickListener listener) {this.onClickFunction = listener;}
 
-    // Setter para asignar el callback
+    /**
+     * Setter para asignar el callback (busca el metodo en el state parametrp)
+     * @param state estado en el que esta la funcion callback a buscar
+     */
     public void setCallback(State state) {
         if(this.callback!=null) {
             try {
@@ -182,11 +186,9 @@ public class Button extends VisualElement {
     public boolean isImageNull(){
         return image==null;
     }
-
     public boolean isFigureNull(){
         return figure==null;
     }
-
 
     /**
      * Metodo que renderiza el boton
@@ -236,5 +238,4 @@ public class Button extends VisualElement {
         }
         return false;
     }
-
 }

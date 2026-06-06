@@ -12,17 +12,11 @@ import com.example.gamelogic.VisualElements.figure.Figure;
  */
 public class ThunderTower extends BaseTower{
     //Timer de renderizado del rayo
-    float rayo;
-
+    float timerFeedBackRayo;
     //Cada cuanto se renderiza el rayo
     float frecuenciaRayo = 1;
-
-    //Determina si está disparando
-    boolean disparo = false;
-    Image imagen = null;
     //Enemigo a atacar
     Enemy enemigo;
-
     //Color del rayo
     String colorRayo = "#FF00FFFF";
 
@@ -31,14 +25,14 @@ public class ThunderTower extends BaseTower{
      */
     public ThunderTower(float x, float y, Figure figure){
         super(x,y,4,70,1.6f, TipoTorre.RAYO);
-        this.rayo = this.frecuenciaRayo;
+        this.timerFeedBackRayo = this.frecuenciaRayo;
         this.figura=figure;
 
     }
     public ThunderTower(float x, float y, Image im){
         super(x,y,4,70,1.6f, TipoTorre.RAYO);
-        this.imagen=im;
-        this.rayo = this.frecuenciaRayo;
+        this.image=im;
+        this.timerFeedBackRayo = this.frecuenciaRayo;
     }
     @Override
     public void setAudio(AndroidAudio audio) {
@@ -55,7 +49,7 @@ public class ThunderTower extends BaseTower{
         this.enfriamiento = this.velocidad;
         this.disparo = true;
         this.audio.playSound(this.soundAttack);
-        this.rayo = this.frecuenciaRayo;
+        this.timerFeedBackRayo = this.frecuenciaRayo;
     }
 
     /**
@@ -72,7 +66,7 @@ public class ThunderTower extends BaseTower{
         else{
             //actualizamos cooldown
             this.enfriamiento -= deltaTime;
-            this.rayo -= deltaTime;
+            this.timerFeedBackRayo -= deltaTime;
         }
     }
 
@@ -82,12 +76,12 @@ public class ThunderTower extends BaseTower{
      */
     @Override
     public void Render(AndroidGraphics gr) {
-        if(this.imagen!=null)
-            this.imagen.RenderCentrado((int)this.getPosX(),(int)this.getPosY());
+        if(this.image!=null)
+            this.image.RenderCentrado((int)this.getPosX(),(int)this.getPosY());
         else
             this.figura.RenderAtPosition(gr,this.getPosX(),this.getPosY());
 
-        if(this.disparo && this.rayo > 0 && this.enemigo != null){
+        if(this.disparo && this.timerFeedBackRayo > 0 && this.enemigo != null){
             gr.setColor(colorRayo);
             gr.pintarLinea(this.getPosX(),this.getPosY(),this.enemigo.getX(),this.enemigo.getY(),5);
         }

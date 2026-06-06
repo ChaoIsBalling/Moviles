@@ -24,6 +24,12 @@ public class Text extends VisualElement {
     String[] myArray;
     //id del boton
     String id;
+
+    /**
+     * Contructora de un componente text a partor de un json
+     * @param json JsonObject del que se leen los parametros
+     * @param gr Graphics de Andorid
+     */
     public Text(JSONObject json, AndroidGraphics gr)
     {
         super(json);

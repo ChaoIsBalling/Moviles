@@ -10,8 +10,7 @@ import org.json.JSONObject;
  */
 public class Square extends Figure{
     //Dimensiones
-    private float w;
-    private float h;
+    private float w, h;
 
     //Radio de las esquinas (si es que son redondeadas)
     private float arcRadius;
@@ -33,8 +32,6 @@ public class Square extends Figure{
         this.isFill = isFill;
         this.visible = true;
     }
-
-
     public Square(JSONObject obj){
         super(obj);
         try {
@@ -49,28 +46,10 @@ public class Square extends Figure{
             throw new RuntimeException(e);
         }
     }
-    public float getWidth(){return this.w;}
     /**
      * Getters
      */
-
-    @Override
-    public String getColor() {
-        return this.color;
-    }
-
-    /**
-     * Setters
-     */
-    @Override
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    @Override
-    public void setVisible(boolean c) {
-        this.visible = c;
-    }
+    public float getWidth(){return this.w;}
 
     /**
      * Renderiza el cuadrado con relleno o redondeado si asi quisieramos
