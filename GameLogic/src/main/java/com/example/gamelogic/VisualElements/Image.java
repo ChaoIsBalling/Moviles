@@ -11,13 +11,10 @@ import org.json.JSONObject;
  */
 public class Image extends VisualElement {
     //Dimensiones
-    int w;
-    int h;
+    int w, h;
     //Path de la imagen
     String imagen;
-
-    boolean escalado =true;
-
+    boolean escalado = true;
     //Interfaz del motor
     AndroidImage im;
     //Graphics del motor
@@ -25,34 +22,32 @@ public class Image extends VisualElement {
 
     /**
      * Constructora de la imagen, con sus coordenadas, dimensiones y referencia al graphics del motor
+     * (a partir de un json)
      */
-
     public Image(JSONObject json,AndroidGraphics gr)
     {
         super(json);
         try{
-        this.imagen= json.getString("imagen");
-        this.w= json.getInt("w");
-        this.h=json.getInt("h");
+            this.imagen= json.getString("imagen");
+            this.w= json.getInt("w");
+            this.h=json.getInt("h");
 
-        if(json.has("visible"))
-            this.isVisible = json.getBoolean("visible");
-        else this.isVisible = true;
-    } catch (
-    JSONException e) {
-        throw new RuntimeException(e);
-    }
+            if(json.has("visible"))
+                this.isVisible = json.getBoolean("visible");
+            else this.isVisible = true;
+        } catch (
+                JSONException e) {
+            throw new RuntimeException(e);
+        }
         this.gr=gr;
         this.im = this.gr.newImage(this.imagen,this.w,this.h);
     }
 
-    public void setW(int w){
-        this.w = w;
-    }
-    public void setH(int h){
-        this.h = h;
-    }
-
+    /**
+     * Setters
+     */
+    public void setW(int w){ this.w = w;}
+    public void setH(int h){ this.h = h;}
     public void setEscalado(boolean c){this.escalado=c;}
 
     /**

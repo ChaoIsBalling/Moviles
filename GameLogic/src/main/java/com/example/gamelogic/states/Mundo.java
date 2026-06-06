@@ -13,13 +13,16 @@ import com.example.gamelogic.managers.UIManager;
 
 import java.util.ArrayList;
 
+/**
+ * Clase que representa el menu de seleccion de mundo
+ */
 public class Mundo implements State {
     private AndroidEngine engine;
     private AndroidMobile mobile;
     private AndroidGraphics gr;
     //booleanos que determinan si el mundo actual tiene un mundo anterior o posterior
     private boolean next,previous;
-    private int numNiveles;
+    private int numNiveles; //numero de niveles en este mundo
     //contador de niveles del mundo usado por el callback de niveles
     private int nivelesCount=0;
     //en que mundo estamos ahora
@@ -35,7 +38,7 @@ public class Mundo implements State {
 
     //Ui Manager que gestiona el funcionamiento de los botones
     UIManager ui;
-    private int nivelesCompletadosEnMundo;
+    private int nivelesCompletadosEnMundo; //niveles completados en este mundo
     private String colorCompleted;
     private String colorLocked;
 
@@ -61,7 +64,7 @@ public class Mundo implements State {
         this.gr = gr;
         this.style = engine.readJsonFile("Mundo/style.json");
         try {
-            this.prefabs = engine.readJsonFile("Mundo/prefabs.json").getJSONObject("NivelMundo");
+            this.prefabs = engine.readJsonFile("prefabs.json").getJSONObject("NivelMundo");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -78,7 +81,6 @@ public class Mundo implements State {
             switch (e.type){
                 case TOUCH_DOWN:
                 this.ui.handleInput(e);
-                //gestionBotones(e);
                 this.ui.onTouchDown(e);
                 break;
                 case TOUCH_UP:
@@ -110,7 +112,6 @@ public class Mundo implements State {
             //Color para colorear los niveles completados y no completados
             this.colorCompleted = mundoInfo.getString("colorCompleted");
             this.colorLocked = mundoInfo.getString("colorLocked");
-
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -122,14 +123,14 @@ public class Mundo implements State {
     private void calcularProgreso(){
         try {
             int  completed= this.save.getInt("completed");
-            int nivelesHastaAhora =0;
+            int nivelesHastaAhora = 0;
             //esto calcula cuantos niveles han habido hasta este mundo
             for(int i = 1; i < this.mundo; i++) {
                 JSONObject obj=engine.readJsonFile("Mundo/World"+i+"/World"+i+".json");
                 nivelesHastaAhora+=obj.getInt("niveles");
             }
             //determina que niveles de ESTE mundo se han completado
-            this.nivelesCompletadosEnMundo = completed-nivelesHastaAhora;
+            this.nivelesCompletadosEnMundo = completed - nivelesHastaAhora;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -151,16 +152,15 @@ public class Mundo implements State {
      */
     public void setCallbackButtonLevel(Button b)
     {
-        if(this.nivelesCount<=Math.min(this.numNiveles - 1, nivelesCompletadosEnMundo)) {
+        if(this.nivelesCount <= Math.min(this.numNiveles - 1, nivelesCompletadosEnMundo)) {
             b.setColor(colorCompleted);
-            if(this.nivelesCount==nivelesCompletadosEnMundo)
+            if(this.nivelesCount == nivelesCompletadosEnMundo)
                 b.setColor(colorLocked);
             b.changeText(String.valueOf(this.nivelesCount+1));
             int ind=this.nivelesCount;
             b.setOnClickListener(() -> iniciarNivel(ind));
         }
         this.nivelesCount++;
-
     }
     /**
      * Metodo para setear el callback de los botones de siguiente y anterior mundo
@@ -170,7 +170,7 @@ public class Mundo implements State {
         JSONObject callback = b.getCallback();
         try {
             boolean nextWorld=callback.getBoolean("nextWorld");
-            if((nextWorld&&!this.next)||(!nextWorld&&!this.previous)) {
+            if(( nextWorld && !this.next)||(!nextWorld&&!this.previous)) {
                 b.setVisible(false);
                 b.setEnabled(false);
             }
@@ -204,7 +204,8 @@ public class Mundo implements State {
         this.ui = new UIManager(this.style,this.engine,this.gr);
         this.ui.setAllCallbacks();
         calcularProgreso();
-        this.ui.createPrefabs(prefabs,this.numNiveles);
+        //crea los botones de niveles
+        this.ui.createPrefabsButtons(prefabs,this.numNiveles);
         this.ui.configurarLimitesScroll();
         this.ui.getTextUI("TEXT_MUNDO").setText("Mundo " + this.mundo);
     }

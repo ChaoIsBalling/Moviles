@@ -20,15 +20,8 @@ public class Hexagon extends Figure {
 
     /**
      * Constructora de la clase Hexagono con su coordenada x,y, su radio y si esta relleno o no
+     * (a partir de un jsonObject)
      */
-    public Hexagon(float x, float y, float r, boolean isFill){
-        this.x = x;
-        this.y = y;
-        this.r = r;
-        this.isFill = isFill;
-        this.isVisible = true;
-    }
-
     public Hexagon(JSONObject obj){
         super(obj);
         try {
@@ -42,41 +35,6 @@ public class Hexagon extends Figure {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Getters
-     */
-    @Override
-    public float getX() {
-        return this.x;
-    }
-    @Override
-    public float getY() {
-        return this.y;
-    }
-    @Override
-    public String getColor() {
-        return this.color;
-    }
-
-    /**
-     * setters
-     */
-    @Override
-    public void setColor(String color) {
-        this.color= color;
-    }
-
-
-    @Override
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    @Override
-    public void setY(float y) {
-        this.y = y;
     }
 
     /**

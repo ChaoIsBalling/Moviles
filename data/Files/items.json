@@ -1,29 +1,33 @@
 {
-    "Torres":
+    "towers":
     {
         "0":
         {
             "type": "RAYO",
-            "cost": 100
+            "cost": 100,
+            "skin": 0 
         },
         "1":
         {
             "type": "HIELO",
-            "cost":150
+            "cost":150,
+            "skin": 1 
         },
         "2":
         {
             "type": "FUEGO",
-            "cost":200
+            "cost":200,
+            "skin": 2 
         },
         "3":
         {
             "type": "MINI",
-            "cost":100
+            "cost":100,
+            "skin": 6
         }
     },
 
-    "Skins":
+    "skins":
     {
     "0" : {
         "forTower": 0,
@@ -35,29 +39,27 @@
         "fill": true,
         "visible": true
         },
-    "1":{
+    "1" : {
         "forTower": 1,
         "type": "Figura",
         "id": "cuadradoHielo",
         "form": "square",
-            "x": 0, "y": -5,
-            "w": 30, "h": 30,
-            "color": "#FFC8A2C8",
-            "fill": true,
-            "round": true,
-            "r": 3,
-            "visible": true
+        "x": 0, "y": -5,"w": 30, "h": 30,
+        "color": "#FFC8A2C8",
+        "fill": true,
+        "round": true,
+        "r": 3,
+        "visible": true
         },
     "2" : {
-                "forTower": 2,
-                 "type": "Figura",
-                "id": "hexFuego",
-                "form": "hexagon",
-                "x": 0, "y":-5,
-                "r": 15,
-                "color": "#FFFF0000",
-                "fill": true,
-                "visible": true
+        "forTower": 2,
+        "type": "Figura",
+        "id": "hexFuego",
+        "form": "hexagon",
+        "x": 0, "y":-5,"r": 15,
+        "color": "#FFFF0000",
+        "fill": true,
+        "visible": true
     },
     "3": {
       "forTower": 0,
@@ -89,19 +91,42 @@
       "imagen": "MiniTorreRayo.png",
       "x": -15, "y": -20, "w": 35, "h": 35,
       "visible": true
+    },
+    "7": {
+      "forTower": 3,
+      "type": "Figura",
+        "id":  "triRayoMini",
+        "form": "triangle",
+        "x": 0, "y":0, "r": 8,
+        "color": "#FFFFFF00",
+        "fill": true,
+        "visible": true
     }
     },
     
-    "Fondos":
+    "bg":
     {
         "0":{
-            "color":"#FFFF0000"
+            "color":"#FFFFFFFF"
         },
         "1":{
             "color":"#FFFF0000"
         },
          "2":{
             "color":"#FF0000FF"
+        }
+    },
+
+    "but":
+    {
+        "0":{
+            "color":"#FF999999"
+        },
+        "1":{
+            "color":"#FF0000FF"
+        },
+         "2":{
+            "color":"#FF00FF00"
         }
     }
 

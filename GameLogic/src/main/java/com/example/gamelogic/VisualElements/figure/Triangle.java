@@ -9,8 +9,6 @@ import org.json.JSONObject;
  * Clase que representa un traingulo e implementa los métodos de Figura
  */
 public class Triangle extends Figure {
-
-
     //radio desde el que generar los vertices del triangulo
     private float r;
 
@@ -18,18 +16,9 @@ public class Triangle extends Figure {
     private boolean isFill;
     private boolean visible;
 
-
     /**
      * Constructora del triangulo con su posición, radio y booleano de rellenado
      */
-    public Triangle(float x, float y, float r, boolean isFill){
-        this.x = x;
-        this.y = y;
-        this.r = r;
-        this.isFill = isFill;
-        this.visible = true;
-    }
-
     public Triangle(JSONObject obj){
         super(obj);
         try {
@@ -42,30 +31,6 @@ public class Triangle extends Figure {
             throw new RuntimeException(e);
         }
     }
-
-    /**
-     * Getters
-     */
-    @Override
-    public String getColor() {
-        return this.color;
-    }
-
-    /**
-     * Setters
-     */
-
-    @Override
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    @Override
-    public void setVisible(boolean c) {
-        this.visible = c;
-    }
-
-
     /**
      * Renderiza el triangulo de forma centrada o no
      * @param gr Interfaz Graphics

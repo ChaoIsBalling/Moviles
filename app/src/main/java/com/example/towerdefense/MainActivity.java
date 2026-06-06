@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -77,11 +78,11 @@ public class MainActivity extends AppCompatActivity {
     {
         JSONObject obj=new JSONObject();
         try {
-            obj.put("gems",0);
+            obj.put("gems",1000);
             obj.put("completed",0);
 
             JSONObject items=engine.readJsonFile("items.json");
-            int TorresAmount= items.getJSONObject("Torres").length();
+            int TorresAmount= items.getJSONObject("towers").length();
 
             //Informacion relevante para la tienda
             JSONObject shop = new JSONObject();
@@ -105,11 +106,16 @@ public class MainActivity extends AppCompatActivity {
             towersPur.put(2);
             purchases.put("towers", towersPur);
 
-
             //Backgrounds que tengo
             JSONArray bgPur = new JSONArray();
             bgPur.put(0);
             purchases.put("bg", bgPur);
+
+            //Fondos de botones que tengo
+            JSONArray butPur = new JSONArray();
+            butPur.put(0);
+            purchases.put("but", butPur);
+
 
             shop.put( "purchases", purchases);
 
@@ -118,29 +124,30 @@ public class MainActivity extends AppCompatActivity {
 
             JSONArray skinsEq = new JSONArray();
             // tengo equipadas las skins base (0, 1 y 2) para sus torres
-            skinsEq.put(0);
-            skinsEq.put(1);
-            skinsEq.put(2);
-            for(int i =0;i < TorresAmount-3;i++)
-                skinsEq.put(-1);
+            Iterator<String> it =items.getJSONObject("towers").keys();
+            for(int i=0;i<items.getJSONObject("towers").length();i++)
+            {
+                skinsEq.put(items.getJSONObject("towers").getJSONObject(it.next()).getInt("skin"));
+            }
+
             equips.put("skins", skinsEq);
 
-            //equips.put("buttons", -1);
+            equips.put("but" , "#FF999999");
             equips.put("bg", "#FFFFFFFF");
 
             JSONArray towersEq = new JSONArray();
             // Las torres activas en su inventario de partida
-            towersEq.put(0);
-            towersEq.put(1);
-            towersEq.put(2);
+            towersEq.put(true);
+            towersEq.put(true);
+            towersEq.put(true);
+            for(int i =0;i < TorresAmount-3;i++)
+                towersEq.put(false);
 
             equips.put("towers", towersEq);
 
             shop.put("equips", equips);
 
             obj.put("shop", shop);
-
-
 
         } catch (JSONException e) {
             throw new RuntimeException(e);

@@ -11,16 +11,13 @@ import com.example.gamelogic.VisualElements.figure.Figure;
  * Clase que representa la torre de Fuego e implementa la interfaz Tower
  */
 public class FireTower extends BaseTower {
-
-    float fuego = 1;
-    boolean disparo = false;
+    float timerFuegoFeedback = 1;
     float radioBolaFuego = 15.0f;
     //Enemigo a atacar
     Enemy enemigo;
-    Image image =null;
 
     /**
-     * Constructora de la torre de fuego
+     * Constructora de la torre de fuego (con figura o skin)
      */
     public FireTower(float x, float y, Figure figure) {
         super(x,y,3,70,2, TipoTorre.FUEGO);
@@ -41,7 +38,7 @@ public class FireTower extends BaseTower {
         this.enemigo.damage(this.ataque,this.tipoTorre);
         this.enfriamiento = this.velocidad;
         this.disparo = true;
-        this.fuego = 1;
+        this.timerFuegoFeedback = 1;
         this.audio.playSound(this.soundAttack);
 
         //Determinamos a que enemigo hay que atacar que este en el radio de ataque de la bola de fuego desde el enemigo objetivo
@@ -75,7 +72,7 @@ public class FireTower extends BaseTower {
         else{
             //actualizamos cooldown
             this.enfriamiento -= deltaTime;
-            this.fuego -= deltaTime;
+            this.timerFuegoFeedback -= deltaTime;
         }
     }
 
@@ -88,7 +85,7 @@ public class FireTower extends BaseTower {
             this.figura.RenderAtPosition(gr,this.getPosX(),this.getPosY());
         else
             this.image.RenderCentrado((int)this.getPosX(),(int)this.getPosY());
-        if(this.disparo && this.fuego > 0){
+        if(this.disparo && this.timerFuegoFeedback > 0){
             gr.setColor(0xffff0000);
             gr.rellenarCirculo(this.enemigo.getX(),this.enemigo.getY(),15);
         }

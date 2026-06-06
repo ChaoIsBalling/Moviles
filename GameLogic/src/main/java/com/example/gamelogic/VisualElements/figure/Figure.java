@@ -6,13 +6,14 @@ import com.example.gamelogic.VisualElements.VisualElement;
 import org.json.JSONObject;
 
 public abstract class Figure extends VisualElement {
+    public Figure(){}
+    public Figure(JSONObject obj){super(obj);}
+
     /**
      * Devuelve el color de la figura
      * @return color
      */
-    public Figure(){}
-    public Figure(JSONObject obj){super(obj);}
-    public abstract String getColor();
+    public String getColor(){ return this.color; };
 
     public abstract void RenderCentrado(AndroidGraphics gr, float x, float y);
     /**

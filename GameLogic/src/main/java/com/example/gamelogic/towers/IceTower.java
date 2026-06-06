@@ -16,7 +16,6 @@ public class IceTower extends BaseTower {
     boolean loopAudio;
     //Determina si aun hay enemigos en el area de ataque
     boolean hayEnemigos;
-    Image image;
 
     /**
      * Constructora de la torre de hielo con su coordenada x,y

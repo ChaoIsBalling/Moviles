@@ -3,20 +3,14 @@
     {
       "id": "BUT_VOLVER",
       "type":"ui",
-      "x": 30,
-      "y": 50,
-      "w": 30,
-      "h": 30,
+      "x": 30, "y": 50, "w": 30, "h": 30,
       "isRound": true,
       "ar": 15,
       "color": "#FFFFFFFF",
       "icon": {
         "id": "ICON_VOLVER",
         "imagen": "Volver.png",
-        "x": -15,
-        "y": -15,
-        "w": -30,
-        "h": 30,
+        "x": -15,"y": -15,"w": -30, "h": 30,
         "visible": true
       },
       "callback":
@@ -24,15 +18,11 @@
         "method":"setCallbackButtonReturn"
       }
     },
-
     {
       "id": "BUT_COMPRAR",
       "type":"compra",
       "layer":1,
-      "x": 450,
-      "y": 350,
-      "w": 250,
-      "h": 50,
+      "x": 450, "y": 350, "w": 250, "h": 50,
       "isRound": true,
       "ar": 20,
       "color":"#FF999999",
@@ -78,6 +68,33 @@
       {
         "method":"setCallbackButtonChange"
       }
+    },
+    {
+      "id": "BUT_ACTIVAR",
+      "type":"activar",
+      "layer":1,
+      "x": 500,
+      "y": 350,
+      "w": 250,
+      "h": 50,
+      "isRound": true,
+      "ar": 20,
+      "color":"#FF999999",
+      "text": {
+        "id": "TEXT_BOTON_ACTIVAR",
+        "texto": "Activar torre",
+        "font": "Inika-Regular.ttf",
+        "x": 0,
+        "y": 0,
+        "size": 30,
+        "bold": true,
+        "italic": true,
+        "color": "#FF00FFFF"
+      },
+      "callback":
+      {
+        "method":"setCallbackButtonActiveTower"
+      }
     }
   ],
 
@@ -119,7 +136,7 @@
       "italic": true,
       "color": "#FF00FFFF"
     },
-     {
+    {
       "id": "TEXT_DESCRIPTION",
       "type":"compra",
       "layer":1,

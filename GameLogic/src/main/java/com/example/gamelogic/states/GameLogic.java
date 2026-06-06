@@ -81,6 +81,7 @@ public class GameLogic implements State {
     private int precioAPagar;
     private TipoTorre tipoTorreSeleccionado;
     private String CURRENT_BUT_ID = " ";
+    private String colorBotones = Color.BLANCO.getHex(); //color de los botones (gris por defecto)
 
     //Enumaerado que determina en que estado de juego estamos
     public enum Estado {
@@ -108,6 +109,8 @@ public class GameLogic implements State {
     //UIManager de la pantalla de juego
     private UIManager ui;
 
+    private ArrayList<Integer>torresEquipadas=new ArrayList<>();
+
     /**
      * Constructora del estado principal de juego en el modo normal
      * @param engine Motor
@@ -119,8 +122,6 @@ public class GameLogic implements State {
         int l = this.engine.getDirectoryLenght("Mapas");
         rnd = new Random();
         int level = rnd.nextInt(l) + 1;
-        //Inicializar parámetros
-
         //Inicializamos el nivel correspondiente
         this.inicializarNivel("Mapas/mapa" + level + ".json");
     }
@@ -161,10 +162,10 @@ public class GameLogic implements State {
         this.mapaObj =engine.readJsonFile(mapa);
         JSONArray arr= null; //array del mapa
 
-            arr = mapaObj.getJSONArray("mapa");
-            this.levelNumber= mapaObj.getInt("level"); //numero de nivel
-            this.oleadasDatos = mapaObj.getJSONArray("waves"); //oleadas de enemigos
-            this.camino = mapaObj.getJSONArray("road"); //camino de puntos de los enemigos
+        arr = mapaObj.getJSONArray("mapa");
+        this.levelNumber= mapaObj.getInt("level"); //numero de nivel
+        this.oleadasDatos = mapaObj.getJSONArray("waves"); //oleadas de enemigos
+        this.camino = mapaObj.getJSONArray("road"); //camino de puntos de los enemigos
 
         //Oleadas que hay en total dependiendo del modo de juego
         switch(this.dificultad) {
@@ -334,11 +335,7 @@ public class GameLogic implements State {
     public float getRealX(int colCoor) {
         return this.casillas.get(0).get(colCoor).getX();
     }
-
     public float getRealY(int filCoor){ return this.casillas.get(filCoor).get(0).getY(); }
-
-    public ArrayList<ArrayList<Casilla>> getCasillas(){return this.casillas;}
-
     /**
      * Metodo que renderiza el tablero, entidades y botones
      * @param gr Graphics del motor
@@ -379,7 +376,7 @@ public class GameLogic implements State {
     public void inicializarUI() {
         //Leemos el json de estilos de botones y elementos del juego
         this.style = engine.readJsonFile("GameLogic/style.json");
-        this.prefabs = engine.readJsonFile("GameLogic/prefabs.json");
+        this.prefabs = engine.readJsonFile("prefabs.json");
         this.items=engine.readJsonFile("items.json");
         //Inicializamos todos los elementos de la UI
         this.ui = new UIManager(this.style,this.engine, this.gr);
@@ -395,15 +392,32 @@ public class GameLogic implements State {
         this.cargarFondoNivel();
     }
 
+    /**
+     * Metodo que inicaliza los botones de juego
+     */
     private void initButtonsPlay(){
-
         try {
-            JSONObject equip = this.save.getJSONObject("shop").getJSONObject("equips");
+            //Leemos el save para ver que objetos tenemos equipados
+            JSONObject equip = this.save.getJSONObject("shop")
+                    .getJSONObject("equips");
 
+            //Vemos que torres tenemos desbloqueadas
             JSONArray torresDesbloqueadas = equip.getJSONArray("towers");
-            JSONArray skinsEquipadas = equip.getJSONArray("skins");
-            int n = torresDesbloqueadas.length();
-            this.ui.createPrefabs(this.prefabs.getJSONObject("BotonTower"),n);
+            for(int i=0;i<torresDesbloqueadas.length();i++) {
+                //Si es true, anyadimos la torre correspondiente
+                if(torresDesbloqueadas.getBoolean(i))
+                    torresEquipadas.add(i);
+            }
+
+            //creamos n numero de torres equipadas a partir del prefab
+            int n = torresEquipadas.size();
+            JSONObject prefabBoton = this.prefabs.getJSONObject("BotonTower");
+            //Leemos el color personalizado de los botones y modifcamos el color
+            //del prefab
+            this.colorBotones = equip.getString("but");
+            prefabBoton.put("color", colorBotones);
+            //Creamos botones
+            this.ui.createPrefabsButtons(prefabBoton,n);
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -452,15 +466,15 @@ public class GameLogic implements State {
         try {
             //Accedo a las torre que tengo
             JSONObject equip = this.save.getJSONObject("shop").getJSONObject("equips");
-             String idTower  = String.valueOf(equip.getJSONArray("towers").getInt(towersCount));
+             String idTower  = String.valueOf(this.torresEquipadas.get(towersCount));
 
              //Cogemos el tipo de torre
-            String torre = this.items.getJSONObject("Torres").getJSONObject(idTower)
+            String torre = this.items.getJSONObject("towers").getJSONObject(idTower)
                             .getString("type");
             TipoTorre tipo = TipoTorre.valueOf(torre);
 
             //Coste de construir la torre
-            int coste = this.items.getJSONObject("Torres").getJSONObject(idTower)
+            int coste = this.items.getJSONObject("towers").getJSONObject(idTower)
                             .getInt("cost");
 
             b.changeText(Integer.toString(coste));
@@ -471,7 +485,7 @@ public class GameLogic implements State {
             int idSkin = equip.getJSONArray("skins").getInt(Integer.parseInt(idTower));
 
             //String skin=this.save.getJSONObject("skins_equipped").getString(tipo.toString());
-            JSONObject currSkin = this.items.getJSONObject("Skins").
+            JSONObject currSkin = this.items.getJSONObject("skins").
                             getJSONObject(String.valueOf(idSkin));
 
             if (currSkin.getString("type").equals("Figura"))
@@ -628,7 +642,7 @@ public class GameLogic implements State {
         this.ui.changeVisualElementStateOfType("upgrade",false);
 
         if(this.ui.getButtonUI(CURRENT_BUT_ID) != null) {
-            this.ui.getButtonUI(CURRENT_BUT_ID).setColor(Color.BLANCO.getHex());
+            this.ui.getButtonUI(CURRENT_BUT_ID).setColor(colorBotones);
             CURRENT_BUT_ID = " ";
         }
     }
@@ -679,7 +693,7 @@ public class GameLogic implements State {
 
         //Primero coloreamos todos los botones de torres en blanco
         for (VisualElement b : this.ui.getAllVisualElementsOfType("tower")) {
-            b.setColor(Color.BLANCO.getHex());
+            b.setColor(colorBotones);
         }
         //Cambiamos el color a Amarillo del boton correspondiente
         but.setColor(Color.AMARILLO_CLARO.getHex());

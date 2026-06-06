@@ -4,6 +4,7 @@ import com.example.androidengine.AndroidAudio;
 import com.example.androidengine.AndroidSound;
 import com.example.gamelogic.Enemy;
 import com.example.gamelogic.Tipos.TipoTorre;
+import com.example.gamelogic.VisualElements.Image;
 import com.example.gamelogic.VisualElements.figure.Figure;
 
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
  * asi evitar la repetición de código en todos los tipos de torres
  */
 public abstract class BaseTower implements Tower {
-
     //Stats comunes de las torres
     protected float ataque, rango, velocidad, enfriamiento;
 
@@ -32,6 +32,10 @@ public abstract class BaseTower implements Tower {
     protected TipoTorre tipoTorre;
 
     protected Figure figura;
+    protected Image image;
+
+    //Determina si la torre esta disparando
+    protected boolean disparo;
 
     public BaseTower(float x, float y, float ataque, float rango, float velocidad, TipoTorre tipo){
         this.posX = x;
@@ -41,6 +45,7 @@ public abstract class BaseTower implements Tower {
         this.velocidad = velocidad;
         this.tipoTorre = tipo;
         this.enfriamiento = 0;
+        this.disparo = false;
     }
 
     /**
@@ -97,7 +102,6 @@ public abstract class BaseTower implements Tower {
     protected Enemy buscarEnemigoMasCercano() {
         Enemy masCercano = null;
         double mejorDist = Double.MAX_VALUE;
-
         for (Enemy e : enemigos) {
             double dist = distancia(getPosX(), getPosY(), e.getX(), e.getY());
             if (dist <= rango && dist < mejorDist) {

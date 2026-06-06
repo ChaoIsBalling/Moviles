@@ -20,7 +20,7 @@ public class MiniThunderTower extends ThunderTower{
         this.velocidad = 0.3f;
         this.colorRayo = "#FFFF0000";
         this.frecuenciaRayo = 0.3f;
-        this.rayo = this.frecuenciaRayo;
+        this.timerFeedBackRayo = this.frecuenciaRayo;
     }
 
     /**

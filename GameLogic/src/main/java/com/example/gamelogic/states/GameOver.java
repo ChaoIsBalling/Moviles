@@ -21,8 +21,7 @@ import java.util.ArrayList;
  */
 public class GameOver implements State {
     //Sonidos de victoria y derrota
-    private AndroidSound victory;
-    private AndroidSound lose;
+    private AndroidSound victory, lose;
 
     //Modulos del motor
     private AndroidAudio audio;
@@ -34,9 +33,7 @@ public class GameOver implements State {
     boolean win;
 
     //nivel, mundo y oleada actual
-    int nivel;
-    int mundo;
-    int oleada;
+    int nivel, mundo, oleada;
 
     //determina si el jugador completó el nivel con anterioridad en el modo aventura
     boolean isCompleted;
@@ -45,7 +42,7 @@ public class GameOver implements State {
     //archivo de guardado de JSON
     private JSONObject save;
     //Recompensa que ganará el jugador
-    int recompensa = 0;
+    int recompensa;
 
     //Dificultad con la que se ha superado el nivel (Para saber el modo de juego)
     GameLogic.Dificultad dificultad;
@@ -72,9 +69,17 @@ public class GameOver implements State {
 
         this.mobile.setVisibleAdBanner(true);
 
-        //Si no se ha completado el nivel la recompensa será de 10 diamantes de base
+        JSONObject worldInfo = this.engine.readJsonFile("Mundo/World" + mundo + "/World" + mundo +".json");
+        int amountReward = 0;
+        try {
+            amountReward = worldInfo.getInt("reward");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        //Si no se ha completado el nivel la recompensa será de n diamantes de base
         if(!isCompleted)
-            this.recompensa = 10;
+            this.recompensa = amountReward;
         else
             this.recompensa = 0;
     }
@@ -106,10 +111,7 @@ public class GameOver implements State {
         //Si el nivel no estaba completado
         if (!isCompleted) {
             //Texto con la cantidad de diamantes actuales (sin recompensa)
-            ui.setTextUI(
-                    "TEXT_DIAMANTES_ACTUALES",
-                    String.valueOf(numDiamantes)
-            );
+            ui.setTextUI("TEXT_DIAMANTES_ACTUALES", String.valueOf(numDiamantes));
             numDiamantes += recompensa;
 
             //Guardamos los diamantes por si acaso el usuario no ve el anuncio
@@ -189,6 +191,9 @@ public class GameOver implements State {
         } catch (JSONException e) {
         throw new RuntimeException(e);
         }
+
+        //Una vez tenemos todos los botones seteamos los callbacks
+        this.ui.setAllCallbacks();
     }
     @Override
     public void update(double deltaTime) { }
@@ -212,7 +217,6 @@ public class GameOver implements State {
         this.style = engine.readJsonFile(uiPath);
         //Incializamos la UI
         this.ui = new UIManager(this.style , this.engine, this.gr);
-        this.ui.setAllCallbacks();
         determinarUI();
         //Configuramos la UI dependiendo del resultado
         configurarUI();
@@ -294,7 +298,6 @@ public class GameOver implements State {
         this.mobile.showRewardedAd(new RewardCallback() {
             @Override
             public void onReward() {
-
                 //Se dan 10 diamantes más
                 recompensa = 10;
 
