@@ -1,5 +1,6 @@
 {
     "niveles":2,
+    "reward": 10,
     "colorCompleted": "#FFFF4388", 
     "colorLocked": "#FFA20328",
     "previous":true,

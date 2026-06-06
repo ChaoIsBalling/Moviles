@@ -409,7 +409,7 @@ public class Tienda implements State {
                 this.ui.changeVisualElementStateOfType("yacomprado",true);
 
                 //Cuando se compra una torre, no se puede acceder al menu de cambio de skin
-                if(tipo != "towers") {
+                if(!tipo.equals("towers")) {
                     this.ui.changeVisualElementStateOfType("cambio",true);
                     this.ui.changeVisualElementStateOfType("activar",false);
                 }
