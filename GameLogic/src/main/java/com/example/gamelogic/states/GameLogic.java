@@ -81,6 +81,7 @@ public class GameLogic implements State {
     private int precioAPagar;
     private TipoTorre tipoTorreSeleccionado;
     private String CURRENT_BUT_ID = " ";
+    private String colorBotones = Color.BLANCO.getHex(); //color de los botones (gris por defecto)
 
     //Enumaerado que determina en que estado de juego estamos
     public enum Estado {
@@ -121,8 +122,6 @@ public class GameLogic implements State {
         int l = this.engine.getDirectoryLenght("Mapas");
         rnd = new Random();
         int level = rnd.nextInt(l) + 1;
-        //Inicializar parámetros
-
         //Inicializamos el nivel correspondiente
         this.inicializarNivel("Mapas/mapa" + level + ".json");
     }
@@ -163,10 +162,10 @@ public class GameLogic implements State {
         this.mapaObj =engine.readJsonFile(mapa);
         JSONArray arr= null; //array del mapa
 
-            arr = mapaObj.getJSONArray("mapa");
-            this.levelNumber= mapaObj.getInt("level"); //numero de nivel
-            this.oleadasDatos = mapaObj.getJSONArray("waves"); //oleadas de enemigos
-            this.camino = mapaObj.getJSONArray("road"); //camino de puntos de los enemigos
+        arr = mapaObj.getJSONArray("mapa");
+        this.levelNumber= mapaObj.getInt("level"); //numero de nivel
+        this.oleadasDatos = mapaObj.getJSONArray("waves"); //oleadas de enemigos
+        this.camino = mapaObj.getJSONArray("road"); //camino de puntos de los enemigos
 
         //Oleadas que hay en total dependiendo del modo de juego
         switch(this.dificultad) {
@@ -336,11 +335,7 @@ public class GameLogic implements State {
     public float getRealX(int colCoor) {
         return this.casillas.get(0).get(colCoor).getX();
     }
-
     public float getRealY(int filCoor){ return this.casillas.get(filCoor).get(0).getY(); }
-
-    public ArrayList<ArrayList<Casilla>> getCasillas(){return this.casillas;}
-
     /**
      * Metodo que renderiza el tablero, entidades y botones
      * @param gr Graphics del motor
@@ -397,19 +392,32 @@ public class GameLogic implements State {
         this.cargarFondoNivel();
     }
 
+    /**
+     * Metodo que inicaliza los botones de juego
+     */
     private void initButtonsPlay(){
-
         try {
-            JSONObject equip = this.save.getJSONObject("shop").getJSONObject("equips");
+            //Leemos el save para ver que objetos tenemos equipados
+            JSONObject equip = this.save.getJSONObject("shop")
+                    .getJSONObject("equips");
 
+            //Vemos que torres tenemos desbloqueadas
             JSONArray torresDesbloqueadas = equip.getJSONArray("towers");
             for(int i=0;i<torresDesbloqueadas.length();i++) {
+                //Si es true, anyadimos la torre correspondiente
                 if(torresDesbloqueadas.getBoolean(i))
                     torresEquipadas.add(i);
             }
 
+            //creamos n numero de torres equipadas a partir del prefab
             int n = torresEquipadas.size();
-            this.ui.createPrefabs(this.prefabs.getJSONObject("BotonTower"),n);
+            JSONObject prefabBoton = this.prefabs.getJSONObject("BotonTower");
+            //Leemos el color personalizado de los botones y modifcamos el color
+            //del prefab
+            this.colorBotones = equip.getString("but");
+            prefabBoton.put("color", colorBotones);
+            //Creamos botones
+            this.ui.createPrefabsButtons(prefabBoton,n);
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -634,7 +642,7 @@ public class GameLogic implements State {
         this.ui.changeVisualElementStateOfType("upgrade",false);
 
         if(this.ui.getButtonUI(CURRENT_BUT_ID) != null) {
-            this.ui.getButtonUI(CURRENT_BUT_ID).setColor(Color.BLANCO.getHex());
+            this.ui.getButtonUI(CURRENT_BUT_ID).setColor(colorBotones);
             CURRENT_BUT_ID = " ";
         }
     }
@@ -685,7 +693,7 @@ public class GameLogic implements State {
 
         //Primero coloreamos todos los botones de torres en blanco
         for (VisualElement b : this.ui.getAllVisualElementsOfType("tower")) {
-            b.setColor(Color.BLANCO.getHex());
+            b.setColor(colorBotones);
         }
         //Cambiamos el color a Amarillo del boton correspondiente
         but.setColor(Color.AMARILLO_CLARO.getHex());

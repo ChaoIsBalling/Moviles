@@ -1,25 +1,6 @@
 {
     "behaviors":
     [
-        {
-        "color": "#FF00FFFF",
-        "text": {
-        "id": "TEXT_BOTON_INICIAL",
-        "texto": "Jugar",
-        "font": "Inika-Regular.ttf",
-        "x": 0,
-        "y": 0,
-        "size": 30,
-        "bold": true,
-        "italic": true,
-        "color": "#FF000000"
-        },
-        "callback":
-        {
-        "method":"setCallbackButtonInicial",
-        "state":"Dificultad"        
-        }
-        }
     ]
     
 }

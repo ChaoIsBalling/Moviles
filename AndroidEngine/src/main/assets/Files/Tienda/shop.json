@@ -4,7 +4,7 @@
                 "id": 3,
                 "cost": 100,
                 "description": "Nueva torre\nde rayo,\nahora mini",
-                "skin":6
+                "skinDefault":6
             }
         ],
 
@@ -60,12 +60,13 @@
                 "description": "Fondo verde"
             }
         ],
-          "textoSeccion":
+
+        "textoSeccion":
         {
-         "towers":"Nuevas Torres",
-         "skins":"Nuevas Skins",
-         "bg":"Fondos",
-         "but":"Botones"
+            "towers":"Nuevas Torres",
+            "skins":"Nuevas Skins",
+            "bg":"Fondos",
+            "but":"Botones"
         }
           
     }

@@ -39,29 +39,27 @@
         "fill": true,
         "visible": true
         },
-    "1":{
+    "1" : {
         "forTower": 1,
         "type": "Figura",
         "id": "cuadradoHielo",
         "form": "square",
-            "x": 0, "y": -5,
-            "w": 30, "h": 30,
-            "color": "#FFC8A2C8",
-            "fill": true,
-            "round": true,
-            "r": 3,
-            "visible": true
+        "x": 0, "y": -5,"w": 30, "h": 30,
+        "color": "#FFC8A2C8",
+        "fill": true,
+        "round": true,
+        "r": 3,
+        "visible": true
         },
     "2" : {
-                "forTower": 2,
-                 "type": "Figura",
-                "id": "hexFuego",
-                "form": "hexagon",
-                "x": 0, "y":-5,
-                "r": 15,
-                "color": "#FFFF0000",
-                "fill": true,
-                "visible": true
+        "forTower": 2,
+        "type": "Figura",
+        "id": "hexFuego",
+        "form": "hexagon",
+        "x": 0, "y":-5,"r": 15,
+        "color": "#FFFF0000",
+        "fill": true,
+        "visible": true
     },
     "3": {
       "forTower": 0,

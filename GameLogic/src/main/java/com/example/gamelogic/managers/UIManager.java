@@ -22,6 +22,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Clase que se encarga de gestionar toda la UI
+ * Se encarga incializar y modificar los elementos estatcos (que no haya mas de una instancia de ellos)
+ * y los que pertenezcan a un scroll
+ * Se incializa con un archivo style.json (incluidos en la carpeta de cada estado)
+ */
 public class UIManager {
     //Ultima cordenada Y tocada
     float lastTouchedY;
@@ -50,24 +56,24 @@ public class UIManager {
     public UIManager(JSONObject sceneJson, AndroidEngine engine, AndroidGraphics gr) {
         // Limpiamos lo anterior para cargar la nueva escena
         visualElementRenderList.add(new ArrayList<>());
-        botones.clear();
-        textos.clear();
-        imagenes.clear();
-        figures.clear();
+        botones.clear(); textos.clear(); imagenes.clear(); figures.clear();
         this.engine=engine;
         this.gr=gr;
         loadUIFromJson(sceneJson);
     }
+
+    /**
+     * Metodo que se encarga de leer el style.json del menu actual
+     * @param sceneJson JSON object extraido del style.json
+     */
     public void loadUIFromJson(JSONObject sceneJson)
     {
         try {
             //Cargar Botones
             if (sceneJson.has("buttons")) {
                 JSONArray array = sceneJson.getJSONArray("buttons");
-                String type= new String();
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject bData = array.getJSONObject(i);
-                    type=bData.getString("type");
                     Button b = new Button(bData,gr);
                     botones.put(bData.getString("id"), b);
                     addVisualElementToArray(b,bData);
@@ -94,12 +100,13 @@ public class UIManager {
                     addVisualElementToArray(img,imageData);
                 }
             }
+            //Figuras
             if(sceneJson.has("figures")){
                 JSONArray array = sceneJson.getJSONArray("figures");
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject figureData = array.getJSONObject(i);
                     String form = figureData.getString("form");
-                    Figure fig=null;
+                    Figure fig = null;
                     switch (form){
                         case "triangle":
                             fig=new Triangle(figureData);
@@ -130,27 +137,30 @@ public class UIManager {
     public void addVisualElementToArray(VisualElement element, JSONObject obj)
     {
         try {
+            //Si el objeto tiene un campo type, se añade a la lista de dicho type
             if(obj.has("type"))
             {
                 String type= obj.getString("type");
-
+                //Si no estaba ese tipo, añadimos un hashmap
                 if(!visualElementTypes.containsKey(type))
                     visualElementTypes.put(type,new ArrayList<VisualElement>());
-
+                //Lo añadimos a su lista
                 visualElementTypes.get(type).add(element);
             }
+            //Si el objeto pertenece a un scroll
             if(obj.has("scrollable"))
             {
                 if(obj.getBoolean("scrollable"))
                     scrollableElements.add(element);
             }
+            //Si el objeto tiene una layer determinada
             if(obj.has("layer"))
             {
                 int layer= obj.getInt("layer");
                 //esto es en caso de que hayan layers que no se usan o la lectura de layers no este en orden
                 while(layer>=visualElementRenderList.size()) {
                     visualElementRenderList.add(new ArrayList<>());}
-                 visualElementRenderList.get(layer).add(element);
+                visualElementRenderList.get(layer).add(element);
             }
             else {
                 //en caso de que no se especifique la layer lo añadimos a la layer 0
@@ -159,8 +169,12 @@ public class UIManager {
         }
         catch (JSONException e) {
             throw new RuntimeException(e);
+        }
     }
-    }
+
+    /**
+     * Metodo que se encarga de setear los callbacks de todos los botones de la UI
+     */
     public void setAllCallbacks()
     {
         botones.forEach((k, v) ->
@@ -168,6 +182,7 @@ public class UIManager {
             v.setCallback(this.engine.getState());
         });
     }
+
     /**
      * Metodo para cambiar el valor de un Texto
      * @param id nombre de identificacion en el JSON
@@ -180,12 +195,21 @@ public class UIManager {
                 t.setText(value);
         }
     }
-    public void  unloadVisualElementOfType(String type,VisualElement element) {
-        visualElementTypes.get(type).remove(element);
-    }
+
+    /**
+     * Getter de un visualElement (elemento de la UI), a partir de su tipo
+     * @param type tipo
+     * @return Elemento de la UI perteneciente al tipo
+     */
     public ArrayList<VisualElement> getAllVisualElementsOfType(String type) {
         return visualElementTypes.get(type);
     }
+
+    /**
+     * Deshabilita/habilita un elemento del UI Manager
+     * @param type tipo del elemento
+     * @param state booleano que determina si se quiere habilitarse el elemento
+     */
     public void changeVisualElementStateOfType(String type,boolean state){
         for(VisualElement element:visualElementTypes.get(type)){
             element.setEnabled(state);
@@ -204,6 +228,10 @@ public class UIManager {
         }
     }
 
+    /**
+     * Obtiene el ultimo elemento de un scroll
+     * @return ultimo elemento de la UI
+     */
     public VisualElement getLastScrollable(){
         return scrollableElements.get(scrollableElements.size()-1);
     }
@@ -231,7 +259,6 @@ public class UIManager {
         return null;
     }
 
-
     /**
      * Obtener el boton a traves de su ID en el JSON
      * @param id nombre de identificacion en el JSON
@@ -243,45 +270,29 @@ public class UIManager {
         return null;
     }
 
+    /**
+     * getter de la imagen del boton
+     * @param id id definido en el style.json
+     * @return imagen/null
+     */
     public Image getButtonImage(String id){
         if(botones.containsKey(id) && !botones.get(id).isImageNull()){
             return botones.get(id).getImgButton();
         }
         return null;
     }
+
+    /**
+     * getter de la figura del boton
+     * @param id Id definido para el elemento en el style.json
+     * @return figura/null
+     */
     public Figure getButtonFigure(String id){
         if(botones.containsKey(id) && !botones.get(id).isFigureNull()){
             return botones.get(id).getFigButton();
         }
         return null;
     }
-
-    public Image getImageUI(String id){
-        if(imagenes.containsKey(id))
-            return imagenes.get(id);
-        return null;
-    }
-    public Figure getFigureUI(String id){
-        if(figures.containsKey(id))
-            return figures.get(id);
-        return null;
-    }
-
-
-
-    /*public void addButtonUI(String id, Button b){
-        botones.put(id,b);
-    }*/
-
-    /**
-     * Borra un boton de la lista
-     * @param id ID del boton
-     */
-    /*public void deleteButtonUI(String id){
-        if(botones.containsKey(id))
-            botones.remove(id);
-    }*/
-
 
     /**
      * Metodo para renderizar los elementos de la UI de la escena
@@ -298,11 +309,12 @@ public class UIManager {
     }
 
     /**
-     * Metodo que crea un boton a partir de un archivo prefab (ideal para Mundo, los botones de gameLogic y la Tienda)
+     * Metodo que crea un boton a partir de un archivo prefab
+     * (ideal para Mundo, los botones de gameLogic y la Tienda)
      * @param prefab JSON Object que contiene la info del prefab
      * @param amount cantidad de prefabs que se quieren generar
      */
-    public void createPrefabs(JSONObject prefab, int amount)
+    public void createPrefabsButtons(JSONObject prefab, int amount)
     {   try {
         Button prefabButton = null;
         float yOffset = (float)prefab.getDouble("yOffset");
@@ -330,6 +342,11 @@ public class UIManager {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Metodo que se debe llamar si es que usamos un scroll
+     * Configura sus limites y los ordena de arriba a abajo
+     */
     public void configurarLimitesScroll() {
         //Se usa para ordenar todos los elemntos de arriba hacia abajo (no hay garantia de que se pongan de forma ordenada)
         Collections.sort(scrollableElements,(obj1,obj2)-> {
@@ -343,14 +360,21 @@ public class UIManager {
         //Posicion más baja permitaida para el scroll
         this.maxY = this.tamScroll - scrollableElements.get(0).getHeight();
     }
-    //si es de tipo touchmove manejamos el scroll del juego
+
+    /**
+     * si es de tipo touchmove manejamos el scroll del juego
+     * @param e evento
+     */
     public void onTouchMove(TouchEvent e)
     {
         if(!scroll)
             return;
 
+        //Posicion destino del movimiento del dedo
         float destY=e.y-lastTouchedY;
+        //Ultima posicion pulsada
         lastTouchedY=e.y;
+
         boolean canScroll=true;
         //checkeamos si los extremeos de los objetos scrolleables (el mas alto y el mas bajo)
         //estan entre el minimo y maximo Y que hemos definido
@@ -367,7 +391,12 @@ public class UIManager {
             }
         }
     }
-    //si el evento es de tipo TouchDown guardamos el ultimo valor de la Y y ponemo a true el scroll
+
+    /**
+     * Si tenemos un evento de tipo touchDown, determinamos la ultima pos Y pulsada
+     * y habilitamos scroll
+     * @param e evento
+     */
     public void onTouchDown(TouchEvent e){
         lastTouchedY=e.y;
         scroll=true;
@@ -379,9 +408,9 @@ public class UIManager {
         scroll = false;
     }
     /**
-     * Recorremos el array de botones y
-     * @param event
-     * @return
+     * Recorremos el array de botones para los handleInput
+     * @param event evento
+     * @return si se ha pulsado o no
      */
     public boolean handleInput(TouchEvent event) {
         // Recorremos la lista y comprobamos si se pulsan los botones

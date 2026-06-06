@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         this.engine.setNotificationIcon(R.drawable.ic_tower_defense_noti); //icono de notificación
 
         checkRewardNotifiactionIntent(); //Comprobamos si el jugador ha vuelto a entrar al juego por la notificacion recompensada
-        if(!this.engine.checkFileExists("save"))
+        if(this.engine.checkFileExists("save"))
         {
             save=this.engine.readInternalJsonFile("save");
             String hash = this.engine.createHash(save.toString());

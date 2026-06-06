@@ -21,28 +21,22 @@ import org.json.JSONObject;
 public class Menu implements State {
     private String fondo;
     //El archivo de guardado del juego
-    private JSONObject save;
+    private JSONObject save, style;
 
     //Referencias al Audio Manager, al motor y a Graphics y a Mobile
     private AndroidAudio audio;
     AndroidEngine engine;
     AndroidGraphics gr;
     AndroidMobile mobile;
-
-    //JSONObject botones;
-    JSONObject style;
-
     UIManager ui;
 
     /**
-     * Constructora del menú
+     * Constructora del menu principal
      */
     public Menu(AndroidEngine engine, AndroidMobile mobile, JSONObject save){
         this.engine = engine;
         this.mobile = mobile;
         this.save=save;
-
-
         this.mobile.setVisibleAdBanner(true);
     }
 
@@ -69,12 +63,12 @@ public class Menu implements State {
 
         this.ui = new UIManager(this.style , this.engine, this.gr);
         this.ui.setAllCallbacks();
-        //this.ui.createPrefabs(engine.readJsonFile("Menu/prefabs.json"),3);
         //Leemos valores guardados
         this.fondo="#FFFFFFFF"; //Fondo por defecto
         try {
             int numGemasGuardadas = this.save.getInt("gems");
             this.ui.getTextUI("TEXT_DIAMANTES").setText(String.valueOf(numGemasGuardadas));
+            //Fondo guardado en el save
             this.fondo = this.save.getJSONObject("shop").
                     getJSONObject("equips").getString("bg");
             this.gr.setColorClear(this.fondo);
@@ -141,7 +135,6 @@ public class Menu implements State {
      */
     @Override
     public void setMobile(AndroidMobile mobile) { this.mobile = mobile; }
-
     @Override
     public JSONObject getSave() { return this.save; }
 }

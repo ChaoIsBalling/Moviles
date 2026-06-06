@@ -60,12 +60,13 @@
                 "description": "Fondo verde"
             }
         ],
-          "textoSeccion":
+
+        "textoSeccion":
         {
-         "towers":"Nuevas Torres",
-         "skins":"Nuevas Skins",
-         "bg":"Fondos",
-         "but":"Botones"
+            "towers":"Nuevas Torres",
+            "skins":"Nuevas Skins",
+            "bg":"Fondos",
+            "but":"Botones"
         }
           
     }

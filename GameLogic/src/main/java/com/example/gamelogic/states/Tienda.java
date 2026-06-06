@@ -174,7 +174,7 @@ public class Tienda implements State {
 
                 //Creamos n numero de botones en el scroll
                 int numBotones = this.shop.getJSONArray(name).length();
-                this.ui.createPrefabs(botonPrefab, numBotones);
+                this.ui.createPrefabsButtons(botonPrefab, numBotones);
 
                 //Reseteamos el indice que nos sirve para inciaizar los items
                 shopItemIndex = 0;

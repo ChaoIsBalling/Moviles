@@ -10,7 +10,7 @@ public abstract class VisualElement {
     protected float h=0;
     protected boolean isVisible = true;
     protected boolean isEnable = true;
-    protected String color="#FF000000";;
+    protected String color="#FF000000";
     public VisualElement(){}
     public VisualElement(JSONObject json)
     {
