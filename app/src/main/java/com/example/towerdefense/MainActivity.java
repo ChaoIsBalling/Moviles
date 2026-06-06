@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     {
         JSONObject obj=new JSONObject();
         try {
-            obj.put("gems",1000);
+            obj.put("gems",0);
             obj.put("completed",0);
 
             JSONObject items=engine.readJsonFile("items.json");
