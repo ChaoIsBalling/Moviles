@@ -59,7 +59,11 @@
       "callback":
       {
         "method":"setCallbackButtonLevel"
-      }
+      },
+      "left":0,
+      "top":100,
+      "right":600,
+      "botton":400
     },
     
       "id": "BUT_PREFAB",
@@ -130,7 +134,11 @@
         "bold":true,
         "italic":true,
         "scrollable":true,
-        "color":"#FF000000"
+        "color":"#FF000000",
+        "left":0,
+        "top":100,
+        "right":600,
+        "botton":400
     },
 
     "BotonItem" :{
@@ -147,6 +155,10 @@
       "callback":
       {
         "method":"setCallbackButtonShopItem"
-      }
+      },
+      "left":0,
+      "top":100,
+      "right":600,
+      "botton":400
     }
 }

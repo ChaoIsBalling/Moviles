@@ -30,6 +30,22 @@ public abstract class VisualElement {
         try {
             this.x=json.getInt("x");
             this.y=json.getInt("y");
+
+            if(json.has("left")){
+                this.left=json.getInt("left");
+            }
+            if(json.has("top")){
+                this.top = json.getInt("top");
+            }
+            if(json.has("right")){
+                this.right = json.getInt("right");
+            }
+            if(json.has("botton")){
+                this.botton = json.getInt("botton");
+            }
+
+            updateEnable();
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -50,18 +66,17 @@ public abstract class VisualElement {
     public void setX(float x){this.x=x;}
     public void setY(float y){
         this.y=y;
-        if(this.y + this.h < this.top || this.y - this.h > this.botton){
-            this.isEnable =false;
-        }
-        else{
-            this.isEnable = true;
-        }
+        updateEnable();
     }
     public void setLimits(float left, float top, float right, float botton){
         this.left = left;
         this.top=top;
         this.right=right;
         this.botton=botton;
+        updateEnable();
+    }
+
+    private void updateEnable(){
         if(this.y + this.h < this.top || this.y - this.h > this.botton){
             this.isEnable =false;
         }

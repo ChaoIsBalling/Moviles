@@ -160,7 +160,6 @@ public class Tienda implements State {
                 nombreSeccion.setText(textoSeccion.getString(name));
                 nombreSeccion.setId(nombreSeccion.getId() + i);
                 nombreSeccion.setX(initXText); nombreSeccion.setY(initYText);
-                nombreSeccion.setLimits(0,100,600,400);
                 //Array perteneciente a la seccion de la tienda (nos sirve para setear otras cosas)
                 shopSection = name;
 
