@@ -299,13 +299,13 @@ public class UIManager {
      * @param gr Referencia al gestor de gráficos de Android
      */
     public void render(AndroidGraphics gr){
-        gr.EmpezarLimiteDibujado(0,0,600,400);
         for(ArrayList<VisualElement> array: visualElementRenderList) {
             for(VisualElement element: array){
+                gr.EmpezarLimiteDibujado(element.getLeft(), element.getTop(), element.getRight(), element.getBotton());
                 element.Render(gr);
+                gr.TerminarLimiteDibujado();
             }
         }
-        gr.TerminarLimiteDibujado();
     }
 
     /**

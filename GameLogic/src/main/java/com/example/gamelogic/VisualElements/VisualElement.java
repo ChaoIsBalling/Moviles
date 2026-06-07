@@ -15,6 +15,11 @@ public abstract class VisualElement {
     protected boolean isEnable = true;
     protected String color = "#FF000000";
 
+    protected float left =0;
+    protected float top=0;
+    protected float right=600;
+    protected float botton=400;
+
     public VisualElement(){}
     /**
      * Constructora base que solo setea la posicion x e y
@@ -44,6 +49,17 @@ public abstract class VisualElement {
     public void setHeight(float h){this.h=h;}
     public void setX(float x){this.x=x;}
     public void setY(float y){this.y=y;}
+    public void setLimits(float left, float top, float right, float botton){
+        this.left = left;
+        this.top=top;
+        this.right=right;
+        this.botton=botton;
+    }
+
+    public float getLeft(){return this.left;}
+    public float getTop(){return this.top;}
+    public float getRight(){return this.right;}
+    public float getBotton(){return this.botton;}
     public void setVisible(boolean visible){this.isVisible = visible;}
     public void setEnabled(boolean enabled){this.isEnable = enabled;}
     public void setColor(String color){ this.color = color; }
