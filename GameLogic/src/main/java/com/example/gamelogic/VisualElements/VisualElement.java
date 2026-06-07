@@ -48,12 +48,26 @@ public abstract class VisualElement {
     //Setters
     public void setHeight(float h){this.h=h;}
     public void setX(float x){this.x=x;}
-    public void setY(float y){this.y=y;}
+    public void setY(float y){
+        this.y=y;
+        if(this.y + this.h < this.top || this.y - this.h > this.botton){
+            this.isEnable =false;
+        }
+        else{
+            this.isEnable = true;
+        }
+    }
     public void setLimits(float left, float top, float right, float botton){
         this.left = left;
         this.top=top;
         this.right=right;
         this.botton=botton;
+        if(this.y + this.h < this.top || this.y - this.h > this.botton){
+            this.isEnable =false;
+        }
+        else{
+            this.isEnable = true;
+        }
     }
 
     public float getLeft(){return this.left;}
