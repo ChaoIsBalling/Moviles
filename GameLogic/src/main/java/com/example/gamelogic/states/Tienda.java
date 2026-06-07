@@ -43,6 +43,9 @@ public class Tienda implements State {
     // El indice del item de la tienda selccionado actualmente (en el jsonArray de shop)
     private int shopItemIndex = 0;
 
+    //JsonArray que representa las torres activadas
+    private JSONArray activeTowers;
+
     public Tienda(AndroidEngine engine,AndroidMobile mobile,JSONObject save){
         this.save =save;
         this.engine=engine;
@@ -51,6 +54,12 @@ public class Tienda implements State {
         this.shop=engine.readJsonFile("Tienda/shop.json");
         this.prefabs=engine.readJsonFile("prefabs.json");
         this.items=engine.readJsonFile("items.json");
+        try {
+            this.activeTowers= this.save.getJSONObject("shop").
+                    getJSONObject("equips").getJSONArray("towers");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
         readData();
     }
 
@@ -241,10 +250,6 @@ public class Tienda implements State {
 
     public void activeTower(JSONObject item){
         try {
-                //Accedemos al array de torres activas
-                JSONArray activeTowers = this.save.getJSONObject("shop").
-                        getJSONObject("equips").getJSONArray("towers");
-
                 int indexTower = item.getInt("id");
 
                 if(!activeTowers.getBoolean(indexTower)) {
@@ -415,6 +420,11 @@ public class Tienda implements State {
                 else{
                     this.ui.changeVisualElementStateOfType("cambio",false);
                     this.ui.changeVisualElementStateOfType("activar",true);
+                    if(activeTowers.getBoolean(item.getInt("id")))
+                        //Cambiamos el texto
+                        this.ui.getButtonUI("BUT_ACTIVAR").changeText("Desactivar torre");
+                    else
+                        this.ui.getButtonUI("BUT_ACTIVAR").changeText("Activar torre");
                 }
             }
             //Caso en el que el item este sin comprar

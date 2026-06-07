@@ -77,7 +77,7 @@ public abstract class VisualElement {
     }
 
     private void updateEnable(){
-        if(this.y + this.h < this.top || this.y - this.h > this.botton){
+        if(this.y + this.h/2 < this.top || this.y - this.h/2 > this.botton){
             this.isEnable =false;
         }
         else{
