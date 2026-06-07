@@ -127,7 +127,7 @@ public class WaveManager {
             this.timerOleada = (this.tiempoEntreGrupos) + (2 * this.oleadaActual);
 
             // Decimos al gl que actualice el HUD correctamente
-            if (this.oleadasRestantes > 0) {
+            if (this.oleadasRestantes != 0) {
                 gl.actualizaOleadas(this.oleadaActual);
             }
             try {
